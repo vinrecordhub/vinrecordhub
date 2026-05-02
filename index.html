@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VIN Record Hub — Instant Vehicle History Reports</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f5f0;
+      --accent: #e8ff3f;
+      --accent2: #3fff8f;
+      --gray: #1a1a1a;
+      --mid: #888;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* NOISE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.4;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      backdrop-filter: blur(20px);
+      background: rgba(10,10,10,0.7);
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+    }
+
+    .logo span { color: var(--accent); }
+
+    .nav-badge {
+      background: rgba(232,255,63,0.1);
+      border: 1px solid rgba(232,255,63,0.3);
+      color: var(--accent);
+      font-size: 0.7rem;
+      font-weight: 500;
+      padding: 0.35rem 0.9rem;
+      border-radius: 100px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* BG GLOW */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(232,255,63,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.2s;
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent2);
+      animation: pulse 2s ease infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3rem, 8vw, 7rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      max-width: 900px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.4s;
+    }
+
+    h1 .highlight {
+      color: var(--accent);
+      position: relative;
+      display: inline-block;
+    }
+
+    h1 .highlight::after {
+      content: '';
+      position: absolute;
+      bottom: 0.05em;
+      left: 0; right: 0;
+      height: 0.06em;
+      background: var(--accent);
+      opacity: 0.4;
+    }
+
+    .hero-sub {
+      margin-top: 2.5rem;
+      font-size: 1.1rem;
+      color: var(--mid);
+      max-width: 480px;
+      line-height: 1.7;
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.6s;
+    }
+
+    /* VIN FORM */
+    .vin-form {
+      margin-top: 3rem;
+      display: flex;
+      gap: 0.75rem;
+      max-width: 560px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.8s;
+    }
+
+    .vin-input {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .vin-input::placeholder { color: rgba(255,255,255,0.25); letter-spacing: 0.05em; }
+
+    .vin-input:focus {
+      border-color: rgba(232,255,63,0.4);
+      background: rgba(255,255,255,0.07);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--black);
+      border: none;
+      border-radius: 8px;
+      padding: 1rem 1.75rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(232,255,63,0.25);
+    }
+
+    .btn-primary:active { transform: translateY(0); }
+
+    /* COMING SOON BADGE */
+    .coming-soon {
+      margin-top: 1.25rem;
+      font-size: 0.8rem;
+      color: var(--mid);
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 1s;
+    }
+
+    .coming-soon span {
+      color: var(--accent2);
+      font-weight: 500;
+    }
+
+    /* STATS */
+    .stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 5rem;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 1.1s;
+    }
+
+    .stat-item {}
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 2rem;
+      letter-spacing: -0.03em;
+      color: var(--white);
+    }
+
+    .stat-num span { color: var(--accent); }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--mid);
+      margin-top: 0.25rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* FEATURES */
+    .features {
+      padding: 6rem 3rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5px;
+      background: rgba(255,255,255,0.06);
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .feature-card {
+      background: var(--black);
+      padding: 2.5rem;
+      transition: background 0.2s;
+    }
+
+    .feature-card:hover { background: var(--gray); }
+
+    .feature-icon {
+      font-size: 1.8rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .feature-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-desc {
+      font-size: 0.88rem;
+      color: var(--mid);
+      line-height: 1.7;
+    }
+
+    /* PRICING PREVIEW */
+    .pricing {
+      padding: 6rem 3rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .pricing::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(63,255,143,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+
+    .section-title span { color: var(--accent); }
+
+    .price-card {
+      display: inline-block;
+      margin-top: 3rem;
+      background: var(--gray);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .price-card::before {
+      content: 'LAUNCH PRICE';
+      position: absolute;
+      top: 1rem; right: -2rem;
+      background: var(--accent);
+      color: var(--black);
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      padding: 0.3rem 3rem;
+      transform: rotate(35deg);
+    }
+
+    .price-amount {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 5rem;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+
+    .price-amount sup {
+      font-size: 2rem;
+      vertical-align: super;
+      color: var(--accent);
+    }
+
+    .price-desc {
+      color: var(--mid);
+      font-size: 0.9rem;
+      margin-top: 0.75rem;
+    }
+
+    .price-features {
+      margin-top: 2rem;
+      text-align: left;
+      list-style: none;
+    }
+
+    .price-features li {
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.7);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .price-features li:last-child { border: none; }
+
+    .price-features li::before {
+      content: '✓';
+      color: var(--accent2);
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 2rem 3rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--mid);
+    }
+
+    .footer-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .footer-logo span { color: var(--accent); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 1.25rem 1.5rem; }
+      .hero { padding: 7rem 1.5rem 3rem; }
+      .vin-form { flex-direction: column; }
+      .stats { gap: 2rem; flex-wrap: wrap; }
+      .features { padding: 4rem 1.5rem; }
+      .pricing { padding: 4rem 1.5rem; }
+      .price-card { padding: 2.5rem 2rem; }
+      footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">VIN<span>Record</span>Hub</div>
+    <div class="nav-badge">Launching Soon</div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-tag">Vehicle History Reports</div>
+    <h1>Know the truth about <span class="highlight">any car.</span></h1>
+    <p class="hero-sub">Instant Carfax & AutoCheck reports at a fraction of the price. No hidden fees. No subscriptions. Just the truth.</p>
+
+    <div class="vin-form">
+      <input class="vin-input" type="text" placeholder="Enter VIN number..." maxlength="17"/>
+      <button class="btn-primary">Get Report</button>
+    </div>
+
+    <p class="coming-soon">🚀 Full launch coming soon — <span>get notified</span> when we go live</p>
+
+    <div class="stats">
+      <div class="stat-item">
+        <div class="stat-num">$4<span>.99</span></div>
+        <div class="stat-label">Per Report</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">60<span>sec</span></div>
+        <div class="stat-label">Delivery Time</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">100<span>%</span></div>
+        <div class="stat-label">Authentic Data</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature-card">
+      <div class="feature-icon">🔍</div>
+      <div class="feature-title">Accident History</div>
+      <div class="feature-desc">Full accident records, damage severity, airbag deployments, and structural damage reports.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📋</div>
+      <div class="feature-title">Title Records</div>
+      <div class="feature-desc">Salvage, rebuilt, flood, lemon titles — every red flag surfaced before you buy.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔧</div>
+      <div class="feature-title">Service History</div>
+      <div class="feature-desc">Oil changes, repairs, recalls, and maintenance records from verified sources.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">👤</div>
+      <div class="feature-title">Ownership Records</div>
+      <div class="feature-desc">Number of previous owners, usage type, and geographic history of the vehicle.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📏</div>
+      <div class="feature-title">Odometer Verification</div>
+      <div class="feature-desc">Detect rollbacks and mileage discrepancies that sellers don't want you to find.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-title">Instant Delivery</div>
+      <div class="feature-desc">Reports delivered to your email within 60 seconds of purchase. No waiting.</div>
+    </div>
+  </section>
+
+  <section class="pricing">
+    <div class="section-label">Simple Pricing</div>
+    <h2 class="section-title">One price. <span>No surprises.</span></h2>
+
+    <div class="price-card">
+      <div class="price-amount"><sup>$</sup>4.99</div>
+      <div class="price-desc">per report — no subscription required</div>
+      <ul class="price-features">
+        <li>Full Carfax or AutoCheck report</li>
+        <li>Accident & damage history</li>
+        <li>Title & ownership records</li>
+        <li>Service & maintenance history</li>
+        <li>Instant PDF delivery to email</li>
+        <li>100% money-back guarantee</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">VIN<span>Record</span>Hub</div>
+    <div>© 2025 VINRecordHub. All rights reserved.</div>
+    <div>support@vinrecordhub.com</div>
+  </footer>
+
+</body>
+</html>

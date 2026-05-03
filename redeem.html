@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Redeem Report — VIN Record Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --black: #080808; --white: #f4f4ef; --accent: #e8ff3f; --accent2: #3fffb0; --gray: #111; --gray2: #1a1a1a; --mid: #666; --border: rgba(255,255,255,0.07); }
+    body { background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; font-weight: 300; min-height: 100vh; display: flex; flex-direction: column; }
+    nav { padding: 1.25rem 3rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; text-decoration: none; color: var(--white); }
+    .logo span { color: var(--accent); }
+
+    .wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 3rem 2rem; }
+
+    .card {
+      background: var(--gray); border: 1px solid var(--border);
+      border-radius: 20px; padding: 3.5rem 3rem; max-width: 520px; width: 100%;
+    }
+
+    /* STATES */
+    .state { display: none; }
+    .state.active { display: block; }
+
+    /* LOADING STATE */
+    .loading-wrap { text-align: center; padding: 2rem 0; }
+    .spinner {
+      width: 48px; height: 48px; border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.1);
+      border-top-color: var(--accent);
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* INVALID STATE */
+    .invalid-icon { font-size: 3rem; margin-bottom: 1rem; text-align: center; }
+    .invalid-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.6rem; text-align: center; margin-bottom: 0.75rem; color: #ff6b6b; }
+    .invalid-desc { color: var(--mid); text-align: center; font-size: 0.9rem; line-height: 1.7; }
+
+    /* FORM STATE */
+    .card-eyebrow { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); margin-bottom: 0.75rem; }
+    .card-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.8rem; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+    .card-title span { color: var(--accent); }
+    .card-sub { font-size: 0.88rem; color: var(--mid); margin-bottom: 2rem; line-height: 1.7; }
+
+    .code-display {
+      background: var(--gray2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .code-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); }
+    .code-value { font-family: monospace; font-size: 1rem; letter-spacing: 0.1em; color: var(--accent); }
+
+    label { display: block; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mid); margin-bottom: 0.5rem; }
+    input {
+      width: 100%; background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
+      padding: 0.95rem 1.1rem; color: var(--white);
+      font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+      outline: none; margin-bottom: 1.25rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    input::placeholder { color: rgba(255,255,255,0.2); }
+    input:focus { border-color: rgba(232,255,63,0.4); background: rgba(255,255,255,0.07); }
+    input.error { border-color: rgba(255,80,80,0.5); margin-bottom: 0.4rem; }
+    .error-msg { font-size: 0.78rem; color: #ff6b6b; margin-bottom: 1rem; }
+
+    .btn-submit {
+      width: 100%; background: var(--accent); color: var(--black);
+      border: none; border-radius: 8px; padding: 1rem;
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem;
+      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(232,255,63,0.3); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* SUCCESS STATE */
+    .success-icon-wrap {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: rgba(63,255,176,0.1); border: 2px solid rgba(63,255,176,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; margin: 0 auto 1.5rem;
+      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+    .success-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.7rem; text-align: center; margin-bottom: 0.75rem; }
+    .success-title span { color: var(--accent2); }
+    .success-desc { color: var(--mid); text-align: center; font-size: 0.9rem; line-height: 1.75; margin-bottom: 2rem; }
+    .success-email {
+      background: var(--gray2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1rem 1.25rem; text-align: center;
+      font-size: 0.88rem; color: var(--accent); margin-bottom: 2rem;
+      font-family: monospace;
+    }
+    .btn-another {
+      display: block; text-align: center; width: 100%;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.9rem;
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem;
+      text-decoration: none; color: var(--white);
+      transition: background 0.2s;
+    }
+    .btn-another:hover { background: rgba(255,255,255,0.1); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">VIN<span>Record</span>Hub</a>
+</nav>
+
+<div class="wrap">
+  <div class="card">
+
+    <!-- LOADING -->
+    <div class="state active" id="stateLoading">
+      <div class="loading-wrap">
+        <div class="spinner"></div>
+        <p style="color:var(--mid)">Validating your code...</p>
+      </div>
+    </div>
+
+    <!-- INVALID -->
+    <div class="state" id="stateInvalid">
+      <div class="invalid-icon">❌</div>
+      <div class="invalid-title">Invalid Code</div>
+      <p class="invalid-desc" id="invalidMsg">This redemption code is invalid or has already been used. Please check your email for the correct code or contact support.</p>
+      <br/>
+      <p class="invalid-desc"><a href="mailto:support@vinrecordhub.com" style="color:var(--accent)">support@vinrecordhub.com</a></p>
+    </div>
+
+    <!-- FORM -->
+    <div class="state" id="stateForm">
+      <div class="card-eyebrow">Redeem Your Report</div>
+      <h1 class="card-title">Enter a <span>VIN</span></h1>
+      <p class="card-sub">Your redemption code is valid. Enter the VIN of the vehicle you want to check and your email to receive the report.</p>
+
+      <div class="code-display">
+        <span class="code-label">Your Code</span>
+        <span class="code-value" id="codeDisplay">—</span>
+      </div>
+
+      <label>VIN Number</label>
+      <input type="text" id="vinInput" placeholder="17-character VIN" maxlength="17" oninput="this.value = this.value.toUpperCase()"/>
+
+      <label>Email Address</label>
+      <input type="email" id="emailInput" placeholder="your@email.com"/>
+      <p style="font-size:0.78rem;color:var(--mid);margin-top:-0.75rem;margin-bottom:1.25rem">Report will be delivered here within 60 seconds.</p>
+
+      <div id="formError" class="error-msg" style="display:none"></div>
+
+      <button class="btn-submit" id="submitBtn" onclick="submitRedeem()">Get My Report →</button>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="state" id="stateSuccess">
+      <div class="success-icon-wrap">✓</div>
+      <h2 class="success-title">Report <span>Sent!</span></h2>
+      <p class="success-desc">Your vehicle history report is on its way. Check your inbox — it should arrive within 60 seconds.</p>
+      <div class="success-email" id="successEmail">—</div>
+      <a href="/" class="btn-another">← Run Another VIN</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code')?.toUpperCase();
+
+  function showState(id) {
+    document.querySelectorAll('.state').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  async function validateCode() {
+    if (!code) {
+      document.getElementById('invalidMsg').textContent = 'No redemption code found in the URL. Please check your email and click the correct link.';
+      showState('stateInvalid');
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/check-code?code=${encodeURIComponent(code)}`);
+      const data = await res.json();
+
+      if (data.valid) {
+        document.getElementById('codeDisplay').textContent = code;
+        showState('stateForm');
+      } else {
+        document.getElementById('invalidMsg').textContent =
+          data.vin_used
+            ? `This code has already been used for VIN: ${data.vin_used}`
+            : (data.error || 'This code is invalid or expired.');
+        showState('stateInvalid');
+      }
+    } catch (err) {
+      document.getElementById('invalidMsg').textContent = 'Could not validate code. Please try again or contact support.';
+      showState('stateInvalid');
+    }
+  }
+
+  async function submitRedeem() {
+    const vin = document.getElementById('vinInput').value.trim();
+    const email = document.getElementById('emailInput').value.trim();
+    const errorEl = document.getElementById('formError');
+    const btn = document.getElementById('submitBtn');
+
+    errorEl.style.display = 'none';
+
+    if (vin.length !== 17) {
+      errorEl.textContent = 'Please enter a valid 17-character VIN.';
+      errorEl.style.display = 'block';
+      return;
+    }
+    if (!email.includes('@') || !email.includes('.')) {
+      errorEl.textContent = 'Please enter a valid email address.';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Generating report...';
+
+    try {
+      const res = await fetch('/api/redeem', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, vin, email }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('successEmail').textContent = email;
+        showState('stateSuccess');
+      } else {
+        errorEl.textContent = data.error || 'Something went wrong. Please try again.';
+        errorEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Get My Report →';
+      }
+    } catch (err) {
+      errorEl.textContent = 'Network error. Please try again or contact support@vinrecordhub.com';
+      errorEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Get My Report →';
+    }
+  }
+
+  // Kick off validation immediately
+  validateCode();
+</script>
+</body>
+</html>

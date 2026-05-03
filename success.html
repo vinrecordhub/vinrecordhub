@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Confirmed — VIN Record Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --black: #080808; --white: #f4f4ef; --accent: #e8ff3f; --accent2: #3fffb0; --gray: #111; --mid: #666; --border: rgba(255,255,255,0.07); }
+    body { background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; font-weight: 300; min-height: 100vh; display: flex; flex-direction: column; }
+    nav { padding: 1.25rem 3rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; text-decoration: none; color: var(--white); }
+    .logo span { color: var(--accent); }
+
+    .success-wrap {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      padding: 4rem 2rem;
+    }
+    .success-card {
+      background: var(--gray); border: 1px solid var(--border);
+      border-radius: 20px; padding: 4rem 3.5rem; max-width: 580px;
+      width: 100%; text-align: center; position: relative; overflow: hidden;
+    }
+    .success-card::before {
+      content: '';
+      position: absolute; top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle at center, rgba(63,255,176,0.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .success-icon {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: rgba(63,255,176,0.1); border: 2px solid rgba(63,255,176,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.2rem; margin: 0 auto 2rem;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    @keyframes popIn { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+    h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2rem; letter-spacing: -0.03em; margin-bottom: 0.75rem; }
+    h1 span { color: var(--accent2); }
+    .success-sub { color: var(--mid); font-size: 0.95rem; line-height: 1.7; margin-bottom: 2.5rem; }
+    .order-details {
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem; text-align: left; margin-bottom: 2rem;
+    }
+    .detail-row { display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.88rem; border-bottom: 1px solid var(--border); }
+    .detail-row:last-child { border: none; }
+    .detail-label { color: var(--mid); }
+    .detail-value { font-weight: 500; font-family: monospace; font-size: 0.85rem; }
+    .timeline { margin-bottom: 2rem; text-align: left; }
+    .timeline-item { display: flex; gap: 1rem; padding: 0.75rem 0; }
+    .timeline-dot { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; margin-top: 0.1rem; }
+    .timeline-dot.done { background: rgba(63,255,176,0.2); color: var(--accent2); border: 1px solid rgba(63,255,176,0.3); }
+    .timeline-dot.pending { background: rgba(232,255,63,0.1); color: var(--accent); border: 1px solid rgba(232,255,63,0.3); animation: pulse 1.5s ease infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+    .timeline-text { font-size: 0.88rem; }
+    .timeline-text strong { display: block; font-weight: 500; margin-bottom: 0.2rem; }
+    .timeline-text span { color: var(--mid); font-size: 0.82rem; }
+    .btn-home { display: inline-block; background: var(--accent); color: var(--black); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; padding: 0.9rem 2.5rem; border-radius: 8px; text-decoration: none; transition: transform 0.15s, box-shadow 0.15s; }
+    .btn-home:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(232,255,63,0.3); }
+    .support-note { font-size: 0.78rem; color: var(--mid); margin-top: 1.25rem; }
+    .support-note a { color: var(--accent2); text-decoration: none; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">VIN<span>Record</span>Hub</a>
+</nav>
+
+<div class="success-wrap">
+  <div class="success-card">
+    <div class="success-icon">✓</div>
+    <h1>Payment <span>confirmed!</span></h1>
+    <p class="success-sub">Your order is being processed. Your vehicle history report will be delivered to your email inbox within 60 seconds.</p>
+
+    <div class="order-details" id="orderDetails">
+      <div class="detail-row"><span class="detail-label">Order ID</span><span class="detail-value" id="orderId">—</span></div>
+      <div class="detail-row"><span class="detail-label">VIN</span><span class="detail-value" id="vinDisplay">—</span></div>
+      <div class="detail-row"><span class="detail-label">Report sent to</span><span class="detail-value" id="emailDisplay">—</span></div>
+      <div class="detail-row"><span class="detail-label">Plan</span><span class="detail-value" id="planDisplay">—</span></div>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot done">✓</div>
+        <div class="timeline-text"><strong>Payment confirmed</strong><span>Your payment was processed successfully</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot pending">⟳</div>
+        <div class="timeline-text"><strong>Report generating</strong><span>Pulling vehicle history data now...</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);">📩</div>
+        <div class="timeline-text"><strong>Email delivery</strong><span>Report PDF sent to your inbox</span></div>
+      </div>
+    </div>
+
+    <a href="/" class="btn-home">Run Another VIN →</a>
+    <p class="support-note">Didn't receive your report within 5 minutes? <a href="mailto:support@vinrecordhub.com">Contact support</a></p>
+  </div>
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const planNames = { single: 'Single Report', five: '5 Report Pack', ten: '10 Report Pack', twentyfive: '25 Report Pack' };
+  document.getElementById('orderId').textContent = params.get('order') || '—';
+  document.getElementById('vinDisplay').textContent = params.get('vin') || '—';
+  document.getElementById('emailDisplay').textContent = params.get('email') || '—';
+  document.getElementById('planDisplay').textContent = planNames[params.get('plan')] || 'Single Report';
+</script>
+</body>
+</html>

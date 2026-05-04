@@ -1,14 +1,10 @@
-// api/test-cheapvhr.js — DEBUG VERSION (IPv4 forced)
-// GET /api/test-cheapvhr
-// Tests CheapVHR connection — DOES NOT use credits
+// api/test-cheapvhr.js — Diagnose what IP CheapVHR sees
 
 const { HttpsProxyAgent } = require('https-proxy-agent');
 const dns = require('dns');
 
-// FORCE IPv4 — CheapVHR only whitelists IPv4 addresses
 dns.setDefaultResultOrder('ipv4first');
 
-// Build proxy with IPv4 family forced
 const proxyAgent = process.env.FIXIE_URL
   ? new HttpsProxyAgent(process.env.FIXIE_URL, { family: 4 })
   : null;
@@ -18,44 +14,39 @@ module.exports = async function handler(req, res) {
 
   const results = {
     proxyEnabled: !!proxyAgent,
-    apiKeySet: !!process.env.CHEAPVHR_API_KEY,
-    apiKeyLength: process.env.CHEAPVHR_API_KEY?.length || 0,
-    fixieUrlSet: !!process.env.FIXIE_URL,
-    ipv4Forced: true,
+    fixieUrl: process.env.FIXIE_URL ? process.env.FIXIE_URL.replace(/:[^@]+@/, ':***@') : 'NOT SET',
   };
 
   try {
-    // Test 1: User info (no credit charge)
-    const userRes = await fetch('https://api.cheapvhr.com/v1/user', {
+    // Test 1: Hit a "what's my IP" service THROUGH the proxy
+    // This tells us EXACTLY what IP CheapVHR will see from us
+    const ipRes = await fetch('https://api.ipify.org?format=json', {
+      agent: proxyAgent,
+    });
+    const ipData = await ipRes.json();
+    results.outboundIP = ipData.ip;
+    results.expectedIPs = ['52.5.155.132', '52.87.82.133'];
+    results.ipMatchesFixie = ['52.5.155.132', '52.87.82.133'].includes(ipData.ip);
+
+    // Test 2: Hit Fixie's welcome endpoint (their own diagnostic)
+    const welcomeRes = await fetch('http://welcome.usefixie.com', {
+      agent: proxyAgent,
+    });
+    results.fixieWelcomeStatus = welcomeRes.status;
+    const welcomeText = await welcomeRes.text();
+    results.fixieWelcome = welcomeText.substring(0, 200);
+
+    // Test 3: Hit CheapVHR
+    const cheapvhrRes = await fetch('https://api.cheapvhr.com/v1/user', {
       headers: { 'x-api-key': process.env.CHEAPVHR_API_KEY },
       agent: proxyAgent,
     });
+    results.cheapvhrStatus = cheapvhrRes.status;
+    const cheapvhrBody = await cheapvhrRes.text();
+    results.cheapvhrBodySnippet = cheapvhrBody.substring(0, 200);
 
-    results.userStatus = userRes.status;
-    const userBody = await userRes.text();
-    results.userBodyRaw = userBody.substring(0, 300);
-    
-    try {
-      results.userBody = JSON.parse(userBody);
-    } catch {
-      results.userBody = '(not JSON)';
-    }
-
-    // Test 2: Limits (no credit charge)
-    const limitsRes = await fetch('https://api.cheapvhr.com/v1/user/limits', {
-      headers: { 'x-api-key': process.env.CHEAPVHR_API_KEY },
-      agent: proxyAgent,
-    });
-
-    results.limitsStatus = limitsRes.status;
-    const limitsBody = await limitsRes.text();
-    results.limitsBodyRaw = limitsBody.substring(0, 300);
-    
-    try {
-      results.limitsBody = JSON.parse(limitsBody);
-    } catch {
-      results.limitsBody = '(not JSON)';
-    }
+    // Test 4: Pull CF-Ray header (Cloudflare's request ID — tells us why blocked)
+    results.cheapvhrCloudflareRay = cheapvhrRes.headers.get('cf-ray');
 
     return res.status(200).json(results);
 

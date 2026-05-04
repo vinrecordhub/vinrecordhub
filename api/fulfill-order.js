@@ -18,6 +18,24 @@ const PLANS = {
   combo:     { amount: 14.99, reportTypes: ['carfax', 'autocheck']  },
 };
 
+// Server-side coupon validation (must match checkout.html)
+const COUPONS = {
+  'TESTONLY':  { fixedPrice: 1.00 },
+  'LAUNCH50':  { type: 'percent', value: 50 },
+  'WELCOME20': { type: 'percent', value: 20 },
+};
+
+function getDiscountedAmount(planAmount, couponCode) {
+  if (!couponCode) return planAmount;
+  const coupon = COUPONS[couponCode.toUpperCase()];
+  if (!coupon) return planAmount;
+  
+  if (coupon.fixedPrice !== undefined) return coupon.fixedPrice;
+  if (coupon.type === 'percent') return Math.max(0.01, planAmount * (1 - coupon.value / 100));
+  if (coupon.type === 'fixed') return Math.max(0.01, planAmount - coupon.value);
+  return planAmount;
+}
+
 // Verify PayPal payment
 async function verifyPayPalPayment(orderId, expectedAmount) {
   const auth = Buffer.from(`${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`).toString('base64');
@@ -124,7 +142,7 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { email, vin, plan, paypalOrderId } = req.body;
+    const { email, vin, plan, paypalOrderId, coupon } = req.body;
 
     if (!email || !vin || !plan || !paypalOrderId) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -132,7 +150,8 @@ module.exports = async function handler(req, res) {
     if (vin.length !== 17) return res.status(400).json({ error: 'VIN must be 17 characters' });
     if (!PLANS[plan]) return res.status(400).json({ error: 'Invalid plan' });
 
-    const { amount, reportTypes } = PLANS[plan];
+    const { amount: baseAmount, reportTypes } = PLANS[plan];
+    const expectedAmount = getDiscountedAmount(baseAmount, coupon);
 
     // Check duplicate before charging credits
     const { data: existing } = await supabase
@@ -143,14 +162,20 @@ module.exports = async function handler(req, res) {
 
     if (existing) return res.status(400).json({ error: 'Order already processed' });
 
-    // Verify payment
-    const isValid = await verifyPayPalPayment(paypalOrderId, amount);
+    // Verify payment matches expected amount (with coupon discount applied)
+    const isValid = await verifyPayPalPayment(paypalOrderId, expectedAmount);
     if (!isValid) return res.status(400).json({ error: 'Payment verification failed' });
 
     // Save order
     const { data: order, error: orderError } = await supabase
       .from('orders')
-      .insert({ email, plan, quantity: reportTypes.length, amount, paypal_order_id: paypalOrderId })
+      .insert({
+        email,
+        plan,
+        quantity: reportTypes.length,
+        amount: expectedAmount,
+        paypal_order_id: paypalOrderId,
+      })
       .select()
       .single();
 

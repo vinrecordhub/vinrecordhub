@@ -103,11 +103,11 @@
 
 <script>
   const params = new URLSearchParams(window.location.search);
-  const planNames = { single: 'Single Report', five: '5 Report Pack', ten: '10 Report Pack', twentyfive: '25 Report Pack' };
+  const planNames = { carfax: 'Carfax Report', autocheck: 'AutoCheck Report', combo: 'Combo Pack (Carfax + AutoCheck)' };
   document.getElementById('orderId').textContent = params.get('order') || '—';
   document.getElementById('vinDisplay').textContent = params.get('vin') || '—';
   document.getElementById('emailDisplay').textContent = params.get('email') || '—';
-  document.getElementById('planDisplay').textContent = planNames[params.get('plan')] || 'Single Report';
+  document.getElementById('planDisplay').textContent = planNames[params.get('plan')] || 'Carfax Report';
 </script>
 </body>
 </html>

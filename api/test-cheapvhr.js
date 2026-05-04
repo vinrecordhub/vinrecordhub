@@ -1,7 +1,6 @@
-// api/test-cheapvhr.js
-// GET /api/test-cheapvhr?vin=1FMDU34X7PUD75574
-// One-off test endpoint to verify CheapVHR API integration through Fixie proxy
-// DELETE THIS FILE BEFORE GOING LIVE TO PREVENT FREE REPORTS
+// api/test-cheapvhr.js — DEBUG VERSION
+// GET /api/test-cheapvhr
+// Tests CheapVHR connection — DOES NOT use credits
 
 const { HttpsProxyAgent } = require('https-proxy-agent');
 
@@ -12,49 +11,53 @@ const proxyAgent = process.env.FIXIE_URL
 module.exports = async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
-  const vin = req.query.vin || '1FMDU34X7PUD75574'; // CheapVHR's free test VIN
-  const type = req.query.type || 'carfax';
+  const results = {
+    proxyEnabled: !!proxyAgent,
+    apiKeySet: !!process.env.CHEAPVHR_API_KEY,
+    apiKeyLength: process.env.CHEAPVHR_API_KEY?.length || 0,
+    fixieUrlSet: !!process.env.FIXIE_URL,
+  };
 
   try {
-    // Step 1: Check user info (verifies API key works)
+    // Test 1: Check user info (does NOT charge credits)
     const userRes = await fetch('https://api.cheapvhr.com/v1/user', {
       headers: { 'x-api-key': process.env.CHEAPVHR_API_KEY },
       agent: proxyAgent,
     });
-    const user = await userRes.json();
 
-    // Step 2: Check limits
+    results.userStatus = userRes.status;
+    results.userHeaders = Object.fromEntries(userRes.headers.entries());
+    
+    const userBody = await userRes.text();
+    results.userBodyRaw = userBody.substring(0, 500); // first 500 chars
+    
+    try {
+      results.userBody = JSON.parse(userBody);
+    } catch {
+      results.userBody = '(not JSON — see userBodyRaw above)';
+    }
+
+    // Test 2: Check limits (does NOT charge credits)
     const limitsRes = await fetch('https://api.cheapvhr.com/v1/user/limits', {
       headers: { 'x-api-key': process.env.CHEAPVHR_API_KEY },
       agent: proxyAgent,
     });
-    const limits = await limitsRes.json();
 
-    // Step 3: Try fetching a test report (uses 1 credit if real VIN)
-    const reportRes = await fetch(`https://api.cheapvhr.com/v1/${type}/vin/${vin}/html`, {
-      headers: { 'x-api-key': process.env.CHEAPVHR_API_KEY },
-      agent: proxyAgent,
-    });
-    const reportStatus = reportRes.status;
-    const reportData = await reportRes.json().catch(() => null);
+    results.limitsStatus = limitsRes.status;
+    const limitsBody = await limitsRes.text();
+    results.limitsBodyRaw = limitsBody.substring(0, 300);
+    
+    try {
+      results.limitsBody = JSON.parse(limitsBody);
+    } catch {
+      results.limitsBody = '(not JSON)';
+    }
 
-    return res.status(200).json({
-      success: true,
-      proxyEnabled: !!proxyAgent,
-      user,
-      limits,
-      reportStatus,
-      reportSummary: reportData ? {
-        vin: reportData.vin,
-        yearMakeModel: reportData.yearMakeModel,
-        reportId: reportData.id,
-        htmlLength: reportData.html ? reportData.html.length : 0,
-      } : null,
-    });
+    return res.status(200).json(results);
+
   } catch (err) {
-    return res.status(500).json({
-      error: err.message,
-      proxyEnabled: !!proxyAgent,
-    });
+    results.error = err.message;
+    results.stack = err.stack?.substring(0, 500);
+    return res.status(500).json(results);
   }
 };

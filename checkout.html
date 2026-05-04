@@ -160,36 +160,27 @@
     <!-- PLAN SELECT -->
     <label style="margin-bottom:0.75rem; display:block;">Choose Your Plan</label>
     <div class="plan-grid">
-      <div class="plan-option" id="plan-single" onclick="selectPlan('single')">
-        <input type="radio" name="plan" value="single"/>
+      <div class="plan-option" id="plan-carfax" onclick="selectPlan('carfax')">
+        <input type="radio" name="plan" value="carfax"/>
         <div class="plan-check">✓</div>
-        <div class="plan-name">Single Report</div>
-        <div class="plan-price"><span>$5.99</span></div>
-        <div class="plan-per">1 report</div>
+        <div class="plan-name">Carfax Report</div>
+        <div class="plan-price"><span>$9.99</span></div>
+        <div class="plan-per">single report</div>
       </div>
-      <div class="plan-option" id="plan-five" onclick="selectPlan('five')">
-        <input type="radio" name="plan" value="five"/>
+      <div class="plan-option" id="plan-autocheck" onclick="selectPlan('autocheck')">
+        <input type="radio" name="plan" value="autocheck"/>
         <div class="plan-check">✓</div>
-        <div class="plan-name">5 Report Pack</div>
-        <div class="plan-price"><span>$21.99</span></div>
-        <div class="plan-per">$4.40 each</div>
-        <div class="plan-save">Save 27%</div>
+        <div class="plan-name">AutoCheck Report</div>
+        <div class="plan-price"><span>$9.99</span></div>
+        <div class="plan-per">single report</div>
       </div>
-      <div class="plan-option" id="plan-ten" onclick="selectPlan('ten')">
-        <input type="radio" name="plan" value="ten"/>
+      <div class="plan-option" id="plan-combo" onclick="selectPlan('combo')" style="grid-column:1/-1">
+        <input type="radio" name="plan" value="combo"/>
         <div class="plan-check">✓</div>
-        <div class="plan-name">10 Report Pack</div>
-        <div class="plan-price"><span>$39.99</span></div>
-        <div class="plan-per">$4.00 each</div>
-        <div class="plan-save">Save 33%</div>
-      </div>
-      <div class="plan-option" id="plan-twentyfive" onclick="selectPlan('twentyfive')">
-        <input type="radio" name="plan" value="twentyfive"/>
-        <div class="plan-check">✓</div>
-        <div class="plan-name">25 Report Pack</div>
-        <div class="plan-price"><span>$84.99</span></div>
-        <div class="plan-per">$3.40 each</div>
-        <div class="plan-save">Save 43%</div>
+        <div class="plan-name">Combo Pack — Carfax + AutoCheck</div>
+        <div class="plan-price"><span>$14.99</span></div>
+        <div class="plan-per">Both reports for one VIN</div>
+        <div class="plan-save">Save $5 — most thorough check</div>
       </div>
     </div>
 
@@ -201,22 +192,22 @@
   <!-- RIGHT SUMMARY -->
   <div class="order-summary">
     <div class="summary-title">Order Summary</div>
-    <div class="summary-plan" id="summaryPlan">Single Report</div>
+    <div class="summary-plan" id="summaryPlan">Carfax Report</div>
     <div class="summary-vin" id="summaryVin">VIN: —</div>
     <div class="summary-items">
-      <div class="summary-item"><span id="summaryDesc">1 vehicle history report</span><span id="summaryPrice">$5.99</span></div>
+      <div class="summary-item"><span id="summaryDesc">1 Carfax vehicle history report</span><span id="summaryPrice">$9.99</span></div>
     </div>
     <hr class="summary-divider"/>
     <div class="summary-total">
       <span class="summary-total-label">Total</span>
-      <span class="summary-total-price" id="summaryTotal">$5.99</span>
+      <span class="summary-total-price" id="summaryTotal">$9.99</span>
     </div>
     <div class="summary-features">
       <div class="summary-feature">Accident & damage history</div>
       <div class="summary-feature">Title & ownership records</div>
       <div class="summary-feature">Odometer verification</div>
       <div class="summary-feature">Service history records</div>
-      <div class="summary-feature">Instant PDF to email</div>
+      <div class="summary-feature">Instant delivery to email</div>
       <div class="summary-feature">Money-back guarantee</div>
     </div>
   </div>
@@ -228,13 +219,12 @@
 <script src="https://www.paypal.com/sdk/js?client-id=YOUR-PAYPAL-CLIENT-ID&currency=USD"></script>
 <script>
   const plans = {
-    single:      { name: 'Single Report',    price: 5.99,  desc: '1 vehicle history report' },
-    five:        { name: '5 Report Pack',    price: 21.99, desc: '5 vehicle history reports' },
-    ten:         { name: '10 Report Pack',   price: 39.99, desc: '10 vehicle history reports' },
-    twentyfive:  { name: '25 Report Pack',   price: 84.99, desc: '25 vehicle history reports' },
+    carfax:    { name: 'Carfax Report',    price: 9.99,  desc: '1 Carfax vehicle history report',    reportType: 'carfax',    quantity: 1 },
+    autocheck: { name: 'AutoCheck Report', price: 9.99,  desc: '1 AutoCheck vehicle history report', reportType: 'autocheck', quantity: 1 },
+    combo:     { name: 'Combo Pack',       price: 14.99, desc: 'Carfax + AutoCheck for same VIN',    reportType: 'combo',     quantity: 2 },
   };
 
-  let currentPlan = 'single';
+  let currentPlan = 'carfax';
 
   // Read URL params
   const params = new URLSearchParams(window.location.search);
@@ -295,21 +285,34 @@
         });
       },
       onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
+        return actions.order.capture().then(async function(details) {
           const vin = document.getElementById('vinInput').value.trim();
           const email = document.getElementById('emailInput').value.trim();
           const plan = currentPlan;
           const orderId = details.id;
 
-          // ============================================================
-          // TODO: Call CarSimulcast API here when you have the docs
-          // Send: { vin, email, plan, orderId }
-          // Receive: report URL or PDF
-          // Email report to customer
-          // ============================================================
+          // Call fulfill-order — fetches report from CheapVHR and emails customer
+          try {
+            const res = await fetch('/api/fulfill-order', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email, vin, plan, paypalOrderId: orderId }),
+            });
+            const result = await res.json();
 
-          // For now redirect to success page
-          window.location.href = `success.html?vin=${vin}&email=${encodeURIComponent(email)}&plan=${plan}&order=${orderId}`;
+            if (result.success) {
+              // Redirect to success page
+              window.location.href = `success.html?vin=${vin}&email=${encodeURIComponent(email)}&plan=${plan}&order=${orderId}`;
+            } else {
+              // Payment was successful but report fetch failed — still go to success page so they have order info
+              alert('Payment received! Your report may take a few extra minutes — check your email or contact support@vinrecordhub.com if not received within 10 minutes.');
+              window.location.href = `success.html?vin=${vin}&email=${encodeURIComponent(email)}&plan=${plan}&order=${orderId}`;
+            }
+          } catch (err) {
+            // Payment captured but network error — redirect to success page anyway
+            alert('Payment received! Your report is being processed. If you do not receive it within 10 minutes, contact support@vinrecordhub.com');
+            window.location.href = `success.html?vin=${vin}&email=${encodeURIComponent(email)}&plan=${plan}&order=${orderId}`;
+          }
         });
       },
       onError: function(err) {

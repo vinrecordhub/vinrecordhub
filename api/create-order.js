@@ -10,10 +10,9 @@ const supabase = createClient(
 );
 
 const PLANS = {
-  single:     { quantity: 1,  amount: 5.99  },
-  five:       { quantity: 5,  amount: 21.99 },
-  ten:        { quantity: 10, amount: 39.99 },
-  twentyfive: { quantity: 25, amount: 84.99 },
+  carfax:    { quantity: 1, amount: 9.99,  reportType: 'carfax'    },
+  autocheck: { quantity: 1, amount: 9.99,  reportType: 'autocheck' },
+  combo:     { quantity: 2, amount: 14.99, reportType: 'combo'     },
 };
 
 // Generate a random alphanumeric code

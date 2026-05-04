@@ -5,6 +5,10 @@
 
 const { createClient } = require('@supabase/supabase-js');
 const { HttpsProxyAgent } = require('https-proxy-agent');
+const dns = require('dns');
+
+// FORCE IPv4 — CheapVHR only whitelists IPv4 addresses
+dns.setDefaultResultOrder('ipv4first');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -12,7 +16,7 @@ const supabase = createClient(
 );
 
 const proxyAgent = process.env.FIXIE_URL
-  ? new HttpsProxyAgent(process.env.FIXIE_URL)
+  ? new HttpsProxyAgent(process.env.FIXIE_URL, { family: 4 })
   : null;
 
 const PLANS = {

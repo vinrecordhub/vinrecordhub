@@ -39,9 +39,10 @@
     .field-hint { font-size: 0.75rem; color: var(--mid); margin-top: 0.4rem; }
 
     .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem; }
-    .plan-option { border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; cursor: pointer; transition: border-color 0.2s, background 0.2s; position: relative; }
+    .plan-option { border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; cursor: pointer; transition: all 0.2s; position: relative; user-select: none; }
     .plan-option:hover { border-color: rgba(232,255,63,0.3); background: rgba(255,255,255,0.03); }
-    .plan-option.selected { border-color: var(--accent); background: rgba(232,255,63,0.05); }
+    .plan-option.selected { border-color: var(--accent) !important; background: rgba(232,255,63,0.08) !important; }
+    .plan-option:active { transform: scale(0.98); }
     .plan-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem; }
     .plan-price { font-size: 1.3rem; font-weight: 300; margin-top: 0.25rem; }
     .plan-price span { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--accent); }
@@ -116,19 +117,19 @@
 
     <label style="margin-bottom:0.75rem;display:block">Choose Your Plan</label>
     <div class="plan-grid">
-      <div class="plan-option" id="plan-carfax" onclick="selectPlan('carfax')">
+      <div class="plan-option" id="plan-carfax" data-plan="carfax">
         <div class="plan-check">✓</div>
         <div class="plan-name">Carfax Report</div>
         <div class="plan-price"><span>$9.99</span></div>
         <div class="plan-per">single report</div>
       </div>
-      <div class="plan-option" id="plan-autocheck" onclick="selectPlan('autocheck')">
+      <div class="plan-option" id="plan-autocheck" data-plan="autocheck">
         <div class="plan-check">✓</div>
         <div class="plan-name">AutoCheck Report</div>
         <div class="plan-price"><span>$9.99</span></div>
         <div class="plan-per">single report</div>
       </div>
-      <div class="plan-option" id="plan-combo" onclick="selectPlan('combo')" style="grid-column:1/-1">
+      <div class="plan-option" id="plan-combo" data-plan="combo" style="grid-column:1/-1">
         <div class="plan-check">✓</div>
         <div class="plan-name">Combo Pack — Carfax + AutoCheck</div>
         <div class="plan-price"><span>$14.99</span></div>
@@ -216,10 +217,27 @@
   if (params.get('vin')) { document.getElementById('vinInput').value = params.get('vin'); currentVin = params.get('vin'); }
   if (params.get('plan') && plans[params.get('plan')]) currentPlan = params.get('plan');
 
+  // Attach click handlers to plan options
+  document.querySelectorAll('.plan-option').forEach(el => {
+    el.addEventListener('click', function() {
+      selectPlan(this.dataset.plan);
+    });
+  });
+
   function selectPlan(plan) {
     currentPlan = plan;
-    document.querySelectorAll('.plan-option').forEach(el => el.classList.remove('selected'));
-    document.getElementById('plan-' + plan).classList.add('selected');
+    document.querySelectorAll('.plan-option').forEach(el => {
+      el.classList.remove('selected');
+      el.querySelector('.plan-check').style.background = '';
+      el.querySelector('.plan-check').style.borderColor = '';
+      el.querySelector('.plan-check').style.color = '';
+    });
+    const selected = document.getElementById('plan-' + plan);
+    selected.classList.add('selected');
+    const check = selected.querySelector('.plan-check');
+    check.style.background = '#e8ff3f';
+    check.style.borderColor = '#e8ff3f';
+    check.style.color = '#000';
     updateSummary();
   }
 

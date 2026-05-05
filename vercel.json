@@ -3,6 +3,7 @@
   "routes": [
     { "src": "/checkout", "dest": "/checkout.html" },
     { "src": "/success", "dest": "/success.html" },
+    { "src": "/redeem", "dest": "/redeem.html" },
     { "src": "/terms", "dest": "/terms.html" },
     { "src": "/privacy", "dest": "/privacy.html" }
   ]

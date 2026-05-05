@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Checkout — VIN Record Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <!-- Paddle.js -->
-  <script src="https://cdn.paddle.com/paddle/v1/paddle.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -18,76 +16,92 @@
     nav { padding: 1.25rem 3rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
     .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; text-decoration: none; color: var(--white); }
     .logo span { color: var(--accent); }
-    .secure-badge { font-size: 0.78rem; color: var(--mid); display: flex; align-items: center; gap: 0.4rem; }
-
-    .checkout-wrap { max-width: 1000px; margin: 3rem auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 420px; gap: 2rem; }
-
+    .secure-badge { font-size: 0.78rem; color: var(--mid); }
+    .checkout-wrap { max-width: 1000px; margin: 3rem auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 400px; gap: 2rem; }
     .form-section h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.8rem; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
-    .form-section p { font-size: 0.88rem; color: var(--mid); margin-bottom: 2rem; }
-
-    .field-group { margin-bottom: 1.5rem; }
-    label { display: block; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mid); margin-bottom: 0.5rem; }
-    input[type=text], input[type=email] {
+    .form-section > p { font-size: 0.88rem; color: var(--mid); margin-bottom: 2rem; }
+    .field-group { margin-bottom: 1.25rem; }
+    label { display: block; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mid); margin-bottom: 0.5rem; }
+    input {
       width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
       border-radius: 8px; padding: 0.9rem 1.1rem; color: var(--white);
       font-family: 'DM Sans', sans-serif; font-size: 0.95rem; outline: none;
       transition: border-color 0.2s, background 0.2s;
     }
-    input::placeholder { color: rgba(255,255,255,0.2); }
-    input:focus { border-color: rgba(232,255,63,0.4); background: rgba(255,255,255,0.07); }
-    input.error { border-color: rgba(255,80,80,0.5); }
+    input::placeholder { color: rgba(255,255,255,0.25); }
+    input:focus { border-color: rgba(232,255,63,0.5); background: rgba(255,255,255,0.07); }
+    input.error { border-color: rgba(255,80,80,0.6) !important; }
     .field-hint { font-size: 0.75rem; color: var(--mid); margin-top: 0.4rem; }
 
+    /* PLAN CARDS */
     .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem; }
-    .plan-option { border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; cursor: pointer; transition: all 0.2s; position: relative; user-select: none; }
-    .plan-option:hover { border-color: rgba(232,255,63,0.3); background: rgba(255,255,255,0.03); }
-    .plan-option.selected { border-color: var(--accent) !important; background: rgba(232,255,63,0.08) !important; }
-    .plan-option:active { transform: scale(0.98); }
-    .plan-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem; }
-    .plan-price { font-size: 1.3rem; font-weight: 300; margin-top: 0.25rem; }
-    .plan-price span { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--accent); }
-    .plan-per { font-size: 0.72rem; color: var(--mid); }
-    .plan-save { font-size: 0.68rem; color: var(--accent2); font-weight: 500; margin-top: 0.2rem; }
-    .plan-check { position: absolute; top: 0.75rem; right: 0.75rem; width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; transition: all 0.2s; }
-    .plan-option.selected .plan-check { background: var(--accent); border-color: var(--accent); color: var(--black); }
+    .plan-card {
+      border: 2px solid rgba(255,255,255,0.08); border-radius: 12px;
+      padding: 1rem 1.25rem; cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, transform 0.1s;
+      position: relative; background: rgba(255,255,255,0.02);
+    }
+    .plan-card:hover { border-color: rgba(232,255,63,0.4); background: rgba(232,255,63,0.03); }
+    .plan-card.active { border-color: #e8ff3f !important; background: rgba(232,255,63,0.07) !important; }
+    .plan-card:active { transform: scale(0.97); }
+    .plan-card.full { grid-column: 1 / -1; }
+    .plan-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); position: absolute; top: 1rem; right: 1rem; transition: all 0.15s; }
+    .plan-card.active .plan-dot { background: #e8ff3f; border-color: #e8ff3f; }
+    .plan-card.active .plan-dot::after { content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 10px; color: #000; font-weight: 700; }
+    .plan-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; padding-right: 1.5rem; }
+    .plan-price-val { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; color: var(--accent); margin-top: 0.3rem; }
+    .plan-sub { font-size: 0.72rem; color: var(--mid); }
+    .plan-badge { display: inline-block; font-size: 0.65rem; color: var(--accent2); font-weight: 600; margin-top: 0.25rem; }
 
     /* COUPON */
     .coupon-row { display: flex; gap: 0.5rem; }
     .coupon-row input { flex: 1; }
-    .btn-apply { background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--white); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; padding: 0 1.25rem; border-radius: 8px; cursor: pointer; white-space: nowrap; }
-    .coupon-msg { font-size: 0.78rem; margin-top: 0.4rem; display: none; }
+    .btn-apply {
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+      color: var(--white); font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 0.85rem; padding: 0 1.25rem; border-radius: 8px; cursor: pointer;
+      white-space: nowrap; transition: background 0.15s;
+    }
+    .btn-apply:hover { background: rgba(255,255,255,0.12); }
+    .coupon-status { font-size: 0.78rem; margin-top: 0.5rem; min-height: 1rem; }
+    .coupon-status.ok { color: var(--accent2); }
+    .coupon-status.fail { color: #ff6b6b; }
 
-    /* BUY BUTTON */
-    .btn-buy {
-      display: block; width: 100%; background: var(--accent); color: var(--black);
-      border: none; border-radius: 10px; padding: 1.1rem;
+    /* PAY BUTTON */
+    .btn-pay {
+      display: block; width: 100%; margin-top: 1.5rem;
+      background: var(--accent); color: var(--black); border: none;
+      border-radius: 10px; padding: 1.1rem 2rem;
       font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem;
       cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
-      margin-top: 1.5rem; text-align: center;
     }
-    .btn-buy:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(232,255,63,0.3); }
-    .btn-buy:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-    .pay-note { font-size: 0.78rem; color: var(--mid); text-align: center; margin-top: 1rem; line-height: 1.6; }
+    .btn-pay:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(232,255,63,0.3); }
+    .btn-pay:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+    .pay-note { font-size: 0.75rem; color: var(--mid); text-align: center; margin-top: 0.75rem; line-height: 1.6; }
+    .error-msg { color: #ff6b6b; font-size: 0.82rem; margin-top: 1rem; display: none; }
 
     /* ORDER SUMMARY */
-    .order-summary { background: var(--gray); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; height: fit-content; position: sticky; top: 2rem; }
-    .summary-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--mid); margin-bottom: 1.5rem; }
-    .summary-plan { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.25rem; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
-    .summary-vin { font-size: 0.8rem; color: var(--mid); margin-bottom: 1.5rem; font-family: monospace; letter-spacing: 0.05em; }
-    .summary-item { display: flex; justify-content: space-between; font-size: 0.85rem; color: rgba(255,255,255,0.6); padding: 0.4rem 0; }
-    .summary-divider { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
-    .summary-total { display: flex; justify-content: space-between; align-items: baseline; }
-    .summary-total-label { font-family: 'Syne', sans-serif; font-weight: 700; }
-    .summary-total-price { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2rem; letter-spacing: -0.03em; color: var(--accent); }
-    .summary-feature { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; color: rgba(255,255,255,0.5); padding: 0.3rem 0; }
-    .summary-feature::before { content: '✓'; color: var(--accent2); font-weight: 700; flex-shrink: 0; }
-    .summary-features { margin-top: 1.5rem; }
+    .order-summary {
+      background: var(--gray); border: 1px solid var(--border);
+      border-radius: 16px; padding: 2rem; height: fit-content; position: sticky; top: 2rem;
+    }
+    .sum-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); margin-bottom: 1.5rem; }
+    .sum-plan { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem; margin-bottom: 0.3rem; }
+    .sum-vin { font-size: 0.78rem; color: var(--mid); font-family: monospace; letter-spacing: 0.05em; margin-bottom: 1.5rem; }
+    .sum-row { display: flex; justify-content: space-between; font-size: 0.85rem; color: rgba(255,255,255,0.55); padding: 0.35rem 0; }
+    .sum-discount { color: var(--accent2) !important; }
+    .sum-divider { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+    .sum-total { display: flex; justify-content: space-between; align-items: center; }
+    .sum-total-label { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; }
+    .sum-total-price { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2rem; letter-spacing: -0.03em; color: var(--accent); }
+    .sum-features { margin-top: 1.5rem; }
+    .sum-feat { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; color: rgba(255,255,255,0.45); padding: 0.28rem 0; }
+    .sum-feat::before { content: '✓'; color: var(--accent2); font-weight: 700; flex-shrink: 0; }
 
-    @media (max-width: 768px) {
-      .checkout-wrap { grid-template-columns: 1fr; }
-      .order-summary { position: static; }
-      nav { padding: 1.25rem 1.5rem; }
-      .plan-grid { grid-template-columns: 1fr; }
+    @media(max-width:768px){
+      nav{padding:1rem 1.25rem}
+      .checkout-wrap{grid-template-columns:1fr;padding:0 1rem}
+      .order-summary{position:static}
     }
   </style>
 </head>
@@ -95,239 +109,267 @@
 
 <nav>
   <a href="/" class="logo">VIN<span>Record</span>Hub</a>
-  <div class="secure-badge">🔒 Secure Checkout via Paddle</div>
+  <span class="secure-badge">🔒 Secured by Paddle</span>
 </nav>
 
 <div class="checkout-wrap">
+
+  <!-- LEFT FORM -->
   <div class="form-section">
     <h2>Complete your order</h2>
-    <p>Fill in your details and choose a plan to get your report.</p>
+    <p>Enter your details, pick a report type, and pay securely.</p>
 
     <div class="field-group">
       <label>Vehicle VIN Number</label>
-      <input type="text" id="vinInput" placeholder="17-character VIN" maxlength="17" oninput="this.value = this.value.toUpperCase(); updateSummary()"/>
-      <div class="field-hint">Found on the dashboard, door jamb, or vehicle title.</div>
+      <input type="text" id="vinInput" placeholder="17-character VIN" maxlength="17"/>
+      <div class="field-hint">Found on dashboard, door jamb, or title.</div>
     </div>
 
     <div class="field-group">
       <label>Email Address</label>
       <input type="email" id="emailInput" placeholder="your@email.com"/>
-      <div class="field-hint">Your report will be delivered here within 60 seconds.</div>
+      <div class="field-hint">Report delivered here within 60 seconds.</div>
     </div>
 
-    <label style="margin-bottom:0.75rem;display:block">Choose Your Plan</label>
-    <div class="plan-grid">
-      <div class="plan-option" id="plan-carfax" data-plan="carfax">
-        <div class="plan-check">✓</div>
-        <div class="plan-name">Carfax Report</div>
-        <div class="plan-price"><span>$9.99</span></div>
-        <div class="plan-per">single report</div>
-      </div>
-      <div class="plan-option" id="plan-autocheck" data-plan="autocheck">
-        <div class="plan-check">✓</div>
-        <div class="plan-name">AutoCheck Report</div>
-        <div class="plan-price"><span>$9.99</span></div>
-        <div class="plan-per">single report</div>
-      </div>
-      <div class="plan-option" id="plan-combo" data-plan="combo" style="grid-column:1/-1">
-        <div class="plan-check">✓</div>
-        <div class="plan-name">Combo Pack — Carfax + AutoCheck</div>
-        <div class="plan-price"><span>$14.99</span></div>
-        <div class="plan-per">Both reports for one VIN</div>
-        <div class="plan-save">Save $5 — most thorough check</div>
-      </div>
-    </div>
-
-    <!-- COUPON -->
     <div class="field-group">
-      <label>Coupon Code <span style="color:#666;font-weight:300;text-transform:none;letter-spacing:0">(optional)</span></label>
-      <div class="coupon-row">
-        <input type="text" id="couponInput" placeholder="Enter code..." oninput="this.value = this.value.toUpperCase()"/>
-        <button class="btn-apply" onclick="applyCoupon()">Apply</button>
+      <label>Choose Report Type</label>
+      <div class="plan-grid">
+        <div class="plan-card" id="card-carfax">
+          <div class="plan-dot"></div>
+          <div class="plan-name">Carfax Report</div>
+          <div class="plan-price-val">$9.99</div>
+          <div class="plan-sub">single report</div>
+        </div>
+        <div class="plan-card" id="card-autocheck">
+          <div class="plan-dot"></div>
+          <div class="plan-name">AutoCheck Report</div>
+          <div class="plan-price-val">$9.99</div>
+          <div class="plan-sub">single report</div>
+        </div>
+        <div class="plan-card full" id="card-combo">
+          <div class="plan-dot"></div>
+          <div class="plan-name">Combo Pack — Carfax + AutoCheck</div>
+          <div class="plan-price-val">$14.99</div>
+          <div class="plan-sub">both reports for one VIN</div>
+          <div class="plan-badge">⚡ Save $5 — most thorough check</div>
+        </div>
       </div>
-      <div class="coupon-msg" id="couponMsg"></div>
     </div>
 
-    <button class="btn-buy" id="buyBtn" onclick="startCheckout()">
-      Pay Securely — <span id="btnPrice">$9.99</span>
+    <div class="field-group">
+      <label>Coupon Code <span style="text-transform:none;letter-spacing:0;font-weight:300;color:#555">(optional)</span></label>
+      <div class="coupon-row">
+        <input type="text" id="couponInput" placeholder="Enter code..."/>
+        <button class="btn-apply" id="applyBtn">Apply</button>
+      </div>
+      <div class="coupon-status" id="couponStatus"></div>
+    </div>
+
+    <div class="error-msg" id="errorMsg"></div>
+
+    <button class="btn-pay" id="payBtn">
+      Pay Securely — <span id="btnAmt">$9.99</span>
     </button>
-    <p class="pay-note">🔒 Secured by Paddle. Accepts all major cards, Apple Pay & Google Pay.<br/>Report delivered within 60 seconds of payment.</p>
+    <p class="pay-note">Accepts all major cards · Apple Pay · Google Pay<br/>Report delivered within 60 seconds of payment</p>
   </div>
 
-  <!-- ORDER SUMMARY -->
+  <!-- RIGHT SUMMARY -->
   <div class="order-summary">
-    <div class="summary-title">Order Summary</div>
-    <div class="summary-plan" id="summaryPlan">Carfax Report</div>
-    <div class="summary-vin" id="summaryVin">VIN: —</div>
-    <div class="summary-item"><span id="summaryDesc">1 Carfax report</span><span id="summaryPrice">$9.99</span></div>
-    <div class="summary-item" id="discountRow" style="display:none;color:#3fffb0">
-      <span id="discountLabel">Discount</span>
-      <span id="discountAmount">-$0.00</span>
+    <div class="sum-title">Order Summary</div>
+    <div class="sum-plan" id="sumPlan">Carfax Report</div>
+    <div class="sum-vin" id="sumVin">VIN: —</div>
+    <div class="sum-row"><span id="sumDesc">1 Carfax vehicle history report</span><span id="sumPrice">$9.99</span></div>
+    <div class="sum-row sum-discount" id="sumDiscountRow" style="display:none">
+      <span id="sumDiscountLabel">Discount</span>
+      <span id="sumDiscountAmt"></span>
     </div>
-    <hr class="summary-divider"/>
-    <div class="summary-total">
-      <span class="summary-total-label">Total</span>
-      <span class="summary-total-price" id="summaryTotal">$9.99</span>
+    <div class="sum-divider"></div>
+    <div class="sum-total">
+      <span class="sum-total-label">Total</span>
+      <span class="sum-total-price" id="sumTotal">$9.99</span>
     </div>
-    <div class="summary-features">
-      <div class="summary-feature">Accident & damage history</div>
-      <div class="summary-feature">Title & ownership records</div>
-      <div class="summary-feature">Odometer verification</div>
-      <div class="summary-feature">Service history records</div>
-      <div class="summary-feature">Instant delivery to email</div>
-      <div class="summary-feature">Money-back guarantee</div>
+    <div class="sum-features">
+      <div class="sum-feat">Accident & damage history</div>
+      <div class="sum-feat">Title & ownership records</div>
+      <div class="sum-feat">Odometer verification</div>
+      <div class="sum-feat">Service & recall records</div>
+      <div class="sum-feat">Instant delivery to email</div>
+      <div class="sum-feat">Money-back guarantee</div>
     </div>
   </div>
+
 </div>
 
+<!-- Paddle loaded at bottom AFTER DOM is ready -->
+<script src="https://cdn.paddle.com/paddle/v1/paddle.js"></script>
 <script>
-  // Initialize Paddle with your client token
-  Paddle.Initialize({
-    token: 'live_da97e2736662ef70f5e3496d412',
-    eventCallback: function(event) {
-      if (event.name === 'checkout.completed') {
-        window.location.href = `success.html?vin=${encodeURIComponent(currentVin)}&email=${encodeURIComponent(currentEmail)}&plan=${currentPlan}`;
-      }
-      if (event.name === 'checkout.closed') {
-        document.getElementById('buyBtn').disabled = false;
-        document.getElementById('buyBtn').textContent = `Pay Securely — ${document.getElementById('btnPrice').textContent}`;
+// ─── CONFIG ───────────────────────────────────────────────
+const PADDLE_TOKEN = 'live_da97e2736662ef70f5e3496d412';
+
+const PLANS = {
+  carfax:    { name:'Carfax Report',    price:9.99,  priceId:'pri_01kqwnxq99mq0f1p751syqjmm2', desc:'1 Carfax vehicle history report' },
+  autocheck: { name:'AutoCheck Report', price:9.99,  priceId:'pri_01kqwp0ge245ahg9427jzcfwj5', desc:'1 AutoCheck vehicle history report' },
+  combo:     { name:'Combo Pack',       price:14.99, priceId:'pri_01kqwp325vx2xvksm42ejsx4k3', desc:'Carfax + AutoCheck for same VIN' },
+};
+
+const COUPONS = {
+  'TESTONLY':  { fixedPrice:1.00,  label:'Test purchase'         },
+  'LAUNCH50':  { pct:50,           label:'50% launch discount'   },
+  'WELCOME20': { pct:20,           label:'20% welcome offer'     },
+};
+
+// ─── STATE ────────────────────────────────────────────────
+let plan = 'carfax';
+let coupon = null;
+
+// ─── INIT PADDLE ──────────────────────────────────────────
+Paddle.Initialize({ token: PADDLE_TOKEN });
+
+// ─── PLAN SELECTION ───────────────────────────────────────
+function selectPlan(p) {
+  plan = p;
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
+  document.getElementById('card-' + p).classList.add('active');
+  refreshSummary();
+}
+
+// Attach click listeners to each card
+['carfax','autocheck','combo'].forEach(p => {
+  document.getElementById('card-' + p).addEventListener('click', () => selectPlan(p));
+});
+
+// ─── COUPON ───────────────────────────────────────────────
+function getFinalPrice() {
+  const base = PLANS[plan].price;
+  if (!coupon) return base;
+  if (coupon.fixedPrice !== undefined) return coupon.fixedPrice;
+  if (coupon.pct) return Math.max(0.01, base * (1 - coupon.pct / 100));
+  return base;
+}
+
+document.getElementById('applyBtn').addEventListener('click', function() {
+  const code = document.getElementById('couponInput').value.trim().toUpperCase();
+  const statusEl = document.getElementById('couponStatus');
+
+  if (!code) {
+    coupon = null;
+    statusEl.textContent = '';
+    statusEl.className = 'coupon-status';
+    refreshSummary();
+    return;
+  }
+
+  if (COUPONS[code]) {
+    coupon = { code, ...COUPONS[code] };
+    statusEl.textContent = '✓ ' + COUPONS[code].label + ' applied';
+    statusEl.className = 'coupon-status ok';
+  } else {
+    coupon = null;
+    statusEl.textContent = '✗ Invalid coupon code';
+    statusEl.className = 'coupon-status fail';
+  }
+  refreshSummary();
+});
+
+// ─── SUMMARY UPDATE ───────────────────────────────────────
+function refreshSummary() {
+  const p = PLANS[plan];
+  const finalPrice = getFinalPrice();
+  const vin = document.getElementById('vinInput').value.trim().toUpperCase();
+
+  document.getElementById('sumPlan').textContent = p.name;
+  document.getElementById('sumVin').textContent = 'VIN: ' + (vin || '—');
+  document.getElementById('sumDesc').textContent = p.desc;
+  document.getElementById('sumPrice').textContent = '$' + p.price.toFixed(2);
+  document.getElementById('sumTotal').textContent = '$' + finalPrice.toFixed(2);
+  document.getElementById('btnAmt').textContent = '$' + finalPrice.toFixed(2);
+
+  const discRow = document.getElementById('sumDiscountRow');
+  if (coupon && finalPrice < p.price) {
+    discRow.style.display = 'flex';
+    document.getElementById('sumDiscountLabel').textContent = 'Coupon (' + coupon.code + ')';
+    document.getElementById('sumDiscountAmt').textContent = '-$' + (p.price - finalPrice).toFixed(2);
+  } else {
+    discRow.style.display = 'none';
+  }
+}
+
+// Live VIN update in summary
+document.getElementById('vinInput').addEventListener('input', function() {
+  this.value = this.value.toUpperCase();
+  refreshSummary();
+});
+
+// ─── CHECKOUT ─────────────────────────────────────────────
+document.getElementById('payBtn').addEventListener('click', function() {
+  const vin   = document.getElementById('vinInput').value.trim().toUpperCase();
+  const email = document.getElementById('emailInput').value.trim();
+  const errEl = document.getElementById('errorMsg');
+  errEl.style.display = 'none';
+
+  // Validate
+  let valid = true;
+  if (vin.length !== 17) {
+    document.getElementById('vinInput').classList.add('error');
+    valid = false;
+  } else {
+    document.getElementById('vinInput').classList.remove('error');
+  }
+  if (!email.includes('@') || !email.includes('.')) {
+    document.getElementById('emailInput').classList.add('error');
+    valid = false;
+  } else {
+    document.getElementById('emailInput').classList.remove('error');
+  }
+  if (!valid) {
+    errEl.textContent = 'Please enter a valid 17-character VIN and email address.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  // Disable button while Paddle opens
+  this.disabled = true;
+  this.textContent = 'Opening checkout...';
+
+  const finalPrice = getFinalPrice();
+
+  // Open Paddle overlay
+  Paddle.Checkout.open({
+    items: [{ priceId: PLANS[plan].priceId, quantity: 1 }],
+    customer: { email: email },
+    customData: {
+      vin: vin,
+      plan: plan,
+      email: email,
+      coupon: coupon ? coupon.code : null,
+    },
+    settings: {
+      displayMode: 'overlay',
+      theme: 'dark',
+      locale: 'en',
+      successUrl: 'https://vinrecordhub.com/success.html?vin=' + encodeURIComponent(vin) + '&email=' + encodeURIComponent(email) + '&plan=' + plan,
+    },
+  });
+
+  // Re-enable button when Paddle closes
+  Paddle.Update({
+    eventCallback: function(evt) {
+      if (evt.name === 'checkout.closed' || evt.name === 'checkout.error') {
+        document.getElementById('payBtn').disabled = false;
+        document.getElementById('payBtn').innerHTML = 'Pay Securely — <span id="btnAmt">$' + finalPrice.toFixed(2) + '</span>';
       }
     }
   });
+});
 
-  const plans = {
-    carfax:    { name: 'Carfax Report',    price: 9.99,  priceId: 'pri_01kqwnxq99mq0f1p751syqjmm2', desc: '1 Carfax report' },
-    autocheck: { name: 'AutoCheck Report', price: 9.99,  priceId: 'pri_01kqwp0ge245ahg9427jzcfwj5', desc: '1 AutoCheck report' },
-    combo:     { name: 'Combo Pack',       price: 14.99, priceId: 'pri_01kqwp325vx2xvksm42ejsx4k3', desc: 'Carfax + AutoCheck' },
-  };
-
-  const COUPONS = {
-    'TESTONLY':  { fixedPrice: 1.00, description: 'Test purchase' },
-    'LAUNCH50':  { type: 'percent', value: 50, description: '50% launch discount' },
-    'WELCOME20': { type: 'percent', value: 20, description: '20% welcome offer' },
-  };
-
-  let currentPlan = 'carfax';
-  let appliedCoupon = null;
-  let currentVin = '';
-  let currentEmail = '';
-
-  // Read URL params
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('vin')) { document.getElementById('vinInput').value = params.get('vin'); currentVin = params.get('vin'); }
-  if (params.get('plan') && plans[params.get('plan')]) currentPlan = params.get('plan');
-
-  // Attach click handlers to plan options
-  document.querySelectorAll('.plan-option').forEach(el => {
-    el.addEventListener('click', function() {
-      selectPlan(this.dataset.plan);
-    });
-  });
-
-  function selectPlan(plan) {
-    currentPlan = plan;
-    document.querySelectorAll('.plan-option').forEach(el => {
-      el.classList.remove('selected');
-      el.querySelector('.plan-check').style.background = '';
-      el.querySelector('.plan-check').style.borderColor = '';
-      el.querySelector('.plan-check').style.color = '';
-    });
-    const selected = document.getElementById('plan-' + plan);
-    selected.classList.add('selected');
-    const check = selected.querySelector('.plan-check');
-    check.style.background = '#e8ff3f';
-    check.style.borderColor = '#e8ff3f';
-    check.style.color = '#000';
-    updateSummary();
-  }
-
-  function getFinalPrice() {
-    const base = plans[currentPlan].price;
-    if (!appliedCoupon) return base;
-    if (appliedCoupon.fixedPrice !== undefined) return appliedCoupon.fixedPrice;
-    if (appliedCoupon.type === 'percent') return Math.max(0.01, base * (1 - appliedCoupon.value / 100));
-    return base;
-  }
-
-  function applyCoupon() {
-    const code = document.getElementById('couponInput').value.trim().toUpperCase();
-    const msgEl = document.getElementById('couponMsg');
-    msgEl.style.display = 'block';
-
-    if (COUPONS[code]) {
-      appliedCoupon = { code, ...COUPONS[code] };
-      msgEl.style.color = '#3fffb0';
-      msgEl.textContent = `✓ ${COUPONS[code].description} applied`;
-    } else {
-      appliedCoupon = null;
-      msgEl.style.color = '#ff6b6b';
-      msgEl.textContent = '✗ Invalid coupon code';
-    }
-    updateSummary();
-  }
-
-  function updateSummary() {
-    const p = plans[currentPlan];
-    const vin = document.getElementById('vinInput').value.trim();
-    const finalPrice = getFinalPrice();
-    currentVin = vin;
-
-    document.getElementById('summaryPlan').textContent = p.name;
-    document.getElementById('summaryVin').textContent = 'VIN: ' + (vin || '—');
-    document.getElementById('summaryDesc').textContent = p.desc;
-    document.getElementById('summaryPrice').textContent = '$' + p.price.toFixed(2);
-    document.getElementById('summaryTotal').textContent = '$' + finalPrice.toFixed(2);
-    document.getElementById('btnPrice').textContent = '$' + finalPrice.toFixed(2);
-
-    const discountRow = document.getElementById('discountRow');
-    if (appliedCoupon && finalPrice < p.price) {
-      discountRow.style.display = 'flex';
-      document.getElementById('discountLabel').textContent = `Coupon (${appliedCoupon.code})`;
-      document.getElementById('discountAmount').textContent = '-$' + (p.price - finalPrice).toFixed(2);
-    } else {
-      discountRow.style.display = 'none';
-    }
-  }
-
-  function validate() {
-    const vin = document.getElementById('vinInput').value.trim();
-    const email = document.getElementById('emailInput').value.trim();
-    let ok = true;
-    if (vin.length !== 17) { document.getElementById('vinInput').classList.add('error'); ok = false; }
-    else { document.getElementById('vinInput').classList.remove('error'); }
-    if (!email.includes('@') || !email.includes('.')) { document.getElementById('emailInput').classList.add('error'); ok = false; }
-    else { document.getElementById('emailInput').classList.remove('error'); }
-    return ok;
-  }
-
-  function startCheckout() {
-    if (!validate()) return;
-
-    const vin = document.getElementById('vinInput').value.trim();
-    const email = document.getElementById('emailInput').value.trim();
-    currentVin = vin;
-    currentEmail = email;
-
-    const btn = document.getElementById('buyBtn');
-    btn.disabled = true;
-    btn.textContent = 'Opening checkout...';
-
-    // Open Paddle checkout overlay
-    Paddle.Checkout.open({
-      items: [{ priceId: plans[currentPlan].priceId, quantity: 1 }],
-      customer: { email: email },
-      customData: { vin: vin, plan: currentPlan, coupon: appliedCoupon?.code || null },
-      settings: {
-        displayMode: 'overlay',
-        theme: 'dark',
-        locale: 'en',
-        successUrl: `https://vinrecordhub.com/success.html?vin=${encodeURIComponent(vin)}&email=${encodeURIComponent(email)}&plan=${currentPlan}`,
-      }
-    });
-  }
-
-  // Init
-  selectPlan(currentPlan);
+// ─── INIT ─────────────────────────────────────────────────
+// Read URL param for pre-selected plan
+const urlPlan = new URLSearchParams(window.location.search).get('plan');
+if (urlPlan && PLANS[urlPlan]) {
+  selectPlan(urlPlan);
+} else {
+  selectPlan('carfax');
+}
 </script>
 </body>
 </html>

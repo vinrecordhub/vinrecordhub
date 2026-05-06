@@ -32,59 +32,28 @@
     input:focus { border-color: rgba(232,255,63,0.5); background: rgba(255,255,255,0.07); }
     input.error { border-color: rgba(255,80,80,0.6) !important; }
     .field-hint { font-size: 0.75rem; color: var(--mid); margin-top: 0.4rem; }
-
-    /* PLAN CARDS */
     .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem; }
-    .plan-card {
-      border: 2px solid rgba(255,255,255,0.08); border-radius: 12px;
-      padding: 1rem 1.25rem; cursor: pointer;
-      transition: border-color 0.15s, background 0.15s, transform 0.1s;
-      position: relative; background: rgba(255,255,255,0.02);
-    }
+    .plan-card { border: 2px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1rem 1.25rem; cursor: pointer; transition: all 0.15s; position: relative; background: rgba(255,255,255,0.02); }
     .plan-card:hover { border-color: rgba(232,255,63,0.4); background: rgba(232,255,63,0.03); }
     .plan-card.active { border-color: #e8ff3f !important; background: rgba(232,255,63,0.07) !important; }
-    .plan-card:active { transform: scale(0.97); }
     .plan-card.full { grid-column: 1 / -1; }
     .plan-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); position: absolute; top: 1rem; right: 1rem; transition: all 0.15s; }
     .plan-card.active .plan-dot { background: #e8ff3f; border-color: #e8ff3f; }
-    .plan-card.active .plan-dot::after { content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 10px; color: #000; font-weight: 700; }
     .plan-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; padding-right: 1.5rem; }
     .plan-price-val { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; color: var(--accent); margin-top: 0.3rem; }
     .plan-sub { font-size: 0.72rem; color: var(--mid); }
     .plan-badge { display: inline-block; font-size: 0.65rem; color: var(--accent2); font-weight: 600; margin-top: 0.25rem; }
-
-    /* COUPON */
     .coupon-row { display: flex; gap: 0.5rem; }
     .coupon-row input { flex: 1; }
-    .btn-apply {
-      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
-      color: var(--white); font-family: 'Syne', sans-serif; font-weight: 700;
-      font-size: 0.85rem; padding: 0 1.25rem; border-radius: 8px; cursor: pointer;
-      white-space: nowrap; transition: background 0.15s;
-    }
+    .btn-apply { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); color: var(--white); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; padding: 0 1.25rem; border-radius: 8px; cursor: pointer; white-space: nowrap; }
     .btn-apply:hover { background: rgba(255,255,255,0.12); }
     .coupon-status { font-size: 0.78rem; margin-top: 0.5rem; min-height: 1rem; }
     .coupon-status.ok { color: var(--accent2); }
     .coupon-status.fail { color: #ff6b6b; }
-
-    /* PAY BUTTON */
-    .btn-pay {
-      display: block; width: 100%; margin-top: 1.5rem;
-      background: var(--accent); color: var(--black); border: none;
-      border-radius: 10px; padding: 1.1rem 2rem;
-      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem;
-      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .btn-pay:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(232,255,63,0.3); }
-    .btn-pay:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+    .error-msg { color: #ff6b6b; font-size: 0.82rem; margin-top: 0.75rem; display: none; padding: 0.75rem 1rem; background: rgba(255,80,80,0.08); border-radius: 8px; border: 1px solid rgba(255,80,80,0.2); }
+    #paypal-button-container { margin-top: 1.5rem; }
     .pay-note { font-size: 0.75rem; color: var(--mid); text-align: center; margin-top: 0.75rem; line-height: 1.6; }
-    .error-msg { color: #ff6b6b; font-size: 0.82rem; margin-top: 1rem; display: none; }
-
-    /* ORDER SUMMARY */
-    .order-summary {
-      background: var(--gray); border: 1px solid var(--border);
-      border-radius: 16px; padding: 2rem; height: fit-content; position: sticky; top: 2rem;
-    }
+    .order-summary { background: var(--gray); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; height: fit-content; position: sticky; top: 2rem; }
     .sum-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); margin-bottom: 1.5rem; }
     .sum-plan { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem; margin-bottom: 0.3rem; }
     .sum-vin { font-size: 0.78rem; color: var(--mid); font-family: monospace; letter-spacing: 0.05em; margin-bottom: 1.5rem; }
@@ -97,24 +66,17 @@
     .sum-features { margin-top: 1.5rem; }
     .sum-feat { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; color: rgba(255,255,255,0.45); padding: 0.28rem 0; }
     .sum-feat::before { content: '✓'; color: var(--accent2); font-weight: 700; flex-shrink: 0; }
-
-    @media(max-width:768px){
-      nav{padding:1rem 1.25rem}
-      .checkout-wrap{grid-template-columns:1fr;padding:0 1rem}
-      .order-summary{position:static}
-    }
+    @media(max-width:768px){ nav{padding:1rem 1.25rem} .checkout-wrap{grid-template-columns:1fr;padding:0 1rem} .order-summary{position:static} .plan-grid{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
 
 <nav>
   <a href="/" class="logo">VIN<span>Record</span>Hub</a>
-  <span class="secure-badge">🔒 Secured by Paddle</span>
+  <span class="secure-badge">🔒 Secured by PayPal</span>
 </nav>
 
 <div class="checkout-wrap">
-
-  <!-- LEFT FORM -->
   <div class="form-section">
     <h2>Complete your order</h2>
     <p>Enter your details, pick a report type, and pay securely.</p>
@@ -144,14 +106,14 @@
           <div class="plan-dot"></div>
           <div class="plan-name">VINRecordHub Plus</div>
           <div class="plan-price-val">$9.99</div>
-          <div class="plan-sub">single report</div>
+          <div class="plan-sub">extended history</div>
         </div>
         <div class="plan-card full" id="card-combo">
           <div class="plan-dot"></div>
           <div class="plan-name">VINRecordHub Complete</div>
           <div class="plan-price-val">$14.99</div>
-          <div class="plan-sub">both reports for one VIN</div>
-          <div class="plan-badge">⚡ Save $5 — most thorough check</div>
+          <div class="plan-sub">dual-source vehicle history</div>
+          <div class="plan-badge">⚡ Most thorough check</div>
         </div>
       </div>
     </div>
@@ -166,19 +128,15 @@
     </div>
 
     <div class="error-msg" id="errorMsg"></div>
-
-    <button class="btn-pay" id="payBtn">
-      Pay Securely — <span id="btnAmt">$9.99</span>
-    </button>
-    <p class="pay-note">Accepts all major cards · Apple Pay · Google Pay<br/>Report delivered within 60 seconds of payment</p>
+    <div id="paypal-button-container"></div>
+    <p class="pay-note">🔒 Payment secured by PayPal. We never store your card details.<br/>Report delivered within 60 seconds of payment confirmation.</p>
   </div>
 
-  <!-- RIGHT SUMMARY -->
   <div class="order-summary">
     <div class="sum-title">Order Summary</div>
     <div class="sum-plan" id="sumPlan">VINRecordHub Report</div>
     <div class="sum-vin" id="sumVin">VIN: —</div>
-    <div class="sum-row"><span id="sumDesc">Full vehicle history report</span><span id="sumPrice">$9.99</span></div>
+    <div class="sum-row"><span id="sumDesc">1 vehicle history report</span><span id="sumPrice">$9.99</span></div>
     <div class="sum-row sum-discount" id="sumDiscountRow" style="display:none">
       <span id="sumDiscountLabel">Discount</span>
       <span id="sumDiscountAmt"></span>
@@ -197,33 +155,27 @@
       <div class="sum-feat">Money-back guarantee</div>
     </div>
   </div>
-
 </div>
 
-<!-- Paddle loaded at bottom AFTER DOM is ready -->
-<script src="https://cdn.paddle.com/paddle/v1/paddle.js"></script>
+<!-- PayPal SDK loaded at bottom -->
+<script src="https://www.paypal.com/sdk/js?client-id=AXUUd9Y2YuWhoRysQpAg75_bfr9ColW_hNmT-L4Z0O1wvYDIvWC1zcafdwz455AyCq2jHnQUYXmTLdzW&currency=USD&enable-funding=venmo,card"></script>
 <script>
 // ─── CONFIG ───────────────────────────────────────────────
-const PADDLE_TOKEN = 'live_da97e2736662ef70f5e3496d412';
-
 const PLANS = {
-  standard:    { name:'VINRecordHub Report',    price:9.99,  priceId:'pri_01kqwnxq99mq0f1p751syqjmm2', desc:'Full vehicle history report' },
-  plus: { name:'VINRecordHub Plus', price:9.99,  priceId:'pri_01kqwp0ge245ahg9427jzcfwj5', desc:'Extended vehicle history report' },
-  combo:     { name:'VINRecordHub Complete',       price:14.99, priceId:'pri_01kqwp325vx2xvksm42ejsx4k3', desc:'Dual-source vehicle history' },
+  standard: { name:'VINRecordHub Report',    price:9.99,  reportType:'carfax',    desc:'1 vehicle history report' },
+  plus:     { name:'VINRecordHub Plus',      price:9.99,  reportType:'autocheck', desc:'1 extended history report' },
+  combo:    { name:'VINRecordHub Complete',  price:14.99, reportType:'combo',     desc:'Dual-source vehicle history' },
 };
 
 const COUPONS = {
-  'TESTONLY':  { fixedPrice:1.00,  label:'Test purchase'         },
-  'LAUNCH50':  { pct:50,           label:'50% launch discount'   },
-  'WELCOME20': { pct:20,           label:'20% welcome offer'     },
+  'TESTONLY':  { fixedPrice:1.00, label:'Test purchase'       },
+  'LAUNCH50':  { pct:50,          label:'50% launch discount' },
+  'WELCOME20': { pct:20,          label:'20% welcome offer'   },
 };
 
 // ─── STATE ────────────────────────────────────────────────
 let plan = 'standard';
 let coupon = null;
-
-// ─── INIT PADDLE ──────────────────────────────────────────
-Paddle.Initialize({ token: PADDLE_TOKEN });
 
 // ─── PLAN SELECTION ───────────────────────────────────────
 function selectPlan(p) {
@@ -231,9 +183,9 @@ function selectPlan(p) {
   document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
   document.getElementById('card-' + p).classList.add('active');
   refreshSummary();
+  renderPayPal();
 }
 
-// Attach click listeners to each card
 ['standard','plus','combo'].forEach(p => {
   document.getElementById('card-' + p).addEventListener('click', () => selectPlan(p));
 });
@@ -250,15 +202,7 @@ function getFinalPrice() {
 document.getElementById('applyBtn').addEventListener('click', function() {
   const code = document.getElementById('couponInput').value.trim().toUpperCase();
   const statusEl = document.getElementById('couponStatus');
-
-  if (!code) {
-    coupon = null;
-    statusEl.textContent = '';
-    statusEl.className = 'coupon-status';
-    refreshSummary();
-    return;
-  }
-
+  if (!code) { coupon = null; statusEl.textContent = ''; statusEl.className = 'coupon-status'; refreshSummary(); renderPayPal(); return; }
   if (COUPONS[code]) {
     coupon = { code, ...COUPONS[code] };
     statusEl.textContent = '✓ ' + COUPONS[code].label + ' applied';
@@ -269,107 +213,112 @@ document.getElementById('applyBtn').addEventListener('click', function() {
     statusEl.className = 'coupon-status fail';
   }
   refreshSummary();
+  renderPayPal();
 });
 
-// ─── SUMMARY UPDATE ───────────────────────────────────────
+// ─── SUMMARY ──────────────────────────────────────────────
 function refreshSummary() {
   const p = PLANS[plan];
   const finalPrice = getFinalPrice();
   const vin = document.getElementById('vinInput').value.trim().toUpperCase();
-
   document.getElementById('sumPlan').textContent = p.name;
   document.getElementById('sumVin').textContent = 'VIN: ' + (vin || '—');
   document.getElementById('sumDesc').textContent = p.desc;
   document.getElementById('sumPrice').textContent = '$' + p.price.toFixed(2);
   document.getElementById('sumTotal').textContent = '$' + finalPrice.toFixed(2);
-  document.getElementById('btnAmt').textContent = '$' + finalPrice.toFixed(2);
-
   const discRow = document.getElementById('sumDiscountRow');
   if (coupon && finalPrice < p.price) {
     discRow.style.display = 'flex';
     document.getElementById('sumDiscountLabel').textContent = 'Coupon (' + coupon.code + ')';
     document.getElementById('sumDiscountAmt').textContent = '-$' + (p.price - finalPrice).toFixed(2);
-  } else {
-    discRow.style.display = 'none';
-  }
+  } else { discRow.style.display = 'none'; }
 }
 
-// Live VIN update in summary
 document.getElementById('vinInput').addEventListener('input', function() {
   this.value = this.value.toUpperCase();
   refreshSummary();
 });
 
-// ─── CHECKOUT ─────────────────────────────────────────────
-document.getElementById('payBtn').addEventListener('click', function() {
-  const vin   = document.getElementById('vinInput').value.trim().toUpperCase();
+// ─── VALIDATION ───────────────────────────────────────────
+function validate() {
+  const vin = document.getElementById('vinInput').value.trim();
   const email = document.getElementById('emailInput').value.trim();
   const errEl = document.getElementById('errorMsg');
-  errEl.style.display = 'none';
-
-  // Validate
   let valid = true;
-  if (vin.length !== 17) {
-    document.getElementById('vinInput').classList.add('error');
-    valid = false;
-  } else {
-    document.getElementById('vinInput').classList.remove('error');
-  }
-  if (!email.includes('@') || !email.includes('.')) {
-    document.getElementById('emailInput').classList.add('error');
-    valid = false;
-  } else {
-    document.getElementById('emailInput').classList.remove('error');
-  }
-  if (!valid) {
-    errEl.textContent = 'Please enter a valid 17-character VIN and email address.';
-    errEl.style.display = 'block';
-    return;
-  }
+  if (vin.length !== 17) { document.getElementById('vinInput').classList.add('error'); valid = false; }
+  else { document.getElementById('vinInput').classList.remove('error'); }
+  if (!email.includes('@') || !email.includes('.')) { document.getElementById('emailInput').classList.add('error'); valid = false; }
+  else { document.getElementById('emailInput').classList.remove('error'); }
+  if (!valid) { errEl.textContent = 'Please enter a valid 17-character VIN and email address.'; errEl.style.display = 'block'; }
+  else { errEl.style.display = 'none'; }
+  return valid;
+}
 
-  // Disable button while Paddle opens
-  this.disabled = true;
-  this.textContent = 'Opening checkout...';
+// ─── PAYPAL ───────────────────────────────────────────────
+function renderPayPal() {
+  const container = document.getElementById('paypal-button-container');
+  container.innerHTML = '';
 
-  const finalPrice = getFinalPrice();
+  paypal.Buttons({
+    style: { layout:'vertical', color:'gold', shape:'rect', label:'pay' },
 
-  // Open Paddle overlay
-  Paddle.Checkout.open({
-    items: [{ priceId: PLANS[plan].priceId, quantity: 1 }],
-    customer: { email: email },
-    customData: {
-      vin: vin,
-      plan: plan,
-      email: email,
-      coupon: coupon ? coupon.code : null,
+    createOrder: function(data, actions) {
+      if (!validate()) return Promise.reject(new Error('Validation failed'));
+      const finalPrice = getFinalPrice();
+      return actions.order.create({
+        purchase_units: [{
+          description: 'VINRecordHub — ' + PLANS[plan].name,
+          amount: { currency_code:'USD', value: finalPrice.toFixed(2) }
+        }]
+      });
     },
-    settings: {
-      displayMode: 'overlay',
-      theme: 'dark',
-      locale: 'en',
-      successUrl: 'https://vinrecordhub.com/success.html?vin=' + encodeURIComponent(vin) + '&email=' + encodeURIComponent(email) + '&plan=' + plan,
-    },
-  });
 
-  // Re-enable button when Paddle closes
-  Paddle.Update({
-    eventCallback: function(evt) {
-      if (evt.name === 'checkout.closed' || evt.name === 'checkout.error') {
-        document.getElementById('payBtn').disabled = false;
-        document.getElementById('payBtn').innerHTML = 'Pay Securely — <span id="btnAmt">$' + finalPrice.toFixed(2) + '</span>';
+    onApprove: async function(data, actions) {
+      const details = await actions.order.capture();
+      const vin = document.getElementById('vinInput').value.trim().toUpperCase();
+      const email = document.getElementById('emailInput').value.trim();
+      const orderId = details.id;
+
+      try {
+        const res = await fetch('/api/fulfill-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email, vin,
+            plan: PLANS[plan].reportType,
+            paypalOrderId: orderId,
+            coupon: coupon ? coupon.code : null,
+          }),
+        });
+        const result = await res.json();
+        if (result.success) {
+          window.location.href = 'success.html?vin=' + encodeURIComponent(vin) + '&email=' + encodeURIComponent(email) + '&plan=' + plan + '&order=' + orderId;
+        } else {
+          alert('Payment received! Your report is being processed. Check your email within 5 minutes or contact support@vinrecordhub.com');
+          window.location.href = 'success.html?vin=' + encodeURIComponent(vin) + '&email=' + encodeURIComponent(email) + '&plan=' + plan + '&order=' + orderId;
+        }
+      } catch(err) {
+        alert('Payment received! Report is being processed. Contact support@vinrecordhub.com if not received within 10 minutes.');
+        window.location.href = 'success.html?vin=' + encodeURIComponent(vin) + '&email=' + encodeURIComponent(email) + '&plan=' + plan + '&order=' + orderId;
       }
+    },
+
+    onError: function(err) {
+      console.error('PayPal error:', err);
+      document.getElementById('errorMsg').textContent = 'Payment failed. Please try again or contact support@vinrecordhub.com';
+      document.getElementById('errorMsg').style.display = 'block';
+    },
+
+    onCancel: function() {
+      document.getElementById('errorMsg').textContent = 'Payment cancelled. Your cart is still saved — try again when ready.';
+      document.getElementById('errorMsg').style.display = 'block';
     }
-  });
-});
+  }).render('#paypal-button-container');
+}
 
 // ─── INIT ─────────────────────────────────────────────────
-// Read URL param for pre-selected plan
 const urlPlan = new URLSearchParams(window.location.search).get('plan');
-if (urlPlan && PLANS[urlPlan]) {
-  selectPlan(urlPlan);
-} else {
-  selectPlan('standard');
-}
+selectPlan(urlPlan && PLANS[urlPlan] ? urlPlan : 'standard');
 </script>
 </body>
 </html>

@@ -1,4 +1,3 @@
-
 // api/fulfill-order.js
 // POST /api/fulfill-order
 // Verifies PayPal payment → fetches report from CheapVHR via Fixie → emails customer
@@ -189,12 +188,17 @@ module.exports = async function handler(req, res) {
     const expectedAmount = getDiscountedAmount(baseAmount, coupon);
 
     // Prevent duplicate orders
-    const { data: existing } = await supabase
-      .from('orders')
-      .select('id')
-      .eq('paypal_order_id', paypalOrderId)
-      .single()
-      .catch(() => ({ data: null }));
+    let existing = null;
+    try {
+      const { data } = await supabase
+        .from('orders')
+        .select('id')
+        .eq('paypal_order_id', paypalOrderId)
+        .single();
+      existing = data;
+    } catch (e) {
+      // No existing order found — this is fine, continue
+    }
 
     if (existing) {
       console.log('Duplicate order:', paypalOrderId);

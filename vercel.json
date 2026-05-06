@@ -1,5 +1,7 @@
 {
   "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
   "routes": [
     { "src": "/checkout", "dest": "/checkout.html" },
     { "src": "/success", "dest": "/success.html" },

@@ -134,21 +134,21 @@
     <div class="field-group">
       <label>Choose Report Type</label>
       <div class="plan-grid">
-        <div class="plan-card" id="card-carfax">
+        <div class="plan-card" id="card-standard">
           <div class="plan-dot"></div>
-          <div class="plan-name">Carfax Report</div>
+          <div class="plan-name">VINRecordHub Report</div>
           <div class="plan-price-val">$9.99</div>
           <div class="plan-sub">single report</div>
         </div>
-        <div class="plan-card" id="card-autocheck">
+        <div class="plan-card" id="card-plus">
           <div class="plan-dot"></div>
-          <div class="plan-name">AutoCheck Report</div>
+          <div class="plan-name">VINRecordHub Plus</div>
           <div class="plan-price-val">$9.99</div>
           <div class="plan-sub">single report</div>
         </div>
         <div class="plan-card full" id="card-combo">
           <div class="plan-dot"></div>
-          <div class="plan-name">Combo Pack — Carfax + AutoCheck</div>
+          <div class="plan-name">VINRecordHub Complete</div>
           <div class="plan-price-val">$14.99</div>
           <div class="plan-sub">both reports for one VIN</div>
           <div class="plan-badge">⚡ Save $5 — most thorough check</div>
@@ -176,9 +176,9 @@
   <!-- RIGHT SUMMARY -->
   <div class="order-summary">
     <div class="sum-title">Order Summary</div>
-    <div class="sum-plan" id="sumPlan">Carfax Report</div>
+    <div class="sum-plan" id="sumPlan">VINRecordHub Report</div>
     <div class="sum-vin" id="sumVin">VIN: —</div>
-    <div class="sum-row"><span id="sumDesc">1 Carfax vehicle history report</span><span id="sumPrice">$9.99</span></div>
+    <div class="sum-row"><span id="sumDesc">Full vehicle history report</span><span id="sumPrice">$9.99</span></div>
     <div class="sum-row sum-discount" id="sumDiscountRow" style="display:none">
       <span id="sumDiscountLabel">Discount</span>
       <span id="sumDiscountAmt"></span>
@@ -207,9 +207,9 @@
 const PADDLE_TOKEN = 'live_da97e2736662ef70f5e3496d412';
 
 const PLANS = {
-  carfax:    { name:'Carfax Report',    price:9.99,  priceId:'pri_01kqwnxq99mq0f1p751syqjmm2', desc:'1 Carfax vehicle history report' },
-  autocheck: { name:'AutoCheck Report', price:9.99,  priceId:'pri_01kqwp0ge245ahg9427jzcfwj5', desc:'1 AutoCheck vehicle history report' },
-  combo:     { name:'Combo Pack',       price:14.99, priceId:'pri_01kqwp325vx2xvksm42ejsx4k3', desc:'Carfax + AutoCheck for same VIN' },
+  standard:    { name:'VINRecordHub Report',    price:9.99,  priceId:'pri_01kqwnxq99mq0f1p751syqjmm2', desc:'Full vehicle history report' },
+  plus: { name:'VINRecordHub Plus', price:9.99,  priceId:'pri_01kqwp0ge245ahg9427jzcfwj5', desc:'Extended vehicle history report' },
+  combo:     { name:'VINRecordHub Complete',       price:14.99, priceId:'pri_01kqwp325vx2xvksm42ejsx4k3', desc:'Dual-source vehicle history' },
 };
 
 const COUPONS = {
@@ -219,7 +219,7 @@ const COUPONS = {
 };
 
 // ─── STATE ────────────────────────────────────────────────
-let plan = 'carfax';
+let plan = 'standard';
 let coupon = null;
 
 // ─── INIT PADDLE ──────────────────────────────────────────
@@ -234,7 +234,7 @@ function selectPlan(p) {
 }
 
 // Attach click listeners to each card
-['carfax','autocheck','combo'].forEach(p => {
+['standard','plus','combo'].forEach(p => {
   document.getElementById('card-' + p).addEventListener('click', () => selectPlan(p));
 });
 
@@ -368,7 +368,7 @@ const urlPlan = new URLSearchParams(window.location.search).get('plan');
 if (urlPlan && PLANS[urlPlan]) {
   selectPlan(urlPlan);
 } else {
-  selectPlan('carfax');
+  selectPlan('standard');
 }
 </script>
 </body>

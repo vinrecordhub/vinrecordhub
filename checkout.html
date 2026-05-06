@@ -279,28 +279,23 @@ function renderPayPal() {
       const email = document.getElementById('emailInput').value.trim();
       const orderId = details.id;
 
-      try {
-        const res = await fetch('/api/fulfill-order', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email, vin,
-            plan: PLANS[plan].reportType,
-            paypalOrderId: orderId,
-            coupon: coupon ? coupon.code : null,
-          }),
-        });
-        const result = await res.json();
-        if (result.success) {
-          window.location.href = 'success.html?vin=' + encodeURIComponent(vin) + '&email=' + encodeURIComponent(email) + '&plan=' + plan + '&order=' + orderId;
-        } else {
-          alert('Payment received! Your report is being processed. Check your email within 5 minutes or contact support@vinrecordhub.com');
-          window.location.href = 'success.html?vin=' + encodeURIComponent(vin) + '&email=' + encodeURIComponent(email) + '&plan=' + plan + '&order=' + orderId;
-        }
-      } catch(err) {
-        alert('Payment received! Report is being processed. Contact support@vinrecordhub.com if not received within 10 minutes.');
-        window.location.href = 'success.html?vin=' + encodeURIComponent(vin) + '&email=' + encodeURIComponent(email) + '&plan=' + plan + '&order=' + orderId;
-      }
+      // Redirect to success page IMMEDIATELY — don't wait for report
+      window.location.href = 'success.html?vin=' + encodeURIComponent(vin) +
+        '&email=' + encodeURIComponent(email) +
+        '&plan=' + plan +
+        '&order=' + orderId;
+
+      // Fire fulfill-order in background (doesn't block redirect)
+      fetch('/api/fulfill-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email, vin,
+          plan: PLANS[plan].reportType,
+          paypalOrderId: orderId,
+          coupon: coupon ? coupon.code : null,
+        }),
+      }).catch(err => console.error('Fulfill error:', err));
     },
 
     onError: function(err) {

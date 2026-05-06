@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>VIN Record Hub — Instant Vehicle History Reports</title>
-  <meta name="description" content="Instant vehicle history reports for used car buyers. Get comprehensive accident history, title records, odometer verification and more — delivered to your inbox in seconds."/>
+  <title>VIN Record Hub — Carfax® & AutoCheck® Reports from $9.99</title>
+  <meta name="description" content="Access Carfax® & AutoCheck® vehicle history reports from just $9.99. Accident history, title records, odometer checks — delivered instantly to your inbox."/>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -134,6 +134,15 @@
     .btn-search:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(232,255,63,0.3); }
     .search-hint { font-size: 0.78rem; color: var(--mid); margin-top: 0.75rem; }
     .search-hint a { color: var(--accent2); text-decoration: none; }
+    .vin-lookup-hero {
+      margin-top: 0.6rem; padding: 0.65rem 1rem;
+      background: rgba(63,255,176,0.07); border: 1px solid rgba(63,255,176,0.25);
+      border-radius: 8px; font-size: 0.85rem; color: var(--accent2);
+      display: none; align-items: center; gap: 0.5rem; max-width: 560px;
+    }
+    .vin-lookup-hero.show { display: flex; }
+    .vin-lookup-hero.error { background: rgba(255,80,80,0.07); border-color: rgba(255,80,80,0.2); color: #ff6b6b; }
+    .vin-lookup-hero.loading { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); color: var(--mid); }
 
     /* TRUST BAR */
     .trust-bar {
@@ -391,7 +400,7 @@
     <a href="#pricing">Pricing</a>
     <a href="#faq">FAQ</a>
     <a href="mailto:support@vinrecordhub.com">Support</a>
-    <a href="#pricing" class="nav-cta">Get Report — from $9.99</a>
+    <a href="#pricing" class="nav-cta">Get Carfax® or AutoCheck® — from $9.99</a>
   </div>
 </nav>
 
@@ -401,14 +410,19 @@
   <div class="hero-glow2"></div>
   <div class="hero-badge">Instant Vehicle History Reports</div>
   <h1>Know everything about <em>any vehicle.</em></h1>
-  <p class="hero-sub">Professional vehicle history reports from our verified data network. Accident history, title records, odometer checks and more — delivered to your inbox in under 60 seconds.</p>
+  <p class="hero-sub">Instant vehicle history reports powered by Carfax® & AutoCheck® data. Accident history, title records, odometer checks and more — delivered to your inbox in under 60 seconds.</p>
 
   <div class="search-box">
     <span class="search-label">Enter a VIN to get started</span>
     <div class="search-row">
-      <input class="vin-input" type="text" id="heroVin" placeholder="e.g. 1HGCM82633A004352" maxlength="17" oninput="this.value = this.value.toUpperCase()"/>
+      <input class="vin-input" type="text" id="heroVin" placeholder="e.g. 1HGCM82633A004352" maxlength="17" oninput="this.value = this.value.toUpperCase(); validateVin(this)"/>
       <button class="btn-search" onclick="goToCheckout()">Get Report →</button>
     </div>
+    <div class="vin-lookup-hero" id="heroVinLookup">
+      <span id="heroVinLookupIcon">🚗</span>
+      <span id="heroVinLookupText"></span>
+    </div>
+    <div id="vinError" style="font-size:0.78rem;color:#ff6b6b;margin-top:0.5rem;display:none"></div>
     <p class="search-hint">Not sure where to find your VIN? <a href="#faq">It's on your windshield or door jamb.</a></p>
   </div>
 
@@ -457,7 +471,7 @@
   <div class="pricing-grid">
 
     <div class="price-card" onclick="goToCheckoutPlan('standard')">
-      <div class="price-name">VINRecordHub VINRecordHub Report</div>
+      <div class="price-name">Carfax® Vehicle History</div>
       <div class="price-amount"><sup>$</sup>9.99</div>
       <div class="price-per">single report</div>
       <hr class="price-divider"/>
@@ -491,7 +505,7 @@
     </div>
 
     <div class="price-card" onclick="goToCheckoutPlan('premium')">
-      <div class="price-name">VINRecordHub VINRecordHub Plus Report</div>
+      <div class="price-name">AutoCheck® Vehicle History</div>
       <div class="price-amount"><sup>$</sup>9.99</div>
       <div class="price-per">single report</div>
       <hr class="price-divider"/>
@@ -553,20 +567,32 @@
 <section class="comparison-section" id="compare">
   <div class="section-header">
     <span class="section-eyebrow">Why VINRecordHub</span>
-    <h2 class="section-title">Everything you need, <em>nothing you don't.</em></h2>
+    <h2 class="section-title">Same data. <em>Way less.</em></h2>
   </div>
   <div class="comparison-table">
     <div class="comp-header">
       <span>Feature</span>
       <span class="us">VINRecordHub</span>
-      <span>Competitor A</span>
-      <span>Competitor B</span>
+      <span>Carfax® Direct</span>
+      <span>AutoCheck® Direct</span>
     </div>
     <div class="comp-row">
-      <span class="label">Powered by our proprietary data network</span>
-      <span class="check">✓</span>
-      <span class="check">✓</span>
-      <span class="check">✓</span>
+      <span class="label" style="font-weight:600;color:var(--white)">Price per report</span>
+      <span class="price-highlight" style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--accent)">$9.99</span>
+      <span style="color:#ff6b6b;font-family:'Syne',sans-serif;font-weight:700">$44.99</span>
+      <span style="color:#ff6b6b;font-family:'Syne',sans-serif;font-weight:700">$24.99</span>
+    </div>
+    <div class="comp-row">
+      <span class="label">Carfax® + AutoCheck® combo</span>
+      <span style="color:var(--accent);font-family:'Syne',sans-serif;font-weight:800">$14.99</span>
+      <span style="color:#ff6b6b;font-family:'Syne',sans-serif;font-weight:700">$69.98</span>
+      <span style="color:#ff6b6b;font-family:'Syne',sans-serif;font-weight:700">$69.98</span>
+    </div>
+    <div class="comp-row">
+      <span class="label">Subscription required</span>
+      <span class="check">✓ No subscription</span>
+      <span class="cross">✗ Required</span>
+      <span class="cross">✗ Required</span>
     </div>
     <div class="comp-row">
       <span class="label">Accident history</span>
@@ -593,24 +619,13 @@
       <span class="check">✓</span>
     </div>
     <div class="comp-row">
-      <span class="label">No subscription required</span>
-      <span class="check">✓</span>
-      <span class="cross">✗</span>
-      <span class="cross">✗</span>
-    </div>
-    <div class="comp-row">
-      <span class="label">Standard + Premium together</span>
-      <span class="check">✓</span>
-      <span class="cross">✗</span>
-      <span class="cross">✗</span>
-    </div>
-    <div class="comp-row">
       <span class="label">Money-back guarantee</span>
       <span class="check">✓</span>
       <span class="cross">✗</span>
       <span class="cross">✗</span>
     </div>
   </div>
+  <p style="text-align:center;font-size:0.72rem;color:#444;margin-top:1rem">* Competitor pricing sourced from Carfax.com and AutoCheck.com. Prices subject to change.</p>
 </section>
 
 <!-- FAQ -->
@@ -661,7 +676,7 @@
   <div class="footer-top">
     <div class="footer-brand">
       <div class="footer-logo">VIN<span>Record</span>Hub</div>
-      <div class="footer-tagline">Professional vehicle history reports for used car buyers.</div>
+      <div class="footer-tagline">Instant vehicle history powered by Carfax® & AutoCheck®.</div>
     </div>
     <div class="footer-links">
       <div class="footer-col">
@@ -685,7 +700,10 @@
   </div>
   <div class="footer-bottom">
     <span>© 2025 VINRecordHub. All rights reserved.</span>
-    <span>Vehicle history data sourced from our verified automotive data network.</span>
+    <span>Vehicle history data powered by Carfax® & AutoCheck®.</span>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.04);margin-top:1.5rem;padding-top:1.5rem;font-size:0.68rem;color:#333;line-height:1.6;text-align:center">
+    Carfax® and AutoCheck® are registered trademarks of their respective owners. VINRecordHub is not affiliated with, endorsed by, or sponsored by Carfax, AutoCheck, or Experian. Vehicle history reports are provided through licensed data access.
   </div>
 </footer>
 
@@ -697,23 +715,103 @@
     });
   });
 
-  // Go to checkout with VIN
+  // VIN validation
+  function isValidVin(vin) {
+    return /^[A-HJ-NPR-Z0-9]{17}$/.test(vin);
+  }
+
+  // NHTSA VIN lookup
+  let heroLookupTimer = null;
+  async function lookupHeroVin(vin) {
+    const lookup = document.getElementById('heroVinLookup');
+    const icon = document.getElementById('heroVinLookupIcon');
+    const text = document.getElementById('heroVinLookupText');
+
+    lookup.className = 'vin-lookup-hero loading show';
+    icon.textContent = '⏳';
+    text.textContent = 'Looking up vehicle...';
+
+    try {
+      const res = await fetch(
+        `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`
+      );
+      const data = await res.json();
+      const result = data?.Results?.[0];
+
+      if (!result || result.ErrorCode !== '0' || !result.Make) {
+        lookup.className = 'vin-lookup-hero error show';
+        icon.textContent = '⚠️';
+        text.textContent = 'VIN not found — please double-check';
+        return;
+      }
+
+      const vehicleName = [result.ModelYear, result.Make, result.Model, result.Trim]
+        .filter(Boolean).join(' ');
+
+      lookup.className = 'vin-lookup-hero show';
+      icon.textContent = '✅';
+      text.innerHTML = `<strong>${vehicleName}</strong>`;
+
+    } catch(e) {
+      lookup.className = 'vin-lookup-hero';
+    }
+  }
+
+  function validateVin(input) {
+    const vin = input.value.trim();
+    const errEl = document.getElementById('vinError');
+    const lookup = document.getElementById('heroVinLookup');
+
+    if (vin.length === 0) {
+      input.style.borderColor = '';
+      errEl.style.display = 'none';
+      lookup.className = 'vin-lookup-hero';
+      return true;
+    }
+    if (vin.length < 17) {
+      input.style.borderColor = 'rgba(255,165,0,0.4)';
+      errEl.style.display = 'none';
+      lookup.className = 'vin-lookup-hero';
+      clearTimeout(heroLookupTimer);
+      return false;
+    }
+    if (!isValidVin(vin)) {
+      input.style.borderColor = 'rgba(255,80,80,0.5)';
+      errEl.textContent = 'Invalid VIN — cannot contain letters I, O, or Q';
+      errEl.style.display = 'block';
+      lookup.className = 'vin-lookup-hero';
+      return false;
+    }
+    // Valid VIN — trigger lookup
+    input.style.borderColor = 'rgba(63,255,176,0.5)';
+    errEl.style.display = 'none';
+    clearTimeout(heroLookupTimer);
+    heroLookupTimer = setTimeout(() => lookupHeroVin(vin), 300);
+    return true;
+  }
+
+  // Go to checkout with VIN pre-filled
   function goToCheckout() {
     const vin = document.getElementById('heroVin').value.trim();
-    if (vin.length < 17) {
+    const errEl = document.getElementById('vinError');
+    if (!isValidVin(vin)) {
       document.getElementById('heroVin').style.borderColor = 'rgba(255,80,80,0.6)';
-      document.getElementById('heroVin').placeholder = 'Please enter a valid 17-character VIN';
+      errEl.textContent = vin.length < 17
+        ? `VIN must be 17 characters (${vin.length}/17)`
+        : 'Please enter a valid VIN';
+      errEl.style.display = 'block';
+      document.getElementById('heroVin').focus();
       return;
     }
-    window.location.href = `checkout.html?vin=${vin}&plan=single`;
+    window.location.href = `/checkout?vin=${encodeURIComponent(vin)}&plan=standard`;
   }
 
   function goToCheckoutPlan(plan) {
     const vin = document.getElementById('heroVin').value.trim();
-    window.location.href = `checkout.html?plan=${plan}${vin ? '&vin='+vin : ''}`;
+    const vinParam = isValidVin(vin) ? `&vin=${encodeURIComponent(vin)}` : '';
+    window.location.href = `/checkout?plan=${plan}${vinParam}`;
   }
 
-  // Enter key on VIN input
   document.getElementById('heroVin').addEventListener('keypress', e => {
     if (e.key === 'Enter') goToCheckout();
   });

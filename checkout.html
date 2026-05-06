@@ -496,7 +496,24 @@ function renderPayPal() {
 }
 
 // ─── INIT ─────────────────────────────────────────────────
-const urlPlan = new URLSearchParams(window.location.search).get('plan');
+// ─── INIT ─────────────────────────────────────────────────
+const urlParams = new URLSearchParams(window.location.search);
+
+// Auto-fill VIN from URL parameter
+const urlVin = urlParams.get('vin');
+if (urlVin) {
+  const vinInput = document.getElementById('vinInput');
+  vinInput.value = urlVin.toUpperCase();
+  vinInput.style.borderColor = 'rgba(63,255,176,0.5)';
+  // Trigger NHTSA lookup if valid
+  if (isValidVin(urlVin.toUpperCase())) {
+    setTimeout(() => lookupVin(urlVin.toUpperCase()), 500);
+  }
+  refreshSummary();
+}
+
+// Set plan from URL parameter
+const urlPlan = urlParams.get('plan');
 selectPlan(urlPlan && PLANS[urlPlan] ? urlPlan : 'standard');
 </script>
 </body>

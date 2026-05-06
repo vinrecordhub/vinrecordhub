@@ -67,6 +67,16 @@
     .sum-feat { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; color: rgba(255,255,255,0.45); padding: 0.28rem 0; }
     .sum-feat::before { content: '✓'; color: var(--accent2); font-weight: 700; flex-shrink: 0; }
     @media(max-width:768px){ nav{padding:1rem 1.25rem} .checkout-wrap{grid-template-columns:1fr;padding:0 1rem} .order-summary{position:static} .plan-grid{grid-template-columns:1fr} }
+    .vin-lookup {
+      margin-top:0.5rem; padding:0.75rem 1rem;
+      background:rgba(63,255,176,0.07); border:1px solid rgba(63,255,176,0.2);
+      border-radius:8px; font-size:0.85rem; color:var(--accent2);
+      display:none; align-items:center; gap:0.5rem;
+    }
+    .vin-lookup.show { display:flex; }
+    .vin-lookup.error { background:rgba(255,80,80,0.07); border-color:rgba(255,80,80,0.2); color:#ff6b6b; }
+    .vin-lookup.loading { background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.1); color:var(--mid); }
+    .vin-lookup-icon { font-size:1rem; flex-shrink:0; }
   </style>
 </head>
 <body>
@@ -84,6 +94,10 @@
     <div class="field-group">
       <label>Vehicle VIN Number</label>
       <input type="text" id="vinInput" placeholder="17-character VIN" maxlength="17"/>
+      <div class="vin-lookup" id="vinLookup">
+        <span class="vin-lookup-icon" id="vinLookupIcon">🚗</span>
+        <span id="vinLookupText"></span>
+      </div>
       <div class="field-hint">Found on dashboard, door jamb, or title.</div>
     </div>
 
@@ -98,24 +112,27 @@
       <div class="plan-grid">
         <div class="plan-card" id="card-standard">
           <div class="plan-dot"></div>
-          <div class="plan-name">VINRecordHub Report</div>
+          <div class="plan-name">Carfax® History Report</div>
           <div class="plan-price-val">$9.99</div>
-          <div class="plan-sub">single report</div>
+          <div class="plan-sub">powered by Carfax data</div>
         </div>
         <div class="plan-card" id="card-plus">
           <div class="plan-dot"></div>
-          <div class="plan-name">VINRecordHub Plus</div>
+          <div class="plan-name">AutoCheck® History Report</div>
           <div class="plan-price-val">$9.99</div>
-          <div class="plan-sub">extended history</div>
+          <div class="plan-sub">powered by AutoCheck data</div>
         </div>
         <div class="plan-card full" id="card-combo">
           <div class="plan-dot"></div>
-          <div class="plan-name">VINRecordHub Complete</div>
+          <div class="plan-name">Complete History — Carfax® + AutoCheck®</div>
           <div class="plan-price-val">$14.99</div>
-          <div class="plan-sub">dual-source vehicle history</div>
-          <div class="plan-badge">⚡ Most thorough check</div>
+          <div class="plan-sub">powered by both data sources</div>
+          <div class="plan-badge">⚡ Most thorough check — Save $5</div>
         </div>
       </div>
+      <p style="font-size:0.68rem;color:#444;margin-top:0.75rem;line-height:1.5">
+        * Carfax® and AutoCheck® are registered trademarks of their respective owners. VINRecordHub is not affiliated with, endorsed by, or sponsored by Carfax or AutoCheck.
+      </p>
     </div>
 
     <div class="field-group">
@@ -134,9 +151,9 @@
 
   <div class="order-summary">
     <div class="sum-title">Order Summary</div>
-    <div class="sum-plan" id="sumPlan">VINRecordHub Report</div>
+    <div class="sum-plan" id="sumPlan">Carfax® History Report</div>
     <div class="sum-vin" id="sumVin">VIN: —</div>
-    <div class="sum-row"><span id="sumDesc">1 vehicle history report</span><span id="sumPrice">$9.99</span></div>
+    <div class="sum-row"><span id="sumDesc">Vehicle history powered by Carfax® data</span><span id="sumPrice">$9.99</span></div>
     <div class="sum-row sum-discount" id="sumDiscountRow" style="display:none">
       <span id="sumDiscountLabel">Discount</span>
       <span id="sumDiscountAmt"></span>
@@ -162,9 +179,9 @@
 <script>
 // ─── CONFIG ───────────────────────────────────────────────
 const PLANS = {
-  standard: { name:'VINRecordHub Report',    price:9.99,  reportType:'carfax',    desc:'1 vehicle history report' },
-  plus:     { name:'VINRecordHub Plus',      price:9.99,  reportType:'autocheck', desc:'1 extended history report' },
-  combo:    { name:'VINRecordHub Complete',  price:14.99, reportType:'combo',     desc:'Dual-source vehicle history' },
+  standard: { name:'Carfax® History Report',              price:9.99,  reportType:'carfax',    desc:'Vehicle history powered by Carfax® data' },
+  plus:     { name:'AutoCheck® History Report',           price:9.99,  reportType:'autocheck', desc:'Vehicle history powered by AutoCheck® data' },
+  combo:    { name:'Complete History — Carfax® + AutoCheck®', price:14.99, reportType:'combo', desc:'Powered by Carfax® & AutoCheck® data' },
 };
 
 const COUPONS = {
@@ -234,25 +251,157 @@ function refreshSummary() {
   } else { discRow.style.display = 'none'; }
 }
 
+// ─── NHTSA VIN DECODE ─────────────────────────────────────
+let vinLookupTimer = null;
+
+async function lookupVin(vin) {
+  const lookup = document.getElementById('vinLookup');
+  const icon = document.getElementById('vinLookupIcon');
+  const text = document.getElementById('vinLookupText');
+
+  // Show loading state
+  lookup.className = 'vin-lookup loading show';
+  icon.textContent = '⏳';
+  text.textContent = 'Looking up vehicle...';
+
+  try {
+    const res = await fetch(
+      `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`
+    );
+    const data = await res.json();
+    const result = data?.Results?.[0];
+
+    if (!result || result.ErrorCode !== '0') {
+      lookup.className = 'vin-lookup error show';
+      icon.textContent = '⚠️';
+      text.textContent = 'Could not verify VIN — please double-check the number';
+      return;
+    }
+
+    const year = result.ModelYear;
+    const make = result.Make;
+    const model = result.Model;
+    const trim = result.Trim;
+    const bodyClass = result.BodyClass;
+
+    if (!year || !make || !model) {
+      lookup.className = 'vin-lookup error show';
+      icon.textContent = '⚠️';
+      text.textContent = 'VIN not found in database — please verify';
+      return;
+    }
+
+    const vehicleName = [year, make, model, trim].filter(Boolean).join(' ');
+
+    lookup.className = 'vin-lookup show';
+    icon.textContent = '✅';
+    text.innerHTML = `<strong>${vehicleName}</strong>${bodyClass ? ' · ' + bodyClass : ''}`;
+
+    // Update order summary with vehicle name
+    document.getElementById('sumVin').textContent = `${vehicleName} · ${vin}`;
+
+  } catch (err) {
+    lookup.className = 'vin-lookup loading show';
+    icon.textContent = '🔍';
+    text.textContent = 'VIN format valid — lookup unavailable';
+  }
+}
+
+// ─── VALIDATION ───────────────────────────────────────────
+function isValidVin(vin) {
+  // VINs are 17 chars, alphanumeric, no I O Q
+  return /^[A-HJ-NPR-Z0-9]{17}$/.test(vin);
+}
+
+function isValidEmail(email) {
+  // Proper email regex validation
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+}
+
+function validate() {
+  const vin = document.getElementById('vinInput').value.trim().toUpperCase();
+  const email = document.getElementById('emailInput').value.trim();
+  const errEl = document.getElementById('errorMsg');
+  let errors = [];
+
+  // VIN validation
+  if (vin.length === 0) {
+    document.getElementById('vinInput').classList.add('error');
+    errors.push('Please enter your vehicle VIN number.');
+  } else if (vin.length !== 17) {
+    document.getElementById('vinInput').classList.add('error');
+    errors.push(`VIN must be exactly 17 characters (you entered ${vin.length}).`);
+  } else if (!isValidVin(vin)) {
+    document.getElementById('vinInput').classList.add('error');
+    errors.push('Invalid VIN — VINs cannot contain the letters I, O, or Q.');
+  } else {
+    document.getElementById('vinInput').classList.remove('error');
+    document.getElementById('vinInput').style.borderColor = 'rgba(63,255,176,0.5)';
+  }
+
+  // Email validation
+  if (email.length === 0) {
+    document.getElementById('emailInput').classList.add('error');
+    errors.push('Please enter your email address.');
+  } else if (!isValidEmail(email)) {
+    document.getElementById('emailInput').classList.add('error');
+    errors.push('Please enter a valid email address (e.g. name@example.com).');
+  } else {
+    document.getElementById('emailInput').classList.remove('error');
+    document.getElementById('emailInput').style.borderColor = 'rgba(63,255,176,0.5)';
+  }
+
+  if (errors.length > 0) {
+    errEl.innerHTML = errors.join('<br/>');
+    errEl.style.display = 'block';
+    return false;
+  }
+  errEl.style.display = 'none';
+  return true;
+}
+
+// Live VIN validation as user types
 document.getElementById('vinInput').addEventListener('input', function() {
   this.value = this.value.toUpperCase();
+  const vin = this.value.trim();
+  const lookup = document.getElementById('vinLookup');
+
+  // Hide lookup if VIN not complete
+  if (vin.length < 17) {
+    lookup.className = 'vin-lookup';
+    clearTimeout(vinLookupTimer);
+  }
+
+  if (vin.length > 0 && vin.length < 17) {
+    this.style.borderColor = 'rgba(255,165,0,0.5)';
+  } else if (vin.length === 17 && isValidVin(vin)) {
+    this.style.borderColor = 'rgba(63,255,176,0.5)';
+    this.classList.remove('error');
+    // Debounce NHTSA lookup — fire after 300ms of no typing
+    clearTimeout(vinLookupTimer);
+    vinLookupTimer = setTimeout(() => lookupVin(vin), 300);
+  } else if (vin.length === 17) {
+    this.style.borderColor = 'rgba(255,80,80,0.5)';
+    lookup.className = 'vin-lookup error show';
+    document.getElementById('vinLookupIcon').textContent = '⚠️';
+    document.getElementById('vinLookupText').textContent = 'Invalid VIN — cannot contain letters I, O, or Q';
+  }
   refreshSummary();
 });
 
-// ─── VALIDATION ───────────────────────────────────────────
-function validate() {
-  const vin = document.getElementById('vinInput').value.trim();
-  const email = document.getElementById('emailInput').value.trim();
-  const errEl = document.getElementById('errorMsg');
-  let valid = true;
-  if (vin.length !== 17) { document.getElementById('vinInput').classList.add('error'); valid = false; }
-  else { document.getElementById('vinInput').classList.remove('error'); }
-  if (!email.includes('@') || !email.includes('.')) { document.getElementById('emailInput').classList.add('error'); valid = false; }
-  else { document.getElementById('emailInput').classList.remove('error'); }
-  if (!valid) { errEl.textContent = 'Please enter a valid 17-character VIN and email address.'; errEl.style.display = 'block'; }
-  else { errEl.style.display = 'none'; }
-  return valid;
-}
+// Live email validation as user types
+document.getElementById('emailInput').addEventListener('blur', function() {
+  const email = this.value.trim();
+  if (email.length > 0) {
+    if (isValidEmail(email)) {
+      this.style.borderColor = 'rgba(63,255,176,0.5)';
+      this.classList.remove('error');
+    } else {
+      this.style.borderColor = 'rgba(255,80,80,0.5)';
+      this.classList.add('error');
+    }
+  }
+});
 
 // ─── PAYPAL ───────────────────────────────────────────────
 function renderPayPal() {

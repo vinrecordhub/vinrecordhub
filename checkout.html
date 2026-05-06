@@ -280,12 +280,12 @@ function renderPayPal() {
       const orderId = details.id;
 
       // Redirect to success page IMMEDIATELY — don't wait for report
-      window.location.href = 'success.html?vin=' + encodeURIComponent(vin) +
+      window.location.href = 'success?vin=' + encodeURIComponent(vin) +
         '&email=' + encodeURIComponent(email) +
         '&plan=' + plan +
         '&order=' + orderId;
 
-      // Fire fulfill-order in background (doesn't block redirect)
+      // Fire fulfill-order in background
       fetch('/api/fulfill-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -295,7 +295,24 @@ function renderPayPal() {
           paypalOrderId: orderId,
           coupon: coupon ? coupon.code : null,
         }),
-      }).catch(err => console.error('Fulfill error:', err));
+      }).then(async function(res) {
+        if (!res.ok) {
+          // If report delivery failed — notify support automatically
+          fetch('/api/report-failed', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, vin, orderId, plan }),
+          }).catch(() => {});
+        }
+      }).catch(function(err) {
+        console.error('Fulfill error:', err);
+        // Silently notify support
+        fetch('/api/report-failed', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, vin, orderId, plan }),
+        }).catch(() => {});
+      });
     },
 
     onError: function(err) {

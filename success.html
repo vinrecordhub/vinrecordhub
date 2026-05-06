@@ -72,13 +72,13 @@
   <div class="success-card">
     <div class="success-icon">✓</div>
     <h1>Payment <span>confirmed!</span></h1>
-    <p class="success-sub">Your order is being processed. Your vehicle history report will be delivered to your email inbox within 60 seconds.</p>
+    <p class="success-sub">Your report is being generated and will be delivered to your email within the next few minutes. Please check your inbox and spam folder.</p>
 
     <div class="order-details" id="orderDetails">
       <div class="detail-row"><span class="detail-label">Order ID</span><span class="detail-value" id="orderId">—</span></div>
       <div class="detail-row"><span class="detail-label">VIN</span><span class="detail-value" id="vinDisplay">—</span></div>
       <div class="detail-row"><span class="detail-label">Report sent to</span><span class="detail-value" id="emailDisplay">—</span></div>
-      <div class="detail-row"><span class="detail-label">Plan</span><span class="detail-value" id="planDisplay">—</span></div>
+      <div class="detail-row"><span class="detail-label">Report type</span><span class="detail-value" id="planDisplay">—</span></div>
     </div>
 
     <div class="timeline">
@@ -92,22 +92,28 @@
       </div>
       <div class="timeline-item">
         <div class="timeline-dot" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);">📩</div>
-        <div class="timeline-text"><strong>Email delivery</strong><span>Report PDF sent to your inbox</span></div>
+        <div class="timeline-text"><strong>Email delivery</strong><span>Report will arrive in your inbox shortly</span></div>
       </div>
     </div>
 
-    <a href="/" class="btn-home">Run Another VIN →</a>
-    <p class="support-note">Didn't receive your report within 5 minutes? <a href="mailto:support@vinrecordhub.com">Contact support</a></p>
+    <a href="/" class="btn-home">Check Another VIN →</a>
+    <p class="support-note">Didn't receive your report within 10 minutes? <a href="mailto:support@vinrecordhub.com">Contact support</a> with your Order ID above.</p>
   </div>
 </div>
 
 <script>
   const params = new URLSearchParams(window.location.search);
-  const planNames = { carfax: 'Carfax Report', autocheck: 'AutoCheck Report', combo: 'Combo Pack (Carfax + AutoCheck)' };
+  const planNames = {
+    standard: 'VINRecordHub Report',
+    plus: 'VINRecordHub Plus',
+    combo: 'VINRecordHub Complete',
+    carfax: 'VINRecordHub Report',
+    autocheck: 'VINRecordHub Plus',
+  };
   document.getElementById('orderId').textContent = params.get('order') || '—';
   document.getElementById('vinDisplay').textContent = params.get('vin') || '—';
   document.getElementById('emailDisplay').textContent = params.get('email') || '—';
-  document.getElementById('planDisplay').textContent = planNames[params.get('plan')] || 'Carfax Report';
+  document.getElementById('planDisplay').textContent = planNames[params.get('plan')] || 'Vehicle History Report';
 </script>
 </body>
 </html>

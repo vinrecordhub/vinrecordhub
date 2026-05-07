@@ -72,7 +72,38 @@
     .sum-features { margin-top: 1.5rem; }
     .sum-feat { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; color: rgba(255,255,255,0.45); padding: 0.28rem 0; }
     .sum-feat::before { content: '✓'; color: var(--accent2); font-weight: 700; flex-shrink: 0; }
-    @media(max-width:768px){ nav{padding:1rem 1.25rem} .checkout-wrap{grid-template-columns:1fr;padding:0 1rem} .order-summary{position:static} .plan-grid{grid-template-columns:1fr} }
+    @media(max-width:768px){
+      nav { padding: 0.9rem 1.25rem; }
+      .secure-badge { font-size: 0.72rem; }
+      .checkout-wrap {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+        margin: 1.5rem auto;
+        gap: 1.25rem;
+      }
+      .order-summary {
+        position: static;
+        order: -1; /* Show summary FIRST on mobile */
+      }
+      .form-section h2 { font-size: 1.4rem; }
+      .plan-grid { grid-template-columns: 1fr; gap: 0.6rem; }
+      .plan-card { padding: 0.85rem 1rem; }
+      .plan-price-val { font-size: 1.25rem; }
+      .coupon-row input { font-size: 0.85rem; }
+      .btn-apply { padding: 0 1rem; font-size: 0.8rem; }
+      .btn-pay { font-size: 0.9rem; padding: 1rem; }
+      .pay-note { font-size: 0.7rem; }
+      .sum-total-price { font-size: 1.6rem; }
+      .sum-plan { font-size: 1rem; }
+      .field-hint { font-size: 0.72rem; }
+      .vin-lookup { font-size: 0.8rem; }
+      input { font-size: 0.9rem; padding: 0.85rem 1rem; }
+    }
+    @media(max-width:390px){
+      .checkout-wrap { padding: 0 0.75rem; }
+      .form-section h2 { font-size: 1.25rem; }
+      nav { padding: 0.85rem 1rem; }
+    }
     .vin-lookup {
       margin-top:0.5rem; padding:0.75rem 1rem;
       background:rgba(63,255,176,0.07); border:1px solid rgba(63,255,176,0.2);

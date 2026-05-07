@@ -4,6 +4,7 @@
 // Token is checked server-side, Supabase service key never exposed to browser
 
 const { createClient } = require('@supabase/supabase-js');
+const rateLimit = require('./rate-limit');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -14,9 +15,17 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
+  // Rate limit admin endpoint — 20 requests per minute
+  const rl = rateLimit(req, { maxRequests: 20, windowMs: 60000 });
+  if (rl.limited) {
+    return res.status(429).json({ error: 'Too many requests' });
+  }
+
   // Check admin token
   const token = req.query.token;
   if (!token || token !== process.env.ADMIN_TOKEN) {
+    // Add delay to prevent brute force
+    await new Promise(r => setTimeout(r, 1000));
     return res.status(401).json({ error: 'Unauthorized' });
   }
 

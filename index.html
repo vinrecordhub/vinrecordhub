@@ -8,7 +8,30 @@
   <meta name="theme-color" content="#060608"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>VINRecordHub — Carfax® & AutoCheck® Reports from $9.99</title>
-  <meta name="description" content="Access Carfax® & AutoCheck® vehicle history reports from $9.99. Accident history, title records, odometer checks — delivered instantly."/>
+  <meta name="description" content="Access Carfax® & AutoCheck® vehicle history reports from $9.99. Accident history, title records, odometer checks — delivered instantly to your inbox."/>
+  <meta name="keywords" content="carfax cheap, autocheck report, vehicle history report, cheap carfax, vin check, car history report"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://vinrecordhub.com/"/>
+  <!-- Open Graph -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://vinrecordhub.com/"/>
+  <meta property="og:title" content="VINRecordHub — Carfax® & AutoCheck® Reports from $9.99"/>
+  <meta property="og:description" content="Get real Carfax® & AutoCheck® vehicle history reports for just $9.99. Same data, delivered in 60 seconds. No subscription required."/>
+  <meta property="og:image" content="https://vinrecordhub.com/og-image.png"/>
+  <meta property="og:site_name" content="VINRecordHub"/>
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="VINRecordHub — Carfax® Reports from $9.99"/>
+  <meta name="twitter:description" content="Real Carfax® & AutoCheck® vehicle history reports for $9.99. Delivered in 60 seconds."/>
+  <meta name="twitter:image" content="https://vinrecordhub.com/og-image.png"/>
+  <!-- Google Analytics GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -179,7 +202,7 @@
     .step{background:var(--surface);padding:2.25rem 1.75rem;transition:background .2s}
     .step:hover{background:var(--surface2)}
     .step-n{font-size:2.75rem;font-weight:900;letter-spacing:-.06em;
-      color:#8FA3B8;;line-height:1;margin-bottom:1.1rem}
+      color:rgba(255,255,255,.06);line-height:1;margin-bottom:1.1rem}
     .step-ico{font-size:1.6rem;margin-bottom:.9rem}
     .step-t{font-size:.95rem;font-weight:700;margin-bottom:.5rem}
     .step-d{font-size:.84rem;color:rgba(255,255,255,.6);line-height:1.65}
@@ -330,6 +353,9 @@
       .f-links{flex-direction:column;gap:1.75rem}
       .hero{min-height:auto;padding-bottom:3rem}
     }
+  /* LOADING ANIMATION */
+  @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  #socialToast{animation:slideUp .4s ease}
   </style>
 </head>
 <body>
@@ -344,6 +370,7 @@
       <a href="#faq">FAQ</a>
       <a href="mailto:support@vinrecordhub.com">Support</a>
       <a href="#pricing" class="nav-cta">Get Report — $9.99</a>
+      <button class="dark-toggle" id="darkToggle" onclick="toggleMode()" aria-label="Toggle dark/light mode" title="Toggle theme">☀️</button>
     </div>
     <button class="burger" onclick="openM()" aria-label="Menu"><span></span><span></span><span></span></button>
   </nav>
@@ -530,6 +557,85 @@
   </div>
 </div>
 
+<!-- SAMPLE REPORT PREVIEW -->
+<div style="background:var(--bg);padding:0">
+  <div style="max-width:1160px;margin:0 auto;padding:5rem clamp(1.25rem,5vw,3.5rem)">
+    <div style="font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.65rem">Sample Report</div>
+    <h2 style="font-size:clamp(1.7rem,3.2vw,2.4rem);font-weight:800;letter-spacing:-.035em;margin-bottom:.85rem">Here's what you get <em style="font-style:normal;color:var(--accent)">in your inbox.</em></h2>
+    <p style="font-size:.95rem;color:var(--muted);max-width:520px;margin-bottom:2.5rem;line-height:1.72">A real vehicle history report delivered as an HTML file. Open in any browser. Download and keep forever.</p>
+
+    <!-- Sample report card -->
+    <div style="border:1px solid var(--border2);border-radius:20px;overflow:hidden;
+      box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 60px rgba(200,255,0,.04);
+      transform:perspective(1200px) rotateX(3deg);transition:transform .35s"
+      onmouseover="this.style.transform='perspective(1200px) rotateX(0deg)'"
+      onmouseout="this.style.transform='perspective(1200px) rotateX(3deg)'">
+
+      <!-- Report header -->
+      <div style="background:var(--surface2);padding:1.25rem 1.75rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)">
+        <div>
+          <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.2rem">VINRecordHub Vehicle History Report</div>
+          <div style="font-size:1.1rem;font-weight:800;letter-spacing:-.02em">2018 Honda Accord Sport</div>
+          <div style="font-size:.72rem;font-family:monospace;color:var(--muted);margin-top:.15rem">VIN: 1HGCV1F34JA093456</div>
+        </div>
+        <div style="text-align:right">
+          <div style="display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,82,82,.1);border:1px solid rgba(255,82,82,.25);border-radius:8px;padding:.4rem .9rem">
+            <span style="color:var(--red);font-size:.75rem;font-weight:700">⚠ Issues Found</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats row -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface)">
+        <div style="padding:1.25rem 1.5rem;border-right:1px solid var(--border);text-align:center">
+          <div style="font-size:1.75rem;font-weight:900;letter-spacing:-.05em;color:var(--red)">2</div>
+          <div style="font-size:.7rem;color:var(--muted);margin-top:.2rem;font-weight:500">Accidents Reported</div>
+        </div>
+        <div style="padding:1.25rem 1.5rem;border-right:1px solid var(--border);text-align:center">
+          <div style="font-size:1.75rem;font-weight:900;letter-spacing:-.05em;color:var(--green)">Clean</div>
+          <div style="font-size:.7rem;color:var(--muted);margin-top:.2rem;font-weight:500">Title Status</div>
+        </div>
+        <div style="padding:1.25rem 1.5rem;border-right:1px solid var(--border);text-align:center">
+          <div style="font-size:1.75rem;font-weight:900;letter-spacing:-.05em;color:#ffaa00">3</div>
+          <div style="font-size:.7rem;color:var(--muted);margin-top:.2rem;font-weight:500">Previous Owners</div>
+        </div>
+        <div style="padding:1.25rem 1.5rem;text-align:center">
+          <div style="font-size:1.75rem;font-weight:900;letter-spacing:-.05em;color:var(--green)">✓</div>
+          <div style="font-size:.7rem;color:var(--muted);margin-top:.2rem;font-weight:500">Odometer Verified</div>
+        </div>
+      </div>
+
+      <!-- Blurred content rows -->
+      <div style="background:var(--surface);border-top:1px solid var(--border);padding:1.25rem 1.75rem;position:relative">
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem">Accident & Damage History</div>
+        <div style="display:flex;flex-direction:column;gap:.6rem;filter:blur(4px);user-select:none">
+          <div style="background:var(--surface2);border-radius:8px;padding:.75rem 1rem;border:1px solid var(--border)">
+            <div style="display:flex;justify-content:space-between;margin-bottom:.35rem">
+              <span style="font-size:.8rem;font-weight:600;color:var(--red)">Accident Reported</span>
+              <span style="font-size:.72rem;color:var(--muted)">March 2021 · 45,231 miles</span>
+            </div>
+            <div style="font-size:.78rem;color:var(--muted)">Front-end collision. Minor damage reported. Vehicle repaired at certified shop.</div>
+          </div>
+          <div style="background:var(--surface2);border-radius:8px;padding:.75rem 1rem;border:1px solid var(--border)">
+            <div style="display:flex;justify-content:space-between;margin-bottom:.35rem">
+              <span style="font-size:.8rem;font-weight:600;color:var(--red)">Accident Reported</span>
+              <span style="font-size:.72rem;color:var(--muted)">August 2022 · 62,847 miles</span>
+            </div>
+            <div style="font-size:.78rem;color:var(--muted)">Rear impact. Moderate damage. Insurance claim filed.</div>
+          </div>
+        </div>
+        <!-- Unlock overlay -->
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(to bottom,transparent 0%,rgba(14,14,18,.95) 40%)">
+          <div style="text-align:center">
+            <div style="font-size:.9rem;font-weight:700;margin-bottom:.5rem">Full report available after purchase</div>
+            <a href="#pricing" style="display:inline-block;background:var(--accent);color:#000;font-size:.82rem;font-weight:700;padding:.55rem 1.35rem;border-radius:8px;text-decoration:none">Get Full Report — $9.99 →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- COMPARISON -->
 <div id="compare">
   <div class="sec">
@@ -577,6 +683,21 @@
 </div>
 
 <!-- FOOTER -->
+<!-- EMAIL CAPTURE -->
+<div style="background:linear-gradient(135deg,rgba(200,255,0,.04) 0%,rgba(79,140,255,.04) 100%);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div style="max-width:640px;margin:0 auto;padding:3.5rem clamp(1.25rem,5vw,3rem);text-align:center">
+    <div style="font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.65rem">Free Resource</div>
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:800;letter-spacing:-.035em;margin-bottom:.75rem">Get our <em style="font-style:normal;color:var(--accent)">Free Car Buying Guide</em></h2>
+    <p style="font-size:.9rem;color:var(--muted);margin-bottom:1.75rem;line-height:1.7">10 things to check before buying a used car — including how to spot hidden flood damage, odometer fraud, and salvage titles before they cost you thousands.</p>
+    <div style="display:flex;gap:.6rem;max-width:440px;margin:0 auto" id="emailCapture">
+      <input type="email" id="captureEmail" placeholder="your@email.com" style="flex:1;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:.85rem 1.1rem;color:var(--white);font-family:'Inter',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='rgba(200,255,0,.4)'" onblur="this.style.borderColor=''"/>
+      <button onclick="captureEmail()" style="background:var(--accent);color:#000;border:none;border-radius:10px;padding:.85rem 1.4rem;font-family:'Inter',sans-serif;font-weight:700;font-size:.875rem;cursor:pointer;white-space:nowrap;transition:opacity .15s" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">Get Free Guide →</button>
+    </div>
+    <div id="captureMsg" style="font-size:.8rem;margin-top:.75rem;min-height:1.2rem"></div>
+    <p style="font-size:.7rem;color:var(--faint);margin-top:.6rem">No spam. Unsubscribe anytime.</p>
+  </div>
+</div>
+
 <div class="footer-shell">
   <div class="footer-in">
     <div class="f-top">
@@ -594,6 +715,32 @@
     <div class="f-legal">Carfax® and AutoCheck® are registered trademarks of their respective owners. VINRecordHub is not affiliated with, endorsed by, or sponsored by Carfax, AutoCheck, or Experian. Vehicle history reports are provided through licensed data access.</div>
   </div>
 </div>
+
+<!-- SOCIAL PROOF TOAST -->
+<div id="socialToast" style="position:fixed;bottom:1.5rem;left:1.5rem;z-index:500;
+  background:var(--surface);border:1px solid var(--border2);border-radius:12px;
+  padding:1rem 1.25rem;max-width:280px;display:none;
+  box-shadow:0 8px 40px rgba(0,0,0,.5);
+  animation:slideUp .4s ease forwards">
+  <div style="display:flex;align-items:center;gap:.75rem">
+    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#4f8cff,#c8ff00);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem">🚗</div>
+    <div>
+      <div id="toastMsg" style="font-size:.8rem;font-weight:600;line-height:1.35"></div>
+      <div style="font-size:.68rem;color:var(--muted);margin-top:.15rem" id="toastTime"></div>
+    </div>
+    <button onclick="document.getElementById('socialToast').style.display='none'" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0;margin-left:.25rem;flex-shrink:0">✕</button>
+  </div>
+</div>
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+<!-- LIVE CHAT (Tawk.to — replace with your property ID) -->
+<script type="text/javascript">
+  // To activate: go to tawk.to, create account, replace the script below with your widget code
+  // var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+  // (function(){var s1=document.createElement("script");s1.async=true;
+  // s1.src='https://embed.tawk.to/YOUR_PROPERTY_ID/YOUR_WIDGET_ID';
+  // document.getElementsByTagName("head")[0].appendChild(s1);})();
+</script>
 
 <script>
   function openM(){document.getElementById('mMenu').classList.add('open');document.body.style.overflow='hidden'}

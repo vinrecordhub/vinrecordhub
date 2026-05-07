@@ -3,958 +3,622 @@
 <head>
   <meta charset="UTF-8"/>
   <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
-  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png"/>
-  <meta name="theme-color" content="#080808"/>
+  <meta name="theme-color" content="#060608"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>VIN Record Hub — Carfax® & AutoCheck® Reports from $9.99</title>
-  <meta name="description" content="Access Carfax® & AutoCheck® vehicle history reports from just $9.99. Accident history, title records, odometer checks — delivered instantly to your inbox."/>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <title>VINRecordHub — Carfax® & AutoCheck® Reports from $9.99</title>
+  <meta name="description" content="Access Carfax® & AutoCheck® vehicle history reports from $9.99. Accident history, title records, odometer checks — delivered instantly."/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --black: #080808;
-      --white: #f4f4ef;
-      --accent: #e8ff3f;
-      --accent2: #3fffb0;
-      --gray: #111111;
-      --gray2: #1a1a1a;
-      --mid: #666;
-      --border: rgba(255,255,255,0.07);
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#060608;
+      --surface:#0e0e12;
+      --surface2:#15151b;
+      --border:rgba(255,255,255,0.07);
+      --border2:rgba(255,255,255,0.13);
+      --white:#fff;
+      --muted:rgba(255,255,255,0.45);
+      --faint:rgba(255,255,255,0.16);
+      --accent:#c8ff00;
+      --green:#00d97e;
+      --red:#ff5252;
+      --blue:#4f8cff;
+      --max:1160px;
+      --pad:clamp(1.25rem,5vw,3.5rem);
     }
-    html { scroll-behavior: smooth; overflow-x: hidden; }
-    body {
-      background: var(--black);
-      color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-      pointer-events: none; z-index: 9999; opacity: 0.5;
+    html{scroll-behavior:smooth;overflow-x:hidden}
+    body{
+      background:var(--bg);color:var(--white);
+      font-family:'Inter',-apple-system,sans-serif;
+      font-weight:400;line-height:1.6;
+      overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
     }
 
     /* NAV */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(24px);
-      background: rgba(8,8,8,0.75);
-    }
-    .nav-inner {
-      max-width: 1280px; margin: 0 auto; width: 100%;
-      padding: 1.25rem clamp(1.25rem, 5vw, 4rem);
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em; text-decoration: none; color: var(--white); }
-    .logo span { color: var(--accent); }
-    .nav-links { display: flex; gap: 2.5rem; align-items: center; }
-    .nav-links a { color: var(--mid); font-size: 0.88rem; text-decoration: none; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--white); }
-    .nav-cta {
-      background: var(--accent); color: var(--black);
-      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.82rem;
-      padding: 0.6rem 1.4rem; border-radius: 6px; text-decoration: none;
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(232,255,63,0.3); color: var(--black); }
+    .nav-shell{position:fixed;top:0;left:0;right:0;z-index:100;
+      background:rgba(6,6,8,0.82);backdrop-filter:blur(18px) saturate(1.6);
+      border-bottom:1px solid var(--border)}
+    nav{max-width:var(--max);margin:0 auto;padding:0 var(--pad);
+      height:62px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-size:1rem;font-weight:800;letter-spacing:-0.03em;text-decoration:none;color:var(--white)}
+    .logo-r{color:var(--accent)}
+    .logo-h{color:var(--faint);font-weight:500}
+    .nav-links{display:flex;align-items:center;gap:2rem}
+    .nav-links a{font-size:.85rem;font-weight:500;color:var(--muted);text-decoration:none;transition:color .15s}
+    .nav-links a:hover{color:var(--white)}
+    .nav-cta{background:var(--accent);color:#000;font-size:.78rem;font-weight:700;
+      padding:.52rem 1.2rem;border-radius:8px;text-decoration:none;
+      transition:opacity .15s,transform .15s}
+    .nav-cta:hover{opacity:.88;transform:translateY(-1px)}
+    .burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+    .burger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px}
+    .m-menu{display:none;position:fixed;inset:0;z-index:200;
+      background:rgba(6,6,8,.97);backdrop-filter:blur(20px);
+      flex-direction:column;align-items:center;justify-content:center;gap:2.5rem}
+    .m-menu.open{display:flex}
+    .m-menu a{font-size:1.5rem;font-weight:700;color:var(--white);text-decoration:none}
+    .m-menu a.hi{color:var(--accent)}
+    .m-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;
+      color:var(--muted);font-size:1.75rem;cursor:pointer;line-height:1}
 
     /* HERO */
-    .hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column; justify-content: center;
-      padding: 9rem clamp(1.5rem, 6vw, 5rem) 5rem;
-      position: relative; overflow: hidden;
-      max-width: 1280px;
-      margin: 0 auto;
-      width: 100%;
-    }
-    .hero-outer {
-      width: 100%;
-    }
-    .hero-glow {
-      position: absolute; top: 10%; right: -5%;
-      width: 700px; height: 700px;
-      background: radial-gradient(circle, rgba(232,255,63,0.06) 0%, transparent 65%);
-      pointer-events: none;
-    }
-    .hero-glow2 {
-      position: absolute; bottom: -10%; left: -5%;
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(63,255,176,0.04) 0%, transparent 65%);
-      pointer-events: none;
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--mid);
-      margin-bottom: 2rem;
-      opacity: 0; animation: fadeUp 0.6s ease forwards 0.1s;
-    }
-    .hero-badge::before {
-      content: ''; width: 6px; height: 6px; border-radius: 50%;
-      background: var(--accent2); animation: blink 2s ease infinite;
-    }
-    @keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.5)} }
-    h1 {
-      font-family: 'Syne', sans-serif; font-weight: 800;
-      font-size: clamp(2.4rem, 4vw, 4.2rem);
-      line-height: 1.05; letter-spacing: -0.03em; max-width: 760px;
-      opacity: 0; animation: fadeUp 0.7s ease forwards 0.25s;
-    }
-    h1 em { font-style: normal; color: var(--accent); }
-    .hero-sub {
-      margin-top: 2.5rem; font-size: 1.1rem; color: var(--mid);
-      max-width: 560px; line-height: 1.8; font-weight: 300;
-      opacity: 0; animation: fadeUp 0.7s ease forwards 0.4s;
-    }
+    .hero{min-height:100svh;padding-top:62px;display:flex;align-items:center;position:relative;overflow:hidden}
+    .hero-grid{position:absolute;inset:0;
+      background-image:linear-gradient(rgba(200,255,0,.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(200,255,0,.025) 1px,transparent 1px);
+      background-size:64px 64px;
+      mask-image:radial-gradient(ellipse 70% 55% at 50% 0%,black 0%,transparent 100%);
+      pointer-events:none}
+    .hero-orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(60px)}
+    .orb1{width:640px;height:640px;top:-15%;right:-8%;
+      background:radial-gradient(circle,rgba(200,255,0,.07) 0%,transparent 70%)}
+    .orb2{width:480px;height:480px;bottom:-15%;left:-8%;
+      background:radial-gradient(circle,rgba(79,140,255,.06) 0%,transparent 70%)}
+    .hero-inner{max-width:var(--max);margin:0 auto;padding:5rem var(--pad) 4rem;
+      display:grid;grid-template-columns:1fr 400px;gap:4rem;align-items:center;
+      width:100%;position:relative;z-index:1}
+    .hero-tag{display:inline-flex;align-items:center;gap:.5rem;
+      font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+      color:var(--accent);border:1px solid rgba(200,255,0,.2);
+      background:rgba(200,255,0,.05);padding:.32rem .9rem;border-radius:100px;margin-bottom:1.5rem}
+    .hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);
+      animation:blink 2s infinite}
+    @keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.5)}}
+    h1{font-size:clamp(2.2rem,3.8vw,3.5rem);font-weight:900;letter-spacing:-.04em;
+      line-height:1.06;margin-bottom:1.35rem}
+    h1 em{font-style:normal;color:var(--accent)}
+    .hero-sub{font-size:.975rem;color:var(--muted);line-height:1.72;max-width:460px;margin-bottom:2.25rem}
+    .vin-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--faint);margin-bottom:.55rem;display:block}
+    .vin-row{display:flex;gap:.6rem}
+    .vin-input{flex:1;min-width:0;background:var(--surface);border:1px solid var(--border2);
+      border-radius:10px;padding:.85rem 1.1rem;color:var(--white);
+      font-family:'Inter',sans-serif;font-size:.92rem;font-weight:500;letter-spacing:.04em;
+      outline:none;transition:border-color .2s,box-shadow .2s}
+    .vin-input::placeholder{color:rgba(255,255,255,.2);letter-spacing:0;font-weight:400}
+    .vin-input:focus{border-color:rgba(200,255,0,.4);box-shadow:0 0 0 3px rgba(200,255,0,.07)}
+    .vin-btn{background:var(--accent);color:#000;border:none;border-radius:10px;
+      padding:.85rem 1.4rem;font-family:'Inter',sans-serif;font-weight:700;font-size:.875rem;
+      cursor:pointer;white-space:nowrap;transition:opacity .15s,transform .15s}
+    .vin-btn:hover{opacity:.88;transform:translateY(-1px)}
+    .vin-lk{margin-top:.55rem;display:none;align-items:center;gap:.45rem;
+      font-size:.8rem;padding:.45rem .7rem;border-radius:8px}
+    .vin-lk.show{display:flex;background:rgba(0,217,126,.07);border:1px solid rgba(0,217,126,.2);color:var(--green)}
+    .vin-lk.err{display:flex;background:rgba(255,82,82,.07);border:1px solid rgba(255,82,82,.2);color:var(--red)}
+    .vin-lk.ldg{display:flex;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted)}
+    .vin-err{font-size:.76rem;color:var(--red);margin-top:.35rem;display:none}
 
-    /* VIN SEARCH BOX */
-    .search-box {
-      margin-top: 3rem; max-width: 620px;
-      opacity: 0; animation: fadeUp 0.7s ease forwards 0.55s;
-    }
-    .search-label {
-      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--mid); margin-bottom: 0.75rem; display: block;
-    }
-    .search-row { display: flex; gap: 0.75rem; }
-    .vin-input {
-      flex: 1; background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
-      padding: 1.1rem 1.4rem; color: var(--white);
-      font-family: 'DM Sans', sans-serif; font-size: 1rem;
-      letter-spacing: 0.06em; outline: none;
-      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
-    }
-    .vin-input::placeholder { color: rgba(255,255,255,0.2); }
-    .vin-input:focus {
-      border-color: rgba(232,255,63,0.5);
-      background: rgba(255,255,255,0.07);
-      box-shadow: 0 0 0 3px rgba(232,255,63,0.08);
-    }
-    .btn-search {
-      background: var(--accent); color: var(--black);
-      border: none; border-radius: 10px;
-      padding: 1.1rem 2rem;
-      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem;
-      cursor: pointer; white-space: nowrap;
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .btn-search:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(232,255,63,0.3); }
-    .search-hint { font-size: 0.78rem; color: var(--mid); margin-top: 0.75rem; }
-    .search-hint a { color: var(--accent2); text-decoration: none; }
-    .vin-lookup-hero {
-      margin-top: 0.6rem; padding: 0.65rem 1rem;
-      background: rgba(63,255,176,0.07); border: 1px solid rgba(63,255,176,0.25);
-      border-radius: 8px; font-size: 0.85rem; color: var(--accent2);
-      display: none; align-items: center; gap: 0.5rem; max-width: 560px;
-    }
-    .vin-lookup-hero.show { display: flex; }
-    .vin-lookup-hero.error { background: rgba(255,80,80,0.07); border-color: rgba(255,80,80,0.2); color: #ff6b6b; }
-    .vin-lookup-hero.loading { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); color: var(--mid); }
+    /* 3D REPORT CARD */
+    .hero-card{background:var(--surface);border:1px solid var(--border2);border-radius:20px;
+      padding:1.6rem;
+      transform:perspective(900px) rotateY(-9deg) rotateX(4deg);
+      transform-origin:left center;transition:transform .35s ease;
+      box-shadow:0 0 0 1px rgba(255,255,255,.04),0 24px 64px rgba(0,0,0,.7),0 0 80px rgba(200,255,0,.04)}
+    .hero-card:hover{transform:perspective(900px) rotateY(-4deg) rotateX(2deg)}
+    .hc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.1rem}
+    .hc-logo{font-size:.78rem;font-weight:800;letter-spacing:-.02em}
+    .hc-logo span{color:var(--accent)}
+    .hc-badge{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+      background:rgba(0,217,126,.1);color:var(--green);
+      padding:.18rem .55rem;border-radius:100px;border:1px solid rgba(0,217,126,.2)}
+    .hc-car{background:var(--surface2);border-radius:10px;padding:1rem;
+      margin-bottom:1rem;border:1px solid var(--border)}
+    .hc-car-name{font-size:.95rem;font-weight:700;margin-bottom:.18rem}
+    .hc-car-vin{font-size:.66rem;font-family:'Courier New',monospace;color:var(--muted);letter-spacing:.04em}
+    .hc-stats{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1rem}
+    .hc-stat{background:var(--surface2);border-radius:9px;padding:.8rem;border:1px solid var(--border)}
+    .hc-stat-l{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.28rem}
+    .hc-stat-v{font-size:1rem;font-weight:800;letter-spacing:-.02em}
+    .ok{color:var(--green)}.warn{color:#ffaa00}.bad{color:var(--red)}
+    .hc-rows{display:flex;flex-direction:column;gap:.45rem}
+    .hc-row{display:flex;align-items:center;justify-content:space-between;
+      font-size:.75rem;padding:.45rem .7rem;background:var(--surface2);
+      border-radius:7px;border:1px solid var(--border)}
+    .hc-row-l{color:var(--muted)}
+    .hc-tag{font-size:.67rem;font-weight:600;padding:.14rem .45rem;border-radius:4px}
+    .tag-ok{background:rgba(0,217,126,.1);color:var(--green)}
+    .tag-warn{background:rgba(255,170,0,.1);color:#ffaa00}
+    .tag-bad{background:rgba(255,82,82,.1);color:var(--red)}
+    .hc-foot{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between}
+    .hc-price{font-size:1.4rem;font-weight:900;letter-spacing:-.04em;color:var(--accent)}
+    .hc-price span{font-size:.78rem;font-weight:400;color:var(--muted)}
+    .hc-cta{background:var(--accent);color:#000;font-size:.75rem;font-weight:700;
+      padding:.45rem 1rem;border-radius:7px;text-decoration:none;transition:opacity .15s}
+    .hc-cta:hover{opacity:.85}
 
     /* TRUST BAR */
-    .trust-bar {
-      margin-top: 4rem; display: flex; gap: 3rem; flex-wrap: wrap;
-      opacity: 0; animation: fadeUp 0.7s ease forwards 0.7s;
-    }
-    .trust-item { display: flex; align-items: center; gap: 0.6rem; }
-    .trust-icon { font-size: 1rem; }
-    .trust-text { font-size: 0.82rem; color: var(--mid); }
-    .trust-text strong { color: var(--white); font-weight: 500; }
+    .trust{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface)}
+    .trust-inner{max-width:var(--max);margin:0 auto;padding:0 var(--pad);
+      display:flex;justify-content:center;gap:3rem;flex-wrap:wrap}
+    .t-item{display:flex;align-items:center;gap:.55rem;padding:.9rem 0;
+      font-size:.84rem;color:var(--muted)}
+    .t-item strong{color:var(--white);font-weight:600}
 
-    /* HOW IT WORKS */
-    .section { padding: 6rem clamp(1.5rem, 6vw, 5rem); max-width: 1280px; margin: 0 auto; width: 100%; }
-    .section-header { text-align: center; margin-bottom: 4rem; max-width: 700px; margin-left: auto; margin-right: auto; }
-    .section-eyebrow {
-      font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--mid); margin-bottom: 1rem; display: block;
-    }
-    .section-title {
-      font-family: 'Syne', sans-serif; font-weight: 800;
-      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-      letter-spacing: -0.03em; line-height: 1;
-    }
-    .section-title em { font-style: normal; color: var(--accent); }
+    /* SHARED SECTION */
+    .sec{max-width:var(--max);margin:0 auto;padding:5rem var(--pad)}
+    .sec-dark{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .sec-tag{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.12em;
+      text-transform:uppercase;color:var(--accent);margin-bottom:.65rem}
+    h2{font-size:clamp(1.7rem,3.2vw,2.4rem);font-weight:800;letter-spacing:-.035em;
+      line-height:1.15;margin-bottom:.85rem}
+    h2 em{font-style:normal;color:var(--accent)}
+    .sec-sub{font-size:.95rem;color:var(--muted);line-height:1.72;max-width:520px}
+    .sec-center{text-align:center}
+    .sec-center .sec-sub{margin:0 auto}
 
-    .steps {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
-      background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
-    }
-    .step {
-      background: var(--gray); padding: 3rem 2.5rem;
-      position: relative; transition: background 0.2s;
-    }
-    .step:hover { background: var(--gray2); }
-    .step-num {
-      font-family: 'Syne', sans-serif; font-weight: 800;
-      font-size: 4rem; color: rgba(255,255,255,0.04);
-      line-height: 1; margin-bottom: 1.5rem; letter-spacing: -0.04em;
-    }
-    .step-icon { font-size: 1.8rem; margin-bottom: 1.25rem; }
-    .step-title {
-      font-family: 'Syne', sans-serif; font-weight: 700;
-      font-size: 1.05rem; margin-bottom: 0.75rem;
-    }
-    .step-desc { font-size: 0.88rem; color: var(--mid); line-height: 1.75; }
+    /* STEPS */
+    .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+      background:var(--border);border-radius:16px;overflow:hidden;
+      border:1px solid var(--border);margin-top:3rem}
+    .step{background:var(--surface);padding:2.25rem 1.75rem;transition:background .2s}
+    .step:hover{background:var(--surface2)}
+    .step-n{font-size:2.75rem;font-weight:900;letter-spacing:-.06em;
+      color:rgba(255,255,255,.06);line-height:1;margin-bottom:1.1rem}
+    .step-ico{font-size:1.6rem;margin-bottom:.9rem}
+    .step-t{font-size:.95rem;font-weight:700;margin-bottom:.5rem}
+    .step-d{font-size:.84rem;color:var(--muted);line-height:1.65}
 
     /* PRICING */
-    .pricing-section { padding: 6rem clamp(1.5rem, 6vw, 5rem); background: var(--gray); }
-    .pricing-inner { max-width: 1280px; margin: 0 auto; }
-    .pricing-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.25rem; max-width: 1000px; margin: 0 auto;
-    }
-    .price-card {
-      background: var(--black); border: 1px solid var(--border);
-      border-radius: 16px; padding: 2.5rem 2rem;
-      position: relative; transition: border-color 0.2s, transform 0.2s;
-      cursor: pointer;
-    }
-    .price-card:hover { border-color: rgba(232,255,63,0.3); transform: translateY(-4px); }
-    .price-card.featured {
-      border-color: var(--accent); background: rgba(232,255,63,0.04);
-    }
-    .featured-badge {
-      position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
-      background: var(--accent); color: var(--black);
-      font-family: 'Syne', sans-serif; font-weight: 700;
-      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 0.3rem 1.2rem; border-radius: 0 0 8px 8px;
-    }
-    .price-name {
-      font-family: 'Syne', sans-serif; font-weight: 700;
-      font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase;
-      color: var(--mid); margin-bottom: 1.5rem;
-    }
-    .price-amount {
-      font-family: 'Syne', sans-serif; font-weight: 800;
-      font-size: 3.2rem; letter-spacing: -0.04em; line-height: 1;
-    }
-    .price-amount sup { font-size: 1.4rem; vertical-align: super; color: var(--accent); }
-    .price-per { font-size: 0.8rem; color: var(--mid); margin-top: 0.4rem; }
-    .price-save {
-      display: inline-block; background: rgba(63,255,176,0.1);
-      color: var(--accent2); font-size: 0.72rem; font-weight: 500;
-      padding: 0.2rem 0.7rem; border-radius: 4px; margin-top: 0.5rem;
-    }
-    .price-divider { border: none; border-top: 1px solid var(--border); margin: 1.75rem 0; }
-    .price-features { list-style: none; }
-    .price-features li {
-      font-size: 0.85rem; color: rgba(255,255,255,0.65);
-      padding: 0.45rem 0; display: flex; align-items: center; gap: 0.65rem;
-    }
-    .price-features li::before { content: '✓'; color: var(--accent2); font-weight: 700; font-size: 0.8rem; flex-shrink: 0; }
-    .btn-buy {
-      display: block; width: 100%; margin-top: 2rem;
-      background: rgba(255,255,255,0.06); color: var(--white);
-      border: 1px solid var(--border); border-radius: 8px;
-      padding: 0.9rem; text-align: center;
-      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem;
-      text-decoration: none; transition: background 0.2s, border-color 0.2s;
-    }
-    .btn-buy:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: var(--white); }
-    .price-card.featured .btn-buy {
-      background: var(--accent); color: var(--black); border-color: var(--accent);
-    }
-    .price-card.featured .btn-buy:hover { box-shadow: 0 8px 25px rgba(232,255,63,0.3); }
+    .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2.75rem}
+    .pc{background:var(--surface);border:1px solid var(--border2);border-radius:16px;
+      padding:1.85rem;cursor:pointer;position:relative;
+      transition:border-color .2s,transform .2s,box-shadow .2s}
+    .pc:hover{border-color:rgba(200,255,0,.25);transform:translateY(-3px);
+      box-shadow:0 14px 44px rgba(0,0,0,.45)}
+    .pc.feat{border-color:var(--accent);background:rgba(200,255,0,.03)}
+    .feat-badge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);
+      background:var(--accent);color:#000;font-size:.6rem;font-weight:800;
+      letter-spacing:.1em;text-transform:uppercase;
+      padding:.22rem 1rem;border-radius:0 0 8px 8px;white-space:nowrap}
+    .pc-name{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+      color:var(--muted);margin-bottom:1.1rem}
+    .pc-price{font-size:2.6rem;font-weight:900;letter-spacing:-.05em;line-height:1}
+    .pc-price sup{font-size:1.1rem;vertical-align:super;color:var(--accent)}
+    .pc-per{font-size:.76rem;color:var(--muted);margin-top:.3rem}
+    .pc-save{font-size:.7rem;color:var(--green);font-weight:600;margin-top:.25rem}
+    .pc hr{border:none;border-top:1px solid var(--border);margin:1.35rem 0}
+    .pc-feats{list-style:none;display:flex;flex-direction:column;gap:.45rem}
+    .pc-feats li{font-size:.83rem;color:rgba(255,255,255,.62);
+      display:flex;align-items:center;gap:.55rem}
+    .pc-feats li::before{content:'✓';color:var(--green);font-weight:700;font-size:.78rem;flex-shrink:0}
+    .btn-buy{display:block;text-align:center;margin-top:1.5rem;padding:.78rem;
+      border-radius:10px;font-size:.85rem;font-weight:700;text-decoration:none;
+      transition:all .2s;background:rgba(255,255,255,.06);color:var(--white);
+      border:1px solid var(--border2)}
+    .btn-buy:hover{background:rgba(255,255,255,.11)}
+    .pc.feat .btn-buy{background:var(--accent);color:#000;border-color:transparent}
+    .pc.feat .btn-buy:hover{box-shadow:0 8px 28px rgba(200,255,0,.22)}
 
-    /* WHAT'S INCLUDED */
-    .included-section { padding: 6rem clamp(1.5rem, 6vw, 5rem); max-width: 1280px; margin: 0 auto; width: 100%; }
-    .included-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5px; background: var(--border); border: 1px solid var(--border);
-      border-radius: 16px; overflow: hidden; margin-top: 4rem;
-    }
-    .included-item { background: var(--gray); padding: 2.5rem; transition: background 0.2s; }
-    .included-item:hover { background: var(--gray2); }
-    .included-icon { font-size: 2rem; margin-bottom: 1.25rem; }
-    .included-title {
-      font-family: 'Syne', sans-serif; font-weight: 700;
-      font-size: 1rem; margin-bottom: 0.6rem;
-    }
-    .included-desc { font-size: 0.85rem; color: var(--mid); line-height: 1.7; }
+    /* FEATURES */
+    .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+      background:var(--border);margin-top:2.75rem}
+    .fc{background:var(--surface);padding:1.85rem 1.75rem;transition:background .2s}
+    .fc:hover{background:var(--surface2)}
+    .fc-ico{font-size:1.6rem;margin-bottom:.85rem}
+    .fc-t{font-size:.92rem;font-weight:700;margin-bottom:.4rem}
+    .fc-d{font-size:.83rem;color:var(--muted);line-height:1.65}
 
-    /* COMPARISON */
-    .comparison-section { padding: 6rem clamp(1.5rem, 6vw, 5rem); background: var(--gray); }
-    .comparison-table {
-      max-width: 860px; margin: 3rem auto 0;
-      border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
-    }
-    .comp-header {
-      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
-      background: var(--gray2); padding: 1.25rem 2rem;
-      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.82rem;
-    }
-    .comp-header span:not(:first-child) { text-align: center; }
-    .comp-header .us { color: var(--accent); }
-    .comp-row {
-      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
-      padding: 1rem 2rem; border-top: 1px solid var(--border);
-      font-size: 0.88rem; align-items: center;
-      transition: background 0.15s;
-    }
-    .comp-row:hover { background: rgba(255,255,255,0.02); }
-    .comp-row span:not(:first-child) { text-align: center; }
-    .comp-row .label { color: rgba(255,255,255,0.7); }
-    .check { color: var(--accent2); font-size: 1rem; }
-    .cross { color: #ff4444; font-size: 1rem; }
-    .price-highlight { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 700; }
+    /* COMPARE */
+    .cmp-table{border:1px solid var(--border2);border-radius:16px;overflow:hidden;margin-top:2.75rem}
+    .cmp-h{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
+      background:var(--surface2);padding:.95rem 1.5rem;
+      font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+      color:var(--muted);gap:1rem}
+    .cmp-h .us{color:var(--accent)}
+    .cmp-r{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
+      padding:.9rem 1.5rem;border-top:1px solid var(--border);
+      font-size:.875rem;gap:1rem;align-items:center;transition:background .15s}
+    .cmp-r:hover{background:rgba(255,255,255,.02)}
+    .cmp-lbl{color:rgba(255,255,255,.65)}
+    .c-us{text-align:center;color:var(--accent);font-weight:800;font-size:.95rem}
+    .c-no{text-align:center;color:rgba(255,82,82,.65)}
+    .c-yes{text-align:center;color:var(--green);font-weight:600}
+    .c-bad{text-align:center;color:var(--red);font-weight:700}
+    .c-good{text-align:center;color:var(--accent);font-weight:800}
 
     /* FAQ */
-    .faq-section { padding: 6rem clamp(1.5rem, 6vw, 5rem); max-width: 1280px; margin: 0 auto; width: 100%; }
-    .faq-list { max-width: 680px; margin: 3rem auto 0; }
-    .faq-item {
-      border-bottom: 1px solid var(--border); padding: 1.75rem 0;
-      cursor: pointer;
-    }
-    .faq-question {
-      font-family: 'Syne', sans-serif; font-weight: 600;
-      font-size: 1rem; display: flex; justify-content: space-between;
-      align-items: center; gap: 1rem;
-    }
-    .faq-icon { color: var(--accent); font-size: 1.2rem; transition: transform 0.2s; flex-shrink: 0; }
-    .faq-answer {
-      font-size: 0.9rem; color: var(--mid); line-height: 1.8;
-      max-height: 0; overflow: hidden; transition: max-height 0.3s ease, margin 0.3s ease;
-    }
-    .faq-item.open .faq-answer { max-height: 200px; margin-top: 1rem; }
-    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-list{max-width:680px;margin:2.75rem auto 0}
+    .fq{border-bottom:1px solid var(--border)}
+    .fq-q{display:flex;justify-content:space-between;align-items:center;gap:1rem;
+      padding:1.2rem 0;cursor:pointer;font-size:.92rem;font-weight:600}
+    .fq-ico{color:var(--accent);font-size:1rem;flex-shrink:0;transition:transform .2s}
+    .fq-a{font-size:.85rem;color:var(--muted);line-height:1.75;
+      max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease}
+    .fq.open .fq-a{max-height:200px;padding-bottom:1.2rem}
+    .fq.open .fq-ico{transform:rotate(45deg)}
 
     /* GUARANTEE */
-    .guarantee-section { padding: 5rem clamp(1.5rem, 6vw, 5rem); text-align: center; max-width: 1280px; margin: 0 auto; width: 100%; }
-    .guarantee-box {
-      display: inline-block; background: var(--gray);
-      border: 1px solid var(--border); border-radius: 20px;
-      padding: 3.5rem clamp(2rem, 6vw, 5rem); max-width: 680px; width: 100%;
-      position: relative; overflow: hidden;
-    }
-    .guarantee-box::before {
-      content: '';
-      position: absolute; top: -50%; left: -50%;
-      width: 200%; height: 200%;
-      background: radial-gradient(circle at center, rgba(63,255,176,0.04) 0%, transparent 60%);
-      pointer-events: none;
-    }
-    .guarantee-icon { font-size: 3.5rem; margin-bottom: 1.5rem; }
-    .guarantee-title {
-      font-family: 'Syne', sans-serif; font-weight: 800;
-      font-size: 2rem; letter-spacing: -0.03em; margin-bottom: 1rem;
-    }
-    .guarantee-title span { color: var(--accent2); }
-    .guarantee-desc { color: var(--mid); line-height: 1.8; font-size: 0.95rem; }
+    .gbox{background:var(--surface);border:1px solid var(--border2);border-radius:20px;
+      padding:3rem 2.5rem;text-align:center;max-width:620px;margin:0 auto;position:relative;overflow:hidden}
+    .gbox::before{content:'';position:absolute;inset:0;
+      background:radial-gradient(circle at 50% 0%,rgba(0,217,126,.06) 0%,transparent 70%);
+      pointer-events:none}
+    .g-ico{font-size:2.75rem;margin-bottom:1.1rem}
+    .g-title{font-size:clamp(1.5rem,2.8vw,2rem);font-weight:800;letter-spacing:-.03em;margin-bottom:.9rem}
+    .g-title span{color:var(--green)}
+    .g-desc{font-size:.9rem;color:var(--muted);line-height:1.75}
 
     /* FOOTER */
-    footer {
-      border-top: 1px solid var(--border);
+    .footer-shell{border-top:1px solid var(--border)}
+    .footer-in{max-width:var(--max);margin:0 auto;padding:2.75rem var(--pad)}
+    .f-top{display:flex;justify-content:space-between;gap:3rem;flex-wrap:wrap;margin-bottom:2.5rem}
+    .f-logo{font-size:1rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.45rem}
+    .f-logo .fr{color:var(--accent)}
+    .f-logo .fh{color:var(--faint);font-weight:500}
+    .f-tagline{font-size:.8rem;color:var(--muted)}
+    .f-links{display:flex;gap:3.5rem}
+    .f-col h4{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--faint);margin-bottom:.9rem}
+    .f-col a{display:block;font-size:.83rem;color:var(--muted);text-decoration:none;
+      margin-bottom:.5rem;transition:color .15s}
+    .f-col a:hover{color:var(--white)}
+    .f-btm{border-top:1px solid var(--border);padding-top:1.6rem;
+      display:flex;justify-content:space-between;align-items:center;
+      font-size:.75rem;color:var(--faint);flex-wrap:wrap;gap:.75rem}
+    .f-legal{margin-top:1.4rem;padding-top:1.4rem;
+      border-top:1px solid rgba(255,255,255,.03);
+      font-size:.65rem;color:rgba(255,255,255,.18);line-height:1.7;text-align:center}
+
+    /* RESPONSIVE */
+    @media(max-width:960px){
+      .burger{display:flex}
+      .nav-links{display:none}
+      nav{height:56px}
+      .hero-inner{grid-template-columns:1fr;padding:3.5rem var(--pad) 3rem;gap:0}
+      .hero-card{display:none}
+      h1{font-size:clamp(1.9rem,7vw,2.8rem)}
+      .hero-sub{font-size:.92rem}
+      .trust-inner{gap:1.25rem;padding:0 var(--pad)}
+      .t-item{padding:.7rem 0;font-size:.8rem}
+      .sec{padding:3.5rem var(--pad)}
+      .steps{grid-template-columns:1fr;gap:1px}
+      .pricing-grid{grid-template-columns:1fr;gap:.875rem}
+      .pc:hover{transform:none}
+      .feat-grid{grid-template-columns:1fr 1fr}
+      .cmp-h,.cmp-r{grid-template-columns:1.5fr .75fr .75fr .75fr;font-size:.72rem;padding:.8rem 1rem;gap:.5rem}
+      .f-top{flex-direction:column;gap:1.75rem}
+      .f-links{flex-wrap:wrap;gap:2.25rem}
+      .f-btm{flex-direction:column;text-align:center}
     }
-    .footer-inner {
-      max-width: 1280px; margin: 0 auto;
-      padding: 3rem clamp(1.5rem, 6vw, 4rem);
-    }
-    .footer-top {
-      display: flex; justify-content: space-between; align-items: flex-start;
-      margin-bottom: 2.5rem; gap: 3rem; flex-wrap: wrap;
-    }
-    .footer-brand {}
-    .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; letter-spacing: -0.02em; }
-    .footer-logo span { color: var(--accent); }
-    .footer-tagline { font-size: 0.82rem; color: var(--mid); margin-top: 0.5rem; }
-    .footer-links { display: flex; gap: 4rem; }
-    .footer-col h4 {
-      font-family: 'Syne', sans-serif; font-weight: 700;
-      font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--mid); margin-bottom: 1rem;
-    }
-    .footer-col a {
-      display: block; font-size: 0.85rem; color: rgba(255,255,255,0.5);
-      text-decoration: none; margin-bottom: 0.6rem; transition: color 0.2s;
-    }
-    .footer-col a:hover { color: var(--white); }
-    .footer-bottom {
-      border-top: 1px solid var(--border); padding-top: 2rem;
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 0.78rem; color: var(--mid); flex-wrap: wrap; gap: 1rem;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* MOBILE MENU */
-    .mobile-menu-btn {
-      display: none; background: none; border: none;
-      color: var(--white); cursor: pointer; padding: 0.25rem;
-      flex-direction: column; gap: 5px;
-    }
-    .mobile-menu-btn span {
-      display: block; width: 22px; height: 2px;
-      background: var(--white); border-radius: 2px;
-      transition: all 0.2s;
-    }
-    .mobile-nav {
-      display: none; position: fixed; inset: 0;
-      background: rgba(8,8,8,0.98); z-index: 200;
-      flex-direction: column; align-items: center;
-      justify-content: center; gap: 2rem;
-      backdrop-filter: blur(20px);
-    }
-    .mobile-nav.open { display: flex; }
-    .mobile-nav a {
-      font-family: 'Syne', sans-serif; font-weight: 700;
-      font-size: 1.5rem; color: var(--white); text-decoration: none;
-      transition: color 0.2s;
-    }
-    .mobile-nav a:hover { color: var(--accent); }
-    .mobile-nav .close-btn {
-      position: absolute; top: 1.5rem; right: 1.5rem;
-      background: none; border: none; color: var(--mid);
-      font-size: 1.5rem; cursor: pointer; padding: 0.5rem;
-    }
-    /* ─── RESPONSIVE — Tablet & Mobile ─── */
-    @media (max-width: 900px) {
-      .mobile-menu-btn { display: flex; }
-      nav { padding: 1rem 1.25rem; }
-      .nav-links { display: none; }
-
-      .hero {
-        padding: 6rem 1.5rem 3rem !important;
-        min-height: auto;
-      }
-      h1 {
-        font-size: clamp(1.9rem, 8vw, 2.8rem) !important;
-        line-height: 1.08 !important;
-        letter-spacing: -0.025em !important;
-        max-width: 100% !important;
-      }
-      .hero-sub { font-size: 0.93rem; margin-top: 1.25rem; max-width: 100%; }
-      .hero-badge { margin-bottom: 1.25rem; }
-
-      .search-box { margin-top: 1.75rem; max-width: 100%; }
-      .search-row { flex-direction: column; gap: 0.6rem; }
-      .vin-input { font-size: 1rem; padding: 0.9rem 1rem; border-radius: 8px; }
-      .btn-search { width: 100%; padding: 0.95rem; font-size: 0.95rem; border-radius: 8px; }
-
-      .trust-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 1.75rem; }
-      .trust-item { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 0.75rem; }
-      .trust-text { font-size: 0.73rem; }
-
-      .section, .pricing-section, .included-section,
-      .comparison-section, .faq-section { padding: 3.5rem 1.5rem !important; }
-      .guarantee-section { padding: 3rem 1.5rem !important; }
-      .section-header { margin-bottom: 2rem !important; }
-      .section-title { font-size: clamp(1.55rem, 5.5vw, 2.2rem) !important; }
-
-      .steps { grid-template-columns: 1fr; }
-      .step { padding: 1.5rem 1.25rem; }
-      .step-num { font-size: 2.5rem; margin-bottom: 1rem; }
-
-      .pricing-grid { grid-template-columns: 1fr !important; gap: 0.875rem; }
-      .price-card { padding: 1.5rem 1.25rem; }
-      .price-card:hover { transform: none; }
-      .price-amount { font-size: 2.25rem; }
-
-      .included-grid { grid-template-columns: 1fr; }
-      .included-item { padding: 1.25rem; }
-
-      .comparison-table { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-      .comp-header, .comp-row {
-        grid-template-columns: 1.5fr 0.75fr 0.75fr 0.75fr;
-        font-size: 0.7rem; padding: 0.7rem 0.8rem; gap: 0.4rem;
-      }
-
-      .guarantee-box { padding: 2rem 1.5rem !important; width: 100%; }
-      .guarantee-title { font-size: 1.4rem; }
-      .guarantee-icon { font-size: 2.5rem; }
-
-      .faq-question { font-size: 0.88rem; }
-      .faq-answer { font-size: 0.84rem; }
-
-      footer { padding: 2.5rem 1.5rem !important; }
-      .footer-top { flex-direction: column; gap: 1.75rem; }
-      .footer-links { flex-direction: column; gap: 1.25rem; }
-      .footer-bottom { flex-direction: column; text-align: center; gap: 0.4rem; font-size: 0.72rem; }
-    }
-
-    /* ─── SMALL PHONES (390px and under) ─── */
-    @media (max-width: 390px) {
-      .hero { padding: 5.5rem 1rem 2.5rem !important; }
-      h1 { font-size: 1.75rem !important; }
-      .section, .pricing-section, .included-section,
-      .comparison-section, .faq-section { padding: 3rem 1rem !important; }
-      .guarantee-section { padding: 2.5rem 1rem !important; }
-      nav { padding: 0.85rem 1rem; }
-      footer { padding: 2rem 1rem !important; }
-      .trust-bar { grid-template-columns: 1fr; }
-      .comp-header, .comp-row { font-size: 0.63rem; padding: 0.55rem 0.6rem; }
+    @media(max-width:600px){
+      :root{--pad:1.25rem}
+      nav{height:52px}
+      h1{font-size:clamp(1.65rem,8.5vw,2.3rem)}
+      h2{font-size:clamp(1.4rem,5.5vw,1.9rem)}
+      .vin-row{flex-direction:column}
+      .vin-btn{width:100%;padding:.9rem}
+      .trust-inner{flex-direction:column;gap:0}
+      .t-item{width:100%;border-bottom:1px solid var(--border);padding:.8rem 0}
+      .t-item:last-child{border:none}
+      .feat-grid{grid-template-columns:1fr}
+      .cmp-h,.cmp-r{grid-template-columns:1.5fr .7fr .7fr .7fr;font-size:.66rem;padding:.68rem .75rem}
+      .gbox{padding:2rem 1.5rem}
+      .f-links{flex-direction:column;gap:1.75rem}
+      .hero{min-height:auto;padding-bottom:3rem}
     }
   </style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-inner">
-    <a href="/" class="logo">VIN<span>Record</span>Hub</a>
+<div class="nav-shell">
+  <nav>
+    <a href="/" class="logo">VIN<span class="logo-r">Record</span><span class="logo-h">Hub</span></a>
     <div class="nav-links">
-      <a href="#how-it-works">How it Works</a>
+      <a href="#how">How it Works</a>
       <a href="#pricing">Pricing</a>
+      <a href="#compare">Compare</a>
       <a href="#faq">FAQ</a>
       <a href="mailto:support@vinrecordhub.com">Support</a>
-      <a href="#pricing" class="nav-cta">Get Report — from $9.99</a>
+      <a href="#pricing" class="nav-cta">Get Report — $9.99</a>
     </div>
-    <button class="mobile-menu-btn" onclick="openMobileMenu()" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
-
-<!-- Mobile full-screen menu -->
-<div class="mobile-nav" id="mobileNav">
-  <button class="close-btn" onclick="closeMobileMenu()">✕</button>
-  <a href="#how-it-works" onclick="closeMobileMenu()">How it Works</a>
-  <a href="#pricing" onclick="closeMobileMenu()">Pricing</a>
-  <a href="#compare" onclick="closeMobileMenu()">Compare</a>
-  <a href="#faq" onclick="closeMobileMenu()">FAQ</a>
-  <a href="mailto:support@vinrecordhub.com">Support</a>
-  <a href="#pricing" onclick="closeMobileMenu()" style="color:var(--accent);font-size:1.2rem">Get Report →</a>
+    <button class="burger" onclick="openM()" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
 </div>
 
-<!-- HERO -->
+<div class="m-menu" id="mMenu">
+  <button class="m-close" onclick="closeM()">✕</button>
+  <a href="#how" onclick="closeM()">How it Works</a>
+  <a href="#pricing" onclick="closeM()">Pricing</a>
+  <a href="#compare" onclick="closeM()">Compare</a>
+  <a href="#faq" onclick="closeM()">FAQ</a>
+  <a href="mailto:support@vinrecordhub.com" onclick="closeM()">Support</a>
+  <a href="#pricing" onclick="closeM()" class="hi">Get Report →</a>
+</div>
+
 <section class="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-glow2"></div>
-  <div class="hero-badge">Instant Vehicle History Reports</div>
-  <h1>Know everything about <em>any vehicle.</em></h1>
-  <p class="hero-sub">Instant vehicle history reports powered by Carfax® & AutoCheck® data. Accident history, title records, odometer checks and more — delivered to your inbox in under 60 seconds.</p>
-
-  <div class="search-box">
-    <span class="search-label">Enter a VIN to get started</span>
-    <div class="search-row">
-      <input class="vin-input" type="text" id="heroVin" placeholder="e.g. 1HGCM82633A004352" maxlength="17" oninput="this.value = this.value.toUpperCase(); validateVin(this)"/>
-      <button class="btn-search" onclick="goToCheckout()">Get Report →</button>
+  <div class="hero-grid"></div>
+  <div class="hero-orb orb1"></div>
+  <div class="hero-orb orb2"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-tag">Instant Vehicle History Reports</div>
+      <h1>Know the truth about <em>any car</em> before you buy.</h1>
+      <p class="hero-sub">Real Carfax® & AutoCheck® vehicle history — accident records, title history, odometer checks — for just $9.99. Delivered in 60 seconds.</p>
+      <span class="vin-label">Enter VIN to get started</span>
+      <div class="vin-row">
+        <input class="vin-input" id="heroVin" type="text" placeholder="e.g. 1HGCM82633A004352" maxlength="17" autocomplete="off" spellcheck="false" oninput="this.value=this.value.toUpperCase();validateVin(this)"/>
+        <button class="vin-btn" onclick="goCheckout()">Get Report →</button>
+      </div>
+      <div class="vin-lk" id="vinLk"><span id="vinLkIco"></span><span id="vinLkTxt"></span></div>
+      <div class="vin-err" id="vinErr"></div>
     </div>
-    <div class="vin-lookup-hero" id="heroVinLookup">
-      <span id="heroVinLookupIcon">🚗</span>
-      <span id="heroVinLookupText"></span>
-    </div>
-    <div id="vinError" style="font-size:0.78rem;color:#ff6b6b;margin-top:0.5rem;display:none"></div>
-    <p class="search-hint">Not sure where to find your VIN? <a href="#faq">It's on your windshield or door jamb.</a></p>
-  </div>
 
-  <div class="trust-bar">
-    <div class="trust-item"><span class="trust-icon">🔒</span><span class="trust-text"><strong>Secure</strong> checkout</span></div>
-    <div class="trust-item"><span class="trust-icon">⚡</span><span class="trust-text"><strong>60 second</strong> delivery</span></div>
-    <div class="trust-item"><span class="trust-icon">💰</span><span class="trust-text"><strong>From $9.99</strong> per report</span></div>
-    <div class="trust-item"><span class="trust-icon">✅</span><span class="trust-text"><strong>Money-back</strong> guarantee</span></div>
+    <div class="hero-card" id="hCard">
+      <div class="hc-head">
+        <div class="hc-logo">VIN<span>Record</span>Hub</div>
+        <div class="hc-badge">✓ Verified</div>
+      </div>
+      <div class="hc-car">
+        <div class="hc-car-name">2019 Toyota Camry XSE</div>
+        <div class="hc-car-vin">VIN: 4T1B11HK8KU742951</div>
+      </div>
+      <div class="hc-stats">
+        <div class="hc-stat"><div class="hc-stat-l">Accidents</div><div class="hc-stat-v bad">2 Found</div></div>
+        <div class="hc-stat"><div class="hc-stat-l">Owners</div><div class="hc-stat-v warn">3</div></div>
+        <div class="hc-stat"><div class="hc-stat-l">Title</div><div class="hc-stat-v ok">Clean</div></div>
+        <div class="hc-stat"><div class="hc-stat-l">Odometer</div><div class="hc-stat-v ok">Verified</div></div>
+      </div>
+      <div class="hc-rows">
+        <div class="hc-row"><span class="hc-row-l">Flood damage</span><span class="hc-tag tag-ok">None</span></div>
+        <div class="hc-row"><span class="hc-row-l">Salvage title</span><span class="hc-tag tag-ok">No</span></div>
+        <div class="hc-row"><span class="hc-row-l">Open recalls</span><span class="hc-tag tag-warn">1 Found</span></div>
+      </div>
+      <div class="hc-foot">
+        <div class="hc-price">$9.99 <span>/ report</span></div>
+        <a href="#pricing" class="hc-cta">Get This →</a>
+      </div>
+    </div>
   </div>
 </section>
+
+<div class="trust">
+  <div class="trust-inner">
+    <div class="t-item">🔒 <span><strong>Secure</strong> checkout via PayPal</span></div>
+    <div class="t-item">⚡ <span><strong>60 second</strong> delivery</span></div>
+    <div class="t-item">📊 <span>Powered by <strong>Carfax® & AutoCheck®</strong></span></div>
+    <div class="t-item">🛡️ <span><strong>Money-back</strong> guarantee</span></div>
+  </div>
+</div>
 
 <!-- HOW IT WORKS -->
-<section class="section" id="how-it-works">
-  <div class="section-header">
-    <span class="section-eyebrow">Simple Process</span>
-    <h2 class="section-title">Three steps. <em>60 seconds.</em></h2>
-  </div>
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">01</div>
-      <div class="step-icon">🔢</div>
-      <div class="step-title">Enter the VIN</div>
-      <div class="step-desc">Find the 17-character VIN on the dashboard, driver's door jamb, or vehicle title. Type it in the search box above.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">02</div>
-      <div class="step-icon">💳</div>
-      <div class="step-title">Pay Securely</div>
-      <div class="step-desc">Choose Standard, Premium, or the combo pack and pay with PayPal or card. From just $9.99 — no subscription, no hidden fees.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">03</div>
-      <div class="step-icon">📩</div>
-      <div class="step-title">Get Your Report</div>
-      <div class="step-desc">Your full vehicle history report lands in your inbox within 60 seconds. Download it as a PDF and keep it forever.</div>
+<div class="sec-dark" id="how">
+  <div class="sec sec-center">
+    <div class="sec-tag">Simple Process</div>
+    <h2>Three steps. <em>60 seconds.</em></h2>
+    <p class="sec-sub">Getting a full vehicle history report has never been easier.</p>
+    <div class="steps">
+      <div class="step"><div class="step-n">01</div><div class="step-ico">🔢</div><div class="step-t">Enter the VIN</div><div class="step-d">Find the 17-character VIN on the dashboard, door jamb, or vehicle title and type it above.</div></div>
+      <div class="step"><div class="step-n">02</div><div class="step-ico">💳</div><div class="step-t">Pay Securely</div><div class="step-d">Choose Carfax®, AutoCheck®, or the combo. Pay with PayPal or card — from $9.99. No subscription.</div></div>
+      <div class="step"><div class="step-n">03</div><div class="step-ico">📩</div><div class="step-t">Get Your Report</div><div class="step-d">Your full vehicle history report arrives in your email inbox within 60 seconds. Keep it forever.</div></div>
     </div>
   </div>
-</section>
+</div>
 
 <!-- PRICING -->
-<section class="pricing-section" id="pricing">
-  <div class="section-header">
-    <span class="section-eyebrow">Pricing</span>
-    <h2 class="section-title">Simple, <em>honest</em> pricing.</h2>
+<div id="pricing">
+  <div class="sec">
+    <div class="sec-tag">Pricing</div>
+    <h2>Simple, <em>honest</em> pricing.</h2>
+    <p class="sec-sub">One-time payment. No subscription. Reports in seconds.</p>
+    <div class="pricing-grid">
+      <div class="pc" onclick="goCheckoutPlan('standard')">
+        <div class="pc-name">Carfax® Report</div>
+        <div class="pc-price"><sup>$</sup>9.99</div>
+        <div class="pc-per">single report</div>
+        <hr/>
+        <ul class="pc-feats">
+          <li>Powered by Carfax® data</li>
+          <li>Accident & damage history</li>
+          <li>Title & ownership records</li>
+          <li>Odometer verification</li>
+          <li>Service & recall records</li>
+          <li>Instant email delivery</li>
+        </ul>
+        <a href="/checkout?plan=standard" class="btn-buy">Get Carfax® Report →</a>
+      </div>
+      <div class="pc feat" onclick="goCheckoutPlan('combo')">
+        <div class="feat-badge">Best Value</div>
+        <div class="pc-name">Combo Pack</div>
+        <div class="pc-price"><sup>$</sup>14.99</div>
+        <div class="pc-per">Carfax® + AutoCheck®</div>
+        <div class="pc-save">Save $5 — most thorough check</div>
+        <hr/>
+        <ul class="pc-feats">
+          <li>1 full Carfax® report</li>
+          <li>1 full AutoCheck® report</li>
+          <li>Cross-verify both sources</li>
+          <li>Maximum buying confidence</li>
+          <li>All accident & title records</li>
+          <li>Both delivered instantly</li>
+        </ul>
+        <a href="/checkout?plan=combo" class="btn-buy">Get Combo Pack →</a>
+      </div>
+      <div class="pc" onclick="goCheckoutPlan('premium')">
+        <div class="pc-name">AutoCheck® Report</div>
+        <div class="pc-price"><sup>$</sup>9.99</div>
+        <div class="pc-per">single report</div>
+        <hr/>
+        <ul class="pc-feats">
+          <li>Powered by AutoCheck® (Experian)</li>
+          <li>Auction & dealer records</li>
+          <li>Title & ownership records</li>
+          <li>Odometer verification</li>
+          <li>AutoCheck® score included</li>
+          <li>Instant email delivery</li>
+        </ul>
+        <a href="/checkout?plan=premium" class="btn-buy">Get AutoCheck® Report →</a>
+      </div>
+    </div>
   </div>
-  <div class="pricing-grid">
-
-    <div class="price-card" onclick="goToCheckoutPlan('standard')">
-      <div class="price-name">Carfax® Vehicle History</div>
-      <div class="price-amount"><sup>$</sup>9.99</div>
-      <div class="price-per">single report</div>
-      <hr class="price-divider"/>
-      <ul class="price-features">
-        <li>Comprehensive vehicle history</li>
-        <li>Accident & damage history</li>
-        <li>Title & ownership records</li>
-        <li>Odometer verification</li>
-        <li>Service & recall records</li>
-        <li>Instant delivery</li>
-      </ul>
-      <a href="checkout.html?plan=standard" class="btn-buy">Get Standard →</a>
-    </div>
-
-    <div class="price-card featured" onclick="goToCheckoutPlan('combo')">
-      <div class="featured-badge">Best Value</div>
-      <div class="price-name">Combo Pack</div>
-      <div class="price-amount"><sup>$</sup>14.99</div>
-      <div class="price-per">Standard + Premium</div>
-      <div class="price-save">Save $5 — most thorough check</div>
-      <hr class="price-divider"/>
-      <ul class="price-features">
-        <li>1 Standard report</li>
-        <li>1 Premium report</li>
-        <li>Cross-verify both data sources</li>
-        <li>Maximum confidence buying</li>
-        <li>All accident & title records</li>
-        <li>Both reports delivered instantly</li>
-      </ul>
-      <a href="checkout.html?plan=combo" class="btn-buy">Get Combo Pack →</a>
-    </div>
-
-    <div class="price-card" onclick="goToCheckoutPlan('premium')">
-      <div class="price-name">AutoCheck® Vehicle History</div>
-      <div class="price-amount"><sup>$</sup>9.99</div>
-      <div class="price-per">single report</div>
-      <hr class="price-divider"/>
-      <ul class="price-features">
-        <li>Powered by Premium (Experian)</li>
-        <li>Auction & dealer records</li>
-        <li>Title & ownership records</li>
-        <li>Odometer verification</li>
-        <li>Premium score included</li>
-        <li>Instant delivery</li>
-      </ul>
-      <a href="checkout.html?plan=premium" class="btn-buy">Get Premium →</a>
-    </div>
-
-  </div>
-</section>
+</div>
 
 <!-- WHAT'S INCLUDED -->
-<section class="included-section">
-  <div class="section-header">
-    <span class="section-eyebrow">What You Get</span>
-    <h2 class="section-title">Everything in <em>one report.</em></h2>
-  </div>
-  <div class="included-grid">
-    <div class="included-item">
-      <div class="included-icon">💥</div>
-      <div class="included-title">Accident History</div>
-      <div class="included-desc">Full accident records including damage severity, airbag deployments, and structural damage from reported incidents.</div>
-    </div>
-    <div class="included-item">
-      <div class="included-icon">📋</div>
-      <div class="included-title">Title Records</div>
-      <div class="included-desc">Salvage, rebuilt, flood, lemon, and junk title brands. Know every red flag before signing anything.</div>
-    </div>
-    <div class="included-item">
-      <div class="included-icon">👤</div>
-      <div class="included-title">Ownership History</div>
-      <div class="included-desc">Number of previous owners, usage type (personal, rental, fleet, taxi), and geographic history.</div>
-    </div>
-    <div class="included-item">
-      <div class="included-icon">📏</div>
-      <div class="included-title">Odometer Check</div>
-      <div class="included-desc">Detect mileage rollbacks and discrepancies that sellers try to hide from unsuspecting buyers.</div>
-    </div>
-    <div class="included-item">
-      <div class="included-icon">🔧</div>
-      <div class="included-title">Service Records</div>
-      <div class="included-desc">Oil changes, repairs, recalls, and maintenance history from verified shops and dealerships.</div>
-    </div>
-    <div class="included-item">
-      <div class="included-icon">🚨</div>
-      <div class="included-title">Recall Information</div>
-      <div class="included-desc">Outstanding manufacturer recalls and whether they've been addressed — critical safety information.</div>
+<div class="sec-dark">
+  <div class="sec">
+    <div class="sec-tag">What You Get</div>
+    <h2>Everything in <em>one report.</em></h2>
+    <p class="sec-sub">Comprehensive vehicle history — all for $9.99.</p>
+    <div class="feat-grid">
+      <div class="fc"><div class="fc-ico">💥</div><div class="fc-t">Accident History</div><div class="fc-d">Full accident records including damage severity, airbag deployments, and structural damage.</div></div>
+      <div class="fc"><div class="fc-ico">📋</div><div class="fc-t">Title Records</div><div class="fc-d">Salvage, rebuilt, flood, lemon, and junk title brands — every red flag before you buy.</div></div>
+      <div class="fc"><div class="fc-ico">👤</div><div class="fc-t">Ownership History</div><div class="fc-d">Number of owners, usage type (personal, rental, fleet, taxi), and geographic history.</div></div>
+      <div class="fc"><div class="fc-ico">📏</div><div class="fc-t">Odometer Check</div><div class="fc-d">Detect mileage rollbacks and discrepancies that sellers try to hide.</div></div>
+      <div class="fc"><div class="fc-ico">🔧</div><div class="fc-t">Service Records</div><div class="fc-d">Oil changes, repairs, recalls, and maintenance history from verified shops and dealers.</div></div>
+      <div class="fc"><div class="fc-ico">🚨</div><div class="fc-t">Recall Information</div><div class="fc-d">Outstanding manufacturer recalls and whether they've been resolved — critical safety info.</div></div>
     </div>
   </div>
-</section>
+</div>
 
 <!-- COMPARISON -->
-<section class="comparison-section" id="compare">
-  <div class="section-header">
-    <span class="section-eyebrow">Why VINRecordHub</span>
-    <h2 class="section-title">Same data. <em>Way less.</em></h2>
+<div id="compare">
+  <div class="sec">
+    <div class="sec-tag">Why VINRecordHub</div>
+    <h2>Same data. <em>Way less.</em></h2>
+    <p class="sec-sub">Get the exact same Carfax® & AutoCheck® data at a fraction of the retail price.</p>
+    <div class="cmp-table">
+      <div class="cmp-h"><span>Feature</span><span class="us">VINRecordHub</span><span>Carfax® Direct</span><span>AutoCheck® Direct</span></div>
+      <div class="cmp-r"><span class="cmp-lbl" style="font-weight:600;color:var(--white)">Price per report</span><span class="c-good">$9.99</span><span class="c-bad">$44.99</span><span class="c-bad">$24.99</span></div>
+      <div class="cmp-r"><span class="cmp-lbl">Combo (both reports)</span><span class="c-good">$14.99</span><span class="c-bad">$69.98</span><span class="c-bad">$69.98</span></div>
+      <div class="cmp-r"><span class="cmp-lbl">Subscription required</span><span class="c-yes">✓ None</span><span class="c-no">✗ Required</span><span class="c-no">✗ Required</span></div>
+      <div class="cmp-r"><span class="cmp-lbl">Accident history</span><span class="c-yes">✓</span><span class="c-yes">✓</span><span class="c-yes">✓</span></div>
+      <div class="cmp-r"><span class="cmp-lbl">Title records</span><span class="c-yes">✓</span><span class="c-yes">✓</span><span class="c-yes">✓</span></div>
+      <div class="cmp-r"><span class="cmp-lbl">Instant delivery</span><span class="c-yes">✓</span><span class="c-yes">✓</span><span class="c-yes">✓</span></div>
+      <div class="cmp-r"><span class="cmp-lbl">Money-back guarantee</span><span class="c-yes">✓</span><span class="c-no">✗</span><span class="c-no">✗</span></div>
+    </div>
+    <p style="font-size:.67rem;color:rgba(255,255,255,.18);margin-top:.9rem;text-align:center">* Competitor pricing from Carfax.com and AutoCheck.com. Subject to change.</p>
   </div>
-  <div class="comparison-table">
-    <div class="comp-header">
-      <span>Feature</span>
-      <span class="us">VINRecordHub</span>
-      <span>Carfax® Direct</span>
-      <span>AutoCheck® Direct</span>
-    </div>
-    <div class="comp-row">
-      <span class="label" style="font-weight:600;color:var(--white)">Price per report</span>
-      <span class="price-highlight" style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--accent)">$9.99</span>
-      <span style="color:#ff6b6b;font-family:'Syne',sans-serif;font-weight:700">$44.99</span>
-      <span style="color:#ff6b6b;font-family:'Syne',sans-serif;font-weight:700">$24.99</span>
-    </div>
-    <div class="comp-row">
-      <span class="label">Carfax® + AutoCheck® combo</span>
-      <span style="color:var(--accent);font-family:'Syne',sans-serif;font-weight:800">$14.99</span>
-      <span style="color:#ff6b6b;font-family:'Syne',sans-serif;font-weight:700">$69.98</span>
-      <span style="color:#ff6b6b;font-family:'Syne',sans-serif;font-weight:700">$69.98</span>
-    </div>
-    <div class="comp-row">
-      <span class="label">Subscription required</span>
-      <span class="check">✓ No subscription</span>
-      <span class="cross">✗ Required</span>
-      <span class="cross">✗ Required</span>
-    </div>
-    <div class="comp-row">
-      <span class="label">Accident history</span>
-      <span class="check">✓</span>
-      <span class="check">✓</span>
-      <span class="check">✓</span>
-    </div>
-    <div class="comp-row">
-      <span class="label">Title records</span>
-      <span class="check">✓</span>
-      <span class="check">✓</span>
-      <span class="check">✓</span>
-    </div>
-    <div class="comp-row">
-      <span class="label">Odometer check</span>
-      <span class="check">✓</span>
-      <span class="check">✓</span>
-      <span class="check">✓</span>
-    </div>
-    <div class="comp-row">
-      <span class="label">Instant delivery</span>
-      <span class="check">✓</span>
-      <span class="check">✓</span>
-      <span class="check">✓</span>
-    </div>
-    <div class="comp-row">
-      <span class="label">Money-back guarantee</span>
-      <span class="check">✓</span>
-      <span class="cross">✗</span>
-      <span class="cross">✗</span>
-    </div>
-  </div>
-  <p style="text-align:center;font-size:0.72rem;color:#444;margin-top:1rem">* Competitor pricing sourced from Carfax.com and AutoCheck.com. Prices subject to change.</p>
-</section>
+</div>
 
 <!-- FAQ -->
-<section class="faq-section" id="faq">
-  <div class="section-header">
-    <span class="section-eyebrow">Common Questions</span>
-    <h2 class="section-title">Got <em>questions?</em></h2>
-  </div>
-  <div class="faq-list">
-    <div class="faq-item">
-      <div class="faq-question">Why is VINRecordHub more affordable than going direct? <span class="faq-icon">+</span></div>
-      <div class="faq-answer">VINRecordHub is a vehicle history service that provides access to vehicle history reports through our platform. By aggregating demand and optimizing our delivery infrastructure, we're able to offer competitive pricing while delivering the same comprehensive vehicle history data you need.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-question">How quickly will I receive my report? <span class="faq-icon">+</span></div>
-      <div class="faq-answer">Reports are delivered to your email inbox within 60 seconds of your payment being confirmed. You'll receive a PDF that you can download and keep forever.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-question">Where do I find the VIN on my car? <span class="faq-icon">+</span></div>
-      <div class="faq-answer">The VIN (Vehicle Identification Number) is a 17-character code found on: the dashboard (visible through the windshield on the driver's side), the driver's door jamb sticker, your vehicle title, or your insurance card.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-question">What if the report comes back with no records? <span class="faq-icon">+</span></div>
-      <div class="faq-answer">Some vehicles have limited history in the database — this is normal for older vehicles or cars with minimal reported incidents. If your report returns no data, contact us at support@vinrecordhub.com and we'll work to resolve it or issue a refund.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-question">Do report packs expire? <span class="faq-icon">+</span></div>
-      <div class="faq-answer">No — your report credits never expire. Buy a 10-pack today and use them whenever you need them. Perfect for dealers and frequent car buyers.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-question">Is my payment information secure? <span class="faq-icon">+</span></div>
-      <div class="faq-answer">Yes. All payments are processed through PayPal — we never store or see your card or bank details. PayPal's industry-leading encryption and fraud protection keeps your information completely safe.</div>
+<div class="sec-dark" id="faq">
+  <div class="sec sec-center">
+    <div class="sec-tag">FAQ</div>
+    <h2>Common <em>questions.</em></h2>
+    <div class="faq-list">
+      <div class="fq"><div class="fq-q">Why is VINRecordHub more affordable? <span class="fq-ico">+</span></div><div class="fq-a">VINRecordHub is a vehicle history service that provides access to Carfax® & AutoCheck® reports through our platform. By optimizing our delivery infrastructure, we offer competitive pricing while delivering the same comprehensive vehicle data.</div></div>
+      <div class="fq"><div class="fq-q">How fast will I receive my report? <span class="fq-ico">+</span></div><div class="fq-a">Reports are delivered to your email inbox within 60 seconds of payment confirmation. You'll receive it as a downloadable file you can keep forever.</div></div>
+      <div class="fq"><div class="fq-q">Where do I find the VIN on my car? <span class="fq-ico">+</span></div><div class="fq-a">The VIN is a 17-character code found on: the dashboard (visible through the windshield on the driver's side), the driver's door jamb sticker, your vehicle title, or your insurance card.</div></div>
+      <div class="fq"><div class="fq-q">What if the report has no records? <span class="fq-ico">+</span></div><div class="fq-a">Some vehicles have limited history — normal for older vehicles or cars with minimal reported incidents. If your report returns no data, contact us at support@vinrecordhub.com and we'll resolve it or issue a full refund.</div></div>
+      <div class="fq"><div class="fq-q">Is my payment secure? <span class="fq-ico">+</span></div><div class="fq-a">Yes. All payments are processed through PayPal — we never store or see your card details. PayPal's encryption keeps your information completely safe.</div></div>
     </div>
   </div>
-</section>
+</div>
 
 <!-- GUARANTEE -->
-<section class="guarantee-section">
-  <div class="guarantee-box">
-    <div class="guarantee-icon">🛡️</div>
-    <h3 class="guarantee-title">100% Money-Back <span>Guarantee</span></h3>
-    <p class="guarantee-desc">Not satisfied with your report? Contact us within 24 hours and we'll give you a full refund — no questions asked. We stand behind every report we deliver.</p>
+<div>
+  <div class="sec sec-center">
+    <div class="gbox">
+      <div class="g-ico">🛡️</div>
+      <h3 class="g-title">100% Money-Back <span>Guarantee</span></h3>
+      <p class="g-desc">Not satisfied with your report? Contact us within 24 hours and we'll give you a full refund — no questions asked. We stand behind every report we deliver.</p>
+    </div>
   </div>
-</section>
+</div>
 
 <!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-  <div class="footer-top">
-    <div class="footer-brand">
-      <div class="footer-logo">VIN<span>Record</span>Hub</div>
-      <div class="footer-tagline">Instant vehicle history powered by Carfax® & AutoCheck®.</div>
-    </div>
-    <div class="footer-links">
-      <div class="footer-col">
-        <h4>Product</h4>
-        <a href="#how-it-works">How it Works</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#compare">Compare</a>
+<div class="footer-shell">
+  <div class="footer-in">
+    <div class="f-top">
+      <div>
+        <div class="f-logo">VIN<span class="fr">Record</span><span class="fh">Hub</span></div>
+        <div class="f-tagline">Instant vehicle history powered by Carfax® & AutoCheck®.</div>
       </div>
-      <div class="footer-col">
-        <h4>Support</h4>
-        <a href="#faq">FAQ</a>
-        <a href="mailto:support@vinrecordhub.com">Contact Us</a>
-        <a href="mailto:support@vinrecordhub.com">support@vinrecordhub.com</a>
-      </div>
-      <div class="footer-col">
-        <h4>Legal</h4>
-        <a href="terms.html">Terms of Service</a>
-        <a href="privacy.html">Privacy Policy</a>
+      <div class="f-links">
+        <div class="f-col"><h4>Product</h4><a href="#how">How it Works</a><a href="#pricing">Pricing</a><a href="#compare">Compare</a></div>
+        <div class="f-col"><h4>Support</h4><a href="#faq">FAQ</a><a href="mailto:support@vinrecordhub.com">Contact Us</a><a href="mailto:support@vinrecordhub.com">support@vinrecordhub.com</a></div>
+        <div class="f-col"><h4>Legal</h4><a href="/terms">Terms of Service</a><a href="/privacy">Privacy Policy</a></div>
       </div>
     </div>
+    <div class="f-btm"><span>© 2026 VINRecordHub. All rights reserved.</span><span>Powered by Carfax® & AutoCheck® data.</span></div>
+    <div class="f-legal">Carfax® and AutoCheck® are registered trademarks of their respective owners. VINRecordHub is not affiliated with, endorsed by, or sponsored by Carfax, AutoCheck, or Experian. Vehicle history reports are provided through licensed data access.</div>
   </div>
-  <div class="footer-bottom">
-    <span>© 2025 VINRecordHub. All rights reserved.</span>
-    <span>Vehicle history data powered by Carfax® & AutoCheck®.</span>
-  </div>
-  <div style="border-top:1px solid rgba(255,255,255,0.04);margin-top:1.5rem;padding-top:1.5rem;font-size:0.68rem;color:#333;line-height:1.6;text-align:center">
-    Carfax® and AutoCheck® are registered trademarks of their respective owners. VINRecordHub is not affiliated with, endorsed by, or sponsored by Carfax, AutoCheck, or Experian. Vehicle history reports are provided through licensed data access.
-  </div>
-</footer>
+</div>
 
 <script>
-  // Mobile menu
-  function openMobileMenu() {
-    document.getElementById('mobileNav').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeMobileMenu() {
-    document.getElementById('mobileNav').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  // Close on escape key
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeMobileMenu();
-  });
+  function openM(){document.getElementById('mMenu').classList.add('open');document.body.style.overflow='hidden'}
+  function closeM(){document.getElementById('mMenu').classList.remove('open');document.body.style.overflow=''}
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
 
-  // FAQ toggle
-  document.querySelectorAll('.faq-item').forEach(item => {
-    item.querySelector('.faq-question').addEventListener('click', () => {
-      item.classList.toggle('open');
+  // 3D card parallax
+  const card=document.getElementById('hCard');
+  if(card&&window.innerWidth>960){
+    document.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      const dx=(e.clientX-(r.left+r.width/2))/window.innerWidth;
+      const dy=(e.clientY-(r.top+r.height/2))/window.innerHeight;
+      card.style.transform=`perspective(900px) rotateY(${-9+dx*7}deg) rotateX(${4-dy*5}deg)`;
     });
+  }
+
+  document.querySelectorAll('.fq').forEach(f=>{
+    f.querySelector('.fq-q').addEventListener('click',()=>f.classList.toggle('open'));
   });
 
-  // VIN validation
-  function isValidVin(vin) {
-    return /^[A-HJ-NPR-Z0-9]{17}$/.test(vin);
+  function isValidVin(v){return /^[A-HJ-NPR-Z0-9]{17}$/.test(v)}
+  let vtimer=null;
+
+  async function lookupVin(vin){
+    const el=document.getElementById('vinLk'),ico=document.getElementById('vinLkIco'),txt=document.getElementById('vinLkTxt');
+    el.className='vin-lk ldg';ico.textContent='⏳';txt.textContent='Looking up vehicle...';
+    try{
+      const r=await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`);
+      const d=await r.json();const res=d?.Results?.[0];
+      if(!res||res.ErrorCode!=='0'||!res.Make){el.className='vin-lk err';ico.textContent='⚠️';txt.textContent='VIN not found — please double-check';return}
+      const name=[res.ModelYear,res.Make,res.Model,res.Trim].filter(Boolean).join(' ');
+      el.className='vin-lk show';ico.textContent='✅';txt.innerHTML=`<strong>${name}</strong>`;
+    }catch{el.className='vin-lk'}
   }
 
-  // NHTSA VIN lookup
-  let heroLookupTimer = null;
-  async function lookupHeroVin(vin) {
-    const lookup = document.getElementById('heroVinLookup');
-    const icon = document.getElementById('heroVinLookupIcon');
-    const text = document.getElementById('heroVinLookupText');
-
-    lookup.className = 'vin-lookup-hero loading show';
-    icon.textContent = '⏳';
-    text.textContent = 'Looking up vehicle...';
-
-    try {
-      const res = await fetch(
-        `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`
-      );
-      const data = await res.json();
-      const result = data?.Results?.[0];
-
-      if (!result || result.ErrorCode !== '0' || !result.Make) {
-        lookup.className = 'vin-lookup-hero error show';
-        icon.textContent = '⚠️';
-        text.textContent = 'VIN not found — please double-check';
-        return;
-      }
-
-      const vehicleName = [result.ModelYear, result.Make, result.Model, result.Trim]
-        .filter(Boolean).join(' ');
-
-      lookup.className = 'vin-lookup-hero show';
-      icon.textContent = '✅';
-      text.innerHTML = `<strong>${vehicleName}</strong>`;
-
-    } catch(e) {
-      lookup.className = 'vin-lookup-hero';
-    }
+  function validateVin(inp){
+    const v=inp.value.trim(),err=document.getElementById('vinErr'),lk=document.getElementById('vinLk');
+    if(!v){inp.style.borderColor='';err.style.display='none';lk.className='vin-lk';return true}
+    if(v.length<17){inp.style.borderColor='rgba(255,170,0,.4)';lk.className='vin-lk';clearTimeout(vtimer);return false}
+    if(!isValidVin(v)){inp.style.borderColor='rgba(255,82,82,.5)';err.textContent='Invalid VIN — cannot contain I, O, or Q';err.style.display='block';return false}
+    inp.style.borderColor='rgba(0,217,126,.5)';err.style.display='none';
+    clearTimeout(vtimer);vtimer=setTimeout(()=>lookupVin(v),300);return true;
   }
 
-  function validateVin(input) {
-    const vin = input.value.trim();
-    const errEl = document.getElementById('vinError');
-    const lookup = document.getElementById('heroVinLookup');
-
-    if (vin.length === 0) {
-      input.style.borderColor = '';
-      errEl.style.display = 'none';
-      lookup.className = 'vin-lookup-hero';
-      return true;
+  function goCheckout(){
+    const v=document.getElementById('heroVin').value.trim(),err=document.getElementById('vinErr');
+    if(!isValidVin(v)){
+      document.getElementById('heroVin').style.borderColor='rgba(255,82,82,.6)';
+      err.textContent=v.length<17?`VIN must be 17 characters (${v.length}/17)`:'Please enter a valid VIN';
+      err.style.display='block';document.getElementById('heroVin').focus();return;
     }
-    if (vin.length < 17) {
-      input.style.borderColor = 'rgba(255,165,0,0.4)';
-      errEl.style.display = 'none';
-      lookup.className = 'vin-lookup-hero';
-      clearTimeout(heroLookupTimer);
-      return false;
-    }
-    if (!isValidVin(vin)) {
-      input.style.borderColor = 'rgba(255,80,80,0.5)';
-      errEl.textContent = 'Invalid VIN — cannot contain letters I, O, or Q';
-      errEl.style.display = 'block';
-      lookup.className = 'vin-lookup-hero';
-      return false;
-    }
-    // Valid VIN — trigger lookup
-    input.style.borderColor = 'rgba(63,255,176,0.5)';
-    errEl.style.display = 'none';
-    clearTimeout(heroLookupTimer);
-    heroLookupTimer = setTimeout(() => lookupHeroVin(vin), 300);
-    return true;
+    window.location.href=`/checkout?vin=${encodeURIComponent(v)}&plan=standard`;
   }
 
-  // Go to checkout with VIN pre-filled
-  function goToCheckout() {
-    const vin = document.getElementById('heroVin').value.trim();
-    const errEl = document.getElementById('vinError');
-    if (!isValidVin(vin)) {
-      document.getElementById('heroVin').style.borderColor = 'rgba(255,80,80,0.6)';
-      errEl.textContent = vin.length < 17
-        ? `VIN must be 17 characters (${vin.length}/17)`
-        : 'Please enter a valid VIN';
-      errEl.style.display = 'block';
-      document.getElementById('heroVin').focus();
-      return;
-    }
-    window.location.href = `/checkout?vin=${encodeURIComponent(vin)}&plan=standard`;
+  function goCheckoutPlan(p){
+    const v=document.getElementById('heroVin').value.trim();
+    const vp=isValidVin(v)?`&vin=${encodeURIComponent(v)}`:'';
+    window.location.href=`/checkout?plan=${p}${vp}`;
   }
 
-  function goToCheckoutPlan(plan) {
-    const vin = document.getElementById('heroVin').value.trim();
-    const vinParam = isValidVin(vin) ? `&vin=${encodeURIComponent(vin)}` : '';
-    window.location.href = `/checkout?plan=${plan}${vinParam}`;
-  }
-
-  document.getElementById('heroVin').addEventListener('keypress', e => {
-    if (e.key === 'Enter') goToCheckout();
-  });
+  document.getElementById('heroVin').addEventListener('keypress',e=>{if(e.key==='Enter')goCheckout()});
 </script>
-
 </body>
 </html>

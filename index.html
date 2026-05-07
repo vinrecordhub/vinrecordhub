@@ -747,6 +747,118 @@ s0.parentNode.insertBefore(s1,s0);
 </script>
 <!--End of Tawk.to Script-->
 
+<style>
+  #vrh-quick-replies {
+    position: fixed;
+    bottom: 90px;
+    right: 1.5rem;
+    z-index: 499;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-end;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  #vrh-quick-replies.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+  .vrh-qr-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 0.15rem;
+    text-align: right;
+  }
+  .vrh-qr-btn {
+    background: rgba(14,14,18,0.92);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 100px;
+    cursor: pointer;
+    white-space: nowrap;
+    backdrop-filter: blur(12px);
+    transition: background 0.15s, border-color 0.15s, transform 0.15s;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  }
+  .vrh-qr-btn:hover {
+    background: rgba(200,255,0,0.12);
+    border-color: rgba(200,255,0,0.4);
+    color: #c8ff00;
+    transform: translateX(-3px);
+  }
+  .vrh-qr-btn .qr-icon { margin-right: 0.4rem; }
+  @media(max-width:600px){
+    #vrh-quick-replies { bottom: 80px; right: 1rem; }
+    .vrh-qr-btn { font-size: 0.75rem; padding: 0.45rem 0.875rem; }
+  }
+</style>
+
+<!-- Quick Reply Buttons -->
+<div id="vrh-quick-replies">
+  <div class="vrh-qr-label">Quick questions</div>
+  <button class="vrh-qr-btn" onclick="vrhAsk('💰 How much does a report cost?')"><span class="qr-icon">💰</span>Pricing</button>
+  <button class="vrh-qr-btn" onclick="vrhAsk('⚡ How fast will I get my report?')"><span class="qr-icon">⚡</span>Delivery time</button>
+  <button class="vrh-qr-btn" onclick="vrhAsk('🔍 Where do I find my VIN number?')"><span class="qr-icon">🔍</span>Find my VIN</button>
+  <button class="vrh-qr-btn" onclick="vrhAsk('🛡️ What is your refund policy?')"><span class="qr-icon">🛡️</span>Refund policy</button>
+  <button class="vrh-qr-btn" onclick="vrhAsk('📊 What is the difference between Carfax and AutoCheck?')"><span class="qr-icon">📊</span>Carfax vs AutoCheck</button>
+  <button class="vrh-qr-btn" onclick="vrhAsk('📩 I paid but did not receive my report')"><span class="qr-icon">📩</span>Missing report</button>
+</div>
+
+<script>
+  // Show quick reply buttons when Tawk chat opens
+  var Tawk_API = Tawk_API || {};
+  var _vrhQRShown = false;
+
+  function vrhInitQR() {
+    if (typeof Tawk_API === 'undefined') return;
+
+    Tawk_API.onChatMaximized = function() {
+      document.getElementById('vrh-quick-replies').classList.add('show');
+    };
+    Tawk_API.onChatMinimized = function() {
+      document.getElementById('vrh-quick-replies').classList.remove('show');
+    };
+    Tawk_API.onChatHidden = function() {
+      document.getElementById('vrh-quick-replies').classList.remove('show');
+    };
+  }
+
+  // Try init immediately and after Tawk loads
+  vrhInitQR();
+  window.addEventListener('load', function() {
+    setTimeout(vrhInitQR, 2000);
+  });
+
+  function vrhAsk(question) {
+    // Hide buttons after selection
+    document.getElementById('vrh-quick-replies').classList.remove('show');
+    // Open Tawk chat and send message
+    if (typeof Tawk_API !== 'undefined' && Tawk_API.maximize) {
+      Tawk_API.maximize();
+      // Small delay to ensure chat is open before sending
+      setTimeout(function() {
+        if (Tawk_API.sendMessage) {
+          Tawk_API.sendMessage(question);
+        } else {
+          // Fallback: just maximize with the question visible
+          Tawk_API.maximize();
+        }
+      }, 500);
+    }
+  }
+</script>
+
 <script>
   function openM(){document.getElementById('mMenu').classList.add('open');document.body.style.overflow='hidden'}
   function closeM(){document.getElementById('mMenu').classList.remove('open');document.body.style.overflow=''}

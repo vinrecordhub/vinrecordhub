@@ -2,73 +2,84 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+  <meta name="theme-color" content="#060608"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Privacy Policy — VIN Record Hub</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <title>Privacy Policy — VINRecordHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --black: #080808; --white: #f4f4ef; --accent: #e8ff3f; --gray: #111; --mid: #666; --border: rgba(255,255,255,0.07); }
-    body { background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; font-weight: 300; }
-    nav { padding: 1.25rem 3rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; text-decoration: none; color: var(--white); }
-    .logo span { color: var(--accent); }
-    .content { max-width: 760px; margin: 4rem auto; padding: 0 2rem 6rem; }
-    h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2.5rem; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
-    .last-updated { font-size: 0.82rem; color: var(--mid); margin-bottom: 3rem; }
-    h2 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; margin: 2.5rem 0 0.75rem; }
-    p { font-size: 0.92rem; color: rgba(255,255,255,0.65); line-height: 1.85; margin-bottom: 1rem; }
-    ul { padding-left: 1.5rem; margin-bottom: 1rem; }
-    li { font-size: 0.92rem; color: rgba(255,255,255,0.65); line-height: 1.85; margin-bottom: 0.4rem; }
-    a { color: var(--accent); text-decoration: none; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#060608;--surface:#0e0e12;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--white:#fff;--muted:rgba(255,255,255,0.55);--faint:rgba(255,255,255,0.25);--accent:#c8ff00;}
+    body{background:var(--bg);color:var(--white);font-family:'Inter',-apple-system,sans-serif;font-weight:400;line-height:1.7;-webkit-font-smoothing:antialiased}
+    nav{background:rgba(6,6,8,.9);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:0 clamp(1.25rem,5vw,3rem);height:62px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-size:1rem;font-weight:800;letter-spacing:-.03em;text-decoration:none;color:var(--white)}
+    .logo-r{color:var(--accent)}
+    .logo-h{color:var(--faint);font-weight:500}
+    .nav-back{font-size:.82rem;color:var(--muted);text-decoration:none;transition:color .15s}
+    .nav-back:hover{color:var(--white)}
+    .content{max-width:720px;margin:0 auto;padding:3.5rem clamp(1.25rem,5vw,2.5rem) 5rem}
+    .page-tag{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.75rem}
+    h1{font-size:clamp(1.75rem,3.5vw,2.5rem);font-weight:800;letter-spacing:-.04em;margin-bottom:.5rem}
+    .updated{font-size:.8rem;color:var(--muted);margin-bottom:3rem}
+    h2{font-size:1.1rem;font-weight:700;margin:2.25rem 0 .6rem;color:var(--white)}
+    p{font-size:.9rem;color:var(--muted);margin-bottom:1rem}
+    ul{font-size:.9rem;color:var(--muted);padding-left:1.25rem;margin-bottom:1rem}
+    li{margin-bottom:.4rem}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .divider{border:none;border-top:1px solid var(--border);margin:2rem 0}
   </style>
 </head>
 <body>
 <nav>
-  <a href="/" class="logo">VIN<span>Record</span>Hub</a>
-  <a href="/" style="font-size:0.85rem;color:#666;text-decoration:none;">← Back to Home</a>
+  <a href="/" class="logo">VIN<span class="logo-r">Record</span><span class="logo-h">Hub</span></a>
+  <a href="/" class="nav-back">← Back to Home</a>
 </nav>
 <div class="content">
+  <div class="page-tag">Legal</div>
   <h1>Privacy Policy</h1>
-  <p class="last-updated">Last updated: January 1, 2025</p>
+  <p class="updated">Last updated: May 2026</p>
 
-  <h2>1. Information We Collect</h2>
-  <p>When you use VINRecordHub, we collect the following information:</p>
+  <p>Welcome to VINRecordHub. By accessing or using our website at vinrecordhub.com, you agree to be bound by these Privacy Policy. Please read them carefully before placing an order.</p>
+
+  <hr class="divider"/>
+
+  <h2>1. Service Description</h2>
+  <p>VINRecordHub provides vehicle history reports to consumers purchasing used vehicles. Our reports are powered by data from Carfax® and AutoCheck® and delivered digitally to your email address within 60 seconds of payment confirmation.</p>
+
+  <h2>2. Acceptable Use</h2>
+  <p>You may use our service for personal, non-commercial research purposes. You may not:</p>
   <ul>
-    <li><strong>Email address</strong> — to deliver your vehicle history report</li>
-    <li><strong>VIN numbers</strong> — to generate your requested report</li>
-    <li><strong>Payment information</strong> — processed and stored by PayPal, not by us</li>
-    <li><strong>Usage data</strong> — basic analytics like pages visited and browser type</li>
+    <li>Redistribute, resell, or commercially exploit any report data without written permission</li>
+    <li>Use our service for any unlawful purpose</li>
+    <li>Attempt to circumvent any security measures</li>
+    <li>Submit false or misleading information during checkout</li>
   </ul>
 
-  <h2>2. How We Use Your Information</h2>
-  <p>We use the information we collect to:</p>
-  <ul>
-    <li>Deliver your vehicle history report to your email</li>
-    <li>Process and confirm your payment</li>
-    <li>Respond to customer support inquiries</li>
-    <li>Improve our service and user experience</li>
-    <li>Send important service updates (not marketing, unless you opt in)</li>
-  </ul>
+  <h2>3. Payment & Pricing</h2>
+  <p>All prices are listed in USD. Payment is processed securely through PayPal. We never store or have access to your card details. Prices are subject to change without notice, but you will always be charged the price shown at checkout.</p>
 
-  <h2>3. Information Sharing</h2>
-  <p>We do not sell, trade, or rent your personal information to third parties. We share information only with:</p>
-  <ul>
-    <li><strong>PayPal</strong> — to process your payment securely</li>
-    <li><strong>Data providers</strong> — VIN numbers are shared to generate your report</li>
-    <li><strong>Legal authorities</strong> — if required by law</li>
-  </ul>
+  <h2>4. Refund Policy</h2>
+  <p>We offer a 100% money-back guarantee. If you are not satisfied with your report, contact us at support@vinrecordhub.com within 24 hours of purchase and we will issue a full refund — no questions asked.</p>
+  <p>Refunds are not available if the report was successfully delivered and accessed, except at our sole discretion.</p>
 
-  <h2>4. Data Security</h2>
-  <p>We implement appropriate security measures to protect your personal information. All payment processing is handled by PayPal using industry-standard encryption. We do not store credit card or bank account information on our servers.</p>
+  <h2>5. Report Accuracy</h2>
+  <p>Vehicle history reports are based on data reported to Carfax® and AutoCheck®. VINRecordHub does not guarantee the completeness, accuracy, or timeliness of any report. Not all accidents or title issues may be reported. Reports should be used as one tool in your vehicle purchasing decision, not as the sole basis.</p>
 
-  <h2>5. Cookies</h2>
-  <p>We use minimal cookies to improve your experience on our site. These cookies do not store personal information and cannot be used to identify you personally.</p>
+  <h2>6. Intellectual Property</h2>
+  <p>Carfax® and AutoCheck® are registered trademarks of their respective owners. VINRecordHub is not affiliated with, endorsed by, or sponsored by Carfax, AutoCheck, or Experian. All other content on this website is the property of VINRecordHub.</p>
 
-  <h2>6. Your Rights</h2>
-  <p>You have the right to request access to the personal information we hold about you, and to request its deletion. Contact us at <a href="mailto:support@vinrecordhub.com">support@vinrecordhub.com</a> to make such a request.</p>
+  <h2>7. Limitation of Liability</h2>
+  <p>VINRecordHub shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of our service. Our total liability shall not exceed the amount paid for the specific report in question.</p>
 
-  <h2>7. Contact</h2>
-  <p>For privacy-related questions or requests, contact us at <a href="mailto:support@vinrecordhub.com">support@vinrecordhub.com</a>.</p>
+  <h2>8. Privacy</h2>
+  <p>Your use of our service is also governed by our <a href="/privacy">Privacy Policy</a>, which is incorporated into these Terms by reference.</p>
+
+  <h2>9. Changes to Terms</h2>
+  <p>We reserve the right to modify these terms at any time. Continued use of our service after changes constitutes acceptance of the new terms.</p>
+
+  <h2>10. Contact</h2>
+  <p>For questions about these terms, contact us at <a href="mailto:support@vinrecordhub.com">support@vinrecordhub.com</a>.</p>
 </div>
 </body>
 </html>

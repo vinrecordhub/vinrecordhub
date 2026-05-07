@@ -4,6 +4,8 @@
 
 const { createClient } = require('@supabase/supabase-js');
 const { ProxyAgent, fetch: undiciFetch } = require('undici');
+const rateLimit = require('./rate-limit');
+const { sanitizeVin, sanitizeEmail, sanitizePlan, sanitizeOrderId, sanitizeCoupon } = require('./sanitize');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -170,26 +172,44 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  try {
-    const { email, vin, plan, paypalOrderId, coupon } = req.body;
+  // Rate limit: 5 payment attempts per IP per minute
+  const rl = rateLimit(req, { maxRequests: 5, windowMs: 60000 });
+  if (rl.limited) {
+    return res.status(429).json({ error: 'Too many requests. Please wait ' + rl.resetIn + ' seconds.' });
+  }
 
-    // Validate inputs
-    if (!email || !vin || !plan || !paypalOrderId) {
-      return res.status(400).json({ error: 'Missing required fields' });
-    }
-    if (vin.length !== 17) {
-      return res.status(400).json({ error: 'VIN must be 17 characters' });
-    }
-    if (!PLANS[plan]) {
-      return res.status(400).json({ error: 'Invalid plan: ' + plan });
-    }
+  try {
+    const rawEmail = req.body.email;
+    const rawVin = req.body.vin;
+    const rawPlan = req.body.plan;
+    const rawOrderId = req.body.paypalOrderId;
+    const rawCoupon = req.body.coupon;
+
+    // Sanitize all inputs
+    const email = sanitizeEmail(rawEmail);
+    const vin = sanitizeVin(rawVin);
+    const plan = sanitizePlan(rawPlan);
+    const paypalOrderId = sanitizeOrderId(rawOrderId);
+    const coupon = sanitizeCoupon(rawCoupon);
+
+    // Validate sanitized inputs
+    if (!email) return res.status(400).json({ error: 'Invalid email address' });
+    if (!vin) return res.status(400).json({ error: 'Invalid VIN — must be 17 alphanumeric characters' });
+    if (!plan) return res.status(400).json({ error: 'Invalid plan selected' });
+    if (!paypalOrderId) return res.status(400).json({ error: 'Invalid order ID' });
 
     const { amount: baseAmount, reportTypes } = PLANS[plan];
     const expectedAmount = getDiscountedAmount(baseAmount, coupon);
 
     // Prevent duplicate orders
     let existing = null;
-    try {
+    // Rate limit: 5 payment attempts per IP per minute
+  const rl = rateLimit(req, { maxRequests: 5, windowMs: 60000 });
+  if (rl.limited) {
+    return res.status(429).json({ error: 'Too many requests. Please wait ' + rl.resetIn + ' seconds.' });
+  }
+
+  try {
       const { data } = await supabase
         .from('orders')
         .select('id')

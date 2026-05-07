@@ -8,6 +8,14 @@
   <meta name="theme-color" content="#060608"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Checkout — VINRecordHub</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <!-- Google Analytics GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date()); gtag('config', 'G-XXXXXXXXXX');
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -190,6 +198,34 @@
   </style>
 </head>
 <body>
+
+<!-- LOADING OVERLAY -->
+<div id="loadingOverlay" style="display:none;position:fixed;inset:0;z-index:999;
+  background:rgba(6,6,8,.95);backdrop-filter:blur(20px);
+  flex-direction:column;align-items:center;justify-content:center;gap:1.5rem">
+  <div style="width:64px;height:64px;border-radius:50%;
+    border:3px solid rgba(200,255,0,.15);border-top-color:var(--accent);
+    animation:spin .8s linear infinite"></div>
+  <div style="text-align:center">
+    <div style="font-size:1.1rem;font-weight:700;margin-bottom:.4rem">Generating your report...</div>
+    <div style="font-size:.85rem;color:var(--muted)">Fetching vehicle history data · Usually takes 10–30 seconds</div>
+  </div>
+  <div style="display:flex;gap:.5rem;flex-direction:column;align-items:center;width:280px">
+    <div class="prog-step" id="ps1" style="display:flex;align-items:center;gap:.6rem;font-size:.8rem;color:var(--muted);transition:color .3s">
+      <span style="width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:.7rem" id="pi1">1</span>Payment verified
+    </div>
+    <div class="prog-step" id="ps2" style="display:flex;align-items:center;gap:.6rem;font-size:.8rem;color:rgba(255,255,255,.25);transition:color .3s">
+      <span style="width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:.7rem" id="pi2">2</span>Fetching vehicle history...
+    </div>
+    <div class="prog-step" id="ps3" style="display:flex;align-items:center;gap:.6rem;font-size:.8rem;color:rgba(255,255,255,.25);transition:color .3s">
+      <span style="width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:.7rem" id="pi3">3</span>Sending to your email...
+    </div>
+  </div>
+</div>
+<style>
+  @keyframes spin{to{transform:rotate(360deg)}}
+  :root{--accent:#c8ff00;--green:#00d97e;--muted:rgba(255,255,255,.55)}
+</style>
 
 <nav>
   <a href="/" class="logo">VIN<span class="logo-r">Record</span><span class="logo-h">Hub</span></a>
@@ -473,11 +509,86 @@ function renderPayPal() {
       const vin = document.getElementById('vinInput').value.trim().toUpperCase();
       const email = document.getElementById('emailInput').value.trim();
       const orderId = details.id;
-      const payload = JSON.stringify({ email, vin, plan: PLANS[plan].reportType, paypalOrderId: orderId, coupon: coupon ? coupon.code : null });
+
+      // Show loading overlay
+      document.getElementById('loadingOverlay').style.display = 'flex';
+
+      // Helper to update step UI
+      function stepDone(n) {
+        const el = document.getElementById('ps' + n);
+        const ico = document.getElementById('pi' + n);
+        el.style.color = 'var(--green)';
+        ico.textContent = '✓';
+        ico.style.background = 'rgba(0,217,126,.2)';
+        ico.style.color = 'var(--green)';
+      }
+      function stepActive(n) {
+        const el = document.getElementById('ps' + n);
+        const ico = document.getElementById('pi' + n);
+        el.style.color = 'var(--accent)';
+        ico.style.background = 'rgba(200,255,0,.15)';
+      }
+      function stepError(n, msg) {
+        const el = document.getElementById('ps' + n);
+        const ico = document.getElementById('pi' + n);
+        el.style.color = 'var(--red)';
+        ico.textContent = '✗';
+        ico.style.background = 'rgba(255,82,82,.15)';
+        ico.style.color = 'var(--red)';
+        if (msg) el.querySelector('span + *') && (el.lastChild.textContent = msg);
+      }
+
+      // STEP 1 — Payment already captured above ✅ (this is real)
+      stepDone(1);
+
+      // STEP 2 — Fetch report from CheapVHR (real API call)
+      stepActive(2);
+      let reportSuccess = false;
+      let emailSuccess = false;
+
       try {
-        await fetch('/api/fulfill-order', { method:'POST', headers:{'Content-Type':'application/json'}, body:payload, keepalive:true });
-      } catch(e) { navigator.sendBeacon('/api/fulfill-order', new Blob([payload],{type:'application/json'})); }
-      window.location.href = `/success?vin=${encodeURIComponent(vin)}&email=${encodeURIComponent(email)}&plan=${plan}&order=${orderId}`;
+        const res = await fetch('/api/fulfill-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email, vin,
+            plan: PLANS[plan].reportType,
+            paypalOrderId: orderId,
+            coupon: coupon ? coupon.code : null,
+          }),
+        });
+
+        const result = await res.json();
+
+        if (res.ok && result.success) {
+          // Both report fetch AND email send succeeded
+          stepDone(2);
+          stepActive(3);
+          // Small delay so user sees step 3 activate before it turns green
+          await new Promise(r => setTimeout(r, 600));
+          stepDone(3);
+          emailSuccess = true;
+          reportSuccess = true;
+        } else {
+          // API returned an error
+          stepError(2, 'Report fetch issue — check your email');
+          stepError(3, 'Contact support if not received');
+        }
+
+      } catch (err) {
+        // Network error — payment was captured, try beacon as fallback
+        stepError(2, 'Connection issue — report may still deliver');
+        navigator.sendBeacon('/api/fulfill-order',
+          new Blob([JSON.stringify({ email, vin, plan: PLANS[plan].reportType, paypalOrderId: orderId, coupon: coupon ? coupon.code : null })],
+          { type: 'application/json' })
+        );
+      }
+
+      // Wait a moment so user can see final state
+      await new Promise(r => setTimeout(r, emailSuccess ? 1200 : 2500));
+
+      // Redirect to success page with status
+      window.location.href = `/success?vin=${encodeURIComponent(vin)}&email=${encodeURIComponent(email)}&plan=${plan}&order=${orderId}&delivered=${emailSuccess ? '1' : '0'}`;
     },
     onError: function(err) {
       document.getElementById('errMsg').textContent = 'Payment failed — please try again or contact support@vinrecordhub.com';

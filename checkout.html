@@ -9,7 +9,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Checkout — VINRecordHub</title>
   <meta name="robots" content="noindex, nofollow"/>
-  <!-- Google Analytics GA4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4MSSG5GW4X"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -20,135 +19,175 @@
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
-      --bg:#060608;--surface:#0e0e12;--surface2:#15151b;
-      --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
-      --white:#fff;--muted:rgba(255,255,255,0.55);--faint:rgba(255,255,255,0.25);
-      --accent:#c8ff00;--green:#00d97e;--red:#ff5252;--blue:#4f8cff;
+      --bg:       oklch(7% 0.008 133);
+      --surface:  oklch(10.5% 0.010 133);
+      --surface2: oklch(13.5% 0.012 133);
+      --border:   oklch(100% 0 0 / .07);
+      --border2:  oklch(100% 0 0 / .13);
+      --border3:  oklch(100% 0 0 / .22);
+      --text:     oklch(97% 0.005 133);
+      --muted:    oklch(67% 0.007 133);
+      --faint:    oklch(42% 0.007 133);
+      --accent:   oklch(91% 0.215 133);
+      --a-dim:    oklch(91% 0.215 133 / .08);
+      --a-bdr:    oklch(91% 0.215 133 / .28);
+      --a-glow:   oklch(91% 0.215 133 / .10);
+      --green:    oklch(72% 0.18 155);
+      --g-dim:    oklch(72% 0.18 155 / .08);
+      --g-bdr:    oklch(72% 0.18 155 / .22);
+      --red:      oklch(62% 0.22 26);
+      --r-dim:    oklch(62% 0.22 26 / .08);
+      --r-bdr:    oklch(62% 0.22 26 / .22);
+      --amber:    oklch(80% 0.18 72);
+      --blue:     oklch(68% 0.16 245);
+      --ease:     cubic-bezier(0.25,1,0.5,1);
+      --expo:     cubic-bezier(0.16,1,0.3,1);
     }
     html{overflow-x:hidden}
-    body{background:var(--bg);color:var(--white);
+    body{background:var(--bg);color:var(--text);
       font-family:'Inter',-apple-system,sans-serif;
       font-weight:400;min-height:100vh;
       -webkit-font-smoothing:antialiased}
-
-    /* Background grid */
     body::before{content:'';position:fixed;inset:0;
-      background-image:linear-gradient(rgba(200,255,0,.02) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(200,255,0,.02) 1px,transparent 1px);
-      background-size:60px 60px;
+      background-image:
+        linear-gradient(var(--a-bdr) 1px,transparent 1px),
+        linear-gradient(90deg,var(--a-bdr) 1px,transparent 1px);
+      background-size:72px 72px;
       mask-image:radial-gradient(ellipse 60% 50% at 20% 0%,black 0%,transparent 100%);
-      pointer-events:none;z-index:0}
+      opacity:.35;pointer-events:none;z-index:0}
+
+    /* LOADING OVERLAY */
+    #loadingOverlay{display:none;position:fixed;inset:0;z-index:999;
+      background:oklch(7% 0.008 133 / .97);backdrop-filter:blur(24px);
+      flex-direction:column;align-items:center;justify-content:center;gap:1.75rem}
+    .ov-spinner{width:56px;height:56px;border-radius:50%;
+      border:2px solid var(--border2);border-top-color:var(--accent);
+      animation:spin .75s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .ov-title{font-size:1.05rem;font-weight:700;margin-bottom:.3rem;text-align:center}
+    .ov-sub{font-size:.82rem;color:var(--muted);text-align:center;line-height:1.6}
+    .prog-steps{display:flex;flex-direction:column;gap:.5rem;width:260px}
+    .prog-step{display:flex;align-items:center;gap:.65rem;font-size:.8rem;
+      color:var(--faint);transition:color .3s}
+    .prog-step.lit{color:var(--text)}
+    .prog-step.done{color:var(--green)}
+    .step-badge{width:22px;height:22px;border-radius:50%;
+      background:var(--surface2);border:1px solid var(--border2);
+      display:flex;align-items:center;justify-content:center;
+      font-size:.65rem;font-weight:700;flex-shrink:0;transition:background .3s,border-color .3s,color .3s}
+    .prog-step.lit .step-badge{background:var(--a-dim);border-color:var(--a-bdr);color:var(--accent)}
+    .prog-step.done .step-badge{background:var(--g-dim);border-color:var(--g-bdr);color:var(--green)}
 
     /* NAV */
     nav{position:relative;z-index:10;
-      background:rgba(6,6,8,.85);backdrop-filter:blur(18px);
+      background:oklch(7% 0.008 133 / .88);backdrop-filter:blur(20px) saturate(1.8);
       border-bottom:1px solid var(--border);
       padding:0 clamp(1.25rem,5vw,3rem);height:62px;
       display:flex;align-items:center;justify-content:space-between}
-    .logo{font-size:1rem;font-weight:800;letter-spacing:-.03em;text-decoration:none;color:var(--white)}
+    .logo{font-size:1rem;font-weight:800;letter-spacing:-.04em;text-decoration:none;color:var(--text)}
     .logo-r{color:var(--accent)}
-    .logo-h{color:var(--faint);font-weight:500}
-    .secure-badge{display:flex;align-items:center;gap:.4rem;
+    .logo-h{color:var(--faint);font-weight:400}
+    .secure-badge{display:flex;align-items:center;gap:.45rem;
       font-size:.75rem;color:var(--muted);font-weight:500}
-    .secure-badge span{color:var(--green)}
+    .secure-badge-icon{color:var(--green)}
 
     /* MAIN LAYOUT */
     .page{max-width:1080px;margin:0 auto;
-      padding:2.5rem clamp(1.25rem,4vw,2.5rem) 4rem;
+      padding:2.5rem clamp(1.25rem,4vw,2.5rem) 5rem;
       position:relative;z-index:1;
       display:grid;grid-template-columns:1fr 380px;gap:2rem;
       align-items:start}
 
-    /* LEFT — FORM */
-    .form-col{}
+    /* LEFT FORM */
     .form-title{font-size:1.6rem;font-weight:800;letter-spacing:-.04em;margin-bottom:.3rem}
     .form-sub{font-size:.875rem;color:var(--muted);margin-bottom:2rem}
 
     /* FIELD */
     .fg{margin-bottom:1.1rem}
-    .fl{display:block;font-size:.68rem;font-weight:700;letter-spacing:.1em;
+    .fl{display:block;font-size:.67rem;font-weight:700;letter-spacing:.1em;
       text-transform:uppercase;color:var(--faint);margin-bottom:.5rem}
     .fi{width:100%;background:var(--surface);border:1px solid var(--border2);
-      border-radius:10px;padding:.85rem 1.1rem;color:var(--white);
+      border-radius:10px;padding:.85rem 1.1rem;color:var(--text);
       font-family:'Inter',sans-serif;font-size:.92rem;outline:none;
-      transition:border-color .2s,box-shadow .2s,background .2s}
-    .fi::placeholder{color:rgba(255,255,255,.2)}
-    .fi:focus{border-color:rgba(200,255,0,.4);box-shadow:0 0 0 3px rgba(200,255,0,.07);background:rgba(255,255,255,.03)}
-    .fi.err{border-color:rgba(255,82,82,.5)!important;box-shadow:0 0 0 3px rgba(255,82,82,.07)!important}
-    .fi.ok{border-color:rgba(0,217,126,.4)!important}
-    .fh{font-size:.72rem;color:var(--muted);margin-top:.4rem}
+      transition:border-color .2s var(--ease),box-shadow .2s var(--ease),background .2s}
+    .fi::placeholder{color:var(--faint);letter-spacing:0;font-weight:400}
+    .fi:focus{border-color:var(--a-bdr);box-shadow:0 0 0 3px var(--a-dim);background:oklch(100% 0 0 / .02)}
+    .fi.err{border-color:var(--r-bdr);box-shadow:0 0 0 3px var(--r-dim)}
+    .fi.ok{border-color:var(--g-bdr)}
+    .fh{font-size:.72rem;color:var(--faint);margin-top:.4rem}
 
     /* VIN LOOKUP */
     .vin-lk{display:none;align-items:center;gap:.45rem;
       font-size:.8rem;padding:.45rem .75rem;border-radius:8px;margin-top:.5rem}
-    .vin-lk.show{display:flex;background:rgba(0,217,126,.07);border:1px solid rgba(0,217,126,.2);color:var(--green)}
-    .vin-lk.err{display:flex;background:rgba(255,82,82,.07);border:1px solid rgba(255,82,82,.2);color:var(--red)}
-    .vin-lk.ldg{display:flex;background:rgba(255,255,255,.03);border:1px solid var(--border);color:var(--muted)}
+    .vin-lk.show{display:flex;background:var(--g-dim);border:1px solid var(--g-bdr);color:var(--green)}
+    .vin-lk.err{display:flex;background:var(--r-dim);border:1px solid var(--r-bdr);color:var(--red)}
+    .vin-lk.ldg{display:flex;background:var(--border);border:1px solid var(--border2);color:var(--muted)}
 
     /* PLAN SELECTOR */
-    .plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.25rem;perspective:800px}
-    .plan-card{border:1.5px solid var(--border2);border-radius:12px;
+    .plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.25rem}
+    .plan-card{border:1px solid var(--border2);border-radius:12px;
       padding:.95rem 1.1rem;cursor:pointer;position:relative;
       background:var(--surface);
-      transition:all .2s;transform-style:preserve-3d}
-    .plan-card:hover{border-color:rgba(200,255,0,.35);background:rgba(200,255,0,.03);transform:translateY(-2px)}
-    .plan-card.active{border-color:var(--accent)!important;background:rgba(200,255,0,.06)!important;
-      box-shadow:0 0 0 1px rgba(200,255,0,.15),0 4px 20px rgba(200,255,0,.08)}
+      transition:border-color .2s var(--ease),background .2s var(--ease),transform .2s var(--ease),box-shadow .2s}
+    .plan-card:hover{border-color:var(--a-bdr);background:var(--a-dim);transform:translateY(-2px)}
+    .plan-card:active{transform:scale(0.98)}
+    .plan-card.active{border-color:var(--accent);background:var(--a-dim);
+      box-shadow:0 0 0 1px var(--a-bdr),0 4px 20px var(--a-glow)}
     .plan-card.full{grid-column:1/-1}
-    .plan-dot{width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2);
-      position:absolute;top:.9rem;right:.9rem;transition:all .15s}
+    .plan-dot{width:16px;height:16px;border-radius:50%;border:1px solid var(--border3);
+      position:absolute;top:.9rem;right:.9rem;
+      transition:background .15s,border-color .15s}
     .plan-card.active .plan-dot{background:var(--accent);border-color:var(--accent)}
     .plan-card.active .plan-dot::after{content:'✓';position:absolute;top:50%;left:50%;
-      transform:translate(-50%,-50%);font-size:9px;color:#000;font-weight:800}
+      transform:translate(-50%,-50%);font-size:9px;color:oklch(10% .02 133);font-weight:800}
     .plan-name{font-size:.82rem;font-weight:700;padding-right:1.5rem;margin-bottom:.2rem}
     .plan-price{font-size:1.35rem;font-weight:900;letter-spacing:-.04em;color:var(--accent)}
     .plan-sub{font-size:.68rem;color:var(--muted);margin-top:.15rem}
     .plan-badge{font-size:.62rem;color:var(--green);font-weight:600;
       margin-top:.2rem;display:inline-block}
     .plan-tag{position:absolute;top:-1px;left:50%;transform:translateX(-50%);
-      background:var(--accent);color:#000;font-size:.58rem;font-weight:800;
+      background:var(--accent);color:oklch(10% .02 133);font-size:.58rem;font-weight:800;
       letter-spacing:.08em;text-transform:uppercase;
       padding:.18rem .75rem;border-radius:0 0 6px 6px;white-space:nowrap}
-    .disclaimer{font-size:.65rem;color:rgba(255,255,255,.22);margin-top:.75rem;line-height:1.5}
+    .disclaimer{font-size:.65rem;color:var(--faint);margin-top:.75rem;line-height:1.55}
 
     /* COUPON */
     .coupon-row{display:flex;gap:.5rem}
     .coupon-row .fi{flex:1}
-    .btn-apply{background:rgba(255,255,255,.06);border:1px solid var(--border2);
-      color:var(--white);font-family:'Inter',sans-serif;font-weight:700;
+    .btn-apply{background:oklch(100% 0 0 / .06);border:1px solid var(--border2);
+      color:var(--text);font-family:'Inter',sans-serif;font-weight:700;
       font-size:.82rem;padding:0 1.1rem;border-radius:10px;cursor:pointer;
-      white-space:nowrap;transition:background .15s}
-    .btn-apply:hover{background:rgba(255,255,255,.12)}
+      white-space:nowrap;transition:background .15s,transform .15s}
+    .btn-apply:hover{background:oklch(100% 0 0 / .12)}
+    .btn-apply:active{transform:scale(0.97)}
     .coupon-msg{font-size:.76rem;margin-top:.45rem;min-height:1rem}
     .coupon-msg.ok{color:var(--green)}
     .coupon-msg.fail{color:var(--red)}
 
     /* ERROR */
     .err-msg{color:var(--red);font-size:.8rem;margin-top:.75rem;display:none;
-      padding:.7rem 1rem;background:rgba(255,82,82,.07);
-      border-radius:8px;border:1px solid rgba(255,82,82,.2)}
+      padding:.7rem 1rem;background:var(--r-dim);
+      border-radius:8px;border:1px solid var(--r-bdr)}
 
     /* PAYPAL */
     #ppBtn{margin-top:1.25rem}
     .pay-note{font-size:.72rem;color:var(--muted);text-align:center;margin-top:.65rem;line-height:1.6}
 
-    /* RIGHT — ORDER SUMMARY */
+    /* ORDER SUMMARY */
     .summary{position:sticky;top:1.5rem;
       background:var(--surface);border:1px solid var(--border2);
       border-radius:18px;padding:1.75rem;
       transform:perspective(900px) rotateY(-3deg);
       transform-origin:right center;
-      box-shadow:0 0 0 1px rgba(255,255,255,.04),0 20px 60px rgba(0,0,0,.6),0 0 60px rgba(200,255,0,.03);
-      transition:transform .35s ease}
+      box-shadow:0 0 0 1px var(--border),0 20px 60px oklch(0% 0 0 / .6),0 0 60px var(--a-glow);
+      transition:transform .35s var(--ease)}
     .summary:hover{transform:perspective(900px) rotateY(-1deg)}
-
     .sum-title{font-size:.65rem;font-weight:700;letter-spacing:.12em;
       text-transform:uppercase;color:var(--faint);margin-bottom:1.35rem}
     .sum-plan{font-size:1.05rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.25rem}
     .sum-vin{font-size:.72rem;color:var(--muted);font-family:'Courier New',monospace;
       letter-spacing:.04em;margin-bottom:1.25rem;min-height:1rem}
 
-    /* VEHICLE CARD */
     .vehicle-card{background:var(--surface2);border:1px solid var(--border);
       border-radius:10px;padding:.875rem;margin-bottom:1.25rem;display:none}
     .vehicle-card.show{display:block}
@@ -156,33 +195,33 @@
     .vc-vin{font-size:.65rem;font-family:'Courier New',monospace;color:var(--muted)}
 
     .sum-row{display:flex;justify-content:space-between;
-      font-size:.82rem;color:rgba(255,255,255,.5);padding:.3rem 0}
+      font-size:.82rem;color:var(--faint);padding:.3rem 0}
     .sum-discount{color:var(--green)!important}
     .sum-divider{border:none;border-top:1px solid var(--border);margin:.9rem 0}
     .sum-total{display:flex;justify-content:space-between;align-items:center}
     .sum-total-l{font-size:.9rem;font-weight:700}
     .sum-total-p{font-size:2rem;font-weight:900;letter-spacing:-.05em;color:var(--accent)}
 
-    /* TRUST CHIPS */
-    .trust-chips{display:flex;flex-direction:column;gap:.4rem;margin-top:1.25rem}
-    .chip{display:flex;align-items:center;gap:.5rem;font-size:.75rem;
-      color:rgba(255,255,255,.45);padding:.35rem 0}
-    .chip-icon{font-size:.9rem;flex-shrink:0}
-
-    /* 3D STAT CARDS IN SUMMARY */
+    /* STAT CHIPS */
     .sum-stats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:1.25rem}
     .ss{background:var(--surface2);border:1px solid var(--border);
       border-radius:9px;padding:.75rem;text-align:center;
-      transition:transform .2s;transform:perspective(400px) rotateX(2deg)}
-    .ss:hover{transform:perspective(400px) rotateX(0deg) translateY(-2px)}
+      transition:transform .2s var(--ease)}
+    .ss:hover{transform:translateY(-2px)}
     .ss-val{font-size:1.1rem;font-weight:900;letter-spacing:-.04em;color:var(--accent)}
     .ss-lbl{font-size:.62rem;color:var(--muted);margin-top:.15rem}
+
+    /* TRUST CHIPS */
+    .trust-chips{display:flex;flex-direction:column;gap:.25rem;margin-top:1.25rem}
+    .chip{display:flex;align-items:center;gap:.5rem;font-size:.75rem;
+      color:var(--faint);padding:.3rem 0}
+    .chip-icon{color:var(--muted);flex-shrink:0;width:14px;height:14px}
 
     /* RESPONSIVE */
     @media(max-width:860px){
       .page{grid-template-columns:1fr}
       .summary{position:static;transform:none;order:-1;
-        box-shadow:0 4px 30px rgba(0,0,0,.5)}
+        box-shadow:0 4px 30px oklch(0% 0 0 / .5)}
       .summary:hover{transform:none}
       .sum-stats{grid-template-columns:repeat(4,1fr)}
     }
@@ -199,47 +238,42 @@
 </head>
 <body>
 
-<!-- LOADING OVERLAY -->
-<div id="loadingOverlay" style="display:none;position:fixed;inset:0;z-index:999;
-  background:rgba(6,6,8,.95);backdrop-filter:blur(20px);
-  flex-direction:column;align-items:center;justify-content:center;gap:1.5rem">
-  <div style="width:64px;height:64px;border-radius:50%;
-    border:3px solid rgba(200,255,0,.15);border-top-color:var(--accent);
-    animation:spin .8s linear infinite"></div>
-  <div style="text-align:center">
-    <div style="font-size:1.1rem;font-weight:700;margin-bottom:.4rem">Generating your report...</div>
-    <div style="font-size:.85rem;color:var(--muted)">Fetching vehicle history data · Usually takes 10–30 seconds</div>
+<div id="loadingOverlay">
+  <div class="ov-spinner"></div>
+  <div>
+    <div class="ov-title">Generating your report...</div>
+    <div class="ov-sub">Fetching vehicle history data. Usually 10–30 seconds.</div>
   </div>
-  <div style="display:flex;gap:.5rem;flex-direction:column;align-items:center;width:280px">
-    <div class="prog-step" id="ps1" style="display:flex;align-items:center;gap:.6rem;font-size:.8rem;color:var(--muted);transition:color .3s">
-      <span style="width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:.7rem" id="pi1">1</span>Payment verified
+  <div class="prog-steps">
+    <div class="prog-step done" id="ps1">
+      <span class="step-badge" id="pi1">1</span>
+      Payment verified
     </div>
-    <div class="prog-step" id="ps2" style="display:flex;align-items:center;gap:.6rem;font-size:.8rem;color:rgba(255,255,255,.25);transition:color .3s">
-      <span style="width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:.7rem" id="pi2">2</span>Fetching vehicle history...
+    <div class="prog-step" id="ps2">
+      <span class="step-badge" id="pi2">2</span>
+      Fetching vehicle history...
     </div>
-    <div class="prog-step" id="ps3" style="display:flex;align-items:center;gap:.6rem;font-size:.8rem;color:rgba(255,255,255,.25);transition:color .3s">
-      <span style="width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:.7rem" id="pi3">3</span>Sending to your email...
+    <div class="prog-step" id="ps3">
+      <span class="step-badge" id="pi3">3</span>
+      Sending to your email...
     </div>
   </div>
 </div>
-<style>
-  @keyframes spin{to{transform:rotate(360deg)}}
-  :root{--accent:#c8ff00;--green:#00d97e;--muted:rgba(255,255,255,.55)}
-</style>
 
 <nav>
   <a href="/" class="logo">VIN<span class="logo-r">Record</span><span class="logo-h">Hub</span></a>
-  <div class="secure-badge">🔒 <span>Secure</span> checkout via PayPal</div>
+  <div class="secure-badge">
+    <svg class="secure-badge-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    Secure checkout via PayPal
+  </div>
 </nav>
 
 <div class="page">
 
-  <!-- LEFT FORM -->
   <div class="form-col">
     <h1 class="form-title">Complete your order</h1>
     <p class="form-sub">Enter your vehicle details and choose a report type.</p>
 
-    <!-- VIN -->
     <div class="fg">
       <label class="fl">Vehicle VIN Number</label>
       <input class="fi" type="text" id="vinInput" placeholder="17-character VIN" maxlength="17" autocomplete="off" spellcheck="false"/>
@@ -247,14 +281,12 @@
       <div class="fh">Found on dashboard, door jamb, or vehicle title.</div>
     </div>
 
-    <!-- EMAIL -->
     <div class="fg">
       <label class="fl">Email Address</label>
       <input class="fi" type="email" id="emailInput" placeholder="your@email.com"/>
       <div class="fh">Your report will be delivered here within 60 seconds.</div>
     </div>
 
-    <!-- PLAN -->
     <div class="fg">
       <label class="fl">Choose Report Type</label>
       <div class="plan-grid">
@@ -276,15 +308,14 @@
           <div class="plan-name" style="margin-top:.25rem">Combo Pack — Carfax® + AutoCheck®</div>
           <div class="plan-price">$14.99</div>
           <div class="plan-sub">both reports for one VIN</div>
-          <div class="plan-badge">⚡ Save $5 — most thorough check</div>
+          <div class="plan-badge">Save $5 — most thorough check</div>
         </div>
       </div>
       <p class="disclaimer">* Carfax® and AutoCheck® are registered trademarks of their respective owners. VINRecordHub is not affiliated with or endorsed by Carfax or AutoCheck.</p>
     </div>
 
-    <!-- COUPON -->
     <div class="fg">
-      <label class="fl">Coupon Code <span style="text-transform:none;letter-spacing:0;font-weight:400;color:rgba(255,255,255,.2)">(optional)</span></label>
+      <label class="fl">Coupon Code <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--faint)">(optional)</span></label>
       <div class="coupon-row">
         <input class="fi" type="text" id="couponInput" placeholder="Enter code..."/>
         <button class="btn-apply" id="applyBtn">Apply</button>
@@ -297,13 +328,11 @@
     <p class="pay-note">Accepts all major cards · PayPal · No account required<br/>Report delivered within 60 seconds of payment</p>
   </div>
 
-  <!-- RIGHT SUMMARY -->
   <div class="summary" id="summaryCrd">
     <div class="sum-title">Order Summary</div>
     <div class="sum-plan" id="sumPlan">Carfax® Report</div>
     <div class="sum-vin" id="sumVin"></div>
 
-    <!-- Vehicle detected card -->
     <div class="vehicle-card" id="vehicleCard">
       <div class="vc-name" id="vcName"></div>
       <div class="vc-vin" id="vcVin"></div>
@@ -320,20 +349,34 @@
       <span class="sum-total-p" id="sumTotal">$9.99</span>
     </div>
 
-    <!-- 3D stat cards -->
     <div class="sum-stats">
       <div class="ss"><div class="ss-val">60s</div><div class="ss-lbl">Delivery</div></div>
       <div class="ss"><div class="ss-val" style="color:var(--green)">100%</div><div class="ss-lbl">Guaranteed</div></div>
       <div class="ss"><div class="ss-val" style="color:var(--blue)">SSL</div><div class="ss-lbl">Encrypted</div></div>
-      <div class="ss"><div class="ss-val" style="color:#ffaa00">24/7</div><div class="ss-lbl">Support</div></div>
+      <div class="ss"><div class="ss-val" style="color:var(--amber)">24/7</div><div class="ss-lbl">Support</div></div>
     </div>
 
     <div class="trust-chips">
-      <div class="chip"><span class="chip-icon">💥</span>Accident & damage history</div>
-      <div class="chip"><span class="chip-icon">📋</span>Title & ownership records</div>
-      <div class="chip"><span class="chip-icon">📏</span>Odometer verification</div>
-      <div class="chip"><span class="chip-icon">🔧</span>Service & recall records</div>
-      <div class="chip"><span class="chip-icon">🛡️</span>Money-back guarantee</div>
+      <div class="chip">
+        <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Accident &amp; damage history
+      </div>
+      <div class="chip">
+        <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Title &amp; ownership records
+      </div>
+      <div class="chip">
+        <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Odometer verification
+      </div>
+      <div class="chip">
+        <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        Service &amp; recall records
+      </div>
+      <div class="chip">
+        <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        Money-back guarantee
+      </div>
     </div>
   </div>
 
@@ -419,7 +462,6 @@ async function lookupVin(vin) {
     }
     const name = [res.ModelYear, res.Make, res.Model, res.Trim].filter(Boolean).join(' ');
     el.className='vin-lk show'; ico.textContent='✅'; txt.innerHTML=`<strong>${name}</strong>`;
-    // Update vehicle card in summary
     document.getElementById('vcName').textContent = name;
     document.getElementById('vcVin').textContent = 'VIN: ' + vin;
     document.getElementById('vehicleCard').className = 'vehicle-card show';
@@ -431,10 +473,10 @@ document.getElementById('vinInput').addEventListener('input', function() {
   const vin = this.value.trim();
   const lk = document.getElementById('vinLk');
   if (!vin) { this.style.borderColor=''; lk.className='vin-lk'; document.getElementById('vehicleCard').className='vehicle-card'; return; }
-  if (vin.length < 17) { this.style.borderColor='rgba(255,170,0,.4)'; lk.className='vin-lk'; clearTimeout(vtimer); }
-  else if (!isValidVin(vin)) { this.style.borderColor='rgba(255,82,82,.5)'; this.classList.add('err'); }
+  if (vin.length < 17) { this.style.borderColor=''; lk.className='vin-lk'; clearTimeout(vtimer); }
+  else if (!isValidVin(vin)) { this.classList.add('err'); this.classList.remove('ok'); }
   else {
-    this.style.borderColor='rgba(0,217,126,.4)'; this.classList.remove('err'); this.classList.add('ok');
+    this.classList.remove('err'); this.classList.add('ok');
     clearTimeout(vtimer); vtimer = setTimeout(() => lookupVin(vin), 300);
   }
   refreshSummary();
@@ -444,8 +486,7 @@ document.getElementById('emailInput').addEventListener('blur', function() {
   const v = this.value.trim();
   if (!v) return;
   const ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
-  this.style.borderColor = ok ? 'rgba(0,217,126,.4)' : 'rgba(255,82,82,.5)';
-  ok ? this.classList.add('ok') : this.classList.add('err');
+  ok ? (this.classList.add('ok'), this.classList.remove('err')) : (this.classList.add('err'), this.classList.remove('ok'));
 });
 
 // ─── SUMMARY ──────────────────────────────────────────────
@@ -510,38 +551,31 @@ function renderPayPal() {
       const email = document.getElementById('emailInput').value.trim();
       const orderId = details.id;
 
-      // Show loading overlay
       document.getElementById('loadingOverlay').style.display = 'flex';
 
-      // Helper to update step UI
       function stepDone(n) {
         const el = document.getElementById('ps' + n);
         const ico = document.getElementById('pi' + n);
-        el.style.color = 'var(--green)';
+        el.className = 'prog-step done';
         ico.textContent = '✓';
-        ico.style.background = 'rgba(0,217,126,.2)';
-        ico.style.color = 'var(--green)';
       }
       function stepActive(n) {
         const el = document.getElementById('ps' + n);
-        const ico = document.getElementById('pi' + n);
-        el.style.color = 'var(--accent)';
-        ico.style.background = 'rgba(200,255,0,.15)';
+        el.className = 'prog-step lit';
       }
       function stepError(n, msg) {
         const el = document.getElementById('ps' + n);
         const ico = document.getElementById('pi' + n);
         el.style.color = 'var(--red)';
         ico.textContent = '✗';
-        ico.style.background = 'rgba(255,82,82,.15)';
+        ico.style.background = 'var(--r-dim)';
+        ico.style.borderColor = 'var(--r-bdr)';
         ico.style.color = 'var(--red)';
         if (msg) el.querySelector('span + *') && (el.lastChild.textContent = msg);
       }
 
-      // STEP 1 — Payment already captured above ✅ (this is real)
       stepDone(1);
 
-      // STEP 2 — Fetch report from CheapVHR (real API call)
       stepActive(2);
       let reportSuccess = false;
       let emailSuccess = false;
@@ -561,22 +595,18 @@ function renderPayPal() {
         const result = await res.json();
 
         if (res.ok && result.success) {
-          // Both report fetch AND email send succeeded
           stepDone(2);
           stepActive(3);
-          // Small delay so user sees step 3 activate before it turns green
           await new Promise(r => setTimeout(r, 600));
           stepDone(3);
           emailSuccess = true;
           reportSuccess = true;
         } else {
-          // API returned an error
           stepError(2, 'Report fetch issue — check your email');
           stepError(3, 'Contact support if not received');
         }
 
       } catch (err) {
-        // Network error — payment was captured, try beacon as fallback
         stepError(2, 'Connection issue — report may still deliver');
         navigator.sendBeacon('/api/fulfill-order',
           new Blob([JSON.stringify({ email, vin, plan: PLANS[plan].reportType, paypalOrderId: orderId, coupon: coupon ? coupon.code : null })],
@@ -584,10 +614,7 @@ function renderPayPal() {
         );
       }
 
-      // Wait a moment so user can see final state
       await new Promise(r => setTimeout(r, emailSuccess ? 1200 : 2500));
-
-      // Redirect to success page with status
       window.location.href = `/success?vin=${encodeURIComponent(vin)}&email=${encodeURIComponent(email)}&plan=${plan}&order=${orderId}&delivered=${emailSuccess ? '1' : '0'}`;
     },
     onError: function(err) {
@@ -607,7 +634,6 @@ const urlVin = params.get('vin');
 if (urlVin) {
   const vi = document.getElementById('vinInput');
   vi.value = urlVin.toUpperCase(); vi.classList.add('ok');
-  vi.style.borderColor = 'rgba(0,217,126,.4)';
   if (isValidVin(urlVin.toUpperCase())) setTimeout(() => lookupVin(urlVin.toUpperCase()), 600);
   refreshSummary();
 }

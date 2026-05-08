@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($env:CLAUDE_PLUGIN_ROOT)",
+      "Skill(impeccable)",
+      "PowerShell(node .claude/skills/impeccable/scripts/load-context.mjs 2>&1)",
+      "PowerShell(git add *)"
+    ]
+  },
+  "enabledPlugins": {
+    "setupdotclaude@dotclaude": true
+  }
+}

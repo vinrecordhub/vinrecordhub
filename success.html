@@ -8,65 +8,87 @@
   <meta name="theme-color" content="#060608"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Report On Its Way — VINRecordHub</title>
+  <meta name="robots" content="noindex, nofollow"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
-      --bg:#060608;--surface:#0e0e12;--surface2:#15151b;
-      --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
-      --white:#fff;--muted:rgba(255,255,255,0.55);--faint:rgba(255,255,255,0.25);
-      --accent:#c8ff00;--green:#00d97e;--red:#ff5252;--blue:#4f8cff;
+      --bg:       oklch(7% 0.008 133);
+      --surface:  oklch(10.5% 0.010 133);
+      --surface2: oklch(13.5% 0.012 133);
+      --border:   oklch(100% 0 0 / .07);
+      --border2:  oklch(100% 0 0 / .13);
+      --text:     oklch(97% 0.005 133);
+      --muted:    oklch(67% 0.007 133);
+      --faint:    oklch(42% 0.007 133);
+      --accent:   oklch(91% 0.215 133);
+      --a-dim:    oklch(91% 0.215 133 / .08);
+      --a-bdr:    oklch(91% 0.215 133 / .28);
+      --a-glow:   oklch(91% 0.215 133 / .10);
+      --green:    oklch(72% 0.18 155);
+      --g-dim:    oklch(72% 0.18 155 / .08);
+      --g-bdr:    oklch(72% 0.18 155 / .22);
+      --red:      oklch(62% 0.22 26);
+      --r-dim:    oklch(62% 0.22 26 / .08);
+      --r-bdr:    oklch(62% 0.22 26 / .22);
+      --amber:    oklch(80% 0.18 72);
+      --blue:     oklch(68% 0.16 245);
+      --ease:     cubic-bezier(0.25,1,0.5,1);
+      --expo:     cubic-bezier(0.16,1,0.3,1);
     }
     html{overflow-x:hidden}
-    body{background:var(--bg);color:var(--white);
+    body{background:var(--bg);color:var(--text);
       font-family:'Inter',-apple-system,sans-serif;
       min-height:100vh;display:flex;flex-direction:column;
       -webkit-font-smoothing:antialiased}
     body::before{content:'';position:fixed;inset:0;
-      background-image:linear-gradient(rgba(0,217,126,.015) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(0,217,126,.015) 1px,transparent 1px);
-      background-size:60px 60px;pointer-events:none;z-index:0}
+      background-image:
+        linear-gradient(var(--g-bdr) 1px,transparent 1px),
+        linear-gradient(90deg,var(--g-bdr) 1px,transparent 1px);
+      background-size:72px 72px;
+      mask-image:radial-gradient(ellipse 70% 60% at 50% 0%,black 0%,transparent 100%);
+      opacity:.25;pointer-events:none;z-index:0}
 
-    nav{position:relative;z-index:10;background:rgba(6,6,8,.85);
-      backdrop-filter:blur(18px);border-bottom:1px solid var(--border);
+    nav{position:relative;z-index:10;
+      background:oklch(7% 0.008 133 / .88);
+      backdrop-filter:blur(20px) saturate(1.8);
+      border-bottom:1px solid var(--border);
       padding:0 clamp(1.25rem,5vw,3rem);height:62px;
-      display:flex;align-items:center;justify-content:space-between}
-    .logo{font-size:1rem;font-weight:800;letter-spacing:-.03em;text-decoration:none;color:var(--white)}
+      display:flex;align-items:center}
+    .logo{font-size:1rem;font-weight:800;letter-spacing:-.04em;text-decoration:none;color:var(--text)}
     .logo-r{color:var(--accent)}
-    .logo-h{color:var(--faint);font-weight:500}
+    .logo-h{color:var(--faint);font-weight:400}
 
     .page{flex:1;display:flex;align-items:center;justify-content:center;
       padding:3rem clamp(1.25rem,5vw,3rem);position:relative;z-index:1}
 
-    .card{max-width:620px;width:100%;
+    .card{max-width:600px;width:100%;
       background:var(--surface);border:1px solid var(--border2);
       border-radius:24px;padding:3rem;
-      box-shadow:0 0 0 1px rgba(255,255,255,.04),
-        0 24px 80px rgba(0,0,0,.7),
-        0 0 100px rgba(0,217,126,.05);
-      transform:perspective(1000px) rotateX(1deg);
-      animation:rise .6s ease forwards}
-    @keyframes rise{from{opacity:0;transform:perspective(1000px) rotateX(1deg) translateY(20px)}
-      to{opacity:1;transform:perspective(1000px) rotateX(1deg) translateY(0)}}
+      box-shadow:0 0 0 1px var(--border),0 24px 80px oklch(0% 0 0 / .7),0 0 100px var(--g-dim);
+      opacity:0;transform:translateY(20px);
+      animation:rise .55s var(--expo) forwards}
+    @keyframes rise{to{opacity:1;transform:translateY(0)}}
 
-    /* SUCCESS ICON */
     .success-ring{width:80px;height:80px;border-radius:50%;
-      background:rgba(0,217,126,.1);border:2px solid rgba(0,217,126,.3);
+      background:var(--g-dim);border:1px solid var(--g-bdr);
       display:flex;align-items:center;justify-content:center;
-      margin:0 auto 1.75rem;position:relative}
+      margin:0 auto 1.75rem;position:relative;
+      opacity:0;transform:scale(0.8);
+      animation:popIn .5s var(--expo) .15s forwards}
+    @keyframes popIn{to{opacity:1;transform:scale(1)}}
     .success-ring::before{content:'';position:absolute;inset:-8px;
-      border-radius:50%;border:1px solid rgba(0,217,126,.15);
-      animation:ping 2s ease infinite}
-    @keyframes ping{0%{transform:scale(1);opacity:1}100%{transform:scale(1.4);opacity:0}}
-    .success-icon{font-size:2.25rem}
+      border-radius:50%;border:1px solid var(--g-bdr);
+      animation:ping 2s var(--ease) .7s infinite}
+    @keyframes ping{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.45);opacity:0}}
+    .success-icon{color:var(--green)}
 
     h1{font-size:1.75rem;font-weight:800;letter-spacing:-.04em;
       text-align:center;margin-bottom:.5rem}
-    .sub{font-size:.95rem;color:var(--muted);text-align:center;
-      line-height:1.7;margin-bottom:2rem}
+    .sub{font-size:.9rem;color:var(--muted);text-align:center;
+      line-height:1.76;margin-bottom:2rem}
     .sub strong{color:var(--green);font-weight:600}
 
-    /* ORDER DETAILS */
     .details{background:var(--surface2);border:1px solid var(--border);
       border-radius:14px;padding:1.25rem;margin-bottom:1.75rem}
     .det-row{display:flex;justify-content:space-between;align-items:center;
@@ -77,42 +99,43 @@
       overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .det-v.mono{font-family:'Courier New',monospace;font-size:.75rem;color:var(--muted)}
 
-    /* TIMELINE */
-    .timeline{display:flex;flex-direction:column;gap:0;margin-bottom:2rem}
+    .timeline{display:flex;flex-direction:column;margin-bottom:2rem}
     .tl-item{display:flex;gap:1rem;align-items:flex-start;padding:.75rem 0;position:relative}
-    .tl-item:not(:last-child)::after{content:'';position:absolute;left:15px;
+    .tl-item:not(:last-child)::after{content:'';position:absolute;left:14px;
       top:44px;bottom:0;width:1px;background:var(--border)}
     .tl-dot{width:30px;height:30px;border-radius:50%;flex-shrink:0;
-      display:flex;align-items:center;justify-content:center;font-size:.85rem;
+      display:flex;align-items:center;justify-content:center;
       border:1px solid var(--border2);background:var(--surface2)}
-    .tl-dot.done{background:rgba(0,217,126,.15);border-color:rgba(0,217,126,.3);color:var(--green)}
-    .tl-dot.active{background:rgba(200,255,0,.1);border-color:rgba(200,255,0,.3);
-      animation:tl-pulse 1.5s ease infinite}
-    @keyframes tl-pulse{0%,100%{box-shadow:0 0 0 0 rgba(200,255,0,.3)}
-      50%{box-shadow:0 0 0 6px rgba(200,255,0,0)}}
+    .tl-dot.done{background:var(--g-dim);border-color:var(--g-bdr);color:var(--green)}
+    .tl-dot.active{background:var(--a-dim);border-color:var(--a-bdr);
+      animation:tl-pulse 1.5s var(--ease) infinite}
+    @keyframes tl-pulse{0%,100%{box-shadow:0 0 0 0 var(--a-glow)}50%{box-shadow:0 0 0 6px transparent}}
     .tl-content{padding-top:.35rem}
     .tl-title{font-size:.88rem;font-weight:600;margin-bottom:.15rem}
     .tl-desc{font-size:.78rem;color:var(--muted)}
 
-    /* ACTIONS */
-    .actions{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.25rem}
     .btn-primary{display:block;text-align:center;padding:.875rem;border-radius:10px;
       font-size:.875rem;font-weight:700;text-decoration:none;
-      background:var(--accent);color:#000;transition:all .2s}
+      background:var(--accent);color:oklch(10% .02 133);
+      transition:opacity .15s,transform .2s var(--ease)}
     .btn-primary:hover{opacity:.88;transform:translateY(-1px)}
+    .btn-primary:active{transform:scale(0.97)}
     .btn-secondary{display:block;text-align:center;padding:.875rem;border-radius:10px;
-      font-size:.875rem;font-weight:600;text-decoration:none;color:var(--white);
-      background:rgba(255,255,255,.06);border:1px solid var(--border2);transition:all .2s}
-    .btn-secondary:hover{background:rgba(255,255,255,.1)}
-    .support-note{font-size:.75rem;color:var(--muted);text-align:center;
-      margin-top:1.25rem;line-height:1.6}
+      font-size:.875rem;font-weight:600;text-decoration:none;color:var(--text);
+      background:oklch(100% 0 0 / .06);border:1px solid var(--border2);
+      transition:background .15s,transform .15s}
+    .btn-secondary:hover{background:oklch(100% 0 0 / .1)}
+    .btn-secondary:active{transform:scale(0.97)}
+    .support-note{font-size:.75rem;color:var(--muted);text-align:center;line-height:1.6}
     .support-note a{color:var(--accent);text-decoration:none}
+    .support-note a:hover{text-decoration:underline}
 
     @media(max-width:600px){
       .card{padding:2rem 1.5rem;border-radius:18px}
       .actions{grid-template-columns:1fr}
       nav{height:54px;padding:0 1.25rem}
-      h1{font-size:1.45rem}
+      h1{font-size:1.4rem}
     }
   </style>
 </head>
@@ -122,7 +145,9 @@
 </nav>
 <div class="page">
   <div class="card">
-    <div class="success-ring"><div class="success-icon">✓</div></div>
+    <div class="success-ring">
+      <svg class="success-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
     <h1>Payment Confirmed!</h1>
     <p class="sub">Your report is being generated and will arrive in your inbox <strong>within the next few minutes</strong>. Check your spam folder if it doesn't appear.</p>
 
@@ -135,24 +160,30 @@
 
     <div class="timeline">
       <div class="tl-item">
-        <div class="tl-dot done">✓</div>
+        <div class="tl-dot done">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
         <div class="tl-content">
           <div class="tl-title">Payment confirmed</div>
           <div class="tl-desc">Your payment was processed successfully via PayPal</div>
         </div>
       </div>
       <div class="tl-item">
-        <div class="tl-dot active">⟳</div>
+        <div class="tl-dot active" id="tl-dot-2">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.09"/></svg>
+        </div>
         <div class="tl-content">
           <div class="tl-title">Report generating</div>
-          <div class="tl-desc">Pulling vehicle history data from our database now...</div>
+          <div class="tl-desc tl-desc-2">Pulling vehicle history data from our database now...</div>
         </div>
       </div>
       <div class="tl-item">
-        <div class="tl-dot">📩</div>
+        <div class="tl-dot" id="tl-dot-3">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
         <div class="tl-content">
           <div class="tl-title">Email delivery</div>
-          <div class="tl-desc">Report will arrive in your inbox within 60 seconds</div>
+          <div class="tl-desc tl-desc-3">Report will arrive in your inbox within 60 seconds</div>
         </div>
       </div>
     </div>
@@ -174,29 +205,25 @@
   document.getElementById('emailDisplay').textContent = p.get('email') || '—';
   document.getElementById('planDisplay').textContent = plans[p.get('plan')] || 'Vehicle History Report';
 
-  // Update messaging based on actual delivery status
   if (delivered === '1') {
-    // Report was successfully fetched AND emailed
-    document.querySelector('h1').textContent = 'Report Delivered! ✓';
+    document.querySelector('h1').textContent = 'Report Delivered!';
     document.querySelector('.sub').innerHTML = 'Your vehicle history report has been sent to <strong>' + (p.get('email') || 'your email') + '</strong>. Check your inbox now — it should already be there.';
-    // Update timeline — all steps done
     document.querySelectorAll('.tl-dot').forEach(d => {
-      d.className = 'tl-dot done'; d.textContent = '✓';
+      d.className = 'tl-dot done';
+      d.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
     });
     document.querySelectorAll('.tl-desc')[1].textContent = 'Vehicle history data fetched successfully';
-    document.querySelectorAll('.tl-desc')[2].textContent = 'Email delivered to your inbox ✓';
+    document.querySelectorAll('.tl-desc')[2].textContent = 'Email delivered to your inbox';
   } else if (delivered === '0') {
-    // Payment succeeded but delivery had issues
-    document.querySelector('h1').textContent = 'Payment Confirmed ✓';
-    document.querySelector('.sub').innerHTML = 'Your payment was received successfully. Your report is being processed — you should receive it within <strong>5–10 minutes</strong>. If not, contact support with your Order ID.';
-    // Show warning on step 2/3
-    const dots = document.querySelectorAll('.tl-dot');
-    dots[1].style.borderColor = 'rgba(255,170,0,.3)';
-    dots[1].style.background = 'rgba(255,170,0,.1)';
-    dots[1].textContent = '⏳';
-    dots[2].textContent = '⏳';
+    document.querySelector('h1').textContent = 'Payment Confirmed';
+    document.querySelector('.sub').innerHTML = 'Your payment was received. Your report is being processed — you should receive it within <strong>5–10 minutes</strong>. If not, contact support with your Order ID.';
+    const dot2 = document.getElementById('tl-dot-2');
+    const dot3 = document.getElementById('tl-dot-3');
+    dot2.style.borderColor = 'oklch(80% 0.18 72 / .3)';
+    dot2.style.background = 'oklch(80% 0.18 72 / .08)';
+    dot2.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="oklch(80% 0.18 72)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>';
+    dot3.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>';
   }
-  // If delivered is null (old flow), keep original messaging
 </script>
 </body>
 </html>

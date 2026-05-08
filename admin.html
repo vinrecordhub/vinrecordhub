@@ -7,114 +7,260 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
   <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png"/>
-  <meta name="theme-color" content="#080808"/>
+  <meta name="theme-color" content="#060608"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin — VIN Record Hub</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <title>Admin — VINRecordHub</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --black: #080808; --white: #f4f4ef; --accent: #e8ff3f;
-      --accent2: #3fffb0; --gray: #111; --gray2: #1a1a1a;
-      --mid: #666; --border: rgba(255,255,255,0.07);
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:       oklch(7% 0.008 133);
+      --surface:  oklch(10.5% 0.010 133);
+      --surface2: oklch(13.5% 0.012 133);
+      --border:   oklch(100% 0 0 / .07);
+      --border2:  oklch(100% 0 0 / .13);
+      --text:     oklch(97% 0.005 133);
+      --muted:    oklch(67% 0.007 133);
+      --faint:    oklch(42% 0.007 133);
+      --accent:   oklch(91% 0.215 133);
+      --a-dim:    oklch(91% 0.215 133 / .08);
+      --a-bdr:    oklch(91% 0.215 133 / .28);
+      --a-glow:   oklch(91% 0.215 133 / .10);
+      --green:    oklch(72% 0.18 155);
+      --g-dim:    oklch(72% 0.18 155 / .08);
+      --g-bdr:    oklch(72% 0.18 155 / .22);
+      --red:      oklch(62% 0.22 26);
+      --r-dim:    oklch(62% 0.22 26 / .08);
+      --r-bdr:    oklch(62% 0.22 26 / .22);
+      --blue:     oklch(68% 0.16 245);
+      --b-dim:    oklch(68% 0.16 245 / .08);
+      --b-bdr:    oklch(68% 0.16 245 / .22);
+      --amber:    oklch(80% 0.18 72);
+      --am-dim:   oklch(80% 0.18 72 / .08);
+      --am-bdr:   oklch(80% 0.18 72 / .22);
+      --purple:   oklch(72% 0.2 290);
+      --ease:     cubic-bezier(0.25,1,0.5,1);
+      --expo:     cubic-bezier(0.16,1,0.3,1);
     }
-    body { background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; font-weight: 300; min-height: 100vh; }
+    html{overflow-x:hidden}
+    body{background:var(--bg);color:var(--text);
+      font-family:'Inter',-apple-system,sans-serif;
+      font-weight:400;min-height:100vh;
+      -webkit-font-smoothing:antialiased}
+    body::before{content:'';position:fixed;inset:0;
+      background-image:
+        linear-gradient(var(--a-bdr) 1px,transparent 1px),
+        linear-gradient(90deg,var(--a-bdr) 1px,transparent 1px);
+      background-size:72px 72px;
+      mask-image:radial-gradient(ellipse 80% 40% at 50% 0%,black 0%,transparent 100%);
+      opacity:.15;pointer-events:none;z-index:0}
 
     /* LOGIN */
-    .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
-    .login-card { background: var(--gray); border: 1px solid var(--border); border-radius: 16px; padding: 3rem; width: 100%; max-width: 400px; }
-    .login-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; margin-bottom: 2rem; }
-    .login-logo span { color: var(--accent); }
-    .login-card h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.4rem; margin-bottom: 0.4rem; }
-    .login-card p { color: var(--mid); font-size: 0.85rem; margin-bottom: 2rem; }
-    .login-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem 1.1rem; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; outline: none; margin-bottom: 1rem; transition: border-color 0.2s; }
-    .login-input:focus { border-color: rgba(232,255,63,0.4); }
-    .login-btn { width: 100%; background: var(--accent); color: var(--black); border: none; border-radius: 8px; padding: 0.9rem; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.95rem; cursor: pointer; transition: opacity 0.2s; }
-    .login-btn:hover { opacity: 0.9; }
-    .login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .login-err { color: #ff6b6b; font-size: 0.82rem; margin-top: 0.75rem; display: none; }
+    .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;
+      padding:2rem;position:relative;z-index:1}
+    .login-card{background:var(--surface);border:1px solid var(--border2);
+      border-radius:20px;padding:3rem;width:100%;max-width:400px;
+      box-shadow:0 0 0 1px var(--border),0 24px 60px oklch(0% 0 0 / .6),0 0 60px var(--a-glow)}
+    .login-logo{font-size:1rem;font-weight:800;letter-spacing:-.04em;margin-bottom:2rem}
+    .login-logo .logo-r{color:var(--accent)}
+    .login-logo .logo-h{color:var(--faint);font-weight:400}
+    .login-card h2{font-weight:800;font-size:1.4rem;letter-spacing:-.03em;margin-bottom:.4rem}
+    .login-card p{color:var(--muted);font-size:.85rem;margin-bottom:2rem}
+    .login-input{width:100%;background:var(--surface2);border:1px solid var(--border2);
+      border-radius:9px;padding:.9rem 1.1rem;color:var(--text);
+      font-family:'Inter',sans-serif;font-size:.92rem;
+      outline:none;margin-bottom:1rem;
+      transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
+    .login-input::placeholder{color:var(--faint)}
+    .login-input:focus{border-color:var(--a-bdr);box-shadow:0 0 0 3px var(--a-dim)}
+    .login-btn{width:100%;background:var(--accent);color:oklch(10% .02 133);
+      border:none;border-radius:9px;padding:1rem;
+      font-family:'Inter',sans-serif;font-weight:800;font-size:.92rem;
+      cursor:pointer;
+      transition:opacity .15s,transform .2s var(--ease)}
+    .login-btn:hover{opacity:.9;transform:translateY(-1px)}
+    .login-btn:active{transform:scale(0.97)}
+    .login-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .login-err{color:var(--red);font-size:.82rem;margin-top:.75rem;display:none}
 
     /* ADMIN */
-    .admin-wrap { display: none; }
-    .admin-nav { background: var(--gray); border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
-    .admin-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 0.75rem; }
-    .admin-logo span { color: var(--accent); }
-    .admin-badge { background: rgba(232,255,63,0.1); border: 1px solid rgba(232,255,63,0.3); color: var(--accent); font-size: 0.65rem; padding: 0.2rem 0.65rem; border-radius: 100px; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'Syne', sans-serif; font-weight: 700; }
-    .nav-right { display: flex; align-items: center; gap: 1rem; }
-    .last-updated { font-size: 0.75rem; color: var(--mid); }
-    .btn-logout { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--mid); font-size: 0.8rem; padding: 0.4rem 1rem; border-radius: 6px; cursor: pointer; }
-    .btn-logout:hover { color: var(--white); border-color: rgba(255,255,255,0.2); }
+    .admin-wrap{display:none;position:relative;z-index:1}
+    .admin-nav{background:oklch(7% 0.008 133 / .9);backdrop-filter:blur(20px) saturate(1.8);
+      border-bottom:1px solid var(--border);
+      padding:0 clamp(1.25rem,5vw,3rem);height:62px;
+      display:flex;align-items:center;justify-content:space-between;
+      position:sticky;top:0;z-index:100}
+    .admin-logo{font-size:1rem;font-weight:800;letter-spacing:-.04em;
+      display:flex;align-items:center;gap:.65rem}
+    .admin-logo .logo-r{color:var(--accent)}
+    .admin-logo .logo-h{color:var(--faint);font-weight:400}
+    .admin-badge{background:var(--a-dim);border:1px solid var(--a-bdr);color:var(--accent);
+      font-size:.6rem;padding:.2rem .6rem;border-radius:100px;
+      letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+    .nav-right{display:flex;align-items:center;gap:1rem}
+    .last-updated{font-size:.75rem;color:var(--faint)}
+    .btn-logout{background:oklch(100% 0 0 / .05);border:1px solid var(--border);
+      color:var(--muted);font-size:.8rem;padding:.4rem 1rem;border-radius:6px;
+      cursor:pointer;font-family:'Inter',sans-serif;
+      transition:color .15s,border-color .15s,background .15s}
+    .btn-logout:hover{color:var(--text);border-color:var(--border2);background:oklch(100% 0 0 / .08)}
+    .btn-logout:active{transform:scale(0.97)}
 
-    .admin-content { padding: 2rem; max-width: 1300px; margin: 0 auto; }
+    .admin-content{padding:2rem;max-width:1300px;margin:0 auto}
 
     /* STATS */
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-    .stat-card { background: var(--gray); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; position: relative; overflow: hidden; }
-    .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
-    .stat-card.green::before { background: var(--accent2); }
-    .stat-card.yellow::before { background: var(--accent); }
-    .stat-card.blue::before { background: #7eb8ff; }
-    .stat-label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); margin-bottom: 0.75rem; }
-    .stat-value { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2.2rem; letter-spacing: -0.04em; line-height: 1; }
-    .stat-value.green { color: var(--accent2); }
-    .stat-value.yellow { color: var(--accent); }
-    .stat-value.blue { color: #7eb8ff; }
-    .stat-sub { font-size: 0.75rem; color: var(--mid); margin-top: 0.4rem; }
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:1rem;margin-bottom:2rem}
+    .stat-card{background:var(--surface);border:1px solid var(--border2);
+      border-radius:12px;padding:1.5rem}
+    .stat-label{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+      color:var(--faint);margin-bottom:.75rem}
+    .stat-value{font-weight:800;font-size:2.2rem;letter-spacing:-.04em;line-height:1}
+    .stat-value.green{color:var(--green)}
+    .stat-value.yellow{color:var(--accent)}
+    .stat-value.blue{color:var(--blue)}
+    .stat-sub{font-size:.75rem;color:var(--muted);margin-top:.4rem}
 
-    /* FILTERS */
-    .table-controls { display: flex; gap: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap; align-items: center; }
-    .search-input { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 1rem; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 0.88rem; outline: none; width: 280px; transition: border-color 0.2s; }
-    .search-input::placeholder { color: var(--mid); }
-    .search-input:focus { border-color: rgba(232,255,63,0.3); }
-    .filter-btn { background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--mid); font-size: 0.78rem; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
-    .filter-btn:hover { color: var(--white); border-color: rgba(255,255,255,0.15); }
-    .filter-btn.active { background: rgba(232,255,63,0.1); border-color: rgba(232,255,63,0.35); color: var(--accent); }
-    .sort-select { background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--mid); font-size: 0.78rem; padding: 0.5rem 0.75rem; border-radius: 6px; cursor: pointer; font-family: 'DM Sans', sans-serif; outline: none; }
-    .btn-refresh { background: var(--accent); color: var(--black); border: none; border-radius: 8px; padding: 0.6rem 1.25rem; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.82rem; cursor: pointer; margin-left: auto; transition: opacity 0.2s; }
-    .btn-refresh:hover { opacity: 0.85; }
-    .results-count { font-size: 0.8rem; color: var(--mid); }
+    /* ANALYTICS */
+    .analytics-section{margin-bottom:2rem}
+    .analytics-header{display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:1rem;flex-wrap:wrap;gap:.75rem}
+    .analytics-label{font-size:.68rem;font-weight:700;letter-spacing:.12em;
+      text-transform:uppercase;color:var(--faint);margin-bottom:.25rem}
+    .analytics-title{font-size:1rem;font-weight:700}
+    .analytics-controls{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+    .ga-range-btn{background:oklch(100% 0 0 / .04);border:1px solid var(--border);
+      color:var(--muted);font-size:.75rem;padding:.35rem .85rem;border-radius:6px;
+      cursor:pointer;font-family:'Inter',sans-serif;
+      transition:background .15s,color .15s,border-color .15s}
+    .ga-range-btn.active{background:var(--a-dim);border-color:var(--a-bdr);color:var(--accent)}
+    .btn-ga-refresh{background:var(--accent);color:oklch(10% .02 133);border:none;
+      font-size:.75rem;font-weight:700;padding:.35rem .85rem;border-radius:6px;
+      cursor:pointer;font-family:'Inter',sans-serif;
+      display:flex;align-items:center;gap:.35rem;
+      transition:opacity .15s}
+    .btn-ga-refresh:hover{opacity:.85}
+    .btn-ga-refresh:active{transform:scale(0.97)}
+    .btn-ga-link{background:oklch(100% 0 0 / .04);border:1px solid var(--border);
+      color:var(--muted);font-size:.75rem;padding:.35rem .85rem;border-radius:6px;
+      text-decoration:none;transition:color .15s}
+    .btn-ga-link:hover{color:var(--text)}
+
+    .ga-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+      gap:1rem;margin-bottom:1.25rem}
+    .ga-stat-card{background:var(--surface);border:1px solid var(--border2);
+      border-radius:12px;padding:1.25rem}
+    .ga-stat-label{font-size:.65rem;font-weight:700;letter-spacing:.1em;
+      text-transform:uppercase;color:var(--faint);margin-bottom:.5rem}
+    .ga-stat-value{font-size:1.75rem;font-weight:800;letter-spacing:-.04em}
+    .ga-stat-value.accent{color:var(--accent)}
+    .ga-stat-value.green{color:var(--green)}
+    .ga-stat-value.blue{color:var(--blue)}
+    .ga-stat-value.amber{color:var(--amber)}
+    .ga-stat-sub{font-size:.7rem;color:var(--muted);margin-top:.2rem}
+
+    .charts-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem}
+    .chart-panel{background:var(--surface);border:1px solid var(--border2);
+      border-radius:12px;overflow:hidden}
+    .chart-panel.wide{grid-column:span 2}
+    .panel-header{padding:.875rem 1.25rem;border-bottom:1px solid var(--border);
+      font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--faint);display:flex;align-items:center;gap:.5rem}
+    .panel-body{padding:.75rem 1.25rem}
+    .panel-body-chart{padding:1rem 1.25rem}
+    .repeat-panel{background:var(--surface);border:1px solid var(--border2);
+      border-radius:12px;overflow:hidden}
+
+    /* CONTROLS */
+    .table-controls{display:flex;gap:.75rem;margin-bottom:1.25rem;
+      flex-wrap:wrap;align-items:center}
+    .search-input{background:var(--surface2);border:1px solid var(--border2);
+      border-radius:8px;padding:.6rem 1rem;color:var(--text);
+      font-family:'Inter',sans-serif;font-size:.88rem;
+      outline:none;width:280px;
+      transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
+    .search-input::placeholder{color:var(--faint)}
+    .search-input:focus{border-color:var(--a-bdr);box-shadow:0 0 0 3px var(--a-dim)}
+    .filter-btn{background:oklch(100% 0 0 / .04);border:1px solid var(--border);
+      color:var(--muted);font-size:.78rem;padding:.5rem 1rem;border-radius:6px;
+      cursor:pointer;font-family:'Inter',sans-serif;
+      transition:color .15s,border-color .15s,background .15s}
+    .filter-btn:hover{color:var(--text);border-color:var(--border2)}
+    .filter-btn.active{background:var(--a-dim);border-color:var(--a-bdr);color:var(--accent)}
+    .btn-refresh{background:var(--accent);color:oklch(10% .02 133);border:none;
+      border-radius:8px;padding:.6rem 1.25rem;
+      font-family:'Inter',sans-serif;font-weight:700;font-size:.82rem;
+      cursor:pointer;margin-left:auto;
+      display:flex;align-items:center;gap:.35rem;
+      transition:opacity .15s,transform .15s}
+    .btn-refresh:hover{opacity:.85}
+    .btn-refresh:active{transform:scale(0.97)}
+    .results-count{font-size:.8rem;color:var(--muted)}
 
     /* TABLE */
-    .table-wrap { background: var(--gray); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-    .table-header { display: grid; grid-template-columns: 45px 1.8fr 1.2fr 130px 90px 130px; gap: 1rem; padding: 0.85rem 1.25rem; background: var(--gray2); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); border-bottom: 1px solid var(--border); }
-    .table-row { display: grid; grid-template-columns: 45px 1.8fr 1.2fr 130px 90px 130px; gap: 1rem; padding: 0.95rem 1.25rem; border-top: 1px solid var(--border); align-items: center; transition: background 0.15s; }
-    .table-row:hover { background: rgba(255,255,255,0.02); }
-    .row-num { color: var(--mid); font-size: 0.75rem; font-family: monospace; }
-    .row-email { font-size: 0.85rem; color: var(--white); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .row-orderid { font-family: monospace; font-size: 0.75rem; color: rgba(255,255,255,0.4); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; transition: color 0.15s; }
-    .row-orderid:hover { color: var(--accent2); }
-    .plan-tag { display: inline-block; padding: 0.22rem 0.65rem; border-radius: 4px; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.04em; }
-    .plan-carfax { background: rgba(232,255,63,0.1); color: var(--accent); }
-    .plan-autocheck { background: rgba(63,255,176,0.1); color: var(--accent2); }
-    .plan-combo { background: rgba(180,100,255,0.15); color: #c084fc; }
-    .row-amount { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--accent); }
-    .row-date { font-size: 0.75rem; color: var(--mid); line-height: 1.5; }
-    .row-date strong { color: rgba(255,255,255,0.6); font-weight: 400; }
+    .table-wrap{background:var(--surface);border:1px solid var(--border2);
+      border-radius:12px;overflow:hidden}
+    .table-header{display:grid;grid-template-columns:45px 1.8fr 1.2fr 130px 90px 130px;
+      gap:1rem;padding:.85rem 1.25rem;background:var(--surface2);
+      font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;
+      color:var(--faint);border-bottom:1px solid var(--border)}
+    .table-row{display:grid;grid-template-columns:45px 1.8fr 1.2fr 130px 90px 130px;
+      gap:1rem;padding:.95rem 1.25rem;border-top:1px solid var(--border);
+      align-items:center;transition:background .15s}
+    .table-row:hover{background:oklch(100% 0 0 / .02)}
+    .row-num{color:var(--faint);font-size:.75rem;font-family:monospace}
+    .row-email{font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .row-orderid{font-family:'Courier New',monospace;font-size:.75rem;color:var(--faint);
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+      cursor:pointer;transition:color .15s}
+    .row-orderid:hover{color:var(--green)}
+    .plan-tag{display:inline-block;padding:.22rem .65rem;border-radius:4px;
+      font-size:.7rem;font-weight:500;letter-spacing:.04em}
+    .plan-carfax{background:var(--a-dim);color:var(--accent);border:1px solid oklch(91% 0.215 133 / .15)}
+    .plan-autocheck{background:var(--g-dim);color:var(--green);border:1px solid var(--g-bdr)}
+    .plan-combo{background:oklch(72% 0.2 290 / .08);color:var(--purple);border:1px solid oklch(72% 0.2 290 / .2)}
+    .row-amount{font-weight:700;font-size:.95rem;color:var(--accent)}
+    .row-date{font-size:.75rem;color:var(--muted);line-height:1.5}
+    .row-date strong{color:var(--text);font-weight:400}
 
-    .empty-state { text-align: center; padding: 5rem 2rem; color: var(--mid); }
-    .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
-    .loading-state { text-align: center; padding: 4rem; color: var(--mid); }
-    .spinner { display: inline-block; width: 32px; height: 32px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin-bottom: 1rem; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .empty-state{text-align:center;padding:5rem 2rem;color:var(--muted)}
+    .empty-icon{margin-bottom:1rem;color:var(--faint)}
+    .loading-state{text-align:center;padding:4rem;color:var(--muted)}
+    .spinner{display:inline-block;width:32px;height:32px;
+      border:2px solid var(--border2);border-top-color:var(--accent);
+      border-radius:50%;animation:spin .75s linear infinite;margin-bottom:1rem;
+      display:block;margin:0 auto 1rem}
+    @keyframes spin{to{transform:rotate(360deg)}}
 
     /* PAGINATION */
-    .pagination { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; border-top: 1px solid var(--border); }
-    .page-info { font-size: 0.8rem; color: var(--mid); }
-    .page-btns { display: flex; gap: 0.5rem; }
-    .page-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--mid); padding: 0.4rem 0.9rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: all 0.15s; }
-    .page-btn:hover:not(:disabled) { background: rgba(255,255,255,0.1); color: var(--white); }
-    .page-btn.active { background: rgba(232,255,63,0.1); border-color: rgba(232,255,63,0.3); color: var(--accent); }
-    .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .pagination{display:flex;justify-content:space-between;align-items:center;
+      padding:1rem 1.25rem;border-top:1px solid var(--border)}
+    .page-info{font-size:.8rem;color:var(--muted)}
+    .page-btns{display:flex;gap:.5rem}
+    .page-btn{background:oklch(100% 0 0 / .04);border:1px solid var(--border);
+      color:var(--muted);padding:.4rem .9rem;border-radius:6px;
+      cursor:pointer;font-size:.8rem;font-family:'Inter',sans-serif;
+      transition:background .15s,color .15s}
+    .page-btn:hover:not(:disabled){background:oklch(100% 0 0 / .1);color:var(--text)}
+    .page-btn.active{background:var(--a-dim);border-color:var(--a-bdr);color:var(--accent)}
+    .page-btn:disabled{opacity:.3;cursor:not-allowed}
 
-    .copy-toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: var(--accent); color: var(--black); padding: 0.6rem 1.5rem; border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; }
-    .copy-toast.show { opacity: 1; }
+    .copy-toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);
+      background:var(--accent);color:oklch(10% .02 133);
+      padding:.6rem 1.5rem;border-radius:8px;
+      font-family:'Inter',sans-serif;font-weight:700;font-size:.85rem;
+      opacity:0;transition:opacity .3s;pointer-events:none;z-index:999}
+    .copy-toast.show{opacity:1}
 
-    @media(max-width:900px) {
-      .table-header, .table-row { grid-template-columns: 40px 1fr 100px 80px; }
-      .table-header span:nth-child(3), .table-row .row-orderid,
-      .table-header span:nth-child(6), .table-row .row-date { display: none; }
-      .admin-content { padding: 1rem; }
-      .stats-grid { grid-template-columns: 1fr 1fr; }
+    @media(max-width:900px){
+      .table-header,.table-row{grid-template-columns:40px 1fr 100px 80px}
+      .table-header span:nth-child(3),.table-row .row-orderid,
+      .table-header span:nth-child(6),.table-row .row-date{display:none}
+      .admin-content{padding:1rem}
+      .stats-grid{grid-template-columns:1fr 1fr}
+      .charts-row{grid-template-columns:1fr}
+      .chart-panel.wide{grid-column:unset}
     }
   </style>
 </head>
@@ -123,7 +269,7 @@
 <!-- LOGIN -->
 <div class="login-wrap" id="loginWrap">
   <div class="login-card">
-    <div class="login-logo">VIN<span>Record</span>Hub</div>
+    <div class="login-logo">VIN<span class="logo-r">Record</span><span class="logo-h">Hub</span></div>
     <h2>Admin Panel</h2>
     <p>Enter your admin token to access the dashboard.</p>
     <input type="password" class="login-input" id="tokenInput" placeholder="Admin token..." onkeypress="if(event.key==='Enter') login()"/>
@@ -136,7 +282,7 @@
 <div class="admin-wrap" id="adminWrap">
   <nav class="admin-nav">
     <div class="admin-logo">
-      VIN<span>Record</span>Hub
+      VIN<span class="logo-r">Record</span><span class="logo-h">Hub</span>
       <span class="admin-badge">Admin</span>
     </div>
     <div class="nav-right">
@@ -149,27 +295,27 @@
 
     <!-- STATS -->
     <div class="stats-grid">
-      <div class="stat-card yellow">
+      <div class="stat-card">
         <div class="stat-label">Total Orders</div>
         <div class="stat-value yellow" id="statTotal">—</div>
         <div class="stat-sub">all time</div>
       </div>
-      <div class="stat-card green">
+      <div class="stat-card">
         <div class="stat-label">Total Revenue</div>
         <div class="stat-value green" id="statRevenue">—</div>
         <div class="stat-sub">all time</div>
       </div>
-      <div class="stat-card yellow">
+      <div class="stat-card">
         <div class="stat-label">Today</div>
         <div class="stat-value yellow" id="statToday">—</div>
         <div class="stat-sub" id="statTodayRev">—</div>
       </div>
-      <div class="stat-card blue">
+      <div class="stat-card">
         <div class="stat-label">This Week</div>
         <div class="stat-value blue" id="statWeek">—</div>
         <div class="stat-sub" id="statWeekRev">—</div>
       </div>
-      <div class="stat-card green">
+      <div class="stat-card">
         <div class="stat-label">Avg Order Value</div>
         <div class="stat-value green" id="statAvg">—</div>
         <div class="stat-sub">per transaction</div>
@@ -177,83 +323,87 @@
     </div>
 
     <!-- ANALYTICS SECTION -->
-    <div style="margin-bottom:2rem">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem">
+    <div class="analytics-section">
+      <div class="analytics-header">
         <div>
-          <div style="font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);margin-bottom:.25rem">Analytics</div>
-          <div style="font-size:1rem;font-weight:700;color:var(--white)">Sales & Revenue Breakdown</div>
+          <div class="analytics-label">Analytics</div>
+          <div class="analytics-title">Sales &amp; Revenue Breakdown</div>
         </div>
-        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
-          <button onclick="setGARange(7)" id="ga7" style="background:rgba(232,255,63,0.1);border:1px solid rgba(232,255,63,0.3);color:var(--accent);font-size:.75rem;padding:.35rem .85rem;border-radius:6px;cursor:pointer">7 days</button>
-          <button onclick="setGARange(28)" id="ga28" style="background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--mid);font-size:.75rem;padding:.35rem .85rem;border-radius:6px;cursor:pointer">28 days</button>
-          <button onclick="loadGA()" style="background:var(--accent);color:#000;border:none;font-size:.75rem;font-weight:700;padding:.35rem .85rem;border-radius:6px;cursor:pointer">↻ Refresh</button>
-          <a href="https://analytics.google.com" target="_blank" style="background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--mid);font-size:.75rem;padding:.35rem .85rem;border-radius:6px;text-decoration:none">Open GA4 ↗</a>
+        <div class="analytics-controls">
+          <button onclick="setGARange(7)" id="ga7" class="ga-range-btn active">7 days</button>
+          <button onclick="setGARange(28)" id="ga28" class="ga-range-btn">28 days</button>
+          <button onclick="loadGA()" class="btn-ga-refresh">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.09"/></svg>
+            Refresh
+          </button>
+          <a href="https://analytics.google.com" target="_blank" class="btn-ga-link">Open GA4 ↗</a>
         </div>
       </div>
 
       <!-- PERIOD STAT CARDS -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-bottom:1.25rem">
-        <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid var(--accent)">
-          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Period Revenue</div>
-          <div style="font-size:1.75rem;font-weight:800;color:var(--accent);letter-spacing:-.04em" id="gaPeriodRev">—</div>
-          <div style="font-size:.7rem;margin-top:.2rem" id="gaRevDelta"></div>
+      <div class="ga-stats-grid">
+        <div class="ga-stat-card">
+          <div class="ga-stat-label">Period Revenue</div>
+          <div class="ga-stat-value accent" id="gaPeriodRev">—</div>
+          <div class="ga-stat-sub" id="gaRevDelta"></div>
         </div>
-        <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid var(--accent2)">
-          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Period Orders</div>
-          <div style="font-size:1.75rem;font-weight:800;color:var(--accent2);letter-spacing:-.04em" id="gaPeriodOrders">—</div>
-          <div style="font-size:.7rem;margin-top:.2rem" id="gaOrderDelta"></div>
+        <div class="ga-stat-card">
+          <div class="ga-stat-label">Period Orders</div>
+          <div class="ga-stat-value green" id="gaPeriodOrders">—</div>
+          <div class="ga-stat-sub" id="gaOrderDelta"></div>
         </div>
-        <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid #4285f4">
-          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Avg Order</div>
-          <div style="font-size:1.75rem;font-weight:800;color:#4285f4;letter-spacing:-.04em" id="gaAvgOrder">—</div>
-          <div style="font-size:.7rem;color:var(--mid);margin-top:.2rem">per transaction</div>
+        <div class="ga-stat-card">
+          <div class="ga-stat-label">Avg Order</div>
+          <div class="ga-stat-value blue" id="gaAvgOrder">—</div>
+          <div class="ga-stat-sub">per transaction</div>
         </div>
-        <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid #fbbc04">
-          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">All Time Rev</div>
-          <div style="font-size:1.75rem;font-weight:800;color:#fbbc04;letter-spacing:-.04em" id="gaAllRev">—</div>
-          <div style="font-size:.7rem;color:var(--mid);margin-top:.2rem" id="gaAllOrders"></div>
+        <div class="ga-stat-card">
+          <div class="ga-stat-label">All Time Rev</div>
+          <div class="ga-stat-value amber" id="gaAllRev">—</div>
+          <div class="ga-stat-sub" id="gaAllOrders"></div>
         </div>
       </div>
 
       <!-- CHARTS ROW -->
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem">
-
-        <!-- Daily Revenue Chart -->
-        <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;overflow:hidden;grid-column:span 2">
-          <div style="padding:.875rem 1.25rem;border-bottom:1px solid var(--border);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mid)">Daily Revenue</div>
-          <div style="padding:1rem 1.25rem" id="gaChart">
-            <div style="text-align:center;padding:1.5rem;color:var(--mid);font-size:.8rem">Loading...</div>
+      <div class="charts-row">
+        <div class="chart-panel wide">
+          <div class="panel-header">Daily Revenue</div>
+          <div class="panel-body-chart" id="gaChart">
+            <div style="text-align:center;padding:1.5rem;color:var(--muted);font-size:.8rem">Loading...</div>
           </div>
         </div>
-
-        <!-- Plan Breakdown -->
-        <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;overflow:hidden">
-          <div style="padding:.875rem 1.25rem;border-bottom:1px solid var(--border);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mid)">By Plan</div>
-          <div id="gaPlan" style="padding:.75rem 1.25rem">
-            <div style="text-align:center;padding:1.5rem;color:var(--mid);font-size:.8rem">Loading...</div>
+        <div class="chart-panel">
+          <div class="panel-header">By Plan</div>
+          <div class="panel-body" id="gaPlan">
+            <div style="text-align:center;padding:1.5rem;color:var(--muted);font-size:.8rem">Loading...</div>
           </div>
         </div>
-
       </div>
 
-      <!-- Repeat customers -->
-      <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;overflow:hidden">
-        <div style="padding:.875rem 1.25rem;border-bottom:1px solid var(--border);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mid)">🔄 Repeat Customers</div>
+      <!-- REPEAT CUSTOMERS -->
+      <div class="repeat-panel">
+        <div class="panel-header">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.09"/></svg>
+          Repeat Customers
+        </div>
         <div id="gaRepeat" style="padding:.5rem 0">
-          <div style="text-align:center;padding:1.5rem;color:var(--mid);font-size:.8rem">Loading...</div>
+          <div style="text-align:center;padding:1.5rem;color:var(--muted);font-size:.8rem">Loading...</div>
         </div>
       </div>
     </div>
 
     <!-- CONTROLS -->
     <div class="table-controls">
-      <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search email or order ID..." oninput="filterOrders()"/>
+      <input type="text" class="search-input" id="searchInput" placeholder="Search email or order ID..." oninput="filterOrders()"/>
       <button class="filter-btn active" onclick="setFilter('all', this)">All Plans</button>
       <button class="filter-btn" onclick="setFilter('carfax', this)">Carfax</button>
       <button class="filter-btn" onclick="setFilter('autocheck', this)">AutoCheck</button>
       <button class="filter-btn" onclick="setFilter('combo', this)">Combo</button>
       <span class="results-count" id="resultsCount"></span>
-      <button class="btn-refresh" onclick="loadOrders()">↻ Refresh</button>
+      <button class="btn-refresh" onclick="loadOrders()">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.09"/></svg>
+        Refresh
+      </button>
     </div>
 
     <!-- TABLE -->
@@ -342,7 +492,7 @@
         'Updated ' + new Date().toLocaleTimeString();
     } catch (err) {
       document.getElementById('tableBody').innerHTML =
-        `<div class="empty-state"><div class="empty-icon">⚠️</div><p>Failed to load: ${err.message}</p></div>`;
+        `<div class="empty-state"><div class="empty-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><p>Failed to load: ${err.message}</p></div>`;
     }
   }
 
@@ -350,7 +500,6 @@
     allOrders = data.orders || [];
     const s = data.stats || {};
 
-    // Update stats
     document.getElementById('statTotal').textContent = s.total || 0;
     document.getElementById('statRevenue').textContent = '$' + (s.revenue || '0.00');
     document.getElementById('statAvg').textContent = '$' + (s.avg || '0.00');
@@ -411,7 +560,6 @@
     const pageOrders = filteredOrders.slice(start, end);
     const totalPages = Math.ceil(filteredOrders.length / PER_PAGE);
 
-    // Page info
     if (filteredOrders.length === 0) {
       document.getElementById('pageInfo').textContent = 'No orders';
     } else {
@@ -419,7 +567,6 @@
         `${start + 1}–${Math.min(end, filteredOrders.length)} of ${filteredOrders.length}`;
     }
 
-    // Page buttons
     const pageBtns = document.getElementById('pageBtns');
     pageBtns.innerHTML = '';
     const prevBtn = document.createElement('button');
@@ -429,7 +576,6 @@
     prevBtn.onclick = () => changePage(-1);
     pageBtns.appendChild(prevBtn);
 
-    // Show page numbers
     for (let p = Math.max(1, currentPage - 2); p <= Math.min(totalPages, currentPage + 2); p++) {
       const btn = document.createElement('button');
       btn.className = 'page-btn' + (p === currentPage ? ' active' : '');
@@ -445,14 +591,12 @@
     nextBtn.onclick = () => changePage(1);
     pageBtns.appendChild(nextBtn);
 
-    // Empty state
     if (pageOrders.length === 0) {
       document.getElementById('tableBody').innerHTML =
-        `<div class="empty-state"><div class="empty-icon">📭</div><p>No orders found</p></div>`;
+        `<div class="empty-state"><div class="empty-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg></div><p>No orders found</p></div>`;
       return;
     }
 
-    // Rows
     document.getElementById('tableBody').innerHTML = pageOrders.map((o, i) => {
       const plan = (o.plan || 'carfax').toLowerCase();
       const pc = planConfig[plan] || planConfig.carfax;
@@ -478,7 +622,6 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Copy order ID to clipboard
   function copyId(id) {
     navigator.clipboard.writeText(id).then(() => {
       const toast = document.getElementById('copyToast');
@@ -503,12 +646,8 @@
 
   function setGARange(days) {
     gaRange = days;
-    document.getElementById('ga7').style.background = days === 7 ? 'rgba(232,255,63,0.1)' : 'rgba(255,255,255,.04)';
-    document.getElementById('ga7').style.color = days === 7 ? 'var(--accent)' : 'var(--mid)';
-    document.getElementById('ga7').style.borderColor = days === 7 ? 'rgba(232,255,63,0.3)' : 'var(--border)';
-    document.getElementById('ga28').style.background = days === 28 ? 'rgba(232,255,63,0.1)' : 'rgba(255,255,255,.04)';
-    document.getElementById('ga28').style.color = days === 28 ? 'var(--accent)' : 'var(--mid)';
-    document.getElementById('ga28').style.borderColor = days === 28 ? 'rgba(232,255,63,0.3)' : 'var(--border)';
+    document.getElementById('ga7').classList.toggle('active', days === 7);
+    document.getElementById('ga28').classList.toggle('active', days === 28);
     loadGA();
   }
 
@@ -519,24 +658,21 @@
       const d = await res.json();
       if (d.error) return;
 
-      // Period stats
       document.getElementById('gaPeriodRev').textContent = '$' + d.period.revenue;
       document.getElementById('gaPeriodOrders').textContent = d.period.orders;
       document.getElementById('gaAvgOrder').textContent = '$' + d.avgOrder;
       document.getElementById('gaAllRev').textContent = '$' + d.allTimeRevenue;
       document.getElementById('gaAllOrders').textContent = d.allTimeOrders + ' total orders';
 
-      // Deltas
       const rd = d.deltas.revenue;
       const od = d.deltas.orders;
       document.getElementById('gaRevDelta').innerHTML = rd !== null
-        ? `<span style="color:${rd >= 0 ? 'var(--accent2)' : 'var(--red)'}">${rd >= 0 ? '↑' : '↓'} ${Math.abs(rd)}% vs prev period</span>`
-        : '<span style="color:var(--mid)">first period</span>';
+        ? `<span style="color:${rd >= 0 ? 'var(--green)' : 'var(--red)'}">${rd >= 0 ? '↑' : '↓'} ${Math.abs(rd)}% vs prev period</span>`
+        : '<span style="color:var(--faint)">first period</span>';
       document.getElementById('gaOrderDelta').innerHTML = od !== null
-        ? `<span style="color:${od >= 0 ? 'var(--accent2)' : 'var(--red)'}">${od >= 0 ? '↑' : '↓'} ${Math.abs(od)}% vs prev period</span>`
-        : '<span style="color:var(--mid)">first period</span>';
+        ? `<span style="color:${od >= 0 ? 'var(--green)' : 'var(--red)'}">${od >= 0 ? '↑' : '↓'} ${Math.abs(od)}% vs prev period</span>`
+        : '<span style="color:var(--faint)">first period</span>';
 
-      // Daily revenue bar chart
       if (d.dailyRevenue && d.dailyRevenue.length) {
         const max = Math.max(...d.dailyRevenue.map(r => r.revenue), 0.01);
         document.getElementById('gaChart').innerHTML = `
@@ -545,27 +681,26 @@
               const h = Math.max(4, Math.round((r.revenue / max) * 72));
               const day = new Date(r.date).toLocaleDateString('en-US', {month:'short',day:'numeric'});
               return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:default" title="${day}: $${r.revenue}">
-                <div style="font-size:.58rem;color:var(--accent);font-weight:700">$${r.revenue > 0 ? r.revenue.toFixed(0) : ''}</div>
-                <div style="width:100%;height:${h}px;background:linear-gradient(to top,var(--accent),rgba(200,255,0,.4));border-radius:3px 3px 0 0"></div>
+                <div style="font-size:.58rem;color:var(--accent);font-weight:700">${r.revenue > 0 ? '$' + r.revenue.toFixed(0) : ''}</div>
+                <div style="width:100%;height:${h}px;background:linear-gradient(to top,var(--accent),var(--a-bdr));border-radius:3px 3px 0 0"></div>
               </div>`;
             }).join('')}
           </div>
           <div style="display:flex;gap:4px">
             ${d.dailyRevenue.map(r => {
               const day = new Date(r.date).toLocaleDateString('en-US', {month:'short',day:'numeric'});
-              return `<div style="flex:1;text-align:center;font-size:.55rem;color:var(--mid)">${day.split(' ')[1]}</div>`;
+              return `<div style="flex:1;text-align:center;font-size:.55rem;color:var(--faint)">${day.split(' ')[1]}</div>`;
             }).join('')}
           </div>`;
       } else {
-        document.getElementById('gaChart').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--mid);font-size:.8rem">No orders in this period</div>';
+        document.getElementById('gaChart').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:.8rem">No orders in this period</div>';
       }
 
-      // Plan breakdown
       const planNames = { carfax:'Carfax', standard:'Carfax', autocheck:'AutoCheck', plus:'AutoCheck', combo:'Combo' };
-      const planColors = { carfax:'var(--accent)', standard:'var(--accent)', autocheck:'var(--accent2)', plus:'var(--accent2)', combo:'#c084fc' };
+      const planColors = { carfax:'var(--accent)', standard:'var(--accent)', autocheck:'var(--green)', plus:'var(--green)', combo:'var(--purple)' };
       const totalPlan = Object.values(d.byPlan).reduce((s, n) => s + n, 0);
       document.getElementById('gaPlan').innerHTML = totalPlan === 0
-        ? '<div style="text-align:center;padding:1rem;color:var(--mid);font-size:.8rem">No orders</div>'
+        ? '<div style="text-align:center;padding:1rem;color:var(--muted);font-size:.8rem">No orders</div>'
         : Object.entries(d.byPlan).map(([plan, count]) => {
             const pct = Math.round(count / totalPlan * 100);
             return `<div style="margin-bottom:.75rem">
@@ -573,20 +708,19 @@
                 <span style="font-size:.8rem;font-weight:600">${planNames[plan] || plan}</span>
                 <span style="font-size:.8rem;color:${planColors[plan] || 'var(--accent)'}"><strong>${count}</strong> (${pct}%)</span>
               </div>
-              <div style="height:4px;background:rgba(255,255,255,.06);border-radius:2px">
+              <div style="height:4px;background:oklch(100% 0 0 / .06);border-radius:2px">
                 <div style="height:4px;background:${planColors[plan] || 'var(--accent)'};border-radius:2px;width:${pct}%;transition:width .5s"></div>
               </div>
             </div>`;
           }).join('');
 
-      // Repeat customers
       document.getElementById('gaRepeat').innerHTML = d.repeatCustomers && d.repeatCustomers.length
         ? d.repeatCustomers.map(c => `
             <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 1.25rem;border-bottom:1px solid var(--border)">
-              <span style="font-size:.82rem;color:var(--mid)">${c.email}</span>
-              <span style="font-size:.78rem;font-weight:700;color:var(--accent2);background:rgba(63,255,176,.1);padding:.15rem .5rem;border-radius:4px">${c.count}x buyer</span>
+              <span style="font-size:.82rem;color:var(--muted)">${c.email}</span>
+              <span style="font-size:.78rem;font-weight:700;color:var(--green);background:var(--g-dim);padding:.15rem .5rem;border-radius:4px">${c.count}x buyer</span>
             </div>`).join('')
-        : '<div style="text-align:center;padding:1.5rem;color:var(--mid);font-size:.8rem">No repeat customers yet</div>';
+        : '<div style="text-align:center;padding:1.5rem;color:var(--muted);font-size:.8rem">No repeat customers yet</div>';
 
     } catch(e) {
       console.log('Analytics error:', e);

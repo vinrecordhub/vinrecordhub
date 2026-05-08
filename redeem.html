@@ -2,140 +2,187 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+  <meta name="theme-color" content="#060608"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Redeem Report — VIN Record Hub</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <title>Redeem Report — VINRecordHub</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --black: #080808; --white: #f4f4ef; --accent: #e8ff3f; --accent2: #3fffb0; --gray: #111; --gray2: #1a1a1a; --mid: #666; --border: rgba(255,255,255,0.07); }
-    body { background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; font-weight: 300; min-height: 100vh; display: flex; flex-direction: column; }
-    nav { padding: 1.25rem 3rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; text-decoration: none; color: var(--white); }
-    .logo span { color: var(--accent); }
-
-    .wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 3rem 2rem; }
-
-    .card {
-      background: var(--gray); border: 1px solid var(--border);
-      border-radius: 20px; padding: 3.5rem 3rem; max-width: 520px; width: 100%;
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:       oklch(7% 0.008 133);
+      --surface:  oklch(10.5% 0.010 133);
+      --surface2: oklch(13.5% 0.012 133);
+      --border:   oklch(100% 0 0 / .07);
+      --border2:  oklch(100% 0 0 / .13);
+      --text:     oklch(97% 0.005 133);
+      --muted:    oklch(67% 0.007 133);
+      --faint:    oklch(42% 0.007 133);
+      --accent:   oklch(91% 0.215 133);
+      --a-dim:    oklch(91% 0.215 133 / .08);
+      --a-bdr:    oklch(91% 0.215 133 / .28);
+      --a-glow:   oklch(91% 0.215 133 / .10);
+      --green:    oklch(72% 0.18 155);
+      --g-dim:    oklch(72% 0.18 155 / .08);
+      --g-bdr:    oklch(72% 0.18 155 / .22);
+      --red:      oklch(62% 0.22 26);
+      --r-dim:    oklch(62% 0.22 26 / .08);
+      --r-bdr:    oklch(62% 0.22 26 / .22);
+      --ease:     cubic-bezier(0.25,1,0.5,1);
+      --expo:     cubic-bezier(0.16,1,0.3,1);
     }
+    html{overflow-x:hidden}
+    body{background:var(--bg);color:var(--text);
+      font-family:'Inter',-apple-system,sans-serif;
+      font-weight:400;min-height:100vh;display:flex;flex-direction:column;
+      -webkit-font-smoothing:antialiased}
+    body::before{content:'';position:fixed;inset:0;
+      background-image:
+        linear-gradient(var(--a-bdr) 1px,transparent 1px),
+        linear-gradient(90deg,var(--a-bdr) 1px,transparent 1px);
+      background-size:72px 72px;
+      mask-image:radial-gradient(ellipse 60% 50% at 50% 0%,black 0%,transparent 100%);
+      opacity:.3;pointer-events:none;z-index:0}
 
-    /* STATES */
-    .state { display: none; }
-    .state.active { display: block; }
+    nav{position:relative;z-index:10;
+      background:oklch(7% 0.008 133 / .88);backdrop-filter:blur(20px) saturate(1.8);
+      border-bottom:1px solid var(--border);
+      padding:0 clamp(1.25rem,5vw,3rem);height:62px;
+      display:flex;align-items:center;justify-content:space-between}
+    .logo{font-size:1rem;font-weight:800;letter-spacing:-.04em;text-decoration:none;color:var(--text)}
+    .logo-r{color:var(--accent)}
+    .logo-h{color:var(--faint);font-weight:400}
+    .nav-back{font-size:.82rem;color:var(--muted);text-decoration:none;
+      transition:color .15s}
+    .nav-back:hover{color:var(--text)}
 
-    /* LOADING STATE */
-    .loading-wrap { text-align: center; padding: 2rem 0; }
-    .spinner {
-      width: 48px; height: 48px; border-radius: 50%;
-      border: 3px solid rgba(255,255,255,0.1);
-      border-top-color: var(--accent);
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 1.5rem;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .wrap{flex:1;display:flex;align-items:center;justify-content:center;
+      padding:3rem 2rem;position:relative;z-index:1}
 
-    /* INVALID STATE */
-    .invalid-icon { font-size: 3rem; margin-bottom: 1rem; text-align: center; }
-    .invalid-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.6rem; text-align: center; margin-bottom: 0.75rem; color: #ff6b6b; }
-    .invalid-desc { color: var(--mid); text-align: center; font-size: 0.9rem; line-height: 1.7; }
+    .card{background:var(--surface);border:1px solid var(--border2);
+      border-radius:20px;padding:3rem 2.75rem;max-width:500px;width:100%;
+      box-shadow:0 0 0 1px var(--border),0 24px 60px oklch(0% 0 0 / .6),0 0 60px var(--a-glow)}
 
-    /* FORM STATE */
-    .card-eyebrow { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); margin-bottom: 0.75rem; }
-    .card-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.8rem; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
-    .card-title span { color: var(--accent); }
-    .card-sub { font-size: 0.88rem; color: var(--mid); margin-bottom: 2rem; line-height: 1.7; }
+    .state{display:none}
+    .state.active{display:block}
 
-    .code-display {
-      background: var(--gray2); border: 1px solid var(--border);
-      border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 2rem;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .code-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); }
-    .code-value { font-family: monospace; font-size: 1rem; letter-spacing: 0.1em; color: var(--accent); }
+    /* LOADING */
+    .loading-wrap{text-align:center;padding:2rem 0}
+    .spinner{width:44px;height:44px;border-radius:50%;
+      border:2px solid var(--border2);border-top-color:var(--accent);
+      animation:spin .75s linear infinite;margin:0 auto 1.5rem}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading-wrap p{font-size:.88rem;color:var(--muted)}
 
-    label { display: block; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mid); margin-bottom: 0.5rem; }
-    input {
-      width: 100%; background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
-      padding: 0.95rem 1.1rem; color: var(--white);
-      font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
-      outline: none; margin-bottom: 1.25rem;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    input::placeholder { color: rgba(255,255,255,0.2); }
-    input:focus { border-color: rgba(232,255,63,0.4); background: rgba(255,255,255,0.07); }
-    input.error { border-color: rgba(255,80,80,0.5); margin-bottom: 0.4rem; }
-    .error-msg { font-size: 0.78rem; color: #ff6b6b; margin-bottom: 1rem; }
+    /* INVALID */
+    .invalid-icon-wrap{width:64px;height:64px;border-radius:50%;
+      background:var(--r-dim);border:1px solid var(--r-bdr);
+      display:flex;align-items:center;justify-content:center;
+      margin:0 auto 1.25rem;color:var(--red)}
+    .invalid-title{font-size:1.5rem;font-weight:800;letter-spacing:-.035em;
+      text-align:center;margin-bottom:.65rem;color:var(--red)}
+    .invalid-desc{color:var(--muted);text-align:center;font-size:.88rem;line-height:1.76}
+    .invalid-desc a{color:var(--accent);text-decoration:none}
+    .invalid-desc a:hover{text-decoration:underline}
 
-    .btn-submit {
-      width: 100%; background: var(--accent); color: var(--black);
-      border: none; border-radius: 8px; padding: 1rem;
-      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem;
-      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(232,255,63,0.3); }
-    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    /* FORM */
+    .card-eyebrow{font-size:.67rem;font-weight:700;letter-spacing:.12em;
+      text-transform:uppercase;color:var(--accent);margin-bottom:.65rem}
+    .card-title{font-size:1.75rem;font-weight:800;letter-spacing:-.04em;margin-bottom:.45rem}
+    .card-title em{font-style:normal;color:var(--accent)}
+    .card-sub{font-size:.875rem;color:var(--muted);margin-bottom:1.75rem;line-height:1.76}
 
-    /* SUCCESS STATE */
-    .success-icon-wrap {
-      width: 72px; height: 72px; border-radius: 50%;
-      background: rgba(63,255,176,0.1); border: 2px solid rgba(63,255,176,0.3);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 2rem; margin: 0 auto 1.5rem;
-      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    @keyframes popIn { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
-    .success-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.7rem; text-align: center; margin-bottom: 0.75rem; }
-    .success-title span { color: var(--accent2); }
-    .success-desc { color: var(--mid); text-align: center; font-size: 0.9rem; line-height: 1.75; margin-bottom: 2rem; }
-    .success-email {
-      background: var(--gray2); border: 1px solid var(--border);
-      border-radius: 10px; padding: 1rem 1.25rem; text-align: center;
-      font-size: 0.88rem; color: var(--accent); margin-bottom: 2rem;
-      font-family: monospace;
-    }
-    .btn-another {
-      display: block; text-align: center; width: 100%;
-      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
-      border-radius: 8px; padding: 0.9rem;
-      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem;
-      text-decoration: none; color: var(--white);
-      transition: background 0.2s;
-    }
-    .btn-another:hover { background: rgba(255,255,255,0.1); }
+    .code-display{background:var(--surface2);border:1px solid var(--border2);
+      border-radius:10px;padding:.95rem 1.1rem;margin-bottom:1.75rem;
+      display:flex;justify-content:space-between;align-items:center}
+    .code-label{font-size:.67rem;font-weight:700;letter-spacing:.1em;
+      text-transform:uppercase;color:var(--faint)}
+    .code-value{font-family:'Courier New',monospace;font-size:.95rem;
+      letter-spacing:.1em;color:var(--accent)}
+
+    .fl{display:block;font-size:.67rem;font-weight:700;letter-spacing:.1em;
+      text-transform:uppercase;color:var(--faint);margin-bottom:.5rem}
+    .fi{width:100%;background:var(--surface2);border:1px solid var(--border2);
+      border-radius:9px;padding:.9rem 1.1rem;color:var(--text);
+      font-family:'Inter',sans-serif;font-size:.92rem;
+      outline:none;margin-bottom:1.25rem;
+      transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
+    .fi::placeholder{color:var(--faint);font-weight:400}
+    .fi:focus{border-color:var(--a-bdr);box-shadow:0 0 0 3px var(--a-dim)}
+    .fi.error{border-color:var(--r-bdr);box-shadow:0 0 0 3px var(--r-dim);margin-bottom:.4rem}
+    .fh{font-size:.72rem;color:var(--faint);margin-top:-.85rem;margin-bottom:1.1rem}
+    .error-msg{font-size:.78rem;color:var(--red);margin-bottom:1rem;
+      padding:.55rem .85rem;background:var(--r-dim);
+      border-radius:7px;border:1px solid var(--r-bdr)}
+
+    .btn-submit{width:100%;background:var(--accent);color:oklch(10% .02 133);
+      border:none;border-radius:9px;padding:1rem;
+      font-family:'Inter',sans-serif;font-weight:800;font-size:.92rem;
+      cursor:pointer;
+      transition:opacity .15s,transform .2s var(--ease),box-shadow .2s}
+    .btn-submit:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 8px 28px var(--a-glow)}
+    .btn-submit:active{transform:scale(0.98)}
+    .btn-submit:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+
+    /* SUCCESS */
+    .success-icon-wrap{width:72px;height:72px;border-radius:50%;
+      background:var(--g-dim);border:1px solid var(--g-bdr);
+      display:flex;align-items:center;justify-content:center;
+      margin:0 auto 1.5rem;color:var(--green);
+      opacity:0;transform:scale(0.85);
+      animation:popIn .45s var(--expo) forwards}
+    @keyframes popIn{to{opacity:1;transform:scale(1)}}
+    .success-title{font-size:1.65rem;font-weight:800;letter-spacing:-.04em;
+      text-align:center;margin-bottom:.65rem}
+    .success-title em{font-style:normal;color:var(--green)}
+    .success-desc{color:var(--muted);text-align:center;font-size:.88rem;line-height:1.76;margin-bottom:1.75rem}
+    .success-email{background:var(--surface2);border:1px solid var(--border2);
+      border-radius:10px;padding:.95rem 1.25rem;text-align:center;
+      font-size:.85rem;color:var(--accent);margin-bottom:1.75rem;
+      font-family:'Courier New',monospace;letter-spacing:.04em}
+    .btn-another{display:block;text-align:center;width:100%;
+      background:oklch(100% 0 0 / .06);border:1px solid var(--border2);
+      border-radius:9px;padding:.9rem;
+      font-family:'Inter',sans-serif;font-weight:700;font-size:.88rem;
+      text-decoration:none;color:var(--text);
+      transition:background .15s,transform .15s}
+    .btn-another:hover{background:oklch(100% 0 0 / .1)}
+    .btn-another:active{transform:scale(0.98)}
   </style>
 </head>
 <body>
 
 <nav>
-  <a href="/" class="logo">VIN<span>Record</span>Hub</a>
+  <a href="/" class="logo">VIN<span class="logo-r">Record</span><span class="logo-h">Hub</span></a>
+  <a href="/" class="nav-back">← Back to Home</a>
 </nav>
 
 <div class="wrap">
   <div class="card">
 
-    <!-- LOADING -->
     <div class="state active" id="stateLoading">
       <div class="loading-wrap">
         <div class="spinner"></div>
-        <p style="color:var(--mid)">Validating your code...</p>
+        <p>Validating your code...</p>
       </div>
     </div>
 
-    <!-- INVALID -->
     <div class="state" id="stateInvalid">
-      <div class="invalid-icon">❌</div>
+      <div class="invalid-icon-wrap">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      </div>
       <div class="invalid-title">Invalid Code</div>
       <p class="invalid-desc" id="invalidMsg">This redemption code is invalid or has already been used. Please check your email for the correct code or contact support.</p>
       <br/>
-      <p class="invalid-desc"><a href="mailto:support@vinrecordhub.com" style="color:var(--accent)">support@vinrecordhub.com</a></p>
+      <p class="invalid-desc"><a href="mailto:support@vinrecordhub.com">support@vinrecordhub.com</a></p>
     </div>
 
-    <!-- FORM -->
     <div class="state" id="stateForm">
       <div class="card-eyebrow">Redeem Your Report</div>
-      <h1 class="card-title">Enter a <span>VIN</span></h1>
+      <h1 class="card-title">Enter a <em>VIN</em></h1>
       <p class="card-sub">Your redemption code is valid. Enter the VIN of the vehicle you want to check and your email to receive the report.</p>
 
       <div class="code-display">
@@ -143,22 +190,23 @@
         <span class="code-value" id="codeDisplay">—</span>
       </div>
 
-      <label>VIN Number</label>
-      <input type="text" id="vinInput" placeholder="17-character VIN" maxlength="17" oninput="this.value = this.value.toUpperCase()"/>
+      <label class="fl">VIN Number</label>
+      <input class="fi" type="text" id="vinInput" placeholder="17-character VIN" maxlength="17" oninput="this.value = this.value.toUpperCase()"/>
 
-      <label>Email Address</label>
-      <input type="email" id="emailInput" placeholder="your@email.com"/>
-      <p style="font-size:0.78rem;color:var(--mid);margin-top:-0.75rem;margin-bottom:1.25rem">Report will be delivered here within 60 seconds.</p>
+      <label class="fl">Email Address</label>
+      <input class="fi" type="email" id="emailInput" placeholder="your@email.com"/>
+      <p class="fh">Report will be delivered here within 60 seconds.</p>
 
       <div id="formError" class="error-msg" style="display:none"></div>
 
       <button class="btn-submit" id="submitBtn" onclick="submitRedeem()">Get My Report →</button>
     </div>
 
-    <!-- SUCCESS -->
     <div class="state" id="stateSuccess">
-      <div class="success-icon-wrap">✓</div>
-      <h2 class="success-title">Report <span>Sent!</span></h2>
+      <div class="success-icon-wrap">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2 class="success-title">Report <em>Sent!</em></h2>
       <p class="success-desc">Your vehicle history report is on its way. Check your inbox — it should arrive within 60 seconds.</p>
       <div class="success-email" id="successEmail">—</div>
       <a href="/" class="btn-another">← Run Another VIN</a>
@@ -250,7 +298,6 @@
     }
   }
 
-  // Kick off validation immediately
   validateCode();
 </script>
 </body>

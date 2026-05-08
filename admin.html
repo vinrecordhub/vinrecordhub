@@ -253,6 +253,7 @@
       opacity:0;transition:opacity .3s;pointer-events:none;z-index:999}
     .copy-toast.show{opacity:1}
 
+    :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
     @media(max-width:900px){
       .table-header,.table-row{grid-template-columns:40px 1fr 100px 80px}
       .table-header span:nth-child(3),.table-row .row-orderid,
@@ -272,7 +273,8 @@
     <div class="login-logo">VIN<span class="logo-r">Record</span><span class="logo-h">Hub</span></div>
     <h2>Admin Panel</h2>
     <p>Enter your admin token to access the dashboard.</p>
-    <input type="password" class="login-input" id="tokenInput" placeholder="Admin token..." onkeypress="if(event.key==='Enter') login()"/>
+    <label for="tokenInput" style="display:none">Admin token</label>
+    <input type="password" class="login-input" id="tokenInput" placeholder="Admin token..." aria-label="Admin token" autocomplete="current-password" onkeypress="if(event.key==='Enter') login()"/>
     <button class="login-btn" id="loginBtn" onclick="login()">Sign In →</button>
     <div class="login-err" id="loginErr">Invalid token. Please try again.</div>
   </div>
@@ -394,7 +396,7 @@
 
     <!-- CONTROLS -->
     <div class="table-controls">
-      <input type="text" class="search-input" id="searchInput" placeholder="Search email or order ID..." oninput="filterOrders()"/>
+      <input type="text" class="search-input" id="searchInput" placeholder="Search email or order ID..." aria-label="Search orders by email or order ID" autocomplete="off" oninput="filterOrders()"/>
       <button class="filter-btn active" onclick="setFilter('all', this)">All Plans</button>
       <button class="filter-btn" onclick="setFilter('carfax', this)">Carfax</button>
       <button class="filter-btn" onclick="setFilter('autocheck', this)">AutoCheck</button>
@@ -433,7 +435,11 @@
 
 <div class="copy-toast" id="copyToast">Copied!</div>
 
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script>
+  // ─── HELPERS ──────────────────────────────────────────────
+  function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+
   // ─── STATE ────────────────────────────────────────────────
   let allOrders = [];
   let filteredOrders = [];
@@ -603,12 +609,14 @@
       const date = new Date(o.created_at);
       const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
       const timeStr = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-      const shortId = (o.paypal_order_id || '').substring(0, 16) + '...';
+      const safeEmail = escH(o.email);
+      const safeOrderId = escH(o.paypal_order_id || '');
+      const shortId = safeOrderId.substring(0, 16) + (safeOrderId.length > 16 ? '...' : '');
 
       return `<div class="table-row">
         <span class="row-num">${start + i + 1}</span>
-        <span class="row-email" title="${o.email}">${o.email || '—'}</span>
-        <span class="row-orderid" title="Click to copy: ${o.paypal_order_id}" onclick="copyId('${o.paypal_order_id}')">${shortId}</span>
+        <span class="row-email" title="${safeEmail}">${safeEmail || '—'}</span>
+        <span class="row-orderid" title="Click to copy" data-id="${safeOrderId}" onclick="copyId(this.dataset.id)">${shortId}</span>
         <span><span class="plan-tag ${pc.cls}">${pc.label}</span></span>
         <span class="row-amount">$${parseFloat(o.amount || 0).toFixed(2)}</span>
         <span class="row-date"><strong>${dateStr}</strong><br/>${timeStr}</span>
@@ -631,6 +639,10 @@
   }
 
   // ─── INIT ─────────────────────────────────────────────────
+  if(typeof gsap!=='undefined'){
+    gsap.from('.login-card',{opacity:0,y:24,duration:.5,ease:'power3.out'});
+  }
+
   const savedToken = sessionStorage.getItem('adminToken');
   if (savedToken) {
     adminToken = savedToken;
@@ -717,8 +729,8 @@
       document.getElementById('gaRepeat').innerHTML = d.repeatCustomers && d.repeatCustomers.length
         ? d.repeatCustomers.map(c => `
             <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 1.25rem;border-bottom:1px solid var(--border)">
-              <span style="font-size:.82rem;color:var(--muted)">${c.email}</span>
-              <span style="font-size:.78rem;font-weight:700;color:var(--green);background:var(--g-dim);padding:.15rem .5rem;border-radius:4px">${c.count}x buyer</span>
+              <span style="font-size:.82rem;color:var(--muted)">${escH(c.email)}</span>
+              <span style="font-size:.78rem;font-weight:700;color:var(--green);background:var(--g-dim);padding:.15rem .5rem;border-radius:4px">${parseInt(c.count)||0}x buyer</span>
             </div>`).join('')
         : '<div style="text-align:center;padding:1.5rem;color:var(--muted);font-size:.8rem">No repeat customers yet</div>';
 

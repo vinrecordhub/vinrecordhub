@@ -151,6 +151,7 @@
       transition:background .15s,transform .15s}
     .btn-another:hover{background:oklch(100% 0 0 / .1)}
     .btn-another:active{transform:scale(0.98)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
   </style>
 </head>
 <body>
@@ -190,14 +191,15 @@
         <span class="code-value" id="codeDisplay">—</span>
       </div>
 
-      <label class="fl">VIN Number</label>
-      <input class="fi" type="text" id="vinInput" placeholder="17-character VIN" maxlength="17" oninput="this.value = this.value.toUpperCase()"/>
+      <label class="fl" for="vinInput">VIN Number</label>
+      <input class="fi" type="text" id="vinInput" placeholder="17-character VIN" maxlength="17" autocomplete="off" aria-describedby="vinNote" aria-invalid="false" oninput="this.value = this.value.toUpperCase()"/>
+      <p class="fh" id="vinNote">Found on dashboard, door jamb, or vehicle title.</p>
 
-      <label class="fl">Email Address</label>
-      <input class="fi" type="email" id="emailInput" placeholder="your@email.com"/>
-      <p class="fh">Report will be delivered here within 60 seconds.</p>
+      <label class="fl" for="emailInput">Email Address</label>
+      <input class="fi" type="email" id="emailInput" placeholder="your@email.com" aria-describedby="emailNote"/>
+      <p class="fh" id="emailNote">Report will be delivered here within 60 seconds.</p>
 
-      <div id="formError" class="error-msg" style="display:none"></div>
+      <div id="formError" class="error-msg" role="alert" aria-live="assertive" style="display:none"></div>
 
       <button class="btn-submit" id="submitBtn" onclick="submitRedeem()">Get My Report →</button>
     </div>
@@ -215,6 +217,7 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script>
   const params = new URLSearchParams(window.location.search);
   const code = params.get('code')?.toUpperCase();
@@ -259,12 +262,14 @@
 
     errorEl.style.display = 'none';
 
-    if (vin.length !== 17) {
-      errorEl.textContent = 'Please enter a valid 17-character VIN.';
+    if (!/^[A-HJ-NPR-Z0-9]{17}$/.test(vin)) {
+      errorEl.textContent = 'Please enter a valid 17-character VIN (no I, O, or Q).';
       errorEl.style.display = 'block';
+      document.getElementById('vinInput').setAttribute('aria-invalid','true');
       return;
     }
-    if (!email.includes('@') || !email.includes('.')) {
+    document.getElementById('vinInput').setAttribute('aria-invalid','false');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
       errorEl.textContent = 'Please enter a valid email address.';
       errorEl.style.display = 'block';
       return;
@@ -299,6 +304,11 @@
   }
 
   validateCode();
+
+  // GSAP entrance animation
+  if(typeof gsap!=='undefined'){
+    gsap.from('.card',{opacity:0,y:24,duration:.55,ease:'power3.out'});
+  }
 </script>
 </body>
 </html>

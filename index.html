@@ -513,12 +513,32 @@
       #vrh-quick-replies{bottom:80px;right:1rem}
       .vrh-qr-btn{font-size:.73rem;padding:.45rem .875rem}
     }
+
+    /* FOCUS */
+    :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+    /* HERO AURORA */
+    .hero-aura{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+    .hero-aura-orb{position:absolute;border-radius:50%;filter:blur(70px)}
+    .aura-1{width:600px;height:600px;
+      background:radial-gradient(circle,oklch(76% .145 52 / .09),transparent 65%);
+      top:-160px;right:3%;animation:aura1 14s ease-in-out infinite}
+    .aura-2{width:500px;height:500px;
+      background:radial-gradient(circle,oklch(68% .16 245 / .06),transparent 65%);
+      bottom:-80px;left:3%;animation:aura2 19s ease-in-out infinite}
+    .aura-3{width:380px;height:380px;
+      background:radial-gradient(circle,oklch(72% .15 155 / .05),transparent 65%);
+      top:35%;left:40%;animation:aura3 11s ease-in-out infinite}
+    @media(max-width:960px){.aura-1{width:400px;height:400px}.aura-2{width:350px;height:350px}.aura-3{display:none}}
+    @keyframes aura1{0%,100%{transform:translate(0,0) scale(1)}40%{transform:translate(-5%,8%) scale(1.15)}70%{transform:translate(7%,-5%) scale(.9)}}
+    @keyframes aura2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(13%,-18%) scale(1.2)}}
+    @keyframes aura3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-9%,12%) scale(1.28)}}
   </style>
 </head>
 <body>
 
 <div class="nav-shell">
-  <nav>
+  <nav aria-label="Main navigation">
     <a href="/" class="logo">VIN<span class="logo-r">Record</span><span class="logo-h">Hub</span></a>
     <div class="nav-links">
       <a href="#how">How it Works</a>
@@ -528,12 +548,12 @@
       <a href="mailto:support@vinrecordhub.com">Support</a>
       <a href="#pricing" class="nav-cta">Get Report — $9.99</a>
     </div>
-    <button class="burger" onclick="openM()" aria-label="Menu"><span></span><span></span><span></span></button>
+    <button class="burger" id="menuBtn" onclick="openM()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mMenu"><span></span><span></span><span></span></button>
   </nav>
 </div>
 
-<div class="m-menu" id="mMenu">
-  <button class="m-close" onclick="closeM()">✕</button>
+<div class="m-menu" id="mMenu" role="dialog" aria-modal="true" aria-label="Navigation menu">
+  <button class="m-close" onclick="closeM()" aria-label="Close navigation menu">✕</button>
   <a href="#how" onclick="closeM()">How it Works</a>
   <a href="#pricing" onclick="closeM()">Pricing</a>
   <a href="#compare" onclick="closeM()">Compare</a>
@@ -542,7 +562,12 @@
   <a href="#pricing" onclick="closeM()" class="hi">Get Report →</a>
 </div>
 
-<section class="hero">
+<section class="hero" aria-label="Vehicle History Reports — Get Started">
+  <div class="hero-aura" aria-hidden="true">
+    <div class="hero-aura-orb aura-1"></div>
+    <div class="hero-aura-orb aura-2"></div>
+    <div class="hero-aura-orb aura-3"></div>
+  </div>
   <div class="hero-mesh"></div>
   <div class="hero-grid"></div>
   <div class="hero-inner">
@@ -550,13 +575,13 @@
       <div class="hero-badge rv"><span class="badge-dot"></span>Instant Vehicle History Reports</div>
       <h1 class="rv rv-1">Know the truth about <em>any car</em> before you buy.</h1>
       <p class="hero-sub rv rv-2">Real Carfax® &amp; AutoCheck® vehicle history — accident records, title history, odometer checks — for just $9.99. Delivered in 60 seconds.</p>
-      <span class="vin-label rv rv-3">Enter VIN to get started</span>
+      <label for="heroVin" class="vin-label rv rv-3">Enter VIN to get started</label>
       <div class="vin-row rv rv-3">
-        <input class="vin-input" id="heroVin" type="text" placeholder="e.g. 1HGCM82633A004352" maxlength="17" autocomplete="off" spellcheck="false" oninput="this.value=this.value.toUpperCase();validateVin(this)"/>
-        <button class="vin-btn" onclick="goCheckout()">Get Report →</button>
+        <input class="vin-input" id="heroVin" type="text" placeholder="e.g. 1HGCM82633A004352" maxlength="17" autocomplete="off" spellcheck="false" aria-label="Vehicle Identification Number (VIN)" aria-describedby="vinLk vinErr" aria-invalid="false" oninput="this.value=this.value.toUpperCase();validateVin(this)"/>
+        <button class="vin-btn" onclick="goCheckout()" aria-label="Get vehicle history report">Get Report →</button>
       </div>
-      <div class="vin-lk" id="vinLk"><span id="vinLkIco"></span><span id="vinLkTxt"></span></div>
-      <div class="vin-err" id="vinErr"></div>
+      <div class="vin-lk" id="vinLk" role="status" aria-live="polite" aria-atomic="true"><span id="vinLkIco"></span><span id="vinLkTxt"></span></div>
+      <div class="vin-err" id="vinErr" role="alert" aria-live="assertive"></div>
     </div>
     <div class="hero-card rv rv-4" id="hCard">
       <div class="hc-head">
@@ -891,9 +916,11 @@ s0.parentNode.insertBefore(s1,s0);
   <button class="vrh-qr-btn" onclick="vrhAsk('📩 I paid but did not receive my report')"><span class="qr-icon">📩</span>Missing report</button>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script>
-  function openM(){document.getElementById('mMenu').classList.add('open');document.body.style.overflow='hidden'}
-  function closeM(){document.getElementById('mMenu').classList.remove('open');document.body.style.overflow=''}
+  function openM(){document.getElementById('mMenu').classList.add('open');document.body.style.overflow='hidden';document.getElementById('menuBtn').setAttribute('aria-expanded','true')}
+  function closeM(){document.getElementById('mMenu').classList.remove('open');document.body.style.overflow='';document.getElementById('menuBtn').setAttribute('aria-expanded','false')}
   document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
 
   const card=document.getElementById('hCard');
@@ -913,24 +940,25 @@ s0.parentNode.insertBefore(s1,s0);
   function isValidVin(v){return /^[A-HJ-NPR-Z0-9]{17}$/.test(v)}
   let vtimer=null;
 
+  function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
   async function lookupVin(vin){
     const el=document.getElementById('vinLk'),ico=document.getElementById('vinLkIco'),txt=document.getElementById('vinLkTxt');
     el.className='vin-lk ldg';ico.textContent='⏳';txt.textContent='Looking up vehicle...';
     try{
-      const r=await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`);
+      const r=await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${encodeURIComponent(vin)}?format=json`);
       const d=await r.json();const res=d?.Results?.[0];
       if(!res||res.ErrorCode!=='0'||!res.Make){el.className='vin-lk err';ico.textContent='⚠️';txt.textContent='VIN not found — please double-check';return}
       const name=[res.ModelYear,res.Make,res.Model,res.Trim].filter(Boolean).join(' ');
-      el.className='vin-lk show';ico.textContent='✅';txt.innerHTML=`<strong>${name}</strong>`;
+      el.className='vin-lk show';ico.textContent='✅';txt.innerHTML=`<strong>${escHtml(name)}</strong>`;
     }catch{el.className='vin-lk'}
   }
 
   function validateVin(inp){
     const v=inp.value.trim(),err=document.getElementById('vinErr'),lk=document.getElementById('vinLk');
-    if(!v){inp.style.borderColor='';err.style.display='none';lk.className='vin-lk';return true}
-    if(v.length<17){inp.style.borderColor='oklch(80% .18 72 / .4)';lk.className='vin-lk';clearTimeout(vtimer);return false}
-    if(!isValidVin(v)){inp.style.borderColor='oklch(62% .22 26 / .5)';err.textContent='Invalid VIN — cannot contain I, O, or Q';err.style.display='block';return false}
-    inp.style.borderColor='oklch(72% .18 155 / .5)';err.style.display='none';
+    if(!v){inp.style.borderColor='';inp.setAttribute('aria-invalid','false');err.style.display='none';lk.className='vin-lk';return true}
+    if(v.length<17){inp.style.borderColor='oklch(80% .18 72 / .4)';inp.setAttribute('aria-invalid','true');lk.className='vin-lk';clearTimeout(vtimer);return false}
+    if(!isValidVin(v)){inp.style.borderColor='oklch(62% .22 26 / .5)';inp.setAttribute('aria-invalid','true');err.textContent='Invalid VIN — cannot contain I, O, or Q';err.style.display='block';return false}
+    inp.style.borderColor='oklch(72% .18 155 / .5)';inp.setAttribute('aria-invalid','false');err.style.display='none';
     clearTimeout(vtimer);vtimer=setTimeout(()=>lookupVin(v),300);return true;
   }
 
@@ -962,10 +990,21 @@ s0.parentNode.insertBefore(s1,s0);
     c.addEventListener('mouseleave',()=>{c.style.transform=''});
   });
 
-  const observer=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');observer.unobserve(e.target)}});
-  },{threshold:.1,rootMargin:'0px 0px -40px 0px'});
-  document.querySelectorAll('.rv').forEach(el=>observer.observe(el));
+  // GSAP ScrollTrigger scroll animations — replaces IntersectionObserver
+  (function initScrollReveal(){
+    if(typeof gsap==='undefined'||typeof ScrollTrigger==='undefined'){
+      document.querySelectorAll('.rv').forEach(el=>{el.style.opacity='1';el.style.transform='none'});
+      return;
+    }
+    gsap.registerPlugin(ScrollTrigger);
+    const delayMap={'rv-1':.08,'rv-2':.16,'rv-3':.24,'rv-4':.32,'rv-5':.40,'rv-6':.48};
+    gsap.utils.toArray('.rv').forEach(el=>{
+      let d=0;
+      for(const [cls,val] of Object.entries(delayMap)){if(el.classList.contains(cls)){d=val;break}}
+      gsap.to(el,{opacity:1,y:0,duration:.75,delay:d,ease:'power3.out',
+        scrollTrigger:{trigger:el,start:'top 92%',toggleActions:'play none none none'}});
+    });
+  })();
 
   var Tawk_API=Tawk_API||{};
   function vrhInitQR(){
@@ -985,15 +1024,7 @@ s0.parentNode.insertBefore(s1,s0);
     }
   }
 
-  function doCapture(){
-    const email=document.getElementById('emailIn').value.trim();
-    const msg=document.getElementById('captureMsg');
-    if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-      msg.style.color='var(--red)';msg.textContent='Please enter a valid email address.';return;
-    }
-    msg.style.color='var(--green)';msg.textContent='Thanks! Your guide is on its way.';
-    document.getElementById('emailIn').value='';
-  }
+
 </script>
 </body>
 </html>

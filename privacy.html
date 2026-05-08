@@ -71,6 +71,7 @@
     a{color:var(--accent);text-decoration:none;transition:opacity .15s}
     a:hover{opacity:.75}
     .divider{border:none;border-top:1px solid var(--border);margin:2.25rem 0}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
   </style>
 </head>
 <body>
@@ -127,5 +128,16 @@
   <h2 data-n="10">Contact</h2>
   <p>For questions about this policy, contact us at <a href="mailto:support@vinrecordhub.com">support@vinrecordhub.com</a>.</p>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+if(typeof gsap!=='undefined'&&typeof ScrollTrigger!=='undefined'){
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.utils.toArray('.content h1,.content h2,.content p,.content ul').forEach(el=>{
+    gsap.from(el,{opacity:0,y:14,duration:.5,ease:'power2.out',
+      scrollTrigger:{trigger:el,start:'top 93%',toggleActions:'play none none none'}});
+  });
+}
+</script>
 </body>
 </html>

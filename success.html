@@ -137,6 +137,7 @@
       nav{height:54px;padding:0 1.25rem}
       h1{font-size:1.4rem}
     }
+    :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
   </style>
 </head>
 <body>
@@ -189,12 +190,13 @@
     </div>
 
     <div class="actions">
-      <a href="/" class="btn-primary">Run Another VIN →</a>
-      <a href="mailto:support@vinrecordhub.com" class="btn-secondary">Contact Support</a>
+      <a href="/" class="btn-primary" aria-label="Run another VIN lookup">Run Another VIN →</a>
+      <a href="mailto:support@vinrecordhub.com" class="btn-secondary" aria-label="Contact customer support">Contact Support</a>
     </div>
     <p class="support-note">Didn't receive your report within 10 minutes?<br/>Email <a href="mailto:support@vinrecordhub.com">support@vinrecordhub.com</a> with your Order ID above.</p>
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script>
   const p = new URLSearchParams(window.location.search);
   const plans = {standard:'Carfax® Report',plus:'AutoCheck® Report',combo:'Combo Pack (Carfax® + AutoCheck®)',carfax:'Carfax® Report',autocheck:'AutoCheck® Report'};
@@ -204,6 +206,12 @@
   document.getElementById('vinDisplay').textContent = p.get('vin') || '—';
   document.getElementById('emailDisplay').textContent = p.get('email') || '—';
   document.getElementById('planDisplay').textContent = plans[p.get('plan')] || 'Vehicle History Report';
+
+  // GSAP staggered sub-element entrance (card itself is animated via CSS)
+  if(typeof gsap!=='undefined'){
+    const els=['.sub','.details','.timeline','.actions','.support-note'];
+    els.forEach((s,i)=>{const el=document.querySelector(s);if(el)gsap.from(el,{opacity:0,y:12,duration:.45,ease:'power2.out',delay:.25+i*.06})});
+  }
 
   if (delivered === '1') {
     document.querySelector('h1').textContent = 'Report Delivered!';

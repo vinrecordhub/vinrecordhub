@@ -217,6 +217,9 @@
       color:var(--faint);padding:.3rem 0}
     .chip-icon{color:var(--muted);flex-shrink:0;width:14px;height:14px}
 
+    /* FOCUS */
+    :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
     /* RESPONSIVE */
     @media(max-width:860px){
       .page{grid-template-columns:1fr}
@@ -275,21 +278,21 @@
     <p class="form-sub">Enter your vehicle details and choose a report type.</p>
 
     <div class="fg">
-      <label class="fl">Vehicle VIN Number</label>
-      <input class="fi" type="text" id="vinInput" placeholder="17-character VIN" maxlength="17" autocomplete="off" spellcheck="false"/>
-      <div class="vin-lk" id="vinLk"><span id="vinLkIco"></span><span id="vinLkTxt"></span></div>
-      <div class="fh">Found on dashboard, door jamb, or vehicle title.</div>
+      <label class="fl" for="vinInput">Vehicle VIN Number</label>
+      <input class="fi" type="text" id="vinInput" placeholder="17-character VIN" maxlength="17" autocomplete="off" spellcheck="false" aria-describedby="vinHint" aria-invalid="false"/>
+      <div class="vin-lk" id="vinLk" role="status" aria-live="polite"><span id="vinLkIco"></span><span id="vinLkTxt"></span></div>
+      <div class="fh" id="vinHint">Found on dashboard, door jamb, or vehicle title.</div>
     </div>
 
     <div class="fg">
-      <label class="fl">Email Address</label>
-      <input class="fi" type="email" id="emailInput" placeholder="your@email.com"/>
-      <div class="fh">Your report will be delivered here within 60 seconds.</div>
+      <label class="fl" for="emailInput">Email Address</label>
+      <input class="fi" type="email" id="emailInput" placeholder="your@email.com" aria-describedby="emailHint"/>
+      <div class="fh" id="emailHint">Your report will be delivered here within 60 seconds.</div>
     </div>
 
     <div class="fg">
-      <label class="fl">Choose Report Type</label>
-      <div class="plan-grid">
+      <span class="fl" id="planLabel">Choose Report Type</span>
+      <div class="plan-grid" role="group" aria-labelledby="planLabel">
         <div class="plan-card" id="card-standard">
           <div class="plan-dot"></div>
           <div class="plan-name">Carfax® Report</div>
@@ -315,15 +318,15 @@
     </div>
 
     <div class="fg">
-      <label class="fl">Coupon Code <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--faint)">(optional)</span></label>
+      <label class="fl" for="couponInput">Coupon Code <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--faint)">(optional)</span></label>
       <div class="coupon-row">
-        <input class="fi" type="text" id="couponInput" placeholder="Enter code..."/>
-        <button class="btn-apply" id="applyBtn">Apply</button>
+        <input class="fi" type="text" id="couponInput" placeholder="Enter code..." autocomplete="off"/>
+        <button class="btn-apply" id="applyBtn" aria-label="Apply coupon code">Apply</button>
       </div>
-      <div class="coupon-msg" id="couponMsg"></div>
+      <div class="coupon-msg" id="couponMsg" role="status" aria-live="polite"></div>
     </div>
 
-    <div class="err-msg" id="errMsg"></div>
+    <div class="err-msg" id="errMsg" role="alert" aria-live="assertive"></div>
     <div id="ppBtn"></div>
     <p class="pay-note">Accepts all major cards · PayPal · No account required<br/>Report delivered within 60 seconds of payment</p>
   </div>
@@ -383,7 +386,11 @@
 </div>
 
 <script src="https://www.paypal.com/sdk/js?client-id=AXUUd9Y2YuWhoRysQpAg75_bfr9ColW_hNmT-L4Z0O1wvYDIvWC1zcafdwz455AyCq2jHnQUYXmTLdzW&currency=USD&enable-funding=venmo,card&disable-funding=paylater"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script>
+// ─── HELPERS ──────────────────────────────────────────────
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
 // ─── CONFIG ───────────────────────────────────────────────
 const PLANS = {
   standard: { name:'Carfax® Report',              price:9.99,  reportType:'carfax',    desc:'1 Carfax® vehicle history report' },
@@ -432,7 +439,7 @@ function getFinal() {
   return base;
 }
 document.getElementById('applyBtn').addEventListener('click', () => {
-  const code = document.getElementById('couponInput').value.trim().toUpperCase();
+  const code = document.getElementById('couponInput').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
   const msg = document.getElementById('couponMsg');
   if (!code) { coupon = null; msg.textContent = ''; msg.className = 'coupon-msg'; refreshSummary(); renderPayPal(); return; }
   if (COUPONS[code]) {
@@ -461,7 +468,7 @@ async function lookupVin(vin) {
       el.className='vin-lk err'; ico.textContent='⚠️'; txt.textContent='VIN not found — please double-check'; return;
     }
     const name = [res.ModelYear, res.Make, res.Model, res.Trim].filter(Boolean).join(' ');
-    el.className='vin-lk show'; ico.textContent='✅'; txt.innerHTML=`<strong>${name}</strong>`;
+    el.className='vin-lk show'; ico.textContent='✅'; txt.innerHTML=`<strong>${escHtml(name)}</strong>`;
     document.getElementById('vcName').textContent = name;
     document.getElementById('vcVin').textContent = 'VIN: ' + vin;
     document.getElementById('vehicleCard').className = 'vehicle-card show';
@@ -639,6 +646,12 @@ if (urlVin) {
 }
 const urlPlan = params.get('plan');
 selectPlan(urlPlan && PLANS[urlPlan] ? urlPlan : 'standard');
+
+// GSAP entrance animation
+if(typeof gsap!=='undefined'){
+  gsap.from('.form-col',{opacity:0,x:-20,duration:.55,ease:'power3.out'});
+  gsap.from('#summaryCrd',{opacity:0,x:20,duration:.55,ease:'power3.out',delay:.1});
+}
 </script>
 </body>
 </html>

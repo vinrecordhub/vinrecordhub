@@ -26,14 +26,20 @@
   <meta name="twitter:title" content="VINRecordHub — Carfax® Reports from $9.99"/>
   <meta name="twitter:description" content="Real Carfax® & AutoCheck® vehicle history reports for $9.99. Delivered in 60 seconds."/>
   <meta name="twitter:image" content="https://vinrecordhub.com/og-image.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com"/>
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net"/>
+  <link rel="dns-prefetch" href="https://embed.tawk.to"/>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4MSSG5GW4X"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX');
+    gtag('config', 'G-4MSSG5GW4X');
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"/></noscript>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
@@ -524,7 +530,7 @@
 
     /* HERO AURORA */
     .hero-aura{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
-    .hero-aura-orb{position:absolute;border-radius:50%;filter:blur(70px)}
+    .hero-aura-orb{position:absolute;border-radius:50%;filter:blur(70px);will-change:transform;transform:translateZ(0)}
     .aura-1{width:600px;height:600px;
       background:radial-gradient(circle,oklch(76% .145 52 / .09),transparent 65%);
       top:-160px;right:3%;animation:aura1 14s ease-in-out infinite}
@@ -538,6 +544,18 @@
     @keyframes aura1{0%,100%{transform:translate(0,0) scale(1)}40%{transform:translate(-5%,8%) scale(1.15)}70%{transform:translate(7%,-5%) scale(.9)}}
     @keyframes aura2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(13%,-18%) scale(1.2)}}
     @keyframes aura3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-9%,12%) scale(1.28)}}
+
+    /* Hero above-fold reveals — CSS-only, fires immediately without waiting for GSAP */
+    @keyframes heroReveal{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+    .hero-rv{animation:heroReveal .75s var(--expo) both}
+    .hero-rv-1{animation-delay:.08s}.hero-rv-2{animation-delay:.16s}
+    .hero-rv-3{animation-delay:.24s}.hero-rv-4{animation-delay:.32s}
+    @media(prefers-reduced-motion:reduce){
+      .hero-rv{animation:none;opacity:1;transform:none}
+      .rv{transition:none}
+      .hero-aura-orb{animation:none}
+      @keyframes pulse{0%,100%{opacity:1;transform:none}}
+    }
   </style>
 </head>
 <body>
@@ -580,18 +598,18 @@
   <div class="hero-grid"></div>
   <div class="hero-inner">
     <div>
-      <div class="hero-badge rv"><span class="badge-dot"></span>Instant Vehicle History Reports</div>
-      <h1 class="rv rv-1">Know the truth about <em>any car</em> before you buy.</h1>
-      <p class="hero-sub rv rv-2">Real Carfax® &amp; AutoCheck® vehicle history — accident records, title history, odometer checks — for just $9.99. Delivered in 60 seconds.</p>
-      <label for="heroVin" class="vin-label rv rv-3">Enter VIN to get started</label>
-      <div class="vin-row rv rv-3">
+      <div class="hero-badge hero-rv"><span class="badge-dot"></span>Instant Vehicle History Reports</div>
+      <h1 class="hero-rv hero-rv-1">Know the truth about <em>any car</em> before you buy.</h1>
+      <p class="hero-sub hero-rv hero-rv-2">Real Carfax® &amp; AutoCheck® vehicle history — accident records, title history, odometer checks — for just $9.99. Delivered in 60 seconds.</p>
+      <label for="heroVin" class="vin-label hero-rv hero-rv-3">Enter VIN to get started</label>
+      <div class="vin-row hero-rv hero-rv-3">
         <input class="vin-input" id="heroVin" type="text" placeholder="e.g. 1HGCM82633A004352" maxlength="17" autocomplete="off" spellcheck="false" aria-label="Vehicle Identification Number (VIN)" aria-describedby="vinLk vinErr" aria-invalid="false" oninput="this.value=this.value.toUpperCase();validateVin(this)"/>
         <button class="vin-btn" onclick="goCheckout()" aria-label="Get vehicle history report">Get Report →</button>
       </div>
       <div class="vin-lk" id="vinLk" role="status" aria-live="polite" aria-atomic="true"><span id="vinLkIco"></span><span id="vinLkTxt"></span></div>
       <div class="vin-err" id="vinErr" role="alert" aria-live="assertive"></div>
     </div>
-    <div class="hero-card rv rv-4" id="hCard">
+    <div class="hero-card hero-rv hero-rv-4" id="hCard">
       <div class="hc-head">
         <div class="hc-logo">VIN<span>Record</span>Hub</div>
         <div class="hc-badge">✓ Verified</div>
@@ -905,13 +923,13 @@
 </div>
 
 <script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;s1.src='https://embed.tawk.to/69fd1458ca32511c32eefb48/1jo29eugd';
-s1.charset='UTF-8';s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
+var Tawk_API=Tawk_API||{};
+window.addEventListener('load',function(){
+  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+  s1.async=true;s1.src='https://embed.tawk.to/69fd1458ca32511c32eefb48/1jo29eugd';
+  s1.charset='UTF-8';s1.setAttribute('crossorigin','*');
+  s0.parentNode.insertBefore(s1,s0);
+});
 </script>
 
 <div id="vrh-quick-replies">
@@ -933,11 +951,16 @@ s0.parentNode.insertBefore(s1,s0);
 
   const card=document.getElementById('hCard');
   if(card&&window.innerWidth>960){
+    let rafCard=null;
     document.addEventListener('mousemove',e=>{
-      const r=card.getBoundingClientRect();
-      const dx=(e.clientX-(r.left+r.width/2))/window.innerWidth;
-      const dy=(e.clientY-(r.top+r.height/2))/window.innerHeight;
-      card.style.transform=`perspective(900px) rotateY(${-9+dx*7}deg) rotateX(${4-dy*5}deg)`;
+      if(rafCard)return;
+      rafCard=requestAnimationFrame(()=>{
+        rafCard=null;
+        const r=card.getBoundingClientRect();
+        const dx=(e.clientX-(r.left+r.width/2))/window.innerWidth;
+        const dy=(e.clientY-(r.top+r.height/2))/window.innerHeight;
+        card.style.transform=`perspective(900px) rotateY(${-9+dx*7}deg) rotateX(${4-dy*5}deg)`;
+      });
     });
   }
 
@@ -989,13 +1012,18 @@ s0.parentNode.insertBefore(s1,s0);
   document.getElementById('heroVin').addEventListener('keypress',e=>{if(e.key==='Enter')goCheckout()});
 
   document.querySelectorAll('.pc').forEach(c=>{
+    let rafPc=null;
     c.addEventListener('mousemove',e=>{
-      const r=c.getBoundingClientRect();
-      const x=(e.clientX-r.left)/r.width-.5;
-      const y=(e.clientY-r.top)/r.height-.5;
-      c.style.transform=`translateY(-6px) rotateX(${-y*6}deg) rotateY(${x*6}deg)`;
+      if(rafPc)return;
+      rafPc=requestAnimationFrame(()=>{
+        rafPc=null;
+        const r=c.getBoundingClientRect();
+        const x=(e.clientX-r.left)/r.width-.5;
+        const y=(e.clientY-r.top)/r.height-.5;
+        c.style.transform=`translateY(-6px) rotateX(${-y*6}deg) rotateY(${x*6}deg)`;
+      });
     });
-    c.addEventListener('mouseleave',()=>{c.style.transform=''});
+    c.addEventListener('mouseleave',()=>{rafPc=null;c.style.transform=''});
   });
 
   // GSAP ScrollTrigger scroll animations — replaces IntersectionObserver

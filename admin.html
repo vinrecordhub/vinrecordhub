@@ -176,12 +176,12 @@
       </div>
     </div>
 
-    <!-- GOOGLE ANALYTICS SECTION -->
+    <!-- ANALYTICS SECTION -->
     <div style="margin-bottom:2rem">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem">
         <div>
-          <div style="font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);margin-bottom:.25rem">Google Analytics</div>
-          <div style="font-size:1rem;font-weight:700;color:var(--white)">Site Traffic Overview</div>
+          <div style="font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);margin-bottom:.25rem">Analytics</div>
+          <div style="font-size:1rem;font-weight:700;color:var(--white)">Sales & Revenue Breakdown</div>
         </div>
         <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
           <button onclick="setGARange(7)" id="ga7" style="background:rgba(232,255,63,0.1);border:1px solid rgba(232,255,63,0.3);color:var(--accent);font-size:.75rem;padding:.35rem .85rem;border-radius:6px;cursor:pointer">7 days</button>
@@ -191,63 +191,56 @@
         </div>
       </div>
 
-      <!-- GA STAT CARDS -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-bottom:1.25rem" id="gaCards">
-        <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid #4285f4">
-          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Sessions</div>
-          <div style="font-size:1.75rem;font-weight:800;color:#4285f4;letter-spacing:-.04em" id="gaSessions">—</div>
-          <div style="font-size:.7rem;color:var(--mid);margin-top:.2rem">site visits</div>
-        </div>
-        <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid #34a853">
-          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Users</div>
-          <div style="font-size:1.75rem;font-weight:800;color:#34a853;letter-spacing:-.04em" id="gaUsers">—</div>
-          <div style="font-size:.7rem;color:var(--mid);margin-top:.2rem">unique visitors</div>
-        </div>
-        <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid #fbbc04">
-          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Pageviews</div>
-          <div style="font-size:1.75rem;font-weight:800;color:#fbbc04;letter-spacing:-.04em" id="gaPageviews">—</div>
-          <div style="font-size:.7rem;color:var(--mid);margin-top:.2rem">pages loaded</div>
-        </div>
-        <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid #ea4335">
-          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Bounce Rate</div>
-          <div style="font-size:1.75rem;font-weight:800;color:#ea4335;letter-spacing:-.04em" id="gaBounce">—</div>
-          <div style="font-size:.7rem;color:var(--mid);margin-top:.2rem">left immediately</div>
+      <!-- PERIOD STAT CARDS -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-bottom:1.25rem">
+        <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid var(--accent)">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Period Revenue</div>
+          <div style="font-size:1.75rem;font-weight:800;color:var(--accent);letter-spacing:-.04em" id="gaPeriodRev">—</div>
+          <div style="font-size:.7rem;margin-top:.2rem" id="gaRevDelta"></div>
         </div>
         <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid var(--accent2)">
-          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Avg Session</div>
-          <div style="font-size:1.75rem;font-weight:800;color:var(--accent2);letter-spacing:-.04em" id="gaAvgSession">—</div>
-          <div style="font-size:.7rem;color:var(--mid);margin-top:.2rem">time on site</div>
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Period Orders</div>
+          <div style="font-size:1.75rem;font-weight:800;color:var(--accent2);letter-spacing:-.04em" id="gaPeriodOrders">—</div>
+          <div style="font-size:.7rem;margin-top:.2rem" id="gaOrderDelta"></div>
         </div>
-        <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid var(--accent)">
-          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Conv. Rate</div>
-          <div style="font-size:1.75rem;font-weight:800;color:var(--accent);letter-spacing:-.04em" id="gaConversion">—</div>
-          <div style="font-size:.7rem;color:var(--mid);margin-top:.2rem">visitors → buyers</div>
+        <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid #4285f4">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Avg Order</div>
+          <div style="font-size:1.75rem;font-weight:800;color:#4285f4;letter-spacing:-.04em" id="gaAvgOrder">—</div>
+          <div style="font-size:.7rem;color:var(--mid);margin-top:.2rem">per transaction</div>
         </div>
-      </div>
-
-      <!-- TOP SOURCES + TOP PAGES -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
-        <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;overflow:hidden">
-          <div style="padding:.875rem 1.25rem;border-bottom:1px solid var(--border);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mid)">Top Traffic Sources</div>
-          <div id="gaSources" style="padding:.5rem 0">
-            <div style="text-align:center;padding:1.5rem;color:var(--mid);font-size:.8rem">Loading...</div>
-          </div>
-        </div>
-        <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;overflow:hidden">
-          <div style="padding:.875rem 1.25rem;border-bottom:1px solid var(--border);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mid)">Top Pages</div>
-          <div id="gaPages" style="padding:.5rem 0">
-            <div style="text-align:center;padding:1.5rem;color:var(--mid);font-size:.8rem">Loading...</div>
-          </div>
+        <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid #fbbc04">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">All Time Rev</div>
+          <div style="font-size:1.75rem;font-weight:800;color:#fbbc04;letter-spacing:-.04em" id="gaAllRev">—</div>
+          <div style="font-size:.7rem;color:var(--mid);margin-top:.2rem" id="gaAllOrders"></div>
         </div>
       </div>
 
-      <!-- SETUP NOTICE -->
-      <div id="gaNotice" style="background:rgba(66,133,244,.07);border:1px solid rgba(66,133,244,.2);border-radius:10px;padding:1rem 1.25rem;margin-top:1rem">
-        <div style="font-size:.85rem;font-weight:600;color:#4285f4;margin-bottom:.5rem">📊 Setup Required — 3 Vercel Environment Variables</div>
-        <div style="display:flex;flex-direction:column;gap:.4rem">
-          <div style="font-size:.78rem;color:var(--mid)">1. <code style="background:rgba(255,255,255,.08);padding:.1rem .4rem;border-radius:4px;color:#fbbc04">GA4_PROPERTY_ID</code> — numbers only (e.g. 123456789) · Found in GA4 → Admin → Property Settings</div>
-          <div style="font-size:.78rem;color:var(--mid)">2. <code style="background:rgba(255,255,255,.08);padding:.1rem .4rem;border-radius:4px;color:#fbbc04">GOOGLE_SERVICE_ACCOUNT_KEY</code> — paste entire JSON from downloaded key file</div>
-          <div style="font-size:.78rem;color:var(--mid)">3. Add service account email to GA4 → Admin → Account Access Management → Viewer</div>
+      <!-- CHARTS ROW -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem">
+
+        <!-- Daily Revenue Chart -->
+        <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;overflow:hidden;grid-column:span 2">
+          <div style="padding:.875rem 1.25rem;border-bottom:1px solid var(--border);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mid)">Daily Revenue</div>
+          <div style="padding:1rem 1.25rem" id="gaChart">
+            <div style="text-align:center;padding:1.5rem;color:var(--mid);font-size:.8rem">Loading...</div>
+          </div>
+        </div>
+
+        <!-- Plan Breakdown -->
+        <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+          <div style="padding:.875rem 1.25rem;border-bottom:1px solid var(--border);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mid)">By Plan</div>
+          <div id="gaPlan" style="padding:.75rem 1.25rem">
+            <div style="text-align:center;padding:1.5rem;color:var(--mid);font-size:.8rem">Loading...</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Repeat customers -->
+      <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+        <div style="padding:.875rem 1.25rem;border-bottom:1px solid var(--border);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mid)">🔄 Repeat Customers</div>
+        <div id="gaRepeat" style="padding:.5rem 0">
+          <div style="text-align:center;padding:1.5rem;color:var(--mid);font-size:.8rem">Loading...</div>
         </div>
       </div>
     </div>
@@ -505,7 +498,7 @@
     loadGA();
   }
 
-  // ─── GOOGLE ANALYTICS ─────────────────────────────────────
+  // ─── ANALYTICS ────────────────────────────────────────────
   let gaRange = 7;
 
   function setGARange(days) {
@@ -523,78 +516,81 @@
     try {
       const res = await fetch(`/api/ga-stats?token=${encodeURIComponent(adminToken)}&days=${gaRange}`);
       if (!res.ok) return;
-      const data = await res.json();
+      const d = await res.json();
+      if (d.error) return;
 
-      if (data.notConfigured) {
-        document.getElementById('gaNotice').style.display = 'block';
-        return;
+      // Period stats
+      document.getElementById('gaPeriodRev').textContent = '$' + d.period.revenue;
+      document.getElementById('gaPeriodOrders').textContent = d.period.orders;
+      document.getElementById('gaAvgOrder').textContent = '$' + d.avgOrder;
+      document.getElementById('gaAllRev').textContent = '$' + d.allTimeRevenue;
+      document.getElementById('gaAllOrders').textContent = d.allTimeOrders + ' total orders';
+
+      // Deltas
+      const rd = d.deltas.revenue;
+      const od = d.deltas.orders;
+      document.getElementById('gaRevDelta').innerHTML = rd !== null
+        ? `<span style="color:${rd >= 0 ? 'var(--accent2)' : 'var(--red)'}">${rd >= 0 ? '↑' : '↓'} ${Math.abs(rd)}% vs prev period</span>`
+        : '<span style="color:var(--mid)">first period</span>';
+      document.getElementById('gaOrderDelta').innerHTML = od !== null
+        ? `<span style="color:${od >= 0 ? 'var(--accent2)' : 'var(--red)'}">${od >= 0 ? '↑' : '↓'} ${Math.abs(od)}% vs prev period</span>`
+        : '<span style="color:var(--mid)">first period</span>';
+
+      // Daily revenue bar chart
+      if (d.dailyRevenue && d.dailyRevenue.length) {
+        const max = Math.max(...d.dailyRevenue.map(r => r.revenue), 0.01);
+        document.getElementById('gaChart').innerHTML = `
+          <div style="display:flex;align-items:flex-end;gap:4px;height:80px;padding-bottom:.5rem">
+            ${d.dailyRevenue.map(r => {
+              const h = Math.max(4, Math.round((r.revenue / max) * 72));
+              const day = new Date(r.date).toLocaleDateString('en-US', {month:'short',day:'numeric'});
+              return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:default" title="${day}: $${r.revenue}">
+                <div style="font-size:.58rem;color:var(--accent);font-weight:700">$${r.revenue > 0 ? r.revenue.toFixed(0) : ''}</div>
+                <div style="width:100%;height:${h}px;background:linear-gradient(to top,var(--accent),rgba(200,255,0,.4));border-radius:3px 3px 0 0"></div>
+              </div>`;
+            }).join('')}
+          </div>
+          <div style="display:flex;gap:4px">
+            ${d.dailyRevenue.map(r => {
+              const day = new Date(r.date).toLocaleDateString('en-US', {month:'short',day:'numeric'});
+              return `<div style="flex:1;text-align:center;font-size:.55rem;color:var(--mid)">${day.split(' ')[1]}</div>`;
+            }).join('')}
+          </div>`;
+      } else {
+        document.getElementById('gaChart').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--mid);font-size:.8rem">No orders in this period</div>';
       }
 
-      // Hide setup notice — data is live
-      document.getElementById('gaNotice').style.display = 'none';
+      // Plan breakdown
+      const planNames = { carfax:'Carfax', standard:'Carfax', autocheck:'AutoCheck', plus:'AutoCheck', combo:'Combo' };
+      const planColors = { carfax:'var(--accent)', standard:'var(--accent)', autocheck:'var(--accent2)', plus:'var(--accent2)', combo:'#c084fc' };
+      const totalPlan = Object.values(d.byPlan).reduce((s, n) => s + n, 0);
+      document.getElementById('gaPlan').innerHTML = totalPlan === 0
+        ? '<div style="text-align:center;padding:1rem;color:var(--mid);font-size:.8rem">No orders</div>'
+        : Object.entries(d.byPlan).map(([plan, count]) => {
+            const pct = Math.round(count / totalPlan * 100);
+            return `<div style="margin-bottom:.75rem">
+              <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
+                <span style="font-size:.8rem;font-weight:600">${planNames[plan] || plan}</span>
+                <span style="font-size:.8rem;color:${planColors[plan] || 'var(--accent)'}"><strong>${count}</strong> (${pct}%)</span>
+              </div>
+              <div style="height:4px;background:rgba(255,255,255,.06);border-radius:2px">
+                <div style="height:4px;background:${planColors[plan] || 'var(--accent)'};border-radius:2px;width:${pct}%;transition:width .5s"></div>
+              </div>
+            </div>`;
+          }).join('');
 
-      // Fill stat cards
-      document.getElementById('gaSessions').textContent = fmt(data.sessions);
-      document.getElementById('gaUsers').textContent = fmt(data.users);
-      document.getElementById('gaPageviews').textContent = fmt(data.pageviews);
-      document.getElementById('gaBounce').textContent = data.bounceRate + '%';
-      document.getElementById('gaAvgSession').textContent = fmtTime(data.avgSession);
-
-      // Conversion rate = orders this period / sessions
-      const totalOrders = allOrders.filter(o => {
-        const d = new Date(o.created_at);
-        const cutoff = new Date();
-        cutoff.setDate(cutoff.getDate() - gaRange);
-        return d > cutoff;
-      }).length;
-      const conv = data.sessions > 0 ? ((totalOrders / data.sessions) * 100).toFixed(2) : '0.00';
-      document.getElementById('gaConversion').textContent = conv + '%';
-
-      // Sources
-      if (data.sources && data.sources.length) {
-        const maxSessions = data.sources[0].sessions;
-        document.getElementById('gaSources').innerHTML = data.sources.map((s, i) => `
-          <div style="padding:.6rem 1.25rem;border-bottom:1px solid var(--border)">
-            <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
-              <span style="font-size:.82rem;font-weight:500">${s.source}</span>
-              <span style="font-size:.82rem;font-weight:700;color:var(--accent2)">${fmt(s.sessions)}</span>
-            </div>
-            <div style="height:3px;background:rgba(255,255,255,.06);border-radius:2px">
-              <div style="height:3px;background:var(--accent2);border-radius:2px;width:${Math.round(s.sessions/maxSessions*100)}%"></div>
-            </div>
-          </div>`).join('');
-      }
-
-      // Pages
-      if (data.pages && data.pages.length) {
-        const maxViews = data.pages[0].views;
-        document.getElementById('gaPages').innerHTML = data.pages.map((p, i) => `
-          <div style="padding:.6rem 1.25rem;border-bottom:1px solid var(--border)">
-            <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
-              <span style="font-size:.78rem;color:var(--mid);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px">${p.page}</span>
-              <span style="font-size:.82rem;font-weight:700;color:var(--accent)">${fmt(p.views)}</span>
-            </div>
-            <div style="height:3px;background:rgba(255,255,255,.06);border-radius:2px">
-              <div style="height:3px;background:var(--accent);border-radius:2px;width:${Math.round(p.views/maxViews*100)}%"></div>
-            </div>
-          </div>`).join('');
-      }
+      // Repeat customers
+      document.getElementById('gaRepeat').innerHTML = d.repeatCustomers && d.repeatCustomers.length
+        ? d.repeatCustomers.map(c => `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 1.25rem;border-bottom:1px solid var(--border)">
+              <span style="font-size:.82rem;color:var(--mid)">${c.email}</span>
+              <span style="font-size:.78rem;font-weight:700;color:var(--accent2);background:rgba(63,255,176,.1);padding:.15rem .5rem;border-radius:4px">${c.count}x buyer</span>
+            </div>`).join('')
+        : '<div style="text-align:center;padding:1.5rem;color:var(--mid);font-size:.8rem">No repeat customers yet</div>';
 
     } catch(e) {
-      console.log('GA load error:', e);
+      console.log('Analytics error:', e);
     }
-  }
-
-  function fmt(n) {
-    if (!n && n !== 0) return '—';
-    return n >= 1000 ? (n/1000).toFixed(1) + 'k' : n.toString();
-  }
-
-  function fmtTime(secs) {
-    if (!secs) return '0:00';
-    const m = Math.floor(secs / 60);
-    const s = Math.floor(secs % 60);
-    return `${m}m ${s}s`;
   }
 </script>
 </body>

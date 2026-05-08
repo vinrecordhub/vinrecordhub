@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <pattern id="g" width="72" height="72" patternUnits="userSpaceOnUse">
+      <line x1="72" y1="0" x2="72" y2="72" stroke="#d4a43c" stroke-width="0.7"/>
+      <line x1="0" y1="72" x2="72" y2="72" stroke="#d4a43c" stroke-width="0.7"/>
+    </pattern>
+    <radialGradient id="gfade" cx="42%" cy="0%" r="72%" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="55%" stop-color="white" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="gm"><rect width="1200" height="630" fill="url(#gfade)"/></mask>
+    <radialGradient id="iglow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#d4a43c" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#d4a43c" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="iclip">
+      <rect x="148" y="183" width="264" height="244" rx="30"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0b0f1e"/>
+  <ellipse cx="310" cy="315" rx="400" ry="340" fill="#121930" opacity="0.8"/>
+  <!-- Grid -->
+  <rect width="1200" height="630" fill="url(#g)" opacity="0.1" mask="url(#gm)"/>
+
+  <!-- Icon glow halo -->
+  <circle cx="280" cy="305" r="240" fill="url(#iglow)"/>
+
+  <!-- Icon mark: rounded rect -->
+  <rect x="148" y="183" width="264" height="244" rx="30" fill="#131824"/>
+  <rect x="148" y="183" width="264" height="244" rx="30" fill="none" stroke="#d4a43c" stroke-width="1.5" stroke-opacity="0.38"/>
+
+  <!-- V letterform -->
+  <path d="M182 222L280 372L378 222" stroke="#d4a43c" stroke-width="17" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Scan lines (clipped to icon) -->
+  <g clip-path="url(#iclip)" opacity="0.13">
+    <line x1="100" y1="270" x2="460" y2="270" stroke="#d4a43c" stroke-width="1.2"/>
+    <line x1="100" y1="310" x2="460" y2="310" stroke="#d4a43c" stroke-width="1.2"/>
+    <line x1="100" y1="350" x2="460" y2="350" stroke="#d4a43c" stroke-width="1.2"/>
+    <line x1="100" y1="390" x2="460" y2="390" stroke="#d4a43c" stroke-width="1.2"/>
+  </g>
+
+  <!-- Vertical separator -->
+  <line x1="480" y1="158" x2="480" y2="472" stroke="#d4a43c" stroke-width="1" stroke-opacity="0.2"/>
+
+  <!-- Badge -->
+  <rect x="528" y="180" width="292" height="33" rx="16.5" fill="#d4a43c" fill-opacity="0.09" stroke="#d4a43c" stroke-opacity="0.32" stroke-width="1"/>
+  <text x="674" y="202" text-anchor="middle" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="700" letter-spacing="2" fill="#d4a43c">VEHICLE HISTORY REPORTS</text>
+
+  <!-- Wordmark -->
+  <text x="528" y="308" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="78" font-weight="800" letter-spacing="-2">
+    <tspan fill="#f4f5f9">VIN</tspan><tspan fill="#d4a43c">Record</tspan><tspan fill="#4e5670" font-weight="400">Hub</tspan>
+  </text>
+
+  <!-- Gold rule -->
+  <line x1="528" y1="334" x2="1010" y2="334" stroke="#d4a43c" stroke-width="1" stroke-opacity="0.28"/>
+
+  <!-- Subtitle 1 -->
+  <text x="528" y="378" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="27" font-weight="500" fill="#8892a8" letter-spacing="-0.4">Official Carfax® &amp; AutoCheck® data</text>
+
+  <!-- Subtitle 2 -->
+  <text x="528" y="416" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="21" font-weight="400" fill="#4e5670" letter-spacing="-0.2">From $9.99 · Delivered in 60 seconds · No subscription</text>
+
+  <!-- Bottom rule + URL -->
+  <line x1="60" y1="524" x2="1140" y2="524" stroke="#d4a43c" stroke-width="0.8" stroke-opacity="0.14"/>
+  <text x="600" y="566" text-anchor="middle" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="19" font-weight="500" fill="#4e5670" letter-spacing="0.5">vinrecordhub.com</text>
+
+  <!-- Outer border -->
+  <rect x="1.5" y="1.5" width="1197" height="627" fill="none" stroke="#d4a43c" stroke-width="1.5" stroke-opacity="0.07"/>
+</svg>

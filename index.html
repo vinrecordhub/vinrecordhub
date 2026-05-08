@@ -29,7 +29,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link rel="dns-prefetch" href="https://www.googletagmanager.com"/>
-  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net"/>
   <link rel="dns-prefetch" href="https://embed.tawk.to"/>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4MSSG5GW4X"></script>
   <script>
@@ -75,9 +74,9 @@
       font-weight:400;line-height:1.6;overflow-x:hidden;
       -webkit-font-smoothing:antialiased}
 
-    /* SCROLL REVEAL */
-    .rv{opacity:0;transform:translateY(28px)}
-    .rv.in{opacity:1;transform:translateY(0)}
+    /* SCROLL REVEAL — uses CSS translate (composes with transform, no conflicts) */
+    .rv{opacity:0;translate:0 28px;transition:opacity .65s var(--expo),translate .65s var(--expo)}
+    .rv.in{opacity:1;translate:0 0}
     .rv-1{transition-delay:.08s}.rv-2{transition-delay:.16s}
     .rv-3{transition-delay:.24s}.rv-4{transition-delay:.32s}
     .rv-5{transition-delay:.40s}.rv-6{transition-delay:.48s}
@@ -172,6 +171,8 @@
     /* HERO CARD */
     .hero-card{background:var(--surface);border:1px solid var(--border2);
       border-radius:20px;padding:1.6rem;
+      will-change:transform;transform:translateZ(0);
+      animation:floatCard 3s ease-in-out infinite;
       box-shadow:0 0 0 1px var(--border),0 24px 64px oklch(0% 0 0 / .7),0 0 80px var(--a-glow)}
     .hc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.1rem}
     .hc-logo{font-size:.78rem;font-weight:800;letter-spacing:-.02em}
@@ -204,8 +205,8 @@
     .hc-price span{font-size:.75rem;font-weight:400;color:var(--muted)}
     .hc-cta{background:var(--accent);color:oklch(10% .015 252);
       font-size:.73rem;font-weight:700;padding:.45rem 1rem;
-      border-radius:7px;text-decoration:none;transition:opacity .15s}
-    .hc-cta:hover{opacity:.85}
+      border-radius:7px;text-decoration:none;transition:opacity .15s,transform .15s var(--ease)}
+    .hc-cta:hover{opacity:.85;transform:scale(1.02)}
 
     /* TRUST BAR */
     .trust{border-top:1px solid var(--border);border-bottom:1px solid var(--border);
@@ -297,11 +298,11 @@
     .pc-feats li svg{flex-shrink:0;color:var(--green)}
     .btn-buy{display:block;text-align:center;margin-top:1.75rem;padding:.8rem;
       border-radius:10px;font-size:.84rem;font-weight:700;text-decoration:none;
-      transition:all .2s var(--ease);
+      transition:background .2s var(--ease),transform .2s var(--ease),box-shadow .2s;
       background:oklch(100% 0 0 / .06);color:var(--text);border:1px solid var(--border2)}
-    .btn-buy:hover{background:oklch(100% 0 0 / .11)}
+    .btn-buy:hover{background:oklch(100% 0 0 / .11);transform:scale(1.02)}
     .pc.feat .btn-buy{background:var(--accent);color:oklch(10% .015 252);border-color:transparent}
-    .pc.feat .btn-buy:hover{box-shadow:0 8px 28px oklch(76% .145 52 / .3)}
+    .pc.feat .btn-buy:hover{box-shadow:0 8px 28px oklch(76% .145 52 / .3);transform:scale(1.02)}
 
     /* FEATURES */
     .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);
@@ -351,7 +352,9 @@
     .report-unlock-lbl{font-size:.9rem;font-weight:700;margin-bottom:.5rem}
     .report-unlock-btn{display:inline-block;background:var(--accent);
       color:oklch(10% .015 252);font-size:.82rem;font-weight:700;
-      padding:.55rem 1.35rem;border-radius:8px;text-decoration:none}
+      padding:.55rem 1.35rem;border-radius:8px;text-decoration:none;
+      transition:transform .15s var(--ease),opacity .15s}
+    .report-unlock-btn:hover{transform:scale(1.02);opacity:.9}
 
     /* COMPARISON */
     .cmp-table{border:1px solid var(--border2);border-radius:16px;overflow:hidden;margin-top:3rem;
@@ -535,9 +538,17 @@
     .hero-rv{animation:heroReveal .75s var(--expo) both}
     .hero-rv-1{animation-delay:.08s}.hero-rv-2{animation-delay:.16s}
     .hero-rv-3{animation-delay:.24s}.hero-rv-4{animation-delay:.32s}
+    /* Hero card float */
+    @keyframes floatCard{0%,100%{transform:translateZ(0)}50%{transform:translateY(-10px) translateZ(0)}}
+
+    /* Smooth anchor scrolling — offset for fixed nav */
+    #how,#pricing,#compare,#faq{scroll-margin-top:70px}
+
     @media(prefers-reduced-motion:reduce){
       .hero-rv{animation:none;opacity:1;transform:none}
-      .rv{transition:none}
+      .rv{transition:none;translate:0 0;opacity:1}
+      .hero-card{animation:none}
+      .btn-buy:hover,.hc-cta:hover,.report-unlock-btn:hover{transform:none}
       @keyframes pulse{0%,100%{opacity:1;transform:none}}
     }
   </style>
@@ -831,15 +842,15 @@
     <div class="sec-tag rv">Why VINRecordHub</div>
     <h2 class="rv rv-1">Same data. <em>Way less.</em></h2>
     <p class="sec-sub rv rv-2">Get the exact same Carfax® &amp; AutoCheck® data at a fraction of the retail price.</p>
-    <div class="cmp-table rv rv-3">
-      <div class="cmp-h"><span>Feature</span><span class="us">VINRecordHub</span><span>Carfax® Direct</span><span>AutoCheck® Direct</span></div>
-      <div class="cmp-r"><span class="cmp-lbl" style="font-weight:600;color:var(--text)">Price per report</span><span class="c-good">$9.99</span><span class="c-bad">$44.99</span><span class="c-bad">$24.99</span></div>
-      <div class="cmp-r"><span class="cmp-lbl">Combo (both reports)</span><span class="c-good">$14.99</span><span class="c-bad">$69.98</span><span class="c-bad">$69.98</span></div>
-      <div class="cmp-r"><span class="cmp-lbl">Subscription required</span><span class="c-yes">✓ None</span><span class="c-no">✗ Required</span><span class="c-no">✗ Required</span></div>
-      <div class="cmp-r"><span class="cmp-lbl">Accident history</span><span class="c-yes">✓</span><span class="c-yes">✓</span><span class="c-yes">✓</span></div>
-      <div class="cmp-r"><span class="cmp-lbl">Title records</span><span class="c-yes">✓</span><span class="c-yes">✓</span><span class="c-yes">✓</span></div>
-      <div class="cmp-r"><span class="cmp-lbl">Instant delivery</span><span class="c-yes">✓</span><span class="c-yes">✓</span><span class="c-yes">✓</span></div>
-      <div class="cmp-r"><span class="cmp-lbl">Money-back guarantee</span><span class="c-yes">✓</span><span class="c-no">✗</span><span class="c-no">✗</span></div>
+    <div class="cmp-table">
+      <div class="cmp-h rv rv-1"><span>Feature</span><span class="us">VINRecordHub</span><span>Carfax® Direct</span><span>AutoCheck® Direct</span></div>
+      <div class="cmp-r rv rv-2"><span class="cmp-lbl" style="font-weight:600;color:var(--text)">Price per report</span><span class="c-good">$9.99</span><span class="c-bad">$44.99</span><span class="c-bad">$24.99</span></div>
+      <div class="cmp-r rv rv-3"><span class="cmp-lbl">Combo (both reports)</span><span class="c-good">$14.99</span><span class="c-bad">$69.98</span><span class="c-bad">$69.98</span></div>
+      <div class="cmp-r rv rv-4"><span class="cmp-lbl">Subscription required</span><span class="c-yes">✓ None</span><span class="c-no">✗ Required</span><span class="c-no">✗ Required</span></div>
+      <div class="cmp-r rv rv-5"><span class="cmp-lbl">Accident history</span><span class="c-yes">✓</span><span class="c-yes">✓</span><span class="c-yes">✓</span></div>
+      <div class="cmp-r rv rv-6"><span class="cmp-lbl">Title records</span><span class="c-yes">✓</span><span class="c-yes">✓</span><span class="c-yes">✓</span></div>
+      <div class="cmp-r rv rv-6"><span class="cmp-lbl">Instant delivery</span><span class="c-yes">✓</span><span class="c-yes">✓</span><span class="c-yes">✓</span></div>
+      <div class="cmp-r rv rv-6"><span class="cmp-lbl">Money-back guarantee</span><span class="c-yes">✓</span><span class="c-no">✗</span><span class="c-no">✗</span></div>
     </div>
     <p style="font-size:.67rem;color:oklch(30% .008 252);margin-top:.9rem;text-align:center">* Competitor pricing from Carfax.com and AutoCheck.com. Subject to change.</p>
   </div>
@@ -850,11 +861,11 @@
     <div class="sec-tag rv">FAQ</div>
     <h2 class="rv rv-1">Common <em>questions.</em></h2>
     <div class="faq-list">
-      <div class="fq"><div class="fq-q">Why is VINRecordHub more affordable? <span class="fq-ico">+</span></div><div class="fq-a">VINRecordHub is a vehicle history service that provides access to Carfax® &amp; AutoCheck® reports through our platform. By optimizing our delivery infrastructure, we offer competitive pricing while delivering the same comprehensive vehicle data.</div></div>
-      <div class="fq"><div class="fq-q">How fast will I receive my report? <span class="fq-ico">+</span></div><div class="fq-a">Reports are delivered to your email inbox within 60 seconds of payment confirmation. You'll receive it as a downloadable file you can keep forever.</div></div>
-      <div class="fq"><div class="fq-q">Where do I find the VIN on my car? <span class="fq-ico">+</span></div><div class="fq-a">The VIN is a 17-character code found on: the dashboard (visible through the windshield on the driver's side), the driver's door jamb sticker, your vehicle title, or your insurance card.</div></div>
-      <div class="fq"><div class="fq-q">What if the report has no records? <span class="fq-ico">+</span></div><div class="fq-a">Some vehicles have limited history — normal for older vehicles or cars with minimal reported incidents. If your report returns no data, contact us at support@vinrecordhub.com and we'll resolve it or issue a full refund.</div></div>
-      <div class="fq"><div class="fq-q">Is my payment secure? <span class="fq-ico">+</span></div><div class="fq-a">Yes. All payments are processed through PayPal — we never store or see your card details. PayPal's encryption keeps your information completely safe.</div></div>
+      <div class="fq rv rv-1"><div class="fq-q">Why is VINRecordHub more affordable? <span class="fq-ico">+</span></div><div class="fq-a">VINRecordHub is a vehicle history service that provides access to Carfax® &amp; AutoCheck® reports through our platform. By optimizing our delivery infrastructure, we offer competitive pricing while delivering the same comprehensive vehicle data.</div></div>
+      <div class="fq rv rv-2"><div class="fq-q">How fast will I receive my report? <span class="fq-ico">+</span></div><div class="fq-a">Reports are delivered to your email inbox within 60 seconds of payment confirmation. You'll receive it as a downloadable file you can keep forever.</div></div>
+      <div class="fq rv rv-3"><div class="fq-q">Where do I find the VIN on my car? <span class="fq-ico">+</span></div><div class="fq-a">The VIN is a 17-character code found on: the dashboard (visible through the windshield on the driver's side), the driver's door jamb sticker, your vehicle title, or your insurance card.</div></div>
+      <div class="fq rv rv-4"><div class="fq-q">What if the report has no records? <span class="fq-ico">+</span></div><div class="fq-a">Some vehicles have limited history — normal for older vehicles or cars with minimal reported incidents. If your report returns no data, contact us at support@vinrecordhub.com and we'll resolve it or issue a full refund.</div></div>
+      <div class="fq rv rv-5"><div class="fq-q">Is my payment secure? <span class="fq-ico">+</span></div><div class="fq-a">Yes. All payments are processed through PayPal — we never store or see your card details. PayPal's encryption keeps your information completely safe.</div></div>
     </div>
   </div>
 </div>
@@ -922,8 +933,6 @@ window.addEventListener('load',function(){
   <button class="vrh-qr-btn" onclick="vrhAsk('📩 I paid but did not receive my report')"><span class="qr-icon">📩</span>Missing report</button>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script>
   function openM(){document.getElementById('mMenu').classList.add('open');document.body.style.overflow='hidden';document.getElementById('menuBtn').setAttribute('aria-expanded','true')}
   function closeM(){document.getElementById('mMenu').classList.remove('open');document.body.style.overflow='';document.getElementById('menuBtn').setAttribute('aria-expanded','false')}
@@ -992,23 +1001,53 @@ window.addEventListener('load',function(){
     c.addEventListener('mouseleave',()=>{rafPc=null;c.style.transform=''});
   });
 
-  // Single batch observer instead of one ScrollTrigger per .rv element
+  // Scroll reveal — native IntersectionObserver, no library needed
   (function initScrollReveal(){
-    if(typeof gsap==='undefined'||typeof ScrollTrigger==='undefined'){
-      document.querySelectorAll('.rv').forEach(el=>{el.style.opacity='1';el.style.transform='none'});
+    var rm=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    if(rm){
+      document.querySelectorAll('.rv').forEach(function(el){el.classList.add('in')});
       return;
     }
-    gsap.registerPlugin(ScrollTrigger);
-    ScrollTrigger.batch('.rv',{
-      start:'top 92%',
-      onEnter:function(batch){
-        gsap.to(batch,{opacity:1,y:0,duration:.7,ease:'power3.out',
-          stagger:{each:.08,from:'start'},overwrite:true});
-        // Clear will-change after animation to free GPU memory
-        batch.forEach(function(el){
-          gsap.delayedCall(.7+batch.length*.08,function(){el.style.willChange='auto'});
-        });
-      }
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting)return;
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      });
+    },{rootMargin:'0px 0px -8% 0px',threshold:0.08});
+    document.querySelectorAll('.rv').forEach(function(el){io.observe(el)});
+  })();
+
+  // Stat counter animation — counts up when section scrolls into view
+  (function initCounters(){
+    var rm=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    if(rm)return;
+    var defs=[
+      {cls:'sv-lime',from:0,to:9.99,pre:'$',suf:'',dec:2,dur:1400},
+      {cls:'sv-green',from:0,to:60,pre:'',suf:'s',dec:0,dur:1200},
+      {cls:'sv-blue',from:0,to:100,pre:'',suf:'%',dec:0,dur:1000}
+    ];
+    function countUp(el,from,to,pre,suf,dec,dur){
+      var start=null;
+      (function step(ts){
+        if(!start)start=ts;
+        var p=Math.min((ts-start)/dur,1);
+        var ease=1-Math.pow(1-p,3);
+        el.textContent=pre+(from+(to-from)*ease).toFixed(dec)+suf;
+        if(p<1)requestAnimationFrame(step);
+      })(performance.now());
+    }
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting)return;
+        io.unobserve(e.target);
+        var d=defs.find(function(x){return e.target.classList.contains(x.cls)});
+        if(d)countUp(e.target,d.from,d.to,d.pre,d.suf,d.dec,d.dur);
+      });
+    },{threshold:0.6});
+    defs.forEach(function(d){
+      var el=document.querySelector('.'+d.cls);
+      if(el)io.observe(el);
     });
   })();
 

@@ -240,20 +240,42 @@
         </div>
       </div>
 
-      <!-- GA4 SETUP NOTICE -->
-      <div id="gaSetupNotice" style="background:rgba(66,133,244,.07);border:1px solid rgba(66,133,244,.2);border-radius:10px;padding:1rem 1.25rem;margin-top:1rem;display:flex;align-items:center;gap:1rem">
-        <div style="font-size:1.5rem">📊</div>
-        <div>
-          <div style="font-size:.85rem;font-weight:600;color:#4285f4;margin-bottom:.2rem">Connect Google Analytics to see live traffic data</div>
-          <div style="font-size:.78rem;color:var(--mid)">Replace <code style="background:rgba(255,255,255,.08);padding:.1rem .4rem;border-radius:4px;color:#fbbc04">G-XXXXXXXXXX</code> in index.html and checkout.html with your real GA4 Measurement ID, then add your GA4 Property ID below.</div>
-        </div>
+      <!-- GA4 QUICK LINKS -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;margin-top:1rem">
+        <a href="https://analytics.google.com/analytics/web/#/p${gaPropertyId}/reports/intelligenthome" target="_blank" id="gaHomeLink"
+          style="background:rgba(66,133,244,.08);border:1px solid rgba(66,133,244,.2);border-radius:10px;padding:1rem 1.25rem;text-decoration:none;display:flex;align-items:center;gap:.75rem;transition:background .15s"
+          onmouseover="this.style.background='rgba(66,133,244,.15)'" onmouseout="this.style.background='rgba(66,133,244,.08)'">
+          <span style="font-size:1.4rem">📊</span>
+          <div><div style="font-size:.82rem;font-weight:700;color:#4285f4">Overview Report</div><div style="font-size:.72rem;color:var(--mid)">Sessions, users, conversions</div></div>
+        </a>
+        <a href="https://analytics.google.com/analytics/web/#/p${gaPropertyId}/reports/explorer?params=_u..nav%3Dmaui%26_r.explorerCard..selmet%3D%5B%22sessions%22%5D%26_r.explorerCard..seldim%3D%5B%22sessionSource%22%5D" target="_blank"
+          style="background:rgba(52,168,83,.08);border:1px solid rgba(52,168,83,.2);border-radius:10px;padding:1rem 1.25rem;text-decoration:none;display:flex;align-items:center;gap:.75rem;transition:background .15s"
+          onmouseover="this.style.background='rgba(52,168,83,.15)'" onmouseout="this.style.background='rgba(52,168,83,.08)'">
+          <span style="font-size:1.4rem">🌐</span>
+          <div><div style="font-size:.82rem;font-weight:700;color:#34a853">Traffic Sources</div><div style="font-size:.72rem;color:var(--mid)">Where visitors come from</div></div>
+        </a>
+        <a href="https://analytics.google.com/analytics/web/#/p${gaPropertyId}/reports/realtime" target="_blank"
+          style="background:rgba(234,67,53,.08);border:1px solid rgba(234,67,53,.2);border-radius:10px;padding:1rem 1.25rem;text-decoration:none;display:flex;align-items:center;gap:.75rem;transition:background .15s"
+          onmouseover="this.style.background='rgba(234,67,53,.15)'" onmouseout="this.style.background='rgba(234,67,53,.08)'">
+          <span style="font-size:1.4rem">🔴</span>
+          <div><div style="font-size:.82rem;font-weight:700;color:#ea4335">Realtime</div><div style="font-size:.72rem;color:var(--mid)">Who's on your site right now</div></div>
+        </a>
+        <a href="https://analytics.google.com/analytics/web/#/p${gaPropertyId}/reports/explorer?params=_u..nav%3Dmaui%26_r.explorerCard..selmet%3D%5B%22screenPageViews%22%5D%26_r.explorerCard..seldim%3D%5B%22pagePath%22%5D" target="_blank"
+          style="background:rgba(251,188,4,.08);border:1px solid rgba(251,188,4,.2);border-radius:10px;padding:1rem 1.25rem;text-decoration:none;display:flex;align-items:center;gap:.75rem;transition:background .15s"
+          onmouseover="this.style.background='rgba(251,188,4,.15)'" onmouseout="this.style.background='rgba(251,188,4,.08)'">
+          <span style="font-size:1.4rem">📄</span>
+          <div><div style="font-size:.82rem;font-weight:700;color:#fbbc04">Top Pages</div><div style="font-size:.72rem;color:var(--mid)">Most visited pages</div></div>
+        </a>
       </div>
 
       <!-- GA4 PROPERTY ID INPUT -->
-      <div style="margin-top:.75rem;display:flex;gap:.6rem;align-items:center">
-        <input type="text" id="gaPropertyId" placeholder="GA4 Property ID (e.g. 123456789)" style="background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;padding:.6rem 1rem;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none;width:280px" oninput="saveGAProperty()"/>
-        <span style="font-size:.75rem;color:var(--mid)">Found in GA4 → Admin → Property Settings</span>
+      <div style="margin-top:.75rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
+        <input type="text" id="gaPropertyId" placeholder="GA4 Property ID (numbers only, e.g. 123456789)" 
+          style="background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;padding:.6rem 1rem;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none;width:320px" 
+          oninput="saveGAProperty(this.value)"/>
+        <span style="font-size:.73rem;color:var(--mid)">GA4 → Admin → Property Settings → Property ID</span>
       </div>
+      <div style="font-size:.72rem;color:var(--mid);margin-top:.4rem">Links above will open directly to that report in your GA4 dashboard.</div>
     </div>
 
     <!-- CONTROLS -->
@@ -519,89 +541,32 @@
     document.getElementById('ga28').style.background = days === 28 ? 'rgba(232,255,63,0.1)' : 'rgba(255,255,255,.04)';
     document.getElementById('ga28').style.color = days === 28 ? 'var(--accent)' : 'var(--mid)';
     document.getElementById('ga28').style.borderColor = days === 28 ? 'rgba(232,255,63,0.3)' : 'var(--border)';
-    loadGA();
   }
 
-  function saveGAProperty() {
-    const id = document.getElementById('gaPropertyId').value.trim();
-    if (id) localStorage.setItem('gaPropertyId', id);
-  }
-
-  async function loadGA() {
-    // Restore saved property ID
-    const saved = localStorage.getItem('gaPropertyId');
-    if (saved) document.getElementById('gaPropertyId').value = saved;
-
-    const propertyId = document.getElementById('gaPropertyId').value.trim();
-    if (!propertyId) {
-      showGAPlaceholder();
-      return;
-    }
-
-    // Call our secure GA4 API endpoint
-    try {
-      const res = await fetch(`/api/ga-stats?token=${encodeURIComponent(adminToken)}&propertyId=${encodeURIComponent(propertyId)}&days=${gaRange}`);
-      if (!res.ok) { showGAPlaceholder(); return; }
-      const data = await res.json();
-      renderGA(data);
-    } catch(e) {
-      showGAPlaceholder();
+  function saveGAProperty(val) {
+    const id = (val || document.getElementById('gaPropertyId').value).trim();
+    if (id) {
+      localStorage.setItem('gaPropertyId', id);
+      updateGALinks(id);
     }
   }
 
-  function showGAPlaceholder() {
-    ['gaSessions','gaUsers','gaPageviews','gaBounce','gaAvgSession','gaConversion'].forEach(id => {
-      document.getElementById(id).textContent = '—';
+  function updateGALinks(propertyId) {
+    // Update all GA quick link hrefs with the real property ID
+    document.querySelectorAll('a[href*="${gaPropertyId}"]').forEach(a => {
+      a.href = a.href.replace(/\$\{gaPropertyId\}/g, propertyId);
     });
+    // Also update the Open GA4 button
+    const openBtn = document.querySelector('a[href="https://analytics.google.com"]');
+    if (openBtn) openBtn.href = `https://analytics.google.com/analytics/web/#/p${propertyId}/reports/intelligenthome`;
   }
 
-  function renderGA(data) {
-    document.getElementById('gaSetupNotice').style.display = 'none';
-    document.getElementById('gaSessions').textContent = fmtNum(data.sessions);
-    document.getElementById('gaUsers').textContent = fmtNum(data.users);
-    document.getElementById('gaPageviews').textContent = fmtNum(data.pageviews);
-    document.getElementById('gaBounce').textContent = (data.bounceRate || 0).toFixed(1) + '%';
-    document.getElementById('gaAvgSession').textContent = fmtTime(data.avgSessionDuration);
-
-    // Conversion: orders / sessions
-    const convRate = data.sessions > 0 ? ((data.conversions || 0) / data.sessions * 100).toFixed(2) : '0.00';
-    document.getElementById('gaConversion').textContent = convRate + '%';
-
-    // Top sources
-    if (data.sources && data.sources.length) {
-      document.getElementById('gaSources').innerHTML = data.sources.map((s, i) => `
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:.5rem 1.25rem;border-bottom:1px solid var(--border)">
-          <div style="display:flex;align-items:center;gap:.5rem">
-            <span style="font-size:.72rem;color:var(--mid);width:16px">${i+1}</span>
-            <span style="font-size:.82rem">${s.source || 'direct'}</span>
-          </div>
-          <span style="font-size:.8rem;font-weight:600;color:var(--accent2)">${fmtNum(s.sessions)}</span>
-        </div>`).join('');
+  function loadGA() {
+    const saved = localStorage.getItem('gaPropertyId');
+    if (saved) {
+      document.getElementById('gaPropertyId').value = saved;
+      updateGALinks(saved);
     }
-
-    // Top pages
-    if (data.pages && data.pages.length) {
-      document.getElementById('gaPages').innerHTML = data.pages.map((p, i) => `
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:.5rem 1.25rem;border-bottom:1px solid var(--border)">
-          <div style="display:flex;align-items:center;gap:.5rem">
-            <span style="font-size:.72rem;color:var(--mid);width:16px">${i+1}</span>
-            <span style="font-size:.82rem;color:var(--mid)">${p.page}</span>
-          </div>
-          <span style="font-size:.8rem;font-weight:600;color:var(--accent2)">${fmtNum(p.views)}</span>
-        </div>`).join('');
-    }
-  }
-
-  function fmtNum(n) {
-    if (!n) return '0';
-    return n >= 1000 ? (n/1000).toFixed(1) + 'k' : n.toString();
-  }
-
-  function fmtTime(secs) {
-    if (!secs) return '0:00';
-    const m = Math.floor(secs / 60);
-    const s = Math.floor(secs % 60);
-    return `${m}:${s.toString().padStart(2,'0')}`;
   }
 </script>
 </body>

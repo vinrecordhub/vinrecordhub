@@ -76,8 +76,7 @@
       -webkit-font-smoothing:antialiased}
 
     /* SCROLL REVEAL */
-    .rv{opacity:0;transform:translateY(28px);
-      transition:opacity .7s var(--expo),transform .7s var(--expo)}
+    .rv{opacity:0;transform:translateY(28px);will-change:transform,opacity}
     .rv.in{opacity:1;transform:translateY(0)}
     .rv-1{transition-delay:.08s}.rv-2{transition-delay:.16s}
     .rv-3{transition-delay:.24s}.rv-4{transition-delay:.32s}
@@ -110,7 +109,7 @@
       background:none;border:none;cursor:pointer;padding:4px}
     .burger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px}
     .m-menu{display:none;position:fixed;inset:0;z-index:200;
-      background:oklch(9% .018 252 / .97);backdrop-filter:blur(24px);
+      background:oklch(9% .018 252 / .99);
       flex-direction:column;align-items:center;justify-content:center;gap:2.5rem}
     .m-menu.open{display:flex}
     .m-menu a{font-size:1.5rem;font-weight:700;color:var(--text);text-decoration:none}
@@ -529,7 +528,7 @@
     :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
 
     /* HERO AURORA */
-    .hero-aura{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+    .hero-aura{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;contain:paint}
     .hero-aura-orb{position:absolute;border-radius:50%;filter:blur(70px);will-change:transform;transform:translateZ(0)}
     .aura-1{width:600px;height:600px;
       background:radial-gradient(circle,oklch(76% .145 52 / .09),transparent 65%);
@@ -540,7 +539,13 @@
     .aura-3{width:380px;height:380px;
       background:radial-gradient(circle,oklch(72% .15 155 / .05),transparent 65%);
       top:35%;left:40%;animation:aura3 11s ease-in-out infinite}
-    @media(max-width:960px){.aura-1{width:400px;height:400px}.aura-2{width:350px;height:350px}.aura-3{display:none}}
+    @media(max-width:960px){
+      /* Remove expensive blur on mobile — static gradient is visually equivalent */
+      .hero-aura-orb{filter:none!important;animation:none!important;will-change:auto}
+      .aura-1{width:400px;height:400px}.aura-2{width:350px;height:350px}.aura-3{display:none}
+      /* Remove backdrop-filter on nav — causes full recomposite every scroll frame */
+      .nav-shell{backdrop-filter:none;-webkit-backdrop-filter:none;background:oklch(9% .018 252 / .96)}
+    }
     @keyframes aura1{0%,100%{transform:translate(0,0) scale(1)}40%{transform:translate(-5%,8%) scale(1.15)}70%{transform:translate(7%,-5%) scale(.9)}}
     @keyframes aura2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(13%,-18%) scale(1.2)}}
     @keyframes aura3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-9%,12%) scale(1.28)}}
@@ -1026,20 +1031,35 @@ window.addEventListener('load',function(){
     c.addEventListener('mouseleave',()=>{rafPc=null;c.style.transform=''});
   });
 
-  // GSAP ScrollTrigger scroll animations — replaces IntersectionObserver
+  // Single batch observer instead of one ScrollTrigger per .rv element
   (function initScrollReveal(){
     if(typeof gsap==='undefined'||typeof ScrollTrigger==='undefined'){
       document.querySelectorAll('.rv').forEach(el=>{el.style.opacity='1';el.style.transform='none'});
       return;
     }
     gsap.registerPlugin(ScrollTrigger);
-    const delayMap={'rv-1':.08,'rv-2':.16,'rv-3':.24,'rv-4':.32,'rv-5':.40,'rv-6':.48};
-    gsap.utils.toArray('.rv').forEach(el=>{
-      let d=0;
-      for(const [cls,val] of Object.entries(delayMap)){if(el.classList.contains(cls)){d=val;break}}
-      gsap.to(el,{opacity:1,y:0,duration:.75,delay:d,ease:'power3.out',
-        scrollTrigger:{trigger:el,start:'top 92%',toggleActions:'play none none none'}});
+    ScrollTrigger.batch('.rv',{
+      start:'top 92%',
+      onEnter:function(batch){
+        gsap.to(batch,{opacity:1,y:0,duration:.7,ease:'power3.out',
+          stagger:{each:.08,from:'start'},overwrite:true});
+        // Clear will-change after animation to free GPU memory
+        batch.forEach(function(el){
+          gsap.delayedCall(.7+batch.length*.08,function(){el.style.willChange='auto'});
+        });
+      }
     });
+  })();
+
+  // Disable heavy GPU effects on low-end devices
+  (function checkDeviceCap(){
+    var rm=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    var lowMem=navigator.deviceMemory&&navigator.deviceMemory<4;
+    var lowCPU=navigator.hardwareConcurrency&&navigator.hardwareConcurrency<4;
+    if(rm||lowMem||lowCPU){
+      var aura=document.querySelector('.hero-aura');
+      if(aura)aura.style.display='none';
+    }
   })();
 
   var Tawk_API=Tawk_API||{};

@@ -178,104 +178,78 @@
 
     <!-- GOOGLE ANALYTICS SECTION -->
     <div style="margin-bottom:2rem">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem">
         <div>
           <div style="font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);margin-bottom:.25rem">Google Analytics</div>
           <div style="font-size:1rem;font-weight:700;color:var(--white)">Site Traffic Overview</div>
         </div>
-        <div style="display:flex;gap:.5rem">
+        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
           <button onclick="setGARange(7)" id="ga7" style="background:rgba(232,255,63,0.1);border:1px solid rgba(232,255,63,0.3);color:var(--accent);font-size:.75rem;padding:.35rem .85rem;border-radius:6px;cursor:pointer">7 days</button>
           <button onclick="setGARange(28)" id="ga28" style="background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--mid);font-size:.75rem;padding:.35rem .85rem;border-radius:6px;cursor:pointer">28 days</button>
-          <a href="https://analytics.google.com" target="_blank" style="background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--mid);font-size:.75rem;padding:.35rem .85rem;border-radius:6px;text-decoration:none;display:flex;align-items:center;gap:.35rem">Open GA4 ↗</a>
+          <button onclick="loadGA()" style="background:var(--accent);color:#000;border:none;font-size:.75rem;font-weight:700;padding:.35rem .85rem;border-radius:6px;cursor:pointer">↻ Refresh</button>
+          <a href="https://analytics.google.com" target="_blank" style="background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--mid);font-size:.75rem;padding:.35rem .85rem;border-radius:6px;text-decoration:none">Open GA4 ↗</a>
         </div>
       </div>
 
       <!-- GA STAT CARDS -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.25rem">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-bottom:1.25rem" id="gaCards">
         <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid #4285f4">
-          <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Sessions</div>
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Sessions</div>
           <div style="font-size:1.75rem;font-weight:800;color:#4285f4;letter-spacing:-.04em" id="gaSessions">—</div>
-          <div style="font-size:.72rem;color:var(--mid);margin-top:.25rem" id="gaSessionsDelta"></div>
+          <div style="font-size:.7rem;color:var(--mid);margin-top:.2rem">site visits</div>
         </div>
         <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid #34a853">
-          <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Users</div>
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Users</div>
           <div style="font-size:1.75rem;font-weight:800;color:#34a853;letter-spacing:-.04em" id="gaUsers">—</div>
-          <div style="font-size:.72rem;color:var(--mid);margin-top:.25rem" id="gaUsersDelta"></div>
+          <div style="font-size:.7rem;color:var(--mid);margin-top:.2rem">unique visitors</div>
         </div>
         <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid #fbbc04">
-          <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Pageviews</div>
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Pageviews</div>
           <div style="font-size:1.75rem;font-weight:800;color:#fbbc04;letter-spacing:-.04em" id="gaPageviews">—</div>
-          <div style="font-size:.72rem;color:var(--mid);margin-top:.25rem" id="gaPageviewsDelta"></div>
+          <div style="font-size:.7rem;color:var(--mid);margin-top:.2rem">pages loaded</div>
         </div>
         <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid #ea4335">
-          <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Bounce Rate</div>
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Bounce Rate</div>
           <div style="font-size:1.75rem;font-weight:800;color:#ea4335;letter-spacing:-.04em" id="gaBounce">—</div>
-          <div style="font-size:.72rem;color:var(--mid);margin-top:.25rem">% leave without action</div>
+          <div style="font-size:.7rem;color:var(--mid);margin-top:.2rem">left immediately</div>
         </div>
         <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid var(--accent2)">
-          <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Avg Session</div>
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Avg Session</div>
           <div style="font-size:1.75rem;font-weight:800;color:var(--accent2);letter-spacing:-.04em" id="gaAvgSession">—</div>
-          <div style="font-size:.72rem;color:var(--mid);margin-top:.25rem">time on site</div>
+          <div style="font-size:.7rem;color:var(--mid);margin-top:.2rem">time on site</div>
         </div>
         <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:2px solid var(--accent)">
-          <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Conversion</div>
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">Conv. Rate</div>
           <div style="font-size:1.75rem;font-weight:800;color:var(--accent);letter-spacing:-.04em" id="gaConversion">—</div>
-          <div style="font-size:.72rem;color:var(--mid);margin-top:.25rem">visitors → buyers</div>
+          <div style="font-size:.7rem;color:var(--mid);margin-top:.2rem">visitors → buyers</div>
         </div>
       </div>
 
       <!-- TOP SOURCES + TOP PAGES -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
         <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;overflow:hidden">
-          <div style="padding:.875rem 1.25rem;border-bottom:1px solid var(--border);font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mid)">Top Traffic Sources</div>
+          <div style="padding:.875rem 1.25rem;border-bottom:1px solid var(--border);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mid)">Top Traffic Sources</div>
           <div id="gaSources" style="padding:.5rem 0">
-            <div style="text-align:center;padding:2rem;color:var(--mid);font-size:.82rem">Connect GA4 to see sources</div>
+            <div style="text-align:center;padding:1.5rem;color:var(--mid);font-size:.8rem">Loading...</div>
           </div>
         </div>
         <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;overflow:hidden">
-          <div style="padding:.875rem 1.25rem;border-bottom:1px solid var(--border);font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mid)">Top Pages</div>
+          <div style="padding:.875rem 1.25rem;border-bottom:1px solid var(--border);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mid)">Top Pages</div>
           <div id="gaPages" style="padding:.5rem 0">
-            <div style="text-align:center;padding:2rem;color:var(--mid);font-size:.82rem">Connect GA4 to see pages</div>
+            <div style="text-align:center;padding:1.5rem;color:var(--mid);font-size:.8rem">Loading...</div>
           </div>
         </div>
       </div>
 
-      <!-- GA4 QUICK LINKS -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;margin-top:1rem">
-        <a href="https://analytics.google.com/analytics/web/#/p${gaPropertyId}/reports/intelligenthome" target="_blank" id="gaHomeLink"
-          style="background:rgba(66,133,244,.08);border:1px solid rgba(66,133,244,.2);border-radius:10px;padding:1rem 1.25rem;text-decoration:none;display:flex;align-items:center;gap:.75rem;transition:background .15s"
-          onmouseover="this.style.background='rgba(66,133,244,.15)'" onmouseout="this.style.background='rgba(66,133,244,.08)'">
-          <span style="font-size:1.4rem">📊</span>
-          <div><div style="font-size:.82rem;font-weight:700;color:#4285f4">Overview Report</div><div style="font-size:.72rem;color:var(--mid)">Sessions, users, conversions</div></div>
-        </a>
-        <a href="https://analytics.google.com/analytics/web/#/p${gaPropertyId}/reports/explorer?params=_u..nav%3Dmaui%26_r.explorerCard..selmet%3D%5B%22sessions%22%5D%26_r.explorerCard..seldim%3D%5B%22sessionSource%22%5D" target="_blank"
-          style="background:rgba(52,168,83,.08);border:1px solid rgba(52,168,83,.2);border-radius:10px;padding:1rem 1.25rem;text-decoration:none;display:flex;align-items:center;gap:.75rem;transition:background .15s"
-          onmouseover="this.style.background='rgba(52,168,83,.15)'" onmouseout="this.style.background='rgba(52,168,83,.08)'">
-          <span style="font-size:1.4rem">🌐</span>
-          <div><div style="font-size:.82rem;font-weight:700;color:#34a853">Traffic Sources</div><div style="font-size:.72rem;color:var(--mid)">Where visitors come from</div></div>
-        </a>
-        <a href="https://analytics.google.com/analytics/web/#/p${gaPropertyId}/reports/realtime" target="_blank"
-          style="background:rgba(234,67,53,.08);border:1px solid rgba(234,67,53,.2);border-radius:10px;padding:1rem 1.25rem;text-decoration:none;display:flex;align-items:center;gap:.75rem;transition:background .15s"
-          onmouseover="this.style.background='rgba(234,67,53,.15)'" onmouseout="this.style.background='rgba(234,67,53,.08)'">
-          <span style="font-size:1.4rem">🔴</span>
-          <div><div style="font-size:.82rem;font-weight:700;color:#ea4335">Realtime</div><div style="font-size:.72rem;color:var(--mid)">Who's on your site right now</div></div>
-        </a>
-        <a href="https://analytics.google.com/analytics/web/#/p${gaPropertyId}/reports/explorer?params=_u..nav%3Dmaui%26_r.explorerCard..selmet%3D%5B%22screenPageViews%22%5D%26_r.explorerCard..seldim%3D%5B%22pagePath%22%5D" target="_blank"
-          style="background:rgba(251,188,4,.08);border:1px solid rgba(251,188,4,.2);border-radius:10px;padding:1rem 1.25rem;text-decoration:none;display:flex;align-items:center;gap:.75rem;transition:background .15s"
-          onmouseover="this.style.background='rgba(251,188,4,.15)'" onmouseout="this.style.background='rgba(251,188,4,.08)'">
-          <span style="font-size:1.4rem">📄</span>
-          <div><div style="font-size:.82rem;font-weight:700;color:#fbbc04">Top Pages</div><div style="font-size:.72rem;color:var(--mid)">Most visited pages</div></div>
-        </a>
+      <!-- SETUP NOTICE -->
+      <div id="gaNotice" style="background:rgba(66,133,244,.07);border:1px solid rgba(66,133,244,.2);border-radius:10px;padding:1rem 1.25rem;margin-top:1rem">
+        <div style="font-size:.85rem;font-weight:600;color:#4285f4;margin-bottom:.5rem">📊 Setup Required — 3 Vercel Environment Variables</div>
+        <div style="display:flex;flex-direction:column;gap:.4rem">
+          <div style="font-size:.78rem;color:var(--mid)">1. <code style="background:rgba(255,255,255,.08);padding:.1rem .4rem;border-radius:4px;color:#fbbc04">GA4_PROPERTY_ID</code> — numbers only (e.g. 123456789) · Found in GA4 → Admin → Property Settings</div>
+          <div style="font-size:.78rem;color:var(--mid)">2. <code style="background:rgba(255,255,255,.08);padding:.1rem .4rem;border-radius:4px;color:#fbbc04">GOOGLE_SERVICE_ACCOUNT_KEY</code> — paste entire JSON from downloaded key file</div>
+          <div style="font-size:.78rem;color:var(--mid)">3. Add service account email to GA4 → Admin → Account Access Management → Viewer</div>
+        </div>
       </div>
-
-      <!-- GA4 PROPERTY ID INPUT -->
-      <div style="margin-top:.75rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
-        <input type="text" id="gaPropertyId" placeholder="GA4 Property ID (numbers only, e.g. 123456789)" 
-          style="background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;padding:.6rem 1rem;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none;width:320px" 
-          oninput="saveGAProperty(this.value)"/>
-        <span style="font-size:.73rem;color:var(--mid)">GA4 → Admin → Property Settings → Property ID</span>
-      </div>
-      <div style="font-size:.72rem;color:var(--mid);margin-top:.4rem">Links above will open directly to that report in your GA4 dashboard.</div>
     </div>
 
     <!-- CONTROLS -->
@@ -528,6 +502,7 @@
     document.getElementById('adminWrap').style.display = 'block';
     loadOrders();
     loadGA();
+    loadGA();
   }
 
   // ─── GOOGLE ANALYTICS ─────────────────────────────────────
@@ -541,32 +516,85 @@
     document.getElementById('ga28').style.background = days === 28 ? 'rgba(232,255,63,0.1)' : 'rgba(255,255,255,.04)';
     document.getElementById('ga28').style.color = days === 28 ? 'var(--accent)' : 'var(--mid)';
     document.getElementById('ga28').style.borderColor = days === 28 ? 'rgba(232,255,63,0.3)' : 'var(--border)';
+    loadGA();
   }
 
-  function saveGAProperty(val) {
-    const id = (val || document.getElementById('gaPropertyId').value).trim();
-    if (id) {
-      localStorage.setItem('gaPropertyId', id);
-      updateGALinks(id);
+  async function loadGA() {
+    try {
+      const res = await fetch(`/api/ga-stats?token=${encodeURIComponent(adminToken)}&days=${gaRange}`);
+      if (!res.ok) return;
+      const data = await res.json();
+
+      if (data.notConfigured) {
+        document.getElementById('gaNotice').style.display = 'block';
+        return;
+      }
+
+      // Hide setup notice — data is live
+      document.getElementById('gaNotice').style.display = 'none';
+
+      // Fill stat cards
+      document.getElementById('gaSessions').textContent = fmt(data.sessions);
+      document.getElementById('gaUsers').textContent = fmt(data.users);
+      document.getElementById('gaPageviews').textContent = fmt(data.pageviews);
+      document.getElementById('gaBounce').textContent = data.bounceRate + '%';
+      document.getElementById('gaAvgSession').textContent = fmtTime(data.avgSession);
+
+      // Conversion rate = orders this period / sessions
+      const totalOrders = allOrders.filter(o => {
+        const d = new Date(o.created_at);
+        const cutoff = new Date();
+        cutoff.setDate(cutoff.getDate() - gaRange);
+        return d > cutoff;
+      }).length;
+      const conv = data.sessions > 0 ? ((totalOrders / data.sessions) * 100).toFixed(2) : '0.00';
+      document.getElementById('gaConversion').textContent = conv + '%';
+
+      // Sources
+      if (data.sources && data.sources.length) {
+        const maxSessions = data.sources[0].sessions;
+        document.getElementById('gaSources').innerHTML = data.sources.map((s, i) => `
+          <div style="padding:.6rem 1.25rem;border-bottom:1px solid var(--border)">
+            <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
+              <span style="font-size:.82rem;font-weight:500">${s.source}</span>
+              <span style="font-size:.82rem;font-weight:700;color:var(--accent2)">${fmt(s.sessions)}</span>
+            </div>
+            <div style="height:3px;background:rgba(255,255,255,.06);border-radius:2px">
+              <div style="height:3px;background:var(--accent2);border-radius:2px;width:${Math.round(s.sessions/maxSessions*100)}%"></div>
+            </div>
+          </div>`).join('');
+      }
+
+      // Pages
+      if (data.pages && data.pages.length) {
+        const maxViews = data.pages[0].views;
+        document.getElementById('gaPages').innerHTML = data.pages.map((p, i) => `
+          <div style="padding:.6rem 1.25rem;border-bottom:1px solid var(--border)">
+            <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
+              <span style="font-size:.78rem;color:var(--mid);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px">${p.page}</span>
+              <span style="font-size:.82rem;font-weight:700;color:var(--accent)">${fmt(p.views)}</span>
+            </div>
+            <div style="height:3px;background:rgba(255,255,255,.06);border-radius:2px">
+              <div style="height:3px;background:var(--accent);border-radius:2px;width:${Math.round(p.views/maxViews*100)}%"></div>
+            </div>
+          </div>`).join('');
+      }
+
+    } catch(e) {
+      console.log('GA load error:', e);
     }
   }
 
-  function updateGALinks(propertyId) {
-    // Update all GA quick link hrefs with the real property ID
-    document.querySelectorAll('a[href*="${gaPropertyId}"]').forEach(a => {
-      a.href = a.href.replace(/\$\{gaPropertyId\}/g, propertyId);
-    });
-    // Also update the Open GA4 button
-    const openBtn = document.querySelector('a[href="https://analytics.google.com"]');
-    if (openBtn) openBtn.href = `https://analytics.google.com/analytics/web/#/p${propertyId}/reports/intelligenthome`;
+  function fmt(n) {
+    if (!n && n !== 0) return '—';
+    return n >= 1000 ? (n/1000).toFixed(1) + 'k' : n.toString();
   }
 
-  function loadGA() {
-    const saved = localStorage.getItem('gaPropertyId');
-    if (saved) {
-      document.getElementById('gaPropertyId').value = saved;
-      updateGALinks(saved);
-    }
+  function fmtTime(secs) {
+    if (!secs) return '0:00';
+    const m = Math.floor(secs / 60);
+    const s = Math.floor(secs % 60);
+    return `${m}m ${s}s`;
   }
 </script>
 </body>

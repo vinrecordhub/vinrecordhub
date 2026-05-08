@@ -5,7 +5,7 @@
   <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
-  <meta name="theme-color" content="#060608"/>
+  <meta name="theme-color" content="#0b0d1c"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Checkout — VINRecordHub</title>
   <meta name="robots" content="noindex, nofollow"/>
@@ -19,25 +19,25 @@
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
-      --bg:       oklch(7% 0.008 133);
-      --surface:  oklch(10.5% 0.010 133);
-      --surface2: oklch(13.5% 0.012 133);
+      --bg:       oklch(9% 0.018 252);
+      --surface:  oklch(12.5% 0.020 252);
+      --surface2: oklch(16% 0.022 252);
       --border:   oklch(100% 0 0 / .07);
       --border2:  oklch(100% 0 0 / .13);
       --border3:  oklch(100% 0 0 / .22);
-      --text:     oklch(97% 0.005 133);
-      --muted:    oklch(67% 0.007 133);
-      --faint:    oklch(42% 0.007 133);
-      --accent:   oklch(91% 0.215 133);
-      --a-dim:    oklch(91% 0.215 133 / .08);
-      --a-bdr:    oklch(91% 0.215 133 / .28);
-      --a-glow:   oklch(91% 0.215 133 / .10);
-      --green:    oklch(72% 0.18 155);
-      --g-dim:    oklch(72% 0.18 155 / .08);
-      --g-bdr:    oklch(72% 0.18 155 / .22);
-      --red:      oklch(62% 0.22 26);
-      --r-dim:    oklch(62% 0.22 26 / .08);
-      --r-bdr:    oklch(62% 0.22 26 / .22);
+      --text:     oklch(97% 0.006 252);
+      --muted:    oklch(65% 0.010 252);
+      --faint:    oklch(40% 0.010 252);
+      --accent:   oklch(76% 0.145 52);
+      --a-dim:    oklch(76% 0.145 52 / .08);
+      --a-bdr:    oklch(76% 0.145 52 / .28);
+      --a-glow:   oklch(76% 0.145 52 / .10);
+      --green:    oklch(72% 0.15 155);
+      --g-dim:    oklch(72% 0.15 155 / .08);
+      --g-bdr:    oklch(72% 0.15 155 / .22);
+      --red:      oklch(62% 0.20 26);
+      --r-dim:    oklch(62% 0.20 26 / .08);
+      --r-bdr:    oklch(62% 0.20 26 / .22);
       --amber:    oklch(80% 0.18 72);
       --blue:     oklch(68% 0.16 245);
       --ease:     cubic-bezier(0.25,1,0.5,1);
@@ -58,7 +58,7 @@
 
     /* LOADING OVERLAY */
     #loadingOverlay{display:none;position:fixed;inset:0;z-index:999;
-      background:oklch(7% 0.008 133 / .97);backdrop-filter:blur(24px);
+      background:oklch(9% .018 252 / .97);backdrop-filter:blur(24px);
       flex-direction:column;align-items:center;justify-content:center;gap:1.75rem}
     .ov-spinner{width:56px;height:56px;border-radius:50%;
       border:2px solid var(--border2);border-top-color:var(--accent);
@@ -80,7 +80,7 @@
 
     /* NAV */
     nav{position:relative;z-index:10;
-      background:oklch(7% 0.008 133 / .88);backdrop-filter:blur(20px) saturate(1.8);
+      background:oklch(9% .018 252 / .88);backdrop-filter:blur(20px) saturate(1.8);
       border-bottom:1px solid var(--border);
       padding:0 clamp(1.25rem,5vw,3rem);height:62px;
       display:flex;align-items:center;justify-content:space-between}
@@ -139,14 +139,14 @@
       transition:background .15s,border-color .15s}
     .plan-card.active .plan-dot{background:var(--accent);border-color:var(--accent)}
     .plan-card.active .plan-dot::after{content:'✓';position:absolute;top:50%;left:50%;
-      transform:translate(-50%,-50%);font-size:9px;color:oklch(10% .02 133);font-weight:800}
+      transform:translate(-50%,-50%);font-size:9px;color:oklch(10% .015 252);font-weight:800}
     .plan-name{font-size:.82rem;font-weight:700;padding-right:1.5rem;margin-bottom:.2rem}
     .plan-price{font-size:1.35rem;font-weight:900;letter-spacing:-.04em;color:var(--accent)}
     .plan-sub{font-size:.68rem;color:var(--muted);margin-top:.15rem}
     .plan-badge{font-size:.62rem;color:var(--green);font-weight:600;
       margin-top:.2rem;display:inline-block}
     .plan-tag{position:absolute;top:-1px;left:50%;transform:translateX(-50%);
-      background:var(--accent);color:oklch(10% .02 133);font-size:.58rem;font-weight:800;
+      background:var(--accent);color:oklch(10% .015 252);font-size:.58rem;font-weight:800;
       letter-spacing:.08em;text-transform:uppercase;
       padding:.18rem .75rem;border-radius:0 0 6px 6px;white-space:nowrap}
     .disclaimer{font-size:.65rem;color:var(--faint);margin-top:.75rem;line-height:1.55}

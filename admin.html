@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
   <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png"/>
-  <meta name="theme-color" content="#060608"/>
+  <meta name="theme-color" content="#0b0d1c"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin — VINRecordHub</title>
   <meta name="robots" content="noindex, nofollow"/>
@@ -15,24 +15,24 @@
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
-      --bg:       oklch(7% 0.008 133);
-      --surface:  oklch(10.5% 0.010 133);
-      --surface2: oklch(13.5% 0.012 133);
+      --bg:       oklch(9% 0.018 252);
+      --surface:  oklch(12.5% 0.020 252);
+      --surface2: oklch(16% 0.022 252);
       --border:   oklch(100% 0 0 / .07);
       --border2:  oklch(100% 0 0 / .13);
-      --text:     oklch(97% 0.005 133);
-      --muted:    oklch(67% 0.007 133);
-      --faint:    oklch(42% 0.007 133);
-      --accent:   oklch(91% 0.215 133);
-      --a-dim:    oklch(91% 0.215 133 / .08);
-      --a-bdr:    oklch(91% 0.215 133 / .28);
-      --a-glow:   oklch(91% 0.215 133 / .10);
-      --green:    oklch(72% 0.18 155);
-      --g-dim:    oklch(72% 0.18 155 / .08);
-      --g-bdr:    oklch(72% 0.18 155 / .22);
-      --red:      oklch(62% 0.22 26);
-      --r-dim:    oklch(62% 0.22 26 / .08);
-      --r-bdr:    oklch(62% 0.22 26 / .22);
+      --text:     oklch(97% 0.006 252);
+      --muted:    oklch(65% 0.010 252);
+      --faint:    oklch(40% 0.010 252);
+      --accent:   oklch(76% 0.145 52);
+      --a-dim:    oklch(76% 0.145 52 / .08);
+      --a-bdr:    oklch(76% 0.145 52 / .28);
+      --a-glow:   oklch(76% 0.145 52 / .10);
+      --green:    oklch(72% 0.15 155);
+      --g-dim:    oklch(72% 0.15 155 / .08);
+      --g-bdr:    oklch(72% 0.15 155 / .22);
+      --red:      oklch(62% 0.20 26);
+      --r-dim:    oklch(62% 0.20 26 / .08);
+      --r-bdr:    oklch(62% 0.20 26 / .22);
       --blue:     oklch(68% 0.16 245);
       --b-dim:    oklch(68% 0.16 245 / .08);
       --b-bdr:    oklch(68% 0.16 245 / .22);
@@ -74,7 +74,7 @@
       transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
     .login-input::placeholder{color:var(--faint)}
     .login-input:focus{border-color:var(--a-bdr);box-shadow:0 0 0 3px var(--a-dim)}
-    .login-btn{width:100%;background:var(--accent);color:oklch(10% .02 133);
+    .login-btn{width:100%;background:var(--accent);color:oklch(10% .015 252);
       border:none;border-radius:9px;padding:1rem;
       font-family:'Inter',sans-serif;font-weight:800;font-size:.92rem;
       cursor:pointer;
@@ -86,7 +86,7 @@
 
     /* ADMIN */
     .admin-wrap{display:none;position:relative;z-index:1}
-    .admin-nav{background:oklch(7% 0.008 133 / .9);backdrop-filter:blur(20px) saturate(1.8);
+    .admin-nav{background:oklch(9% .018 252 / .9);backdrop-filter:blur(20px) saturate(1.8);
       border-bottom:1px solid var(--border);
       padding:0 clamp(1.25rem,5vw,3rem);height:62px;
       display:flex;align-items:center;justify-content:space-between;
@@ -135,7 +135,7 @@
       cursor:pointer;font-family:'Inter',sans-serif;
       transition:background .15s,color .15s,border-color .15s}
     .ga-range-btn.active{background:var(--a-dim);border-color:var(--a-bdr);color:var(--accent)}
-    .btn-ga-refresh{background:var(--accent);color:oklch(10% .02 133);border:none;
+    .btn-ga-refresh{background:var(--accent);color:oklch(10% .015 252);border:none;
       font-size:.75rem;font-weight:700;padding:.35rem .85rem;border-radius:6px;
       cursor:pointer;font-family:'Inter',sans-serif;
       display:flex;align-items:center;gap:.35rem;
@@ -188,7 +188,7 @@
       transition:color .15s,border-color .15s,background .15s}
     .filter-btn:hover{color:var(--text);border-color:var(--border2)}
     .filter-btn.active{background:var(--a-dim);border-color:var(--a-bdr);color:var(--accent)}
-    .btn-refresh{background:var(--accent);color:oklch(10% .02 133);border:none;
+    .btn-refresh{background:var(--accent);color:oklch(10% .015 252);border:none;
       border-radius:8px;padding:.6rem 1.25rem;
       font-family:'Inter',sans-serif;font-weight:700;font-size:.82rem;
       cursor:pointer;margin-left:auto;
@@ -217,7 +217,7 @@
     .row-orderid:hover{color:var(--green)}
     .plan-tag{display:inline-block;padding:.22rem .65rem;border-radius:4px;
       font-size:.7rem;font-weight:500;letter-spacing:.04em}
-    .plan-carfax{background:var(--a-dim);color:var(--accent);border:1px solid oklch(91% 0.215 133 / .15)}
+    .plan-carfax{background:var(--a-dim);color:var(--accent);border:1px solid oklch(76% 0.145 52 / .15)}
     .plan-autocheck{background:var(--g-dim);color:var(--green);border:1px solid var(--g-bdr)}
     .plan-combo{background:oklch(72% 0.2 290 / .08);color:var(--purple);border:1px solid oklch(72% 0.2 290 / .2)}
     .row-amount{font-weight:700;font-size:.95rem;color:var(--accent)}
@@ -247,7 +247,7 @@
     .page-btn:disabled{opacity:.3;cursor:not-allowed}
 
     .copy-toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);
-      background:var(--accent);color:oklch(10% .02 133);
+      background:var(--accent);color:oklch(10% .015 252);
       padding:.6rem 1.5rem;border-radius:8px;
       font-family:'Inter',sans-serif;font-weight:700;font-size:.85rem;
       opacity:0;transition:opacity .3s;pointer-events:none;z-index:999}

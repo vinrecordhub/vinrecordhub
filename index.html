@@ -5,26 +5,23 @@
   <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
-  <meta name="theme-color" content="#060608"/>
+  <meta name="theme-color" content="#050508"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>VINRecordHub — Carfax® & AutoCheck® Reports from $9.99</title>
   <meta name="description" content="Access Carfax® & AutoCheck® vehicle history reports from $9.99. Accident history, title records, odometer checks — delivered instantly to your inbox."/>
   <meta name="keywords" content="carfax cheap, autocheck report, vehicle history report, cheap carfax, vin check, car history report"/>
   <meta name="robots" content="index, follow"/>
   <link rel="canonical" href="https://vinrecordhub.com/"/>
-  <!-- Open Graph -->
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://vinrecordhub.com/"/>
   <meta property="og:title" content="VINRecordHub — Carfax® & AutoCheck® Reports from $9.99"/>
   <meta property="og:description" content="Get real Carfax® & AutoCheck® vehicle history reports for just $9.99. Same data, delivered in 60 seconds. No subscription required."/>
   <meta property="og:image" content="https://vinrecordhub.com/og-image.png"/>
   <meta property="og:site_name" content="VINRecordHub"/>
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="VINRecordHub — Carfax® Reports from $9.99"/>
   <meta name="twitter:description" content="Real Carfax® & AutoCheck® vehicle history reports for $9.99. Delivered in 60 seconds."/>
   <meta name="twitter:image" content="https://vinrecordhub.com/og-image.png"/>
-  <!-- Google Analytics GA4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4MSSG5GW4X"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -36,326 +33,487 @@
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
-      --bg:#060608;
-      --surface:#0e0e12;
-      --surface2:#15151b;
-      --border:rgba(255,255,255,0.07);
-      --border2:rgba(255,255,255,0.13);
-      --white:#fff;
-      --muted:rgba(255,255,255,0.58);
-      --faint:rgba(255,255,255,0.28);
-      --accent:#c8ff00;
-      --green:#00d97e;
-      --red:#ff5252;
-      --blue:#4f8cff;
-      --max:1160px;
-      --pad:clamp(1.25rem,5vw,3.5rem);
+      --bg:       oklch(8% 0.009 133);
+      --surface:  oklch(11.5% 0.011 133);
+      --surface2: oklch(14.5% 0.013 133);
+      --border:   oklch(100% 0 0 / .07);
+      --border2:  oklch(100% 0 0 / .13);
+      --border3:  oklch(100% 0 0 / .22);
+      --text:     oklch(97% 0.005 133);
+      --muted:    oklch(67% 0.007 133);
+      --faint:    oklch(42% 0.007 133);
+      --accent:   oklch(91% 0.215 133);
+      --a-dim:    oklch(91% 0.215 133 / .08);
+      --a-bdr:    oklch(91% 0.215 133 / .28);
+      --a-glow:   oklch(91% 0.215 133 / .1);
+      --green:    oklch(72% 0.18 155);
+      --g-dim:    oklch(72% 0.18 155 / .08);
+      --g-bdr:    oklch(72% 0.18 155 / .22);
+      --red:      oklch(62% 0.22 26);
+      --r-dim:    oklch(62% 0.22 26 / .08);
+      --r-bdr:    oklch(62% 0.22 26 / .22);
+      --amber:    oklch(80% 0.18 72);
+      --blue:     oklch(68% 0.16 245);
+      --max: 1160px;
+      --pad: clamp(1.25rem,5vw,3.5rem);
+      --ease: cubic-bezier(0.25,1,0.5,1);
+      --expo: cubic-bezier(0.16,1,0.3,1);
     }
     html{scroll-behavior:smooth;overflow-x:hidden}
-    body{
-      background:var(--bg);color:var(--white);
+    body{background:var(--bg);color:var(--text);
       font-family:'Inter',-apple-system,sans-serif;
-      font-weight:400;line-height:1.6;
-      overflow-x:hidden;
-      -webkit-font-smoothing:antialiased;
-    }
+      font-weight:400;line-height:1.6;overflow-x:hidden;
+      -webkit-font-smoothing:antialiased}
+
+    /* SCROLL REVEAL */
+    .rv{opacity:0;transform:translateY(28px);
+      transition:opacity .7s var(--expo),transform .7s var(--expo)}
+    .rv.in{opacity:1;transform:translateY(0)}
+    .rv-1{transition-delay:.08s}.rv-2{transition-delay:.16s}
+    .rv-3{transition-delay:.24s}.rv-4{transition-delay:.32s}
+    .rv-5{transition-delay:.40s}.rv-6{transition-delay:.48s}
 
     /* NAV */
     .nav-shell{position:fixed;top:0;left:0;right:0;z-index:100;
-      background:rgba(6,6,8,0.82);backdrop-filter:blur(18px) saturate(1.6);
-      border-bottom:1px solid var(--border)}
+      background:oklch(8% .009 133 / .88);backdrop-filter:blur(20px) saturate(1.8);
+      border-bottom:1px solid var(--border);transition:background .3s}
     nav{max-width:var(--max);margin:0 auto;padding:0 var(--pad);
       height:62px;display:flex;align-items:center;justify-content:space-between}
-    .logo{font-size:1rem;font-weight:800;letter-spacing:-0.03em;text-decoration:none;color:var(--white)}
+    .logo{font-size:1rem;font-weight:800;letter-spacing:-.04em;
+      text-decoration:none;color:var(--text)}
     .logo-r{color:var(--accent)}
-    .logo-h{color:var(--faint);font-weight:500}
+    .logo-h{color:var(--faint);font-weight:400;letter-spacing:-.02em}
     .nav-links{display:flex;align-items:center;gap:2rem}
-    .nav-links a{font-size:.85rem;font-weight:500;color:var(--muted);text-decoration:none;transition:color .15s}
-    .nav-links a:hover{color:var(--white)}
-    .nav-cta{background:transparent;color:var(--accent);font-size:.78rem;font-weight:700;
-      padding:.52rem 1.2rem;border-radius:8px;text-decoration:none;
-      border:1.5px solid rgba(200,255,0,0.5);
-      transition:all .15s}
-    .nav-cta:hover{background:var(--accent);color:#000;transform:translateY(-1px);border-color:var(--accent)}
-    .burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
-    .burger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px}
+    .nav-links a{font-size:.84rem;font-weight:500;color:var(--muted);
+      text-decoration:none;transition:color .2s var(--ease)}
+    .nav-links a:hover{color:var(--text)}
+    .nav-cta{background:var(--a-dim);color:var(--accent);
+      font-size:.78rem;font-weight:700;padding:.5rem 1.15rem;
+      border-radius:8px;text-decoration:none;
+      border:1px solid var(--a-bdr);
+      transition:background .2s,border-color .2s,transform .2s var(--ease),box-shadow .2s}
+    .nav-cta:hover{background:var(--accent);color:oklch(10% .02 133);
+      border-color:var(--accent);transform:translateY(-1px);
+      box-shadow:0 6px 20px var(--a-glow)}
+    .burger{display:none;flex-direction:column;gap:5px;
+      background:none;border:none;cursor:pointer;padding:4px}
+    .burger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px}
     .m-menu{display:none;position:fixed;inset:0;z-index:200;
-      background:rgba(6,6,8,.97);backdrop-filter:blur(20px);
+      background:oklch(8% .009 133 / .97);backdrop-filter:blur(24px);
       flex-direction:column;align-items:center;justify-content:center;gap:2.5rem}
     .m-menu.open{display:flex}
-    .m-menu a{font-size:1.5rem;font-weight:700;color:var(--white);text-decoration:none}
+    .m-menu a{font-size:1.5rem;font-weight:700;color:var(--text);text-decoration:none}
     .m-menu a.hi{color:var(--accent)}
-    .m-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;
-      color:var(--muted);font-size:1.75rem;cursor:pointer;line-height:1}
+    .m-close{position:absolute;top:1.5rem;right:1.5rem;
+      background:none;border:none;color:var(--muted);font-size:1.75rem;cursor:pointer;line-height:1}
 
     /* HERO */
-    .hero{min-height:100svh;padding-top:62px;display:flex;align-items:center;position:relative;overflow:hidden}
+    .hero{min-height:100svh;padding-top:62px;
+      display:flex;align-items:center;position:relative;overflow:hidden}
+    .hero-mesh{position:absolute;inset:0;pointer-events:none;
+      background:
+        radial-gradient(ellipse 60% 50% at 70% 20%,oklch(91% .215 133 / .05) 0%,transparent 60%),
+        radial-gradient(ellipse 50% 40% at 15% 80%,oklch(68% .16 245 / .04) 0%,transparent 60%)}
     .hero-grid{position:absolute;inset:0;
-      background-image:linear-gradient(rgba(200,255,0,.025) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(200,255,0,.025) 1px,transparent 1px);
-      background-size:64px 64px;
-      mask-image:radial-gradient(ellipse 70% 55% at 50% 0%,black 0%,transparent 100%);
+      background-image:
+        linear-gradient(oklch(91% .215 133 / .024) 1px,transparent 1px),
+        linear-gradient(90deg,oklch(91% .215 133 / .024) 1px,transparent 1px);
+      background-size:72px 72px;
+      mask-image:radial-gradient(ellipse 80% 65% at 50% 0%,black 0%,transparent 100%);
       pointer-events:none}
-    .hero-orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(60px)}
-    .orb1{width:640px;height:640px;top:-15%;right:-8%;
-      background:radial-gradient(circle,rgba(200,255,0,.07) 0%,transparent 70%)}
-    .orb2{width:480px;height:480px;bottom:-15%;left:-8%;
-      background:radial-gradient(circle,rgba(79,140,255,.06) 0%,transparent 70%)}
     .hero-inner{max-width:var(--max);margin:0 auto;padding:5rem var(--pad) 4rem;
-      display:grid;grid-template-columns:1fr 400px;gap:4rem;align-items:center;
-      width:100%;position:relative;z-index:1}
-    .hero-tag{display:inline-flex;align-items:center;gap:.5rem;
-      font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-      color:var(--accent);border:1px solid rgba(200,255,0,.2);
-      background:rgba(200,255,0,.05);padding:.32rem .9rem;border-radius:100px;margin-bottom:1.5rem}
-    .hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);
-      animation:blink 2s infinite}
-    @keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.5)}}
-    h1{font-size:clamp(2.2rem,3.8vw,3.5rem);font-weight:900;letter-spacing:-.04em;
-      line-height:1.06;margin-bottom:1.35rem}
+      display:grid;grid-template-columns:1fr 400px;gap:4rem;
+      align-items:center;width:100%;position:relative;z-index:1}
+    .hero-badge{display:inline-flex;align-items:center;gap:.5rem;
+      font-size:.67rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+      color:var(--accent);background:var(--a-dim);border:1px solid var(--a-bdr);
+      padding:.3rem .9rem;border-radius:100px;margin-bottom:1.5rem}
+    .badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);
+      animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(1.7)}}
+    h1{font-size:clamp(2.2rem,3.8vw,3.55rem);font-weight:900;
+      letter-spacing:-.046em;line-height:1.04;margin-bottom:1.4rem}
     h1 em{font-style:normal;color:var(--accent)}
-    .hero-sub{font-size:.975rem;color:rgba(255,255,255,.65);line-height:1.72;max-width:460px;margin-bottom:2.25rem}
-    .vin-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-      color:var(--faint);margin-bottom:.55rem;display:block}
+    .hero-sub{font-size:.975rem;color:var(--muted);line-height:1.76;
+      max-width:455px;margin-bottom:2.25rem}
+    .vin-label{font-size:.67rem;font-weight:700;letter-spacing:.1em;
+      text-transform:uppercase;color:var(--faint);margin-bottom:.55rem;display:block}
     .vin-row{display:flex;gap:.6rem}
-    .vin-input{flex:1;min-width:0;background:var(--surface);border:1px solid var(--border2);
-      border-radius:10px;padding:.85rem 1.1rem;color:var(--white);
-      font-family:'Inter',sans-serif;font-size:.92rem;font-weight:500;letter-spacing:.04em;
-      outline:none;transition:border-color .2s,box-shadow .2s}
-    .vin-input::placeholder{color:rgba(255,255,255,.2);letter-spacing:0;font-weight:400}
-    .vin-input:focus{border-color:rgba(200,255,0,.4);box-shadow:0 0 0 3px rgba(200,255,0,.07)}
-    .vin-btn{background:var(--accent);color:#000;border:none;border-radius:10px;
-      padding:.85rem 1.4rem;font-family:'Inter',sans-serif;font-weight:700;font-size:.875rem;
-      cursor:pointer;white-space:nowrap;transition:opacity .15s,transform .15s}
-    .vin-btn:hover{opacity:.88;transform:translateY(-1px)}
+    .vin-input{flex:1;min-width:0;background:var(--surface);
+      border:1px solid var(--border3);border-radius:10px;
+      padding:.9rem 1.1rem;color:var(--text);
+      font-family:'Inter',sans-serif;font-size:.9rem;font-weight:500;letter-spacing:.05em;
+      outline:none;transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
+    .vin-input::placeholder{color:var(--faint);letter-spacing:0;font-weight:400}
+    .vin-input:focus{border-color:var(--a-bdr);box-shadow:0 0 0 3px var(--a-dim)}
+    .vin-btn{background:var(--accent);color:oklch(10% .02 133);
+      border:none;border-radius:10px;padding:.9rem 1.5rem;
+      font-family:'Inter',sans-serif;font-weight:700;font-size:.875rem;
+      cursor:pointer;white-space:nowrap;
+      transition:opacity .15s,transform .2s var(--ease),box-shadow .2s}
+    .vin-btn:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 8px 24px var(--a-glow)}
     .vin-lk{margin-top:.55rem;display:none;align-items:center;gap:.45rem;
-      font-size:.8rem;padding:.45rem .7rem;border-radius:8px}
-    .vin-lk.show{display:flex;background:rgba(0,217,126,.07);border:1px solid rgba(0,217,126,.2);color:var(--green)}
-    .vin-lk.err{display:flex;background:rgba(255,82,82,.07);border:1px solid rgba(255,82,82,.2);color:var(--red)}
-    .vin-lk.ldg{display:flex;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted)}
+      font-size:.8rem;padding:.45rem .75rem;border-radius:8px}
+    .vin-lk.show{display:flex;background:var(--g-dim);border:1px solid var(--g-bdr);color:var(--green)}
+    .vin-lk.err{display:flex;background:var(--r-dim);border:1px solid var(--r-bdr);color:var(--red)}
+    .vin-lk.ldg{display:flex;background:var(--border);border:1px solid var(--border2);color:var(--muted)}
     .vin-err{font-size:.76rem;color:var(--red);margin-top:.35rem;display:none}
 
-    /* 3D REPORT CARD */
-    .hero-card{background:var(--surface);border:1px solid var(--border2);border-radius:20px;
-      padding:1.6rem;
+    /* HERO CARD */
+    .hero-card{background:var(--surface);border:1px solid var(--border2);
+      border-radius:20px;padding:1.6rem;
       transform:perspective(900px) rotateY(-9deg) rotateX(4deg);
-      transform-origin:left center;transition:transform .35s ease;
-      box-shadow:0 0 0 1px rgba(255,255,255,.04),0 24px 64px rgba(0,0,0,.7),0 0 80px rgba(200,255,0,.04)}
-    .hero-card:hover{transform:perspective(900px) rotateY(-4deg) rotateX(2deg)}
+      transform-origin:left center;transition:transform .4s var(--ease);
+      box-shadow:0 0 0 1px var(--border),0 24px 64px oklch(0% 0 0 / .7),0 0 80px var(--a-glow)}
+    .hero-card:hover{transform:perspective(900px) rotateY(-3deg) rotateX(2deg)}
     .hc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.1rem}
     .hc-logo{font-size:.78rem;font-weight:800;letter-spacing:-.02em}
     .hc-logo span{color:var(--accent)}
     .hc-badge{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-      background:rgba(0,217,126,.1);color:var(--green);
-      padding:.18rem .55rem;border-radius:100px;border:1px solid rgba(0,217,126,.2)}
-    .hc-car{background:var(--surface2);border-radius:10px;padding:1rem;
-      margin-bottom:1rem;border:1px solid var(--border)}
-    .hc-car-name{font-size:.95rem;font-weight:700;margin-bottom:.18rem}
-    .hc-car-vin{font-size:.66rem;font-family:'Courier New',monospace;color:var(--muted);letter-spacing:.04em}
-    .hc-stats{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1rem}
-    .hc-stat{background:var(--surface2);border-radius:9px;padding:.8rem;border:1px solid var(--border)}
-    .hc-stat-l{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.28rem}
-    .hc-stat-v{font-size:1rem;font-weight:800;letter-spacing:-.02em}
-    .ok{color:var(--green)}.warn{color:#ffaa00}.bad{color:var(--red)}
-    .hc-rows{display:flex;flex-direction:column;gap:.45rem}
+      background:var(--g-dim);color:var(--green);
+      padding:.2rem .6rem;border-radius:100px;border:1px solid var(--g-bdr)}
+    .hc-car{background:var(--surface2);border-radius:10px;
+      padding:.9rem 1rem;margin-bottom:.9rem;border:1px solid var(--border)}
+    .hc-car-name{font-size:.92rem;font-weight:700;margin-bottom:.18rem}
+    .hc-car-vin{font-size:.65rem;font-family:'Courier New',monospace;color:var(--muted);letter-spacing:.04em}
+    .hc-stats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.85rem}
+    .hc-stat{background:var(--surface2);border-radius:9px;padding:.72rem;border:1px solid var(--border)}
+    .hc-stat-l{font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--muted);margin-bottom:.25rem}
+    .hc-stat-v{font-size:.92rem;font-weight:800;letter-spacing:-.02em}
+    .ok{color:var(--green)}.warn{color:var(--amber)}.bad{color:var(--red)}
+    .hc-rows{display:flex;flex-direction:column;gap:.38rem}
     .hc-row{display:flex;align-items:center;justify-content:space-between;
-      font-size:.75rem;padding:.45rem .7rem;background:var(--surface2);
-      border-radius:7px;border:1px solid var(--border)}
+      font-size:.73rem;padding:.4rem .65rem;
+      background:var(--surface2);border-radius:7px;border:1px solid var(--border)}
     .hc-row-l{color:var(--muted)}
-    .hc-tag{font-size:.67rem;font-weight:600;padding:.14rem .45rem;border-radius:4px}
-    .tag-ok{background:rgba(0,217,126,.1);color:var(--green)}
-    .tag-warn{background:rgba(255,170,0,.1);color:#ffaa00}
-    .tag-bad{background:rgba(255,82,82,.1);color:var(--red)}
-    .hc-foot{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);
+    .hc-tag{font-size:.64rem;font-weight:600;padding:.13rem .45rem;border-radius:4px}
+    .tag-ok{background:var(--g-dim);color:var(--green)}
+    .tag-warn{background:oklch(80% .18 72 / .1);color:var(--amber)}
+    .tag-bad{background:var(--r-dim);color:var(--red)}
+    .hc-foot{margin-top:.9rem;padding-top:.9rem;border-top:1px solid var(--border);
       display:flex;align-items:center;justify-content:space-between}
     .hc-price{font-size:1.4rem;font-weight:900;letter-spacing:-.04em;color:var(--accent)}
-    .hc-price span{font-size:.78rem;font-weight:400;color:var(--muted)}
-    .hc-cta{background:var(--accent);color:#000;font-size:.75rem;font-weight:700;
-      padding:.45rem 1rem;border-radius:7px;text-decoration:none;transition:opacity .15s}
+    .hc-price span{font-size:.75rem;font-weight:400;color:var(--muted)}
+    .hc-cta{background:var(--accent);color:oklch(10% .02 133);
+      font-size:.73rem;font-weight:700;padding:.45rem 1rem;
+      border-radius:7px;text-decoration:none;transition:opacity .15s}
     .hc-cta:hover{opacity:.85}
 
     /* TRUST BAR */
-    .trust{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface)}
+    .trust{border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+      background:var(--surface)}
     .trust-inner{max-width:var(--max);margin:0 auto;padding:0 var(--pad);
-      display:flex;justify-content:center;gap:3rem;flex-wrap:wrap}
-    .t-item{display:flex;align-items:center;gap:.55rem;padding:.9rem 0;
-      font-size:.84rem;color:var(--muted)}
-    .t-item strong{color:var(--white);font-weight:600}
+      display:flex;justify-content:center;flex-wrap:wrap}
+    .t-item{display:flex;align-items:center;gap:.6rem;padding:1rem 2.25rem;
+      font-size:.84rem;color:var(--muted);border-right:1px solid var(--border)}
+    .t-item:last-child{border-right:none}
+    .t-item strong{color:var(--text);font-weight:600}
+    .t-ico{color:var(--accent);opacity:.7;flex-shrink:0}
 
-    /* SHARED SECTION */
+    /* STATS ROW */
+    .stats-row{background:var(--bg);padding:2.5rem var(--pad)}
+    .stats-inner{max-width:var(--max);margin:0 auto;
+      display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;perspective:1000px}
+    .stat-card{background:var(--surface);border:1px solid var(--border2);
+      border-radius:14px;padding:1.6rem 1.75rem;
+      transition:transform .35s var(--ease),box-shadow .35s;
+      box-shadow:0 8px 32px oklch(0% 0 0 / .4)}
+    .stat-card:nth-child(1){transform:perspective(600px) rotateY(-4deg) rotateX(2deg)}
+    .stat-card:nth-child(2){transform:perspective(600px) rotateX(2deg)}
+    .stat-card:nth-child(3){transform:perspective(600px) rotateY(4deg) rotateX(2deg)}
+    .stat-card:hover{transform:none!important;box-shadow:0 16px 48px oklch(0% 0 0 / .5)}
+    .stat-val{font-size:2.2rem;font-weight:900;letter-spacing:-.05em;line-height:1}
+    .stat-sub{font-size:.78rem;color:var(--muted);margin-top:.3rem}
+    .stat-note{font-size:.68rem;margin-top:.18rem}
+    .sv-lime{color:var(--accent)}.sv-green{color:var(--green)}.sv-blue{color:var(--blue)}
+    .sn-red{color:var(--red);text-decoration:line-through}
+    .sn-g{color:oklch(72% .18 155 / .65)}.sn-b{color:oklch(68% .16 245 / .65)}
+
+    /* SECTIONS */
     .sec{max-width:var(--max);margin:0 auto;padding:5rem var(--pad)}
-    .sec-dark{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-    .sec-tag{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.12em;
-      text-transform:uppercase;color:var(--accent);margin-bottom:.65rem}
-    h2{font-size:clamp(1.7rem,3.2vw,2.4rem);font-weight:800;letter-spacing:-.035em;
-      line-height:1.15;margin-bottom:.85rem}
+    .sec-dark{background:var(--surface);
+      border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .sec-tag{display:inline-block;font-size:.66rem;font-weight:700;
+      letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:.7rem}
+    h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-.04em;
+      line-height:1.12;margin-bottom:.85rem}
     h2 em{font-style:normal;color:var(--accent)}
-    .sec-sub{font-size:.95rem;color:rgba(255,255,255,.62);line-height:1.72;max-width:520px}
+    .sec-sub{font-size:.95rem;color:var(--muted);line-height:1.76;max-width:520px}
     .sec-center{text-align:center}
     .sec-center .sec-sub{margin:0 auto}
 
     /* STEPS */
-    .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
-      background:var(--border);border-radius:16px;overflow:hidden;
-      border:1px solid var(--border);margin-top:3rem;
-      box-shadow:0 0 60px rgba(200,255,0,.04),inset 0 1px 0 rgba(255,255,255,.06)}
-    .step{background:var(--surface);padding:2.25rem 1.75rem;transition:background .2s}
+    .steps{display:grid;grid-template-columns:repeat(3,1fr);
+      gap:0;margin-top:3.5rem;border:1px solid var(--border);border-radius:16px;
+      overflow:hidden;box-shadow:0 0 60px var(--a-glow),inset 0 1px 0 var(--border2)}
+    .step{background:var(--surface);padding:2.5rem 2rem;
+      border-right:1px solid var(--border);transition:background .25s var(--ease)}
+    .step:last-child{border-right:none}
     .step:hover{background:var(--surface2)}
-    .step-n{font-size:2.75rem;font-weight:900;letter-spacing:-.06em;
-      color:rgba(255,255,255,.06);line-height:1;margin-bottom:1.1rem}
-    .step-ico{font-size:1.6rem;margin-bottom:.9rem}
+    .step-num{font-size:.6rem;font-weight:700;letter-spacing:.16em;
+      text-transform:uppercase;color:var(--faint);margin-bottom:1.25rem;
+      display:flex;align-items:center;gap:.5rem}
+    .step-num::after{content:'';flex:1;height:1px;
+      background:linear-gradient(to right,var(--border2),transparent)}
+    .step-icon{width:44px;height:44px;margin-bottom:1.1rem;color:var(--accent);opacity:.85}
     .step-t{font-size:.95rem;font-weight:700;margin-bottom:.5rem}
-    .step-d{font-size:.84rem;color:rgba(255,255,255,.6);line-height:1.65}
+    .step-d{font-size:.84rem;color:var(--muted);line-height:1.68}
 
     /* PRICING */
-    .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2.75rem;perspective:1200px}
-    .pc{background:var(--surface);border:1px solid var(--border2);border-radius:16px;
-      padding:1.85rem;cursor:pointer;position:relative;
-      transition:border-color .25s,transform .25s,box-shadow .25s;
+    .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);
+      gap:1rem;margin-top:3rem;perspective:1200px}
+    .pc{background:var(--surface);border:1px solid var(--border2);
+      border-radius:16px;padding:2rem;cursor:pointer;position:relative;
+      transition:border-color .3s var(--ease),transform .3s var(--ease),box-shadow .3s;
       transform-style:preserve-3d}
-    .pc:hover{border-color:rgba(200,255,0,.3);transform:translateY(-6px) rotateX(2deg);
-      box-shadow:0 20px 60px rgba(0,0,0,.55),0 0 40px rgba(200,255,0,.04)}
-    .pc.feat{border-color:var(--accent);background:rgba(200,255,0,.04);
-      box-shadow:0 0 0 1px rgba(200,255,0,.1),0 8px 40px rgba(200,255,0,.07)}
+    .pc:hover{border-color:var(--a-bdr);
+      transform:translateY(-6px) rotateX(2deg);
+      box-shadow:0 20px 60px oklch(0% 0 0 / .55),0 0 40px var(--a-glow)}
+    .pc.feat{border-color:var(--accent);
+      background:oklch(91% .215 133 / .04);
+      box-shadow:0 0 0 1px var(--a-bdr),0 8px 40px var(--a-glow)}
     .feat-badge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);
-      background:var(--accent);color:#000;font-size:.6rem;font-weight:800;
-      letter-spacing:.1em;text-transform:uppercase;
+      background:var(--accent);color:oklch(10% .02 133);
+      font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
       padding:.22rem 1rem;border-radius:0 0 8px 8px;white-space:nowrap}
-    .pc-name{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-      color:var(--muted);margin-bottom:1.1rem}
-    .pc-price{font-size:2.6rem;font-weight:900;letter-spacing:-.05em;line-height:1}
+    .pc-name{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--muted);margin-bottom:1.25rem}
+    .pc-price{font-size:2.75rem;font-weight:900;letter-spacing:-.06em;line-height:1}
     .pc-price sup{font-size:1.1rem;vertical-align:super;color:var(--accent)}
-    .pc-per{font-size:.76rem;color:var(--muted);margin-top:.3rem}
+    .pc-per{font-size:.75rem;color:var(--muted);margin-top:.3rem}
     .pc-save{font-size:.7rem;color:var(--green);font-weight:600;margin-top:.25rem}
-    .pc hr{border:none;border-top:1px solid var(--border);margin:1.35rem 0}
-    .pc-feats{list-style:none;display:flex;flex-direction:column;gap:.45rem}
-    .pc-feats li{font-size:.83rem;color:rgba(255,255,255,.7);
-      display:flex;align-items:center;gap:.55rem}
-    .pc-feats li::before{content:'✓';color:var(--green);font-weight:700;font-size:.78rem;flex-shrink:0}
-    .btn-buy{display:block;text-align:center;margin-top:1.5rem;padding:.78rem;
-      border-radius:10px;font-size:.85rem;font-weight:700;text-decoration:none;
-      transition:all .2s;background:rgba(255,255,255,.06);color:var(--white);
-      border:1px solid var(--border2)}
-    .btn-buy:hover{background:rgba(255,255,255,.11)}
-    .pc.feat .btn-buy{background:var(--accent);color:#000;border-color:transparent}
-    .pc.feat .btn-buy:hover{box-shadow:0 8px 28px rgba(200,255,0,.3)}
+    .pc-divider{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
+    .pc-feats{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+    .pc-feats li{font-size:.83rem;color:oklch(80% .008 133);
+      display:flex;align-items:center;gap:.6rem}
+    .pc-feats li svg{flex-shrink:0;color:var(--green)}
+    .btn-buy{display:block;text-align:center;margin-top:1.75rem;padding:.8rem;
+      border-radius:10px;font-size:.84rem;font-weight:700;text-decoration:none;
+      transition:all .2s var(--ease);
+      background:oklch(100% 0 0 / .06);color:var(--text);border:1px solid var(--border2)}
+    .btn-buy:hover{background:oklch(100% 0 0 / .11)}
+    .pc.feat .btn-buy{background:var(--accent);color:oklch(10% .02 133);border-color:transparent}
+    .pc.feat .btn-buy:hover{box-shadow:0 8px 28px oklch(91% .215 133 / .3)}
 
     /* FEATURES */
-    .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
-      background:var(--border);margin-top:2.75rem;border-radius:16px;overflow:hidden;
-      border:1px solid var(--border)}
-    .fc{background:var(--surface);padding:1.85rem 1.75rem;transition:background .2s}
+    .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);
+      gap:1px;background:var(--border);margin-top:3rem;
+      border-radius:16px;overflow:hidden;border:1px solid var(--border)}
+    .fc{background:var(--surface);padding:2rem 1.75rem;transition:background .2s var(--ease)}
     .fc:hover{background:var(--surface2)}
-    .fc-ico{font-size:1.6rem;margin-bottom:.85rem}
-    .fc-t{font-size:.92rem;font-weight:700;margin-bottom:.4rem}
-    .fc-d{font-size:.83rem;color:rgba(255,255,255,.6);line-height:1.65}
+    .fc-icon{width:40px;height:40px;margin-bottom:1rem;color:var(--accent);opacity:.8}
+    .fc-t{font-size:.92rem;font-weight:700;margin-bottom:.45rem}
+    .fc-d{font-size:.83rem;color:var(--muted);line-height:1.68}
 
-    /* COMPARE */
-    .cmp-table{border:1px solid var(--border2);border-radius:16px;overflow:hidden;margin-top:2.75rem;
-      box-shadow:0 4px 40px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06)}
+    /* SAMPLE REPORT */
+    .sample-inner{max-width:1160px;margin:0 auto;padding:5rem clamp(1.25rem,5vw,3.5rem)}
+    .report-card{border:1px solid var(--border2);border-radius:20px;overflow:hidden;
+      box-shadow:0 24px 80px oklch(0% 0 0 / .6),0 0 60px var(--a-glow);
+      transform:perspective(1200px) rotateX(3deg);transition:transform .4s var(--ease)}
+    .report-card:hover{transform:perspective(1200px) rotateX(0deg)}
+    .report-header{background:var(--surface2);padding:1.25rem 1.75rem;
+      display:flex;justify-content:space-between;align-items:center;
+      border-bottom:1px solid var(--border)}
+    .report-label{font-size:.66rem;font-weight:700;letter-spacing:.1em;
+      text-transform:uppercase;color:var(--muted);margin-bottom:.2rem}
+    .report-vehicle{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .report-vin{font-size:.7rem;font-family:monospace;color:var(--muted);margin-top:.15rem}
+    .report-status{display:inline-flex;align-items:center;gap:.4rem;
+      background:var(--r-dim);border:1px solid var(--r-bdr);
+      border-radius:8px;padding:.4rem .9rem}
+    .report-status span{color:var(--red);font-size:.74rem;font-weight:700}
+    .report-stats-row{display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface)}
+    .report-stat{padding:1.25rem 1.5rem;border-right:1px solid var(--border);text-align:center}
+    .report-stat:last-child{border-right:none}
+    .rs-val{font-size:1.75rem;font-weight:900;letter-spacing:-.05em}
+    .rs-lbl{font-size:.68rem;color:var(--muted);margin-top:.2rem;font-weight:500}
+    .report-body{background:var(--surface);border-top:1px solid var(--border);
+      padding:1.25rem 1.75rem;position:relative}
+    .report-body-lbl{font-size:.7rem;font-weight:700;letter-spacing:.08em;
+      text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+    .report-rows{display:flex;flex-direction:column;gap:.6rem;filter:blur(4px);user-select:none}
+    .report-row{background:var(--surface2);border-radius:8px;padding:.75rem 1rem;border:1px solid var(--border)}
+    .report-row-head{display:flex;justify-content:space-between;margin-bottom:.35rem}
+    .report-row-title{font-size:.8rem;font-weight:600;color:var(--red)}
+    .report-row-meta{font-size:.7rem;color:var(--muted)}
+    .report-row-desc{font-size:.76rem;color:var(--muted)}
+    .report-unlock{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(to bottom,transparent 0%,oklch(11.5% .011 133 / .96) 40%)}
+    .report-unlock-inner{text-align:center}
+    .report-unlock-lbl{font-size:.9rem;font-weight:700;margin-bottom:.5rem}
+    .report-unlock-btn{display:inline-block;background:var(--accent);
+      color:oklch(10% .02 133);font-size:.82rem;font-weight:700;
+      padding:.55rem 1.35rem;border-radius:8px;text-decoration:none}
+
+    /* COMPARISON */
+    .cmp-table{border:1px solid var(--border2);border-radius:16px;overflow:hidden;margin-top:3rem;
+      box-shadow:0 4px 40px oklch(0% 0 0 / .4),inset 0 1px 0 var(--border2)}
     .cmp-h{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
       background:var(--surface2);padding:.95rem 1.5rem;
-      font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
-      color:var(--muted);gap:1rem}
+      font-size:.68rem;font-weight:700;letter-spacing:.08em;
+      text-transform:uppercase;color:var(--muted);gap:1rem}
     .cmp-h .us{color:var(--accent)}
     .cmp-r{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
       padding:.9rem 1.5rem;border-top:1px solid var(--border);
       font-size:.875rem;gap:1rem;align-items:center;transition:background .15s}
-    .cmp-r:hover{background:rgba(255,255,255,.02)}
-    .cmp-lbl{color:rgba(255,255,255,.65)}
+    .cmp-r:hover{background:oklch(100% 0 0 / .02)}
+    .cmp-lbl{color:var(--muted)}
     .c-us{text-align:center;color:var(--accent);font-weight:800;font-size:.95rem}
-    .c-no{text-align:center;color:rgba(255,82,82,.65)}
+    .c-no{text-align:center;color:oklch(62% .22 26 / .6)}
     .c-yes{text-align:center;color:var(--green);font-weight:600}
     .c-bad{text-align:center;color:var(--red);font-weight:700}
     .c-good{text-align:center;color:var(--accent);font-weight:800}
 
     /* FAQ */
-    .faq-list{max-width:680px;margin:2.75rem auto 0}
+    .faq-list{max-width:680px;margin:3rem auto 0}
     .fq{border-bottom:1px solid var(--border)}
     .fq-q{display:flex;justify-content:space-between;align-items:center;gap:1rem;
       padding:1.2rem 0;cursor:pointer;font-size:.92rem;font-weight:600}
-    .fq-ico{color:var(--accent);font-size:1rem;flex-shrink:0;transition:transform .2s}
-    .fq-a{font-size:.85rem;color:var(--muted);line-height:1.75;
-      max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease}
-    .fq.open .fq-a{max-height:200px;padding-bottom:1.2rem}
-    .fq.open .fq-ico{transform:rotate(45deg)}
+    .fq-ico{color:var(--accent);flex-shrink:0;width:22px;height:22px;border-radius:50%;
+      border:1px solid var(--a-bdr);display:flex;align-items:center;justify-content:center;
+      font-size:.75rem;font-weight:700;
+      transition:transform .25s var(--ease),background .2s}
+    .fq.open .fq-ico{transform:rotate(45deg);background:var(--a-dim)}
+    .fq-a{font-size:.85rem;color:var(--muted);line-height:1.78;
+      max-height:0;overflow:hidden;
+      transition:max-height .35s var(--ease),padding .35s var(--ease)}
+    .fq.open .fq-a{max-height:240px;padding-bottom:1.25rem}
 
     /* GUARANTEE */
-    .gbox{background:var(--surface);border:1px solid var(--border2);border-radius:20px;
-      padding:3rem 2.5rem;text-align:center;max-width:620px;margin:0 auto;position:relative;overflow:hidden;
-      box-shadow:0 0 0 1px rgba(0,217,126,.08),0 8px 60px rgba(0,0,0,.5),0 0 80px rgba(0,217,126,.04);
+    .gbox{background:var(--surface);border:1px solid var(--border2);
+      border-radius:20px;padding:3.5rem 2.5rem;text-align:center;
+      max-width:600px;margin:0 auto;position:relative;overflow:hidden;
+      box-shadow:0 0 0 1px var(--g-bdr),0 8px 60px oklch(0% 0 0 / .5),0 0 80px var(--g-dim);
       transform:perspective(800px) rotateX(1deg)}
     .gbox::before{content:'';position:absolute;inset:0;
-      background:radial-gradient(circle at 50% 0%,rgba(0,217,126,.06) 0%,transparent 70%);
+      background:radial-gradient(circle at 50% 0%,var(--g-dim) 0%,transparent 70%);
       pointer-events:none}
-    .g-ico{font-size:2.75rem;margin-bottom:1.1rem}
-    .g-title{font-size:clamp(1.5rem,2.8vw,2rem);font-weight:800;letter-spacing:-.03em;margin-bottom:.9rem}
+    .g-ico{color:var(--green);opacity:.9;margin-bottom:1.25rem}
+    .g-title{font-size:clamp(1.5rem,2.8vw,2rem);font-weight:800;
+      letter-spacing:-.035em;margin-bottom:.9rem}
     .g-title span{color:var(--green)}
-    .g-desc{font-size:.9rem;color:var(--muted);line-height:1.75}
+    .g-desc{font-size:.9rem;color:var(--muted);line-height:1.78}
+
+    /* EMAIL CAP */
+    .email-cap{background:var(--surface);
+      border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .email-cap-inner{max-width:640px;margin:0 auto;
+      padding:3.5rem clamp(1.25rem,5vw,3rem);text-align:center}
+    .cap-row{display:flex;gap:.6rem;max-width:440px;margin:0 auto}
+    .cap-input{flex:1;background:var(--bg);border:1px solid var(--border2);
+      border-radius:10px;padding:.88rem 1.1rem;color:var(--text);
+      font-family:'Inter',sans-serif;font-size:.9rem;outline:none;
+      transition:border-color .2s var(--ease),box-shadow .2s}
+    .cap-input::placeholder{color:var(--faint)}
+    .cap-input:focus{border-color:var(--a-bdr);box-shadow:0 0 0 3px var(--a-dim)}
+    .cap-btn{background:var(--accent);color:oklch(10% .02 133);
+      border:none;border-radius:10px;padding:.88rem 1.4rem;
+      font-family:'Inter',sans-serif;font-weight:700;font-size:.875rem;
+      cursor:pointer;white-space:nowrap;
+      transition:opacity .15s,transform .2s var(--ease)}
+    .cap-btn:hover{opacity:.9;transform:translateY(-1px)}
+    .cap-note{font-size:.7rem;color:var(--faint);margin-top:.6rem}
 
     /* FOOTER */
     .footer-shell{border-top:1px solid var(--border)}
-    .footer-in{max-width:var(--max);margin:0 auto;padding:2.75rem var(--pad)}
+    .footer-in{max-width:var(--max);margin:0 auto;padding:3rem var(--pad)}
     .f-top{display:flex;justify-content:space-between;gap:3rem;flex-wrap:wrap;margin-bottom:2.5rem}
-    .f-logo{font-size:1rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.45rem}
+    .f-logo{font-size:1rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.5rem}
     .f-logo .fr{color:var(--accent)}
-    .f-logo .fh{color:var(--faint);font-weight:500}
+    .f-logo .fh{color:var(--faint);font-weight:400}
     .f-tagline{font-size:.8rem;color:var(--muted)}
     .f-links{display:flex;gap:3.5rem}
-    .f-col h4{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-      color:var(--faint);margin-bottom:.9rem}
-    .f-col a{display:block;font-size:.83rem;color:var(--muted);text-decoration:none;
-      margin-bottom:.5rem;transition:color .15s}
-    .f-col a:hover{color:var(--white)}
-    .f-btm{border-top:1px solid var(--border);padding-top:1.6rem;
+    .f-col h4{font-size:.66rem;font-weight:700;letter-spacing:.1em;
+      text-transform:uppercase;color:var(--faint);margin-bottom:.9rem}
+    .f-col a{display:block;font-size:.83rem;color:var(--muted);
+      text-decoration:none;margin-bottom:.5rem;transition:color .15s}
+    .f-col a:hover{color:var(--text)}
+    .f-btm{border-top:1px solid var(--border);padding-top:1.5rem;
       display:flex;justify-content:space-between;align-items:center;
-      font-size:.75rem;color:var(--faint);flex-wrap:wrap;gap:.75rem}
-    .f-legal{margin-top:1.4rem;padding-top:1.4rem;
-      border-top:1px solid rgba(255,255,255,.03);
-      font-size:.65rem;color:rgba(255,255,255,.18);line-height:1.7;text-align:center}
+      font-size:.73rem;color:var(--faint);flex-wrap:wrap;gap:.75rem}
+    .f-legal{margin-top:1.25rem;padding-top:1.25rem;
+      border-top:1px solid oklch(100% 0 0 / .03);
+      font-size:.63rem;color:oklch(30% .005 133);line-height:1.72;text-align:center}
+
+    /* TOAST */
+    @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .toast{position:fixed;bottom:1.5rem;left:1.5rem;z-index:500;
+      background:var(--surface);border:1px solid var(--border2);border-radius:12px;
+      padding:.875rem 1.15rem;max-width:280px;display:none;
+      box-shadow:0 8px 40px oklch(0% 0 0 / .5);
+      animation:slideUp .4s var(--ease) forwards}
+    .toast-inner{display:flex;align-items:center;gap:.75rem}
+    .toast-avatar{width:36px;height:36px;border-radius:50%;
+      background:var(--surface2);border:1px solid var(--border2);
+      flex-shrink:0;display:flex;align-items:center;justify-content:center}
+    .toast-body{flex:1}
+    .toast-msg{font-size:.79rem;font-weight:600;line-height:1.35}
+    .toast-time{font-size:.67rem;color:var(--muted);margin-top:.15rem}
+    .toast-close{background:none;border:none;color:var(--muted);
+      cursor:pointer;font-size:.9rem;padding:0;flex-shrink:0;line-height:1}
+
+    /* QUICK REPLIES */
+    #vrh-quick-replies{position:fixed;bottom:90px;right:1.5rem;z-index:499;
+      display:flex;flex-direction:column;gap:.5rem;align-items:flex-end;
+      pointer-events:none;opacity:0;transform:translateY(10px);
+      transition:opacity .3s var(--ease),transform .3s var(--ease)}
+    #vrh-quick-replies.show{opacity:1;transform:translateY(0);pointer-events:all}
+    .vrh-qr-label{font-size:.64rem;font-weight:700;letter-spacing:.08em;
+      text-transform:uppercase;color:var(--faint);margin-bottom:.15rem;text-align:right}
+    .vrh-qr-btn{background:oklch(14.5% .013 133 / .95);border:1px solid var(--border2);
+      color:var(--text);font-family:'Inter',sans-serif;
+      font-size:.78rem;font-weight:500;padding:.5rem 1rem;
+      border-radius:100px;cursor:pointer;white-space:nowrap;
+      backdrop-filter:blur(12px);
+      transition:background .15s,border-color .15s,transform .2s var(--ease),color .15s;
+      box-shadow:0 2px 12px oklch(0% 0 0 / .4)}
+    .vrh-qr-btn:hover{background:var(--a-dim);border-color:var(--a-bdr);
+      color:var(--accent);transform:translateX(-3px)}
+    .qr-icon{margin-right:.35rem}
 
     /* RESPONSIVE */
     @media(max-width:960px){
-      #statsRow{grid-template-columns:1fr!important}
-      .burger{display:flex}
-      .nav-links{display:none}
+      .stats-inner{grid-template-columns:1fr}
+      .burger{display:flex}.nav-links{display:none}
       nav{height:56px}
       .hero-inner{grid-template-columns:1fr;padding:3.5rem var(--pad) 3rem;gap:0}
       .hero-card{display:none}
       h1{font-size:clamp(1.9rem,7vw,2.8rem)}
-      .hero-sub{font-size:.92rem}
-      .trust-inner{gap:1.25rem;padding:0 var(--pad)}
-      .t-item{padding:.7rem 0;font-size:.8rem}
+      .trust-inner{flex-direction:column}
+      .t-item{border-right:none;border-bottom:1px solid var(--border);width:100%;padding:.9rem 0}
+      .t-item:last-child{border-bottom:none}
       .sec{padding:3.5rem var(--pad)}
-      .steps{grid-template-columns:1fr;gap:1px}
+      .steps{grid-template-columns:1fr}
+      .step{border-right:none;border-bottom:1px solid var(--border)}
+      .step:last-child{border-bottom:none}
       .pricing-grid{grid-template-columns:1fr;gap:.875rem}
       .pc:hover{transform:none}
       .feat-grid{grid-template-columns:1fr 1fr}
-      .cmp-h,.cmp-r{grid-template-columns:1.5fr .75fr .75fr .75fr;font-size:.72rem;padding:.8rem 1rem;gap:.5rem}
+      .cmp-h,.cmp-r{grid-template-columns:1.5fr .75fr .75fr .75fr;font-size:.7rem;padding:.8rem 1rem;gap:.5rem}
       .f-top{flex-direction:column;gap:1.75rem}
       .f-links{flex-wrap:wrap;gap:2.25rem}
       .f-btm{flex-direction:column;text-align:center}
     }
     @media(max-width:600px){
       :root{--pad:1.25rem}
-      #statsRow{grid-template-columns:1fr!important}
       nav{height:52px}
       h1{font-size:clamp(1.65rem,8.5vw,2.3rem)}
       h2{font-size:clamp(1.4rem,5.5vw,1.9rem)}
       .vin-row{flex-direction:column}
       .vin-btn{width:100%;padding:.9rem}
-      .trust-inner{flex-direction:column;gap:0}
-      .t-item{width:100%;border-bottom:1px solid var(--border);padding:.8rem 0}
-      .t-item:last-child{border:none}
       .feat-grid{grid-template-columns:1fr}
-      .cmp-h,.cmp-r{grid-template-columns:1.5fr .7fr .7fr .7fr;font-size:.66rem;padding:.68rem .75rem}
+      .cmp-h,.cmp-r{grid-template-columns:1.5fr .7fr .7fr .7fr;font-size:.64rem;padding:.68rem .75rem}
       .gbox{padding:2rem 1.5rem}
       .f-links{flex-direction:column;gap:1.75rem}
       .hero{min-height:auto;padding-bottom:3rem}
+      .report-stats-row{grid-template-columns:repeat(2,1fr)}
+      .report-stat:nth-child(2){border-right:none}
+      .cap-row{flex-direction:column}
+      #vrh-quick-replies{bottom:80px;right:1rem}
+      .vrh-qr-btn{font-size:.73rem;padding:.45rem .875rem}
     }
-  /* LOADING ANIMATION */
-  @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-  #socialToast{animation:slideUp .4s ease}</style>
+  </style>
 </head>
 <body>
 
@@ -369,7 +527,6 @@
       <a href="#faq">FAQ</a>
       <a href="mailto:support@vinrecordhub.com">Support</a>
       <a href="#pricing" class="nav-cta">Get Report — $9.99</a>
-      <button class="dark-toggle" id="darkToggle" onclick="toggleMode()" aria-label="Toggle dark/light mode" title="Toggle theme">☀️</button>
     </div>
     <button class="burger" onclick="openM()" aria-label="Menu"><span></span><span></span><span></span></button>
   </nav>
@@ -386,24 +543,22 @@
 </div>
 
 <section class="hero">
+  <div class="hero-mesh"></div>
   <div class="hero-grid"></div>
-  <div class="hero-orb orb1"></div>
-  <div class="hero-orb orb2"></div>
   <div class="hero-inner">
     <div>
-      <div class="hero-tag">Instant Vehicle History Reports</div>
-      <h1>Know the truth about <em>any car</em> before you buy.</h1>
-      <p class="hero-sub">Real Carfax® & AutoCheck® vehicle history — accident records, title history, odometer checks — for just $9.99. Delivered in 60 seconds.</p>
-      <span class="vin-label">Enter VIN to get started</span>
-      <div class="vin-row">
+      <div class="hero-badge rv"><span class="badge-dot"></span>Instant Vehicle History Reports</div>
+      <h1 class="rv rv-1">Know the truth about <em>any car</em> before you buy.</h1>
+      <p class="hero-sub rv rv-2">Real Carfax® &amp; AutoCheck® vehicle history — accident records, title history, odometer checks — for just $9.99. Delivered in 60 seconds.</p>
+      <span class="vin-label rv rv-3">Enter VIN to get started</span>
+      <div class="vin-row rv rv-3">
         <input class="vin-input" id="heroVin" type="text" placeholder="e.g. 1HGCM82633A004352" maxlength="17" autocomplete="off" spellcheck="false" oninput="this.value=this.value.toUpperCase();validateVin(this)"/>
         <button class="vin-btn" onclick="goCheckout()">Get Report →</button>
       </div>
       <div class="vin-lk" id="vinLk"><span id="vinLkIco"></span><span id="vinLkTxt"></span></div>
       <div class="vin-err" id="vinErr"></div>
     </div>
-
-    <div class="hero-card" id="hCard">
+    <div class="hero-card rv rv-4" id="hCard">
       <div class="hc-head">
         <div class="hc-logo">VIN<span>Record</span>Hub</div>
         <div class="hc-badge">✓ Verified</div>
@@ -431,107 +586,125 @@
   </div>
 </section>
 
-<div class="trust">
+<div class="trust rv">
   <div class="trust-inner">
-    <div class="t-item">🔒 <span><strong>Secure</strong> checkout via PayPal</span></div>
-    <div class="t-item">⚡ <span><strong>60 second</strong> delivery</span></div>
-    <div class="t-item">📊 <span>Powered by <strong>Carfax® & AutoCheck®</strong></span></div>
-    <div class="t-item">🛡️ <span><strong>Money-back</strong> guarantee</span></div>
-  </div>
-</div>
-
-<!-- FLOATING STATS -->
-<div style="background:var(--bg);padding:2.5rem var(--pad)">
-  <div style="max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;perspective:1000px" id="statsRow">
-    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:1.5rem 1.75rem;
-      transform:perspective(600px) rotateY(-4deg) rotateX(2deg);transition:transform .3s;
-      box-shadow:0 8px 32px rgba(0,0,0,.4)" onmouseover="this.style.transform='perspective(600px) rotateY(-1deg) rotateX(0deg)'" onmouseout="this.style.transform='perspective(600px) rotateY(-4deg) rotateX(2deg)'">
-      <div style="font-size:2rem;font-weight:900;letter-spacing:-.05em;color:var(--accent)">$9.99</div>
-      <div style="font-size:.8rem;color:rgba(255,255,255,.55);margin-top:.3rem">per Carfax® report</div>
-      <div style="font-size:.7rem;color:rgba(255,82,82,.7);text-decoration:line-through;margin-top:.2rem">$44.99 direct</div>
+    <div class="t-item">
+      <svg class="t-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span><strong>Secure</strong> checkout via PayPal</span>
     </div>
-    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:1.5rem 1.75rem;
-      transform:perspective(600px) rotateX(2deg);transition:transform .3s;
-      box-shadow:0 8px 32px rgba(0,0,0,.4)" onmouseover="this.style.transform='perspective(600px) rotateX(0deg)'" onmouseout="this.style.transform='perspective(600px) rotateX(2deg)'">
-      <div style="font-size:2rem;font-weight:900;letter-spacing:-.05em;color:var(--green)">60s</div>
-      <div style="font-size:.8rem;color:rgba(255,255,255,.55);margin-top:.3rem">average delivery time</div>
-      <div style="font-size:.7rem;color:rgba(0,217,126,.6);margin-top:.2rem">Straight to your inbox</div>
+    <div class="t-item">
+      <svg class="t-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <span><strong>60 second</strong> delivery</span>
     </div>
-    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:1.5rem 1.75rem;
-      transform:perspective(600px) rotateY(4deg) rotateX(2deg);transition:transform .3s;
-      box-shadow:0 8px 32px rgba(0,0,0,.4)" onmouseover="this.style.transform='perspective(600px) rotateY(1deg) rotateX(0deg)'" onmouseout="this.style.transform='perspective(600px) rotateY(4deg) rotateX(2deg)'">
-      <div style="font-size:2rem;font-weight:900;letter-spacing:-.05em;color:var(--blue)">100%</div>
-      <div style="font-size:.8rem;color:rgba(255,255,255,.55);margin-top:.3rem">money-back guarantee</div>
-      <div style="font-size:.7rem;color:rgba(79,140,255,.6);margin-top:.2rem">No questions asked</div>
+    <div class="t-item">
+      <svg class="t-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+      <span>Powered by <strong>Carfax® &amp; AutoCheck®</strong></span>
+    </div>
+    <div class="t-item">
+      <svg class="t-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span><strong>Money-back</strong> guarantee</span>
     </div>
   </div>
 </div>
 
-<!-- HOW IT WORKS -->
+<div class="stats-row">
+  <div class="stats-inner">
+    <div class="stat-card rv rv-1">
+      <div class="stat-val sv-lime">$9.99</div>
+      <div class="stat-sub">per Carfax® report</div>
+      <div class="stat-note sn-red">$44.99 direct</div>
+    </div>
+    <div class="stat-card rv rv-2">
+      <div class="stat-val sv-green">60s</div>
+      <div class="stat-sub">average delivery time</div>
+      <div class="stat-note sn-g">Straight to your inbox</div>
+    </div>
+    <div class="stat-card rv rv-3">
+      <div class="stat-val sv-blue">100%</div>
+      <div class="stat-sub">money-back guarantee</div>
+      <div class="stat-note sn-b">No questions asked</div>
+    </div>
+  </div>
+</div>
+
 <div class="sec-dark" id="how">
   <div class="sec sec-center">
-    <div class="sec-tag">Simple Process</div>
-    <h2>Three steps. <em>60 seconds.</em></h2>
-    <p class="sec-sub">Getting a full vehicle history report has never been easier.</p>
+    <div class="sec-tag rv">Simple Process</div>
+    <h2 class="rv rv-1">Three steps. <em>60 seconds.</em></h2>
+    <p class="sec-sub rv rv-2">Getting a full vehicle history report has never been easier.</p>
     <div class="steps">
-      <div class="step"><div class="step-n">01</div><div class="step-ico">🔢</div><div class="step-t">Enter the VIN</div><div class="step-d">Find the 17-character VIN on the dashboard, door jamb, or vehicle title and type it above.</div></div>
-      <div class="step"><div class="step-n">02</div><div class="step-ico">💳</div><div class="step-t">Pay Securely</div><div class="step-d">Choose Carfax®, AutoCheck®, or the combo. Pay with PayPal or card — from $9.99. No subscription.</div></div>
-      <div class="step"><div class="step-n">03</div><div class="step-ico">📩</div><div class="step-t">Get Your Report</div><div class="step-d">Your full vehicle history report arrives in your email inbox within 60 seconds. Keep it forever.</div></div>
+      <div class="step rv rv-1">
+        <div class="step-num">Step 01</div>
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M6 14h.01M10 14h4M18 14h.01"/></svg>
+        <div class="step-t">Enter the VIN</div>
+        <div class="step-d">Find the 17-character VIN on the dashboard, door jamb, or vehicle title and type it above.</div>
+      </div>
+      <div class="step rv rv-2">
+        <div class="step-num">Step 02</div>
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <div class="step-t">Pay Securely</div>
+        <div class="step-d">Choose Carfax®, AutoCheck®, or the combo. Pay with PayPal or card — from $9.99. No subscription.</div>
+      </div>
+      <div class="step rv rv-3">
+        <div class="step-num">Step 03</div>
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <div class="step-t">Get Your Report</div>
+        <div class="step-d">Your full vehicle history report arrives in your email inbox within 60 seconds. Keep it forever.</div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- PRICING -->
 <div id="pricing">
   <div class="sec">
-    <div class="sec-tag">Pricing</div>
-    <h2>Simple, <em>honest</em> pricing.</h2>
-    <p class="sec-sub">One-time payment. No subscription. Reports in seconds.</p>
+    <div class="sec-tag rv">Pricing</div>
+    <h2 class="rv rv-1">Simple, <em>honest</em> pricing.</h2>
+    <p class="sec-sub rv rv-2">One-time payment. No subscription. Reports in seconds.</p>
     <div class="pricing-grid">
-      <div class="pc" onclick="goCheckoutPlan('standard')">
+      <div class="pc rv rv-1" onclick="goCheckoutPlan('standard')">
         <div class="pc-name">Carfax® Report</div>
         <div class="pc-price"><sup>$</sup>9.99</div>
         <div class="pc-per">single report</div>
-        <hr/>
+        <hr class="pc-divider"/>
         <ul class="pc-feats">
-          <li>Powered by Carfax® data</li>
-          <li>Accident & damage history</li>
-          <li>Title & ownership records</li>
-          <li>Odometer verification</li>
-          <li>Service & recall records</li>
-          <li>Instant email delivery</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Powered by Carfax® data</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Accident &amp; damage history</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Title &amp; ownership records</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Odometer verification</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Service &amp; recall records</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Instant email delivery</li>
         </ul>
         <a href="/checkout?plan=standard" class="btn-buy">Get Carfax® Report →</a>
       </div>
-      <div class="pc feat" onclick="goCheckoutPlan('combo')">
+      <div class="pc feat rv rv-2" onclick="goCheckoutPlan('combo')">
         <div class="feat-badge">Best Value</div>
         <div class="pc-name">Combo Pack</div>
         <div class="pc-price"><sup>$</sup>14.99</div>
         <div class="pc-per">Carfax® + AutoCheck®</div>
         <div class="pc-save">Save $5 — most thorough check</div>
-        <hr/>
+        <hr class="pc-divider"/>
         <ul class="pc-feats">
-          <li>1 full Carfax® report</li>
-          <li>1 full AutoCheck® report</li>
-          <li>Cross-verify both sources</li>
-          <li>Maximum buying confidence</li>
-          <li>All accident & title records</li>
-          <li>Both delivered instantly</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>1 full Carfax® report</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>1 full AutoCheck® report</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Cross-verify both sources</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Maximum buying confidence</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>All accident &amp; title records</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Both delivered instantly</li>
         </ul>
         <a href="/checkout?plan=combo" class="btn-buy">Get Combo Pack →</a>
       </div>
-      <div class="pc" onclick="goCheckoutPlan('premium')">
+      <div class="pc rv rv-3" onclick="goCheckoutPlan('premium')">
         <div class="pc-name">AutoCheck® Report</div>
         <div class="pc-price"><sup>$</sup>9.99</div>
         <div class="pc-per">single report</div>
-        <hr/>
+        <hr class="pc-divider"/>
         <ul class="pc-feats">
-          <li>Powered by AutoCheck® (Experian)</li>
-          <li>Auction & dealer records</li>
-          <li>Title & ownership records</li>
-          <li>Odometer verification</li>
-          <li>AutoCheck® score included</li>
-          <li>Instant email delivery</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Powered by AutoCheck® (Experian)</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Auction &amp; dealer records</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Title &amp; ownership records</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Odometer verification</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>AutoCheck® score included</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Instant email delivery</li>
         </ul>
         <a href="/checkout?plan=premium" class="btn-buy">Get AutoCheck® Report →</a>
       </div>
@@ -539,95 +712,82 @@
   </div>
 </div>
 
-<!-- WHAT'S INCLUDED -->
 <div class="sec-dark">
   <div class="sec">
-    <div class="sec-tag">What You Get</div>
-    <h2>Everything in <em>one report.</em></h2>
-    <p class="sec-sub">Comprehensive vehicle history — all for $9.99.</p>
+    <div class="sec-tag rv">What You Get</div>
+    <h2 class="rv rv-1">Everything in <em>one report.</em></h2>
+    <p class="sec-sub rv rv-2">Comprehensive vehicle history — all for $9.99.</p>
     <div class="feat-grid">
-      <div class="fc"><div class="fc-ico">💥</div><div class="fc-t">Accident History</div><div class="fc-d">Full accident records including damage severity, airbag deployments, and structural damage.</div></div>
-      <div class="fc"><div class="fc-ico">📋</div><div class="fc-t">Title Records</div><div class="fc-d">Salvage, rebuilt, flood, lemon, and junk title brands — every red flag before you buy.</div></div>
-      <div class="fc"><div class="fc-ico">👤</div><div class="fc-t">Ownership History</div><div class="fc-d">Number of owners, usage type (personal, rental, fleet, taxi), and geographic history.</div></div>
-      <div class="fc"><div class="fc-ico">📏</div><div class="fc-t">Odometer Check</div><div class="fc-d">Detect mileage rollbacks and discrepancies that sellers try to hide.</div></div>
-      <div class="fc"><div class="fc-ico">🔧</div><div class="fc-t">Service Records</div><div class="fc-d">Oil changes, repairs, recalls, and maintenance history from verified shops and dealers.</div></div>
-      <div class="fc"><div class="fc-ico">🚨</div><div class="fc-t">Recall Information</div><div class="fc-d">Outstanding manufacturer recalls and whether they've been resolved — critical safety info.</div></div>
+      <div class="fc rv rv-1">
+        <svg class="fc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div class="fc-t">Accident History</div>
+        <div class="fc-d">Full accident records including damage severity, airbag deployments, and structural damage.</div>
+      </div>
+      <div class="fc rv rv-2">
+        <svg class="fc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <div class="fc-t">Title Records</div>
+        <div class="fc-d">Salvage, rebuilt, flood, lemon, and junk title brands — every red flag before you buy.</div>
+      </div>
+      <div class="fc rv rv-3">
+        <svg class="fc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <div class="fc-t">Ownership History</div>
+        <div class="fc-d">Number of owners, usage type (personal, rental, fleet, taxi), and geographic history.</div>
+      </div>
+      <div class="fc rv rv-4">
+        <svg class="fc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        <div class="fc-t">Odometer Check</div>
+        <div class="fc-d">Detect mileage rollbacks and discrepancies that sellers try to hide.</div>
+      </div>
+      <div class="fc rv rv-5">
+        <svg class="fc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <div class="fc-t">Service Records</div>
+        <div class="fc-d">Oil changes, repairs, recalls, and maintenance history from verified shops and dealers.</div>
+      </div>
+      <div class="fc rv rv-6">
+        <svg class="fc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <div class="fc-t">Recall Information</div>
+        <div class="fc-d">Outstanding manufacturer recalls and whether they've been resolved — critical safety info.</div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- SAMPLE REPORT PREVIEW -->
-<div style="background:var(--bg);padding:0">
-  <div style="max-width:1160px;margin:0 auto;padding:5rem clamp(1.25rem,5vw,3.5rem)">
-    <div style="font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.65rem">Sample Report</div>
-    <h2 style="font-size:clamp(1.7rem,3.2vw,2.4rem);font-weight:800;letter-spacing:-.035em;margin-bottom:.85rem">Here's what you get <em style="font-style:normal;color:var(--accent)">in your inbox.</em></h2>
-    <p style="font-size:.95rem;color:var(--muted);max-width:520px;margin-bottom:2.5rem;line-height:1.72">A real vehicle history report delivered as an HTML file. Open in any browser. Download and keep forever.</p>
-
-    <!-- Sample report card -->
-    <div style="border:1px solid var(--border2);border-radius:20px;overflow:hidden;
-      box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 60px rgba(200,255,0,.04);
-      transform:perspective(1200px) rotateX(3deg);transition:transform .35s"
-      onmouseover="this.style.transform='perspective(1200px) rotateX(0deg)'"
-      onmouseout="this.style.transform='perspective(1200px) rotateX(3deg)'">
-
-      <!-- Report header -->
-      <div style="background:var(--surface2);padding:1.25rem 1.75rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)">
+<div>
+  <div class="sample-inner">
+    <div class="sec-tag rv">Sample Report</div>
+    <h2 class="rv rv-1">Here's what you get <em>in your inbox.</em></h2>
+    <p class="rv rv-2" style="font-size:.95rem;color:var(--muted);max-width:520px;margin-bottom:2.5rem;line-height:1.76">A real vehicle history report delivered as an HTML file. Open in any browser. Download and keep forever.</p>
+    <div class="report-card rv rv-3">
+      <div class="report-header">
         <div>
-          <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.2rem">VINRecordHub Vehicle History Report</div>
-          <div style="font-size:1.1rem;font-weight:800;letter-spacing:-.02em">2018 Honda Accord Sport</div>
-          <div style="font-size:.72rem;font-family:monospace;color:var(--muted);margin-top:.15rem">VIN: 1HGCV1F34JA093456</div>
+          <div class="report-label">VINRecordHub Vehicle History Report</div>
+          <div class="report-vehicle">2018 Honda Accord Sport</div>
+          <div class="report-vin">VIN: 1HGCV1F34JA093456</div>
         </div>
-        <div style="text-align:right">
-          <div style="display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,82,82,.1);border:1px solid rgba(255,82,82,.25);border-radius:8px;padding:.4rem .9rem">
-            <span style="color:var(--red);font-size:.75rem;font-weight:700">⚠ Issues Found</span>
-          </div>
-        </div>
+        <div class="report-status"><span>⚠ Issues Found</span></div>
       </div>
-
-      <!-- Stats row -->
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface)">
-        <div style="padding:1.25rem 1.5rem;border-right:1px solid var(--border);text-align:center">
-          <div style="font-size:1.75rem;font-weight:900;letter-spacing:-.05em;color:var(--red)">2</div>
-          <div style="font-size:.7rem;color:var(--muted);margin-top:.2rem;font-weight:500">Accidents Reported</div>
-        </div>
-        <div style="padding:1.25rem 1.5rem;border-right:1px solid var(--border);text-align:center">
-          <div style="font-size:1.75rem;font-weight:900;letter-spacing:-.05em;color:var(--green)">Clean</div>
-          <div style="font-size:.7rem;color:var(--muted);margin-top:.2rem;font-weight:500">Title Status</div>
-        </div>
-        <div style="padding:1.25rem 1.5rem;border-right:1px solid var(--border);text-align:center">
-          <div style="font-size:1.75rem;font-weight:900;letter-spacing:-.05em;color:#ffaa00">3</div>
-          <div style="font-size:.7rem;color:var(--muted);margin-top:.2rem;font-weight:500">Previous Owners</div>
-        </div>
-        <div style="padding:1.25rem 1.5rem;text-align:center">
-          <div style="font-size:1.75rem;font-weight:900;letter-spacing:-.05em;color:var(--green)">✓</div>
-          <div style="font-size:.7rem;color:var(--muted);margin-top:.2rem;font-weight:500">Odometer Verified</div>
-        </div>
+      <div class="report-stats-row">
+        <div class="report-stat"><div class="rs-val bad">2</div><div class="rs-lbl">Accidents Reported</div></div>
+        <div class="report-stat"><div class="rs-val ok">Clean</div><div class="rs-lbl">Title Status</div></div>
+        <div class="report-stat"><div class="rs-val warn">3</div><div class="rs-lbl">Previous Owners</div></div>
+        <div class="report-stat"><div class="rs-val ok">✓</div><div class="rs-lbl">Odometer Verified</div></div>
       </div>
-
-      <!-- Blurred content rows -->
-      <div style="background:var(--surface);border-top:1px solid var(--border);padding:1.25rem 1.75rem;position:relative">
-        <div style="font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem">Accident & Damage History</div>
-        <div style="display:flex;flex-direction:column;gap:.6rem;filter:blur(4px);user-select:none">
-          <div style="background:var(--surface2);border-radius:8px;padding:.75rem 1rem;border:1px solid var(--border)">
-            <div style="display:flex;justify-content:space-between;margin-bottom:.35rem">
-              <span style="font-size:.8rem;font-weight:600;color:var(--red)">Accident Reported</span>
-              <span style="font-size:.72rem;color:var(--muted)">March 2021 · 45,231 miles</span>
-            </div>
-            <div style="font-size:.78rem;color:var(--muted)">Front-end collision. Minor damage reported. Vehicle repaired at certified shop.</div>
+      <div class="report-body">
+        <div class="report-body-lbl">Accident &amp; Damage History</div>
+        <div class="report-rows">
+          <div class="report-row">
+            <div class="report-row-head"><span class="report-row-title">Accident Reported</span><span class="report-row-meta">March 2021 · 45,231 miles</span></div>
+            <div class="report-row-desc">Front-end collision. Minor damage reported. Vehicle repaired at certified shop.</div>
           </div>
-          <div style="background:var(--surface2);border-radius:8px;padding:.75rem 1rem;border:1px solid var(--border)">
-            <div style="display:flex;justify-content:space-between;margin-bottom:.35rem">
-              <span style="font-size:.8rem;font-weight:600;color:var(--red)">Accident Reported</span>
-              <span style="font-size:.72rem;color:var(--muted)">August 2022 · 62,847 miles</span>
-            </div>
-            <div style="font-size:.78rem;color:var(--muted)">Rear impact. Moderate damage. Insurance claim filed.</div>
+          <div class="report-row">
+            <div class="report-row-head"><span class="report-row-title">Accident Reported</span><span class="report-row-meta">August 2022 · 62,847 miles</span></div>
+            <div class="report-row-desc">Rear impact. Moderate damage. Insurance claim filed.</div>
           </div>
         </div>
-        <!-- Unlock overlay -->
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(to bottom,transparent 0%,rgba(14,14,18,.95) 40%)">
-          <div style="text-align:center">
-            <div style="font-size:.9rem;font-weight:700;margin-bottom:.5rem">Full report available after purchase</div>
-            <a href="#pricing" style="display:inline-block;background:var(--accent);color:#000;font-size:.82rem;font-weight:700;padding:.55rem 1.35rem;border-radius:8px;text-decoration:none">Get Full Report — $9.99 →</a>
+        <div class="report-unlock">
+          <div class="report-unlock-inner">
+            <div class="report-unlock-lbl">Full report available after purchase</div>
+            <a href="#pricing" class="report-unlock-btn">Get Full Report — $9.99 →</a>
           </div>
         </div>
       </div>
@@ -635,15 +795,14 @@
   </div>
 </div>
 
-<!-- COMPARISON -->
 <div id="compare">
   <div class="sec">
-    <div class="sec-tag">Why VINRecordHub</div>
-    <h2>Same data. <em>Way less.</em></h2>
-    <p class="sec-sub">Get the exact same Carfax® & AutoCheck® data at a fraction of the retail price.</p>
-    <div class="cmp-table">
+    <div class="sec-tag rv">Why VINRecordHub</div>
+    <h2 class="rv rv-1">Same data. <em>Way less.</em></h2>
+    <p class="sec-sub rv rv-2">Get the exact same Carfax® &amp; AutoCheck® data at a fraction of the retail price.</p>
+    <div class="cmp-table rv rv-3">
       <div class="cmp-h"><span>Feature</span><span class="us">VINRecordHub</span><span>Carfax® Direct</span><span>AutoCheck® Direct</span></div>
-      <div class="cmp-r"><span class="cmp-lbl" style="font-weight:600;color:var(--white)">Price per report</span><span class="c-good">$9.99</span><span class="c-bad">$44.99</span><span class="c-bad">$24.99</span></div>
+      <div class="cmp-r"><span class="cmp-lbl" style="font-weight:600;color:var(--text)">Price per report</span><span class="c-good">$9.99</span><span class="c-bad">$44.99</span><span class="c-bad">$24.99</span></div>
       <div class="cmp-r"><span class="cmp-lbl">Combo (both reports)</span><span class="c-good">$14.99</span><span class="c-bad">$69.98</span><span class="c-bad">$69.98</span></div>
       <div class="cmp-r"><span class="cmp-lbl">Subscription required</span><span class="c-yes">✓ None</span><span class="c-no">✗ Required</span><span class="c-no">✗ Required</span></div>
       <div class="cmp-r"><span class="cmp-lbl">Accident history</span><span class="c-yes">✓</span><span class="c-yes">✓</span><span class="c-yes">✓</span></div>
@@ -651,17 +810,16 @@
       <div class="cmp-r"><span class="cmp-lbl">Instant delivery</span><span class="c-yes">✓</span><span class="c-yes">✓</span><span class="c-yes">✓</span></div>
       <div class="cmp-r"><span class="cmp-lbl">Money-back guarantee</span><span class="c-yes">✓</span><span class="c-no">✗</span><span class="c-no">✗</span></div>
     </div>
-    <p style="font-size:.67rem;color:rgba(255,255,255,.18);margin-top:.9rem;text-align:center">* Competitor pricing from Carfax.com and AutoCheck.com. Subject to change.</p>
+    <p style="font-size:.67rem;color:oklch(30% .005 133);margin-top:.9rem;text-align:center">* Competitor pricing from Carfax.com and AutoCheck.com. Subject to change.</p>
   </div>
 </div>
 
-<!-- FAQ -->
 <div class="sec-dark" id="faq">
   <div class="sec sec-center">
-    <div class="sec-tag">FAQ</div>
-    <h2>Common <em>questions.</em></h2>
+    <div class="sec-tag rv">FAQ</div>
+    <h2 class="rv rv-1">Common <em>questions.</em></h2>
     <div class="faq-list">
-      <div class="fq"><div class="fq-q">Why is VINRecordHub more affordable? <span class="fq-ico">+</span></div><div class="fq-a">VINRecordHub is a vehicle history service that provides access to Carfax® & AutoCheck® reports through our platform. By optimizing our delivery infrastructure, we offer competitive pricing while delivering the same comprehensive vehicle data.</div></div>
+      <div class="fq"><div class="fq-q">Why is VINRecordHub more affordable? <span class="fq-ico">+</span></div><div class="fq-a">VINRecordHub is a vehicle history service that provides access to Carfax® &amp; AutoCheck® reports through our platform. By optimizing our delivery infrastructure, we offer competitive pricing while delivering the same comprehensive vehicle data.</div></div>
       <div class="fq"><div class="fq-q">How fast will I receive my report? <span class="fq-ico">+</span></div><div class="fq-a">Reports are delivered to your email inbox within 60 seconds of payment confirmation. You'll receive it as a downloadable file you can keep forever.</div></div>
       <div class="fq"><div class="fq-q">Where do I find the VIN on my car? <span class="fq-ico">+</span></div><div class="fq-a">The VIN is a 17-character code found on: the dashboard (visible through the windshield on the driver's side), the driver's door jamb sticker, your vehicle title, or your insurance card.</div></div>
       <div class="fq"><div class="fq-q">What if the report has no records? <span class="fq-ico">+</span></div><div class="fq-a">Some vehicles have limited history — normal for older vehicles or cars with minimal reported incidents. If your report returns no data, contact us at support@vinrecordhub.com and we'll resolve it or issue a full refund.</div></div>
@@ -670,30 +828,29 @@
   </div>
 </div>
 
-<!-- GUARANTEE -->
 <div>
   <div class="sec sec-center">
-    <div class="gbox">
-      <div class="g-ico">🛡️</div>
+    <div class="gbox rv">
+      <div class="g-ico">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+      </div>
       <h3 class="g-title">100% Money-Back <span>Guarantee</span></h3>
       <p class="g-desc">Not satisfied with your report? Contact us within 24 hours and we'll give you a full refund — no questions asked. We stand behind every report we deliver.</p>
     </div>
   </div>
 </div>
 
-<!-- FOOTER -->
-<!-- EMAIL CAPTURE -->
-<div style="background:linear-gradient(135deg,rgba(200,255,0,.04) 0%,rgba(79,140,255,.04) 100%);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
-  <div style="max-width:640px;margin:0 auto;padding:3.5rem clamp(1.25rem,5vw,3rem);text-align:center">
-    <div style="font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.65rem">Free Resource</div>
-    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:800;letter-spacing:-.035em;margin-bottom:.75rem">Get our <em style="font-style:normal;color:var(--accent)">Free Car Buying Guide</em></h2>
-    <p style="font-size:.9rem;color:var(--muted);margin-bottom:1.75rem;line-height:1.7">10 things to check before buying a used car — including how to spot hidden flood damage, odometer fraud, and salvage titles before they cost you thousands.</p>
-    <div style="display:flex;gap:.6rem;max-width:440px;margin:0 auto" id="emailCapture">
-      <input type="email" id="captureEmail" placeholder="your@email.com" style="flex:1;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:.85rem 1.1rem;color:var(--white);font-family:'Inter',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='rgba(200,255,0,.4)'" onblur="this.style.borderColor=''"/>
-      <button onclick="captureEmail()" style="background:var(--accent);color:#000;border:none;border-radius:10px;padding:.85rem 1.4rem;font-family:'Inter',sans-serif;font-weight:700;font-size:.875rem;cursor:pointer;white-space:nowrap;transition:opacity .15s" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">Get Free Guide →</button>
+<div class="email-cap">
+  <div class="email-cap-inner">
+    <div class="sec-tag rv">Free Resource</div>
+    <h2 class="rv rv-1" style="font-size:clamp(1.4rem,3vw,2rem)">Get our <em>Free Car Buying Guide</em></h2>
+    <p class="rv rv-2" style="font-size:.9rem;color:var(--muted);margin-bottom:1.75rem;line-height:1.72">10 things to check before buying a used car — including how to spot hidden flood damage, odometer fraud, and salvage titles before they cost you thousands.</p>
+    <div class="cap-row rv rv-3" id="emailCapture">
+      <input type="email" id="emailIn" placeholder="your@email.com" class="cap-input"/>
+      <button onclick="doCapture()" class="cap-btn">Get Free Guide →</button>
     </div>
     <div id="captureMsg" style="font-size:.8rem;margin-top:.75rem;min-height:1.2rem"></div>
-    <p style="font-size:.7rem;color:var(--faint);margin-top:.6rem">No spam. Unsubscribe anytime.</p>
+    <p class="cap-note">No spam. Unsubscribe anytime.</p>
   </div>
 </div>
 
@@ -702,7 +859,7 @@
     <div class="f-top">
       <div>
         <div class="f-logo">VIN<span class="fr">Record</span><span class="fh">Hub</span></div>
-        <div class="f-tagline">Instant vehicle history powered by Carfax® & AutoCheck®.</div>
+        <div class="f-tagline">Instant vehicle history powered by Carfax® &amp; AutoCheck®.</div>
       </div>
       <div class="f-links">
         <div class="f-col"><h4>Product</h4><a href="#how">How it Works</a><a href="#pricing">Pricing</a><a href="#compare">Compare</a></div>
@@ -710,99 +867,34 @@
         <div class="f-col"><h4>Legal</h4><a href="/terms">Terms of Service</a><a href="/privacy">Privacy Policy</a></div>
       </div>
     </div>
-    <div class="f-btm"><span>© 2026 VINRecordHub. All rights reserved.</span><span>Powered by Carfax® & AutoCheck® data.</span></div>
+    <div class="f-btm"><span>© 2026 VINRecordHub. All rights reserved.</span><span>Powered by Carfax® &amp; AutoCheck® data.</span></div>
     <div class="f-legal">Carfax® and AutoCheck® are registered trademarks of their respective owners. VINRecordHub is not affiliated with, endorsed by, or sponsored by Carfax, AutoCheck, or Experian. Vehicle history reports are provided through licensed data access.</div>
   </div>
 </div>
 
-<!-- SOCIAL PROOF TOAST -->
-<div id="socialToast" style="position:fixed;bottom:1.5rem;left:1.5rem;z-index:500;
-  background:var(--surface);border:1px solid var(--border2);border-radius:12px;
-  padding:1rem 1.25rem;max-width:280px;display:none;
-  box-shadow:0 8px 40px rgba(0,0,0,.5);
-  animation:slideUp .4s ease forwards">
-  <div style="display:flex;align-items:center;gap:.75rem">
-    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#4f8cff,#c8ff00);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem">🚗</div>
-    <div>
-      <div id="toastMsg" style="font-size:.8rem;font-weight:600;line-height:1.35"></div>
-      <div style="font-size:.68rem;color:var(--muted);margin-top:.15rem" id="toastTime"></div>
+<div id="socialToast" class="toast">
+  <div class="toast-inner">
+    <div class="toast-avatar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
     </div>
-    <button onclick="document.getElementById('socialToast').style.display='none'" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0;margin-left:.25rem;flex-shrink:0">✕</button>
+    <div class="toast-body">
+      <div id="toastMsg" class="toast-msg"></div>
+      <div id="toastTime" class="toast-time"></div>
+    </div>
+    <button onclick="document.getElementById('socialToast').style.display='none'" class="toast-close">✕</button>
   </div>
 </div>
 
-<!--Start of Tawk.to Script-->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69fd1458ca32511c32eefb48/1jo29eugd';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
+s1.async=true;s1.src='https://embed.tawk.to/69fd1458ca32511c32eefb48/1jo29eugd';
+s1.charset='UTF-8';s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
-<!--End of Tawk.to Script-->
 
-<style>
-  #vrh-quick-replies {
-    position: fixed;
-    bottom: 90px;
-    right: 1.5rem;
-    z-index: 499;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: flex-end;
-    pointer-events: none;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-  #vrh-quick-replies.show {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: all;
-  }
-  .vrh-qr-label {
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.4);
-    margin-bottom: 0.15rem;
-    text-align: right;
-  }
-  .vrh-qr-btn {
-    background: rgba(14,14,18,0.92);
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #fff;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: 100px;
-    cursor: pointer;
-    white-space: nowrap;
-    backdrop-filter: blur(12px);
-    transition: background 0.15s, border-color 0.15s, transform 0.15s;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.4);
-  }
-  .vrh-qr-btn:hover {
-    background: rgba(200,255,0,0.12);
-    border-color: rgba(200,255,0,0.4);
-    color: #c8ff00;
-    transform: translateX(-3px);
-  }
-  .vrh-qr-btn .qr-icon { margin-right: 0.4rem; }
-  @media(max-width:600px){
-    #vrh-quick-replies { bottom: 80px; right: 1rem; }
-    .vrh-qr-btn { font-size: 0.75rem; padding: 0.45rem 0.875rem; }
-  }
-</style>
-
-<!-- Quick Reply Buttons -->
 <div id="vrh-quick-replies">
   <div class="vrh-qr-label">Quick questions</div>
   <button class="vrh-qr-btn" onclick="vrhAsk('💰 How much does a report cost?')"><span class="qr-icon">💰</span>Pricing</button>
@@ -814,55 +906,10 @@ s0.parentNode.insertBefore(s1,s0);
 </div>
 
 <script>
-  // Show quick reply buttons when Tawk chat opens
-  var Tawk_API = Tawk_API || {};
-  var _vrhQRShown = false;
-
-  function vrhInitQR() {
-    if (typeof Tawk_API === 'undefined') return;
-
-    Tawk_API.onChatMaximized = function() {
-      document.getElementById('vrh-quick-replies').classList.add('show');
-    };
-    Tawk_API.onChatMinimized = function() {
-      document.getElementById('vrh-quick-replies').classList.remove('show');
-    };
-    Tawk_API.onChatHidden = function() {
-      document.getElementById('vrh-quick-replies').classList.remove('show');
-    };
-  }
-
-  // Try init immediately and after Tawk loads
-  vrhInitQR();
-  window.addEventListener('load', function() {
-    setTimeout(vrhInitQR, 2000);
-  });
-
-  function vrhAsk(question) {
-    // Hide buttons after selection
-    document.getElementById('vrh-quick-replies').classList.remove('show');
-    // Open Tawk chat and send message
-    if (typeof Tawk_API !== 'undefined' && Tawk_API.maximize) {
-      Tawk_API.maximize();
-      // Small delay to ensure chat is open before sending
-      setTimeout(function() {
-        if (Tawk_API.sendMessage) {
-          Tawk_API.sendMessage(question);
-        } else {
-          // Fallback: just maximize with the question visible
-          Tawk_API.maximize();
-        }
-      }, 500);
-    }
-  }
-</script>
-
-<script>
   function openM(){document.getElementById('mMenu').classList.add('open');document.body.style.overflow='hidden'}
   function closeM(){document.getElementById('mMenu').classList.remove('open');document.body.style.overflow=''}
   document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
 
-  // 3D card parallax
   const card=document.getElementById('hCard');
   if(card&&window.innerWidth>960){
     document.addEventListener('mousemove',e=>{
@@ -895,16 +942,16 @@ s0.parentNode.insertBefore(s1,s0);
   function validateVin(inp){
     const v=inp.value.trim(),err=document.getElementById('vinErr'),lk=document.getElementById('vinLk');
     if(!v){inp.style.borderColor='';err.style.display='none';lk.className='vin-lk';return true}
-    if(v.length<17){inp.style.borderColor='rgba(255,170,0,.4)';lk.className='vin-lk';clearTimeout(vtimer);return false}
-    if(!isValidVin(v)){inp.style.borderColor='rgba(255,82,82,.5)';err.textContent='Invalid VIN — cannot contain I, O, or Q';err.style.display='block';return false}
-    inp.style.borderColor='rgba(0,217,126,.5)';err.style.display='none';
+    if(v.length<17){inp.style.borderColor='oklch(80% .18 72 / .4)';lk.className='vin-lk';clearTimeout(vtimer);return false}
+    if(!isValidVin(v)){inp.style.borderColor='oklch(62% .22 26 / .5)';err.textContent='Invalid VIN — cannot contain I, O, or Q';err.style.display='block';return false}
+    inp.style.borderColor='oklch(72% .18 155 / .5)';err.style.display='none';
     clearTimeout(vtimer);vtimer=setTimeout(()=>lookupVin(v),300);return true;
   }
 
   function goCheckout(){
     const v=document.getElementById('heroVin').value.trim(),err=document.getElementById('vinErr');
     if(!isValidVin(v)){
-      document.getElementById('heroVin').style.borderColor='rgba(255,82,82,.6)';
+      document.getElementById('heroVin').style.borderColor='oklch(62% .22 26 / .6)';
       err.textContent=v.length<17?`VIN must be 17 characters (${v.length}/17)`:'Please enter a valid VIN';
       err.style.display='block';document.getElementById('heroVin').focus();return;
     }
@@ -919,18 +966,48 @@ s0.parentNode.insertBefore(s1,s0);
 
   document.getElementById('heroVin').addEventListener('keypress',e=>{if(e.key==='Enter')goCheckout()});
 
-  // 3D tilt on pricing cards
-  document.querySelectorAll('.pc').forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width - 0.5;
-      const y = (e.clientY - r.top) / r.height - 0.5;
-      card.style.transform = `translateY(-6px) rotateX(${-y * 6}deg) rotateY(${x * 6}deg)`;
+  document.querySelectorAll('.pc').forEach(c=>{
+    c.addEventListener('mousemove',e=>{
+      const r=c.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5;
+      const y=(e.clientY-r.top)/r.height-.5;
+      c.style.transform=`translateY(-6px) rotateX(${-y*6}deg) rotateY(${x*6}deg)`;
     });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-    });
+    c.addEventListener('mouseleave',()=>{c.style.transform=''});
   });
+
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');observer.unobserve(e.target)}});
+  },{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.rv').forEach(el=>observer.observe(el));
+
+  var Tawk_API=Tawk_API||{};
+  function vrhInitQR(){
+    if(typeof Tawk_API==='undefined')return;
+    Tawk_API.onChatMaximized=function(){document.getElementById('vrh-quick-replies').classList.add('show')};
+    Tawk_API.onChatMinimized=function(){document.getElementById('vrh-quick-replies').classList.remove('show')};
+    Tawk_API.onChatHidden=function(){document.getElementById('vrh-quick-replies').classList.remove('show')};
+  }
+  vrhInitQR();
+  window.addEventListener('load',function(){setTimeout(vrhInitQR,2000)});
+
+  function vrhAsk(question){
+    document.getElementById('vrh-quick-replies').classList.remove('show');
+    if(typeof Tawk_API!=='undefined'&&Tawk_API.maximize){
+      Tawk_API.maximize();
+      setTimeout(function(){if(Tawk_API.sendMessage)Tawk_API.sendMessage(question);else Tawk_API.maximize()},500);
+    }
+  }
+
+  function doCapture(){
+    const email=document.getElementById('emailIn').value.trim();
+    const msg=document.getElementById('captureMsg');
+    if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      msg.style.color='var(--red)';msg.textContent='Please enter a valid email address.';return;
+    }
+    msg.style.color='var(--green)';msg.textContent='Thanks! Your guide is on its way.';
+    document.getElementById('emailIn').value='';
+  }
 </script>
 </body>
 </html>

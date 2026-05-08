@@ -1,9 +1,13 @@
-// api/ga-stats.js
-// GET /api/ga-stats?token=ADMIN_TOKEN&days=7
-// Uses GA4 Data API with service account JSON stored in env var
+// api/ga-stats.js — Returns analytics built from your own Supabase order data
+// No Google account needed — uses data you already have
 
+const { createClient } = require('@supabase/supabase-js');
 const rateLimit = require('./rate-limit');
-const { createSign } = require('crypto');
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY
+);
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -18,112 +22,80 @@ module.exports = async function handler(req, res) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  const propertyId = process.env.GA4_PROPERTY_ID;
-  const serviceAccountKey = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
-
-  if (!propertyId || !serviceAccountKey) {
-    return res.status(200).json({ notConfigured: true });
-  }
-
   try {
-    const sa = JSON.parse(serviceAccountKey);
-    const accessToken = await getAccessToken(sa);
     const dayRange = parseInt(days) || 7;
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - dayRange);
+    const cutoffStr = cutoff.toISOString();
 
-    // Main metrics
-    const [mainData, sourcesData, pagesData] = await Promise.all([
-      gaReport(accessToken, propertyId, dayRange, {
-        metrics: [
-          { name: 'sessions' },
-          { name: 'totalUsers' },
-          { name: 'screenPageViews' },
-          { name: 'bounceRate' },
-          { name: 'averageSessionDuration' },
-        ],
-        dimensions: [],
-      }),
-      gaReport(accessToken, propertyId, dayRange, {
-        metrics: [{ name: 'sessions' }],
-        dimensions: [{ name: 'sessionSource' }],
-        orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
-        limit: 6,
-      }),
-      gaReport(accessToken, propertyId, dayRange, {
-        metrics: [{ name: 'screenPageViews' }],
-        dimensions: [{ name: 'pagePath' }],
-        orderBys: [{ metric: { metricName: 'screenPageViews' }, desc: true }],
-        limit: 6,
-      }),
-    ]);
+    // All orders
+    const { data: allOrders } = await supabase
+      .from('orders')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-    const row = mainData.rows?.[0]?.metricValues || [];
+    // Orders in range
+    const { data: rangeOrders } = await supabase
+      .from('orders')
+      .select('*')
+      .gte('created_at', cutoffStr)
+      .order('created_at', { ascending: true });
 
-    const sources = (sourcesData.rows || []).map(r => ({
-      source: r.dimensionValues[0].value === '(direct)' ? 'Direct' : r.dimensionValues[0].value,
-      sessions: parseInt(r.metricValues[0].value),
-    }));
+    // Previous period for comparison
+    const prevCutoff = new Date(cutoff);
+    prevCutoff.setDate(prevCutoff.getDate() - dayRange);
+    const { data: prevOrders } = await supabase
+      .from('orders')
+      .select('*')
+      .gte('created_at', prevCutoff.toISOString())
+      .lt('created_at', cutoffStr);
 
-    const pages = (pagesData.rows || []).map(r => ({
-      page: r.dimensionValues[0].value,
-      views: parseInt(r.metricValues[0].value),
-    }));
+    // Stats for range
+    const revenue = rangeOrders.reduce((s, o) => s + parseFloat(o.amount || 0), 0);
+    const prevRevenue = prevOrders.reduce((s, o) => s + parseFloat(o.amount || 0), 0);
+
+    // Revenue by day
+    const byDay = {};
+    rangeOrders.forEach(o => {
+      const day = o.created_at.slice(0, 10);
+      byDay[day] = (byDay[day] || 0) + parseFloat(o.amount || 0);
+    });
+    const dailyRevenue = Object.entries(byDay).map(([date, revenue]) => ({ date, revenue: parseFloat(revenue.toFixed(2)) }));
+
+    // By plan
+    const byPlan = {};
+    rangeOrders.forEach(o => {
+      const plan = o.plan || 'carfax';
+      byPlan[plan] = (byPlan[plan] || 0) + 1;
+    });
+
+    // Top emails (repeat customers)
+    const byEmail = {};
+    allOrders.forEach(o => { byEmail[o.email] = (byEmail[o.email] || 0) + 1; });
+    const repeatCustomers = Object.entries(byEmail)
+      .filter(([, count]) => count > 1)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([email, count]) => ({ email: email.replace(/(.{2}).*(@.*)/, '$1***$2'), count }));
+
+    // Delta calculations
+    const revDelta = prevRevenue > 0 ? (((revenue - prevRevenue) / prevRevenue) * 100).toFixed(1) : null;
+    const countDelta = prevOrders.length > 0 ? (((rangeOrders.length - prevOrders.length) / prevOrders.length) * 100).toFixed(1) : null;
 
     return res.status(200).json({
-      sessions: parseInt(row[0]?.value || 0),
-      users: parseInt(row[1]?.value || 0),
-      pageviews: parseInt(row[2]?.value || 0),
-      bounceRate: (parseFloat(row[3]?.value || 0) * 100).toFixed(1),
-      avgSession: parseFloat(row[4]?.value || 0),
-      sources,
-      pages,
+      period: { days: dayRange, orders: rangeOrders.length, revenue: revenue.toFixed(2) },
+      prev: { orders: prevOrders.length, revenue: prevRevenue.toFixed(2) },
+      deltas: { revenue: revDelta, orders: countDelta },
+      dailyRevenue,
+      byPlan,
+      repeatCustomers,
+      avgOrder: rangeOrders.length > 0 ? (revenue / rangeOrders.length).toFixed(2) : '0.00',
+      allTimeOrders: allOrders.length,
+      allTimeRevenue: allOrders.reduce((s, o) => s + parseFloat(o.amount || 0), 0).toFixed(2),
     });
 
   } catch (err) {
-    console.error('GA stats error:', err.message);
+    console.error('analytics error:', err.message);
     return res.status(500).json({ error: err.message });
   }
 };
-
-async function gaReport(accessToken, propertyId, days, body) {
-  const res = await fetch(
-    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
-    {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        dateRanges: [{ startDate: `${days}daysAgo`, endDate: 'today' }],
-        ...body,
-      }),
-    }
-  );
-  return res.json();
-}
-
-async function getAccessToken(sa) {
-  const now = Math.floor(Date.now() / 1000);
-  const header = Buffer.from(JSON.stringify({ alg: 'RS256', typ: 'JWT' })).toString('base64url');
-  const payload = Buffer.from(JSON.stringify({
-    iss: sa.client_email,
-    scope: 'https://www.googleapis.com/auth/analytics.readonly',
-    aud: 'https://oauth2.googleapis.com/token',
-    exp: now + 3600,
-    iat: now,
-  })).toString('base64url');
-
-  const sign = createSign('RSA-SHA256');
-  sign.update(`${header}.${payload}`);
-  const sig = sign.sign(sa.private_key).toString('base64url');
-  const jwt = `${header}.${payload}.${sig}`;
-
-  const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`,
-  });
-  const data = await tokenRes.json();
-  if (!data.access_token) throw new Error('Failed to get access token: ' + JSON.stringify(data));
-  return data.access_token;
-}

@@ -26,6 +26,109 @@
   <meta name="twitter:title" content="VINRecordHub — Carfax® Reports from $9.99"/>
   <meta name="twitter:description" content="Real Carfax® & AutoCheck® vehicle history reports for $9.99. Delivered in 60 seconds."/>
   <meta name="twitter:image" content="https://vinrecordhub.com/og-image.png"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://vinrecordhub.com/#website",
+        "url": "https://vinrecordhub.com/",
+        "name": "VINRecordHub",
+        "description": "Instant Carfax® & AutoCheck® vehicle history reports from $9.99",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://vinrecordhub.com/checkout?vin={vin}",
+          "query-input": "required name=vin"
+        }
+      },
+      {
+        "@type": "Service",
+        "@id": "https://vinrecordhub.com/#service",
+        "name": "Vehicle History Report",
+        "provider": {
+          "@type": "Organization",
+          "name": "VINRecordHub",
+          "url": "https://vinrecordhub.com/",
+          "email": "support@vinrecordhub.com"
+        },
+        "description": "Access Carfax® and AutoCheck® vehicle history reports for $9.99. Accident records, title history, odometer verification — delivered to your inbox in 60 seconds.",
+        "offers": [
+          {
+            "@type": "Offer",
+            "name": "Carfax® Report",
+            "price": "9.99",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "url": "https://vinrecordhub.com/checkout?plan=standard"
+          },
+          {
+            "@type": "Offer",
+            "name": "AutoCheck® Report",
+            "price": "9.99",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "url": "https://vinrecordhub.com/checkout?plan=plus"
+          },
+          {
+            "@type": "Offer",
+            "name": "Combo Pack — Carfax® + AutoCheck®",
+            "price": "14.99",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "url": "https://vinrecordhub.com/checkout?plan=combo"
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://vinrecordhub.com/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Why is VINRecordHub more affordable?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "VINRecordHub is a vehicle history service that provides access to Carfax® & AutoCheck® reports through our platform. By optimizing our delivery infrastructure, we offer competitive pricing while delivering the same comprehensive vehicle data."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How fast will I receive my report?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Reports are delivered to your email inbox within 60 seconds of payment confirmation. You'll receive it as a downloadable file you can keep forever."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where do I find the VIN on my car?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The VIN is a 17-character code found on: the dashboard (visible through the windshield on the driver's side), the driver's door jamb sticker, your vehicle title, or your insurance card."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What if the report has no records?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Some vehicles have limited history — normal for older vehicles or cars with minimal reported incidents. If your report returns no data, contact us at support@vinrecordhub.com and we'll resolve it or issue a full refund."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is my payment secure?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. All payments are processed through PayPal — we never store or see your card details. PayPal's encryption keeps your information completely safe."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link rel="dns-prefetch" href="https://www.googletagmanager.com"/>
@@ -105,7 +208,8 @@
       border-color:var(--accent);transform:translateY(-1px);
       box-shadow:0 6px 20px var(--a-glow)}
     .burger{display:none;flex-direction:column;gap:5px;
-      background:none;border:none;cursor:pointer;padding:4px}
+      background:none;border:none;cursor:pointer;padding:4px;
+      min-width:44px;min-height:44px;align-items:center;justify-content:center}
     .burger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px}
     .m-menu{display:none;position:fixed;inset:0;z-index:200;
       background:oklch(9% .018 252 / .99);
@@ -268,6 +372,13 @@
     .step-t{font-size:.95rem;font-weight:700;margin-bottom:.5rem}
     .step-d{font-size:.84rem;color:var(--muted);line-height:1.68}
 
+    /* WALKTHROUGH VIDEO */
+    .walkthrough-wrap{margin-top:3rem;text-align:center}
+    .walkthrough-label{font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--accent);margin-bottom:1rem;opacity:.8}
+    .walkthrough-vid{width:100%;max-width:960px;border-radius:16px;
+      border:1px solid var(--border);box-shadow:0 0 60px var(--a-glow);display:block;margin:0 auto}
+
     /* PRICING */
     .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);
       gap:1rem;margin-top:3rem;perspective:1200px}
@@ -280,7 +391,9 @@
       box-shadow:0 20px 60px oklch(0% 0 0 / .55),0 0 40px var(--a-glow)}
     .pc.feat{border-color:var(--accent);
       background:oklch(76% .145 52 / .04);
-      box-shadow:0 0 0 1px var(--a-bdr),0 8px 40px var(--a-glow)}
+      box-shadow:0 0 0 1px var(--a-bdr),0 8px 40px var(--a-glow),0 0 60px oklch(76% .145 52 / .08)}
+    @keyframes featPulse{0%,100%{box-shadow:0 0 0 1px var(--a-bdr),0 8px 40px var(--a-glow),0 0 60px oklch(76% .145 52 / .08)}50%{box-shadow:0 0 0 1px var(--a-bdr),0 8px 40px var(--a-glow),0 0 90px oklch(76% .145 52 / .16)}}
+    .pc.feat{animation:featPulse 3s ease-in-out infinite}
     .feat-badge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);
       background:var(--accent);color:oklch(10% .015 252);
       font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
@@ -527,6 +640,55 @@
     /* FOCUS */
     :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
 
+    /* TRUST BADGES — below VIN row */
+    .hero-trust{display:flex;align-items:center;gap:1.25rem;margin-top:.85rem;flex-wrap:wrap}
+    .ht-badge{display:flex;align-items:center;gap:.4rem;font-size:.73rem;color:var(--muted)}
+    .ht-badge svg{color:var(--green);flex-shrink:0}
+    .ht-badge strong{color:var(--text);font-weight:600}
+
+    /* VINNY MASCOT */
+    .vinny-wrap{display:flex;align-items:flex-end;gap:.9rem;margin-top:1.25rem;
+      animation:floatVinny 3s ease-in-out infinite}
+    @keyframes floatVinny{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+    .vinny-img{width:80px;height:auto;flex-shrink:0}
+    .vinny-bubble{background:var(--surface);border:1px solid var(--a-bdr);
+      border-radius:14px 14px 14px 4px;padding:.55rem .85rem;
+      font-size:.78rem;color:var(--text);font-weight:500;
+      box-shadow:0 4px 20px oklch(0% 0 0 / .3);position:relative;line-height:1.4}
+    .vinny-bubble::before{content:'';position:absolute;bottom:-8px;left:16px;
+      width:0;height:0;border-left:8px solid transparent;
+      border-right:4px solid transparent;border-top:8px solid var(--a-bdr)}
+    .vinny-bubble::after{content:'';position:absolute;bottom:-6px;left:17px;
+      width:0;height:0;border-left:7px solid transparent;
+      border-right:3px solid transparent;border-top:7px solid var(--surface)}
+    @media(max-width:600px){.vinny-img{width:60px}}
+
+    /* VINNY SUCCESS WRAP */
+    .vinny-success-wrap{display:flex;align-items:center;gap:.75rem;
+      margin:0 auto 1.5rem;width:fit-content}
+    .vinny-success-img{width:72px;height:auto}
+    .vinny-success-msg{font-size:.82rem;color:var(--green);font-weight:600}
+
+    /* STICKY CTA BAR */
+    .sticky-cta{position:fixed;bottom:0;left:0;right:0;z-index:90;
+      background:oklch(9% .018 252 / .97);backdrop-filter:blur(20px) saturate(1.6);
+      border-top:1px solid var(--a-bdr);
+      padding:.75rem clamp(1.25rem,5vw,3rem);
+      display:flex;align-items:center;justify-content:space-between;gap:1rem;
+      transform:translateY(100%);transition:transform .4s var(--expo);pointer-events:none}
+    .sticky-cta.show{transform:translateY(0);pointer-events:all}
+    .sticky-cta-txt{font-size:.84rem;color:var(--muted);font-weight:500}
+    .sticky-cta-txt strong{color:var(--text)}
+    .sticky-cta-btn{background:var(--accent);color:oklch(10% .015 252);
+      font-size:.84rem;font-weight:700;padding:.65rem 1.4rem;
+      border-radius:9px;text-decoration:none;white-space:nowrap;
+      transition:opacity .15s,transform .15s var(--ease);flex-shrink:0}
+    .sticky-cta-btn:hover{opacity:.88;transform:scale(1.02)}
+    @media(max-width:600px){
+      .sticky-cta{flex-direction:column;text-align:center;gap:.5rem;padding:.85rem 1.25rem}
+      .sticky-cta-btn{width:100%;text-align:center}
+    }
+
     /* HERO BACKGROUND — static gradient, zero paint cost */
     .hero-aura{position:absolute;inset:0;pointer-events:none;z-index:0;
       background:
@@ -590,15 +752,27 @@
   <div class="hero-inner">
     <div>
       <div class="hero-badge hero-rv"><span class="badge-dot"></span>Instant Vehicle History Reports</div>
-      <h1 class="hero-rv hero-rv-1">Know the truth about <em>any car</em> before you buy.</h1>
-      <p class="hero-sub hero-rv hero-rv-2">Real Carfax® &amp; AutoCheck® vehicle history — accident records, title history, odometer checks — for just $9.99. Delivered in 60 seconds.</p>
-      <label for="heroVin" class="vin-label hero-rv hero-rv-3">Enter VIN to get started</label>
+      <h1 class="hero-rv hero-rv-1">Every accident. Every secret. <em>Know before you buy.</em></h1>
+      <p class="hero-sub hero-rv hero-rv-2">Real Carfax® &amp; AutoCheck® vehicle history — accidents, title brands, odometer fraud — for just $9.99. Delivered to your inbox in 60 seconds.</p>
+      <label for="heroVin" class="vin-label hero-rv hero-rv-3">Enter VIN — get your report instantly</label>
       <div class="vin-row hero-rv hero-rv-3">
-        <input class="vin-input" id="heroVin" type="text" placeholder="e.g. 1HGCM82633A004352" maxlength="17" autocomplete="off" spellcheck="false" aria-label="Vehicle Identification Number (VIN)" aria-describedby="vinLk vinErr" aria-invalid="false" oninput="this.value=this.value.toUpperCase();validateVin(this)"/>
-        <button class="vin-btn" onclick="goCheckout()" aria-label="Get vehicle history report">Get Report →</button>
+        <input class="vin-input" id="heroVin" type="text" placeholder="e.g. 1HGCM82633A004352" maxlength="17" autocomplete="off" spellcheck="false" aria-label="Vehicle Identification Number (VIN)" aria-describedby="vinLk vinErr vinCount" aria-invalid="false" oninput="this.value=this.value.toUpperCase();validateVin(this)"/>
+        <button class="vin-btn" onclick="goCheckout()" aria-label="Get vehicle history report">Check VIN →</button>
       </div>
+      <div style="font-size:.68rem;color:var(--faint);margin-top:.3rem" id="vinCount" aria-live="polite"></div>
       <div class="vin-lk" id="vinLk" role="status" aria-live="polite" aria-atomic="true"><span id="vinLkIco"></span><span id="vinLkTxt"></span></div>
       <div class="vin-err" id="vinErr" role="alert" aria-live="assertive"></div>
+      <div class="hero-trust hero-rv hero-rv-3">
+        <span class="ht-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><strong>256-bit</strong>&nbsp;encrypted</span>
+        <span class="ht-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>Instant</strong>&nbsp;delivery</span>
+        <span class="ht-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg><strong>Money-back</strong>&nbsp;guarantee</span>
+      </div>
+      <div class="vinny-wrap hero-rv hero-rv-4" aria-hidden="true">
+        <div>
+          <div class="vinny-bubble">Enter your VIN to get started!</div>
+          <img src="/vinny-wave.svg" class="vinny-img" width="80" height="90" alt="" loading="lazy"/>
+        </div>
+      </div>
     </div>
     <div class="hero-card hero-rv hero-rv-4" id="hCard">
       <div class="hc-head">
@@ -693,6 +867,19 @@
         <div class="step-t">Get Your Report</div>
         <div class="step-d">Your full vehicle history report arrives in your email inbox within 60 seconds. Keep it forever.</div>
       </div>
+    </div>
+    <div class="walkthrough-wrap rv rv-3">
+      <div class="walkthrough-label">See it in action →</div>
+      <video
+        class="walkthrough-vid"
+        src="/walkthrough.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="none"
+        aria-label="VINRecordHub walkthrough: enter VIN, choose report, get instant delivery"
+      ></video>
     </div>
   </div>
 </div>
@@ -882,6 +1069,11 @@
   </div>
 </div>
 
+<div class="sticky-cta" id="stickyCta" aria-label="Get your vehicle history report">
+  <span class="sticky-cta-txt"><strong>Don't buy blind</strong> — check any VIN in 60 seconds</span>
+  <a href="#pricing" class="sticky-cta-btn">Get Report — from $9.99 →</a>
+</div>
+
 <div class="footer-shell">
   <div class="footer-in">
     <div class="f-top">
@@ -946,6 +1138,23 @@ window.addEventListener('load',function(){
   function isValidVin(v){return /^[A-HJ-NPR-Z0-9]{17}$/.test(v)}
   let vtimer=null;
 
+  // GA4 helper
+  function gaPush(event, params){
+    if(typeof gtag==='function') gtag('event', event, params || {});
+    if(window.dataLayer) window.dataLayer.push(Object.assign({event: event}, params || {}));
+  }
+
+  // Sticky CTA bar — show after hero exits viewport
+  (function initStickyCta(){
+    var hero=document.querySelector('.hero');
+    var bar=document.getElementById('stickyCta');
+    if(!hero||!bar) return;
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){bar.classList.toggle('show',!e.isIntersecting)});
+    },{threshold:0});
+    io.observe(hero);
+  })();
+
   function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
   async function lookupVin(vin){
     const el=document.getElementById('vinLk'),ico=document.getElementById('vinLkIco'),txt=document.getElementById('vinLkTxt');
@@ -960,27 +1169,36 @@ window.addEventListener('load',function(){
   }
 
   function validateVin(inp){
-    const v=inp.value.trim(),err=document.getElementById('vinErr'),lk=document.getElementById('vinLk');
+    const v=inp.value.trim(),err=document.getElementById('vinErr'),lk=document.getElementById('vinLk'),ctr=document.getElementById('vinCount');
+    if(ctr) ctr.textContent=v.length>0&&v.length<17?v.length+'/17 characters entered':v.length===17?'':'';
     if(!v){inp.style.borderColor='';inp.setAttribute('aria-invalid','false');err.style.display='none';lk.className='vin-lk';return true}
-    if(v.length<17){inp.style.borderColor='oklch(80% .18 72 / .4)';inp.setAttribute('aria-invalid','true');lk.className='vin-lk';clearTimeout(vtimer);return false}
-    if(!isValidVin(v)){inp.style.borderColor='oklch(62% .22 26 / .5)';inp.setAttribute('aria-invalid','true');err.textContent='Invalid VIN — cannot contain I, O, or Q';err.style.display='block';return false}
+    if(v.length<17){inp.style.borderColor='oklch(80% .18 72 / .4)';inp.setAttribute('aria-invalid','true');err.style.display='none';lk.className='vin-lk';clearTimeout(vtimer);return false}
+    if(!isValidVin(v)){inp.style.borderColor='oklch(62% .22 26 / .5)';inp.setAttribute('aria-invalid','true');err.textContent='Invalid VIN — cannot contain letters I, O, or Q';err.style.display='block';return false}
     inp.style.borderColor='oklch(72% .18 155 / .5)';inp.setAttribute('aria-invalid','false');err.style.display='none';
+    if(ctr) ctr.textContent='';
     clearTimeout(vtimer);vtimer=setTimeout(()=>lookupVin(v),300);return true;
   }
+
+  document.getElementById('heroVin').addEventListener('focus',function(){
+    gaPush('vin_field_focus');
+  },{once:true});
 
   function goCheckout(){
     const v=document.getElementById('heroVin').value.trim(),err=document.getElementById('vinErr');
     if(!isValidVin(v)){
       document.getElementById('heroVin').style.borderColor='oklch(62% .22 26 / .6)';
-      err.textContent=v.length<17?`VIN must be 17 characters (${v.length}/17)`:'Please enter a valid VIN';
+      err.textContent=v.length===0?'Please enter your 17-character VIN':v.length<17?`VIN must be 17 characters — you've entered ${v.length}`:'Invalid VIN — cannot contain I, O, or Q';
       err.style.display='block';document.getElementById('heroVin').focus();return;
     }
+    gaPush('vin_submitted', {vin_length: v.length});
+    gaPush('checkout_initiated', {plan: 'standard', source: 'hero'});
     window.location.href=`/checkout?vin=${encodeURIComponent(v)}&plan=standard`;
   }
 
   function goCheckoutPlan(p){
     const v=document.getElementById('heroVin').value.trim();
     const vp=isValidVin(v)?`&vin=${encodeURIComponent(v)}`:'';
+    gaPush('checkout_initiated', {plan: p, source: 'pricing'});
     window.location.href=`/checkout?plan=${p}${vp}`;
   }
 

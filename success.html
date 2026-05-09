@@ -135,6 +135,9 @@
     .support-note{font-size:.75rem;color:var(--muted);text-align:center;line-height:1.6}
     .support-note a{color:var(--accent);text-decoration:none}
     .support-note a:hover{text-decoration:underline}
+    .vinny-success{display:flex;align-items:center;justify-content:center;gap:.75rem;margin:0 auto 1.5rem;animation:popIn .5s cubic-bezier(0.16,1,0.3,1) .4s both}
+    .vinny-success img{width:68px;height:auto}
+    .vinny-success-msg{font-size:.82rem;color:oklch(72% 0.15 155);font-weight:600}
 
     @media(max-width:600px){
       .card{padding:2rem 1.5rem;border-radius:18px}
@@ -156,6 +159,10 @@
   <div class="card">
     <div class="success-ring">
       <svg class="success-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="vinny-success" aria-hidden="true">
+      <img src="/vinny-thumbsup.svg" width="68" height="76" alt="" loading="lazy"/>
+      <span class="vinny-success-msg">Your report is on its way!</span>
     </div>
     <h1>Payment Confirmed!</h1>
     <p class="sub">Your report is being generated and will arrive in your inbox <strong>within the next few minutes</strong>. Check your spam folder if it doesn't appear.</p>

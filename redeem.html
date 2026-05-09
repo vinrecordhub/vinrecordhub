@@ -225,6 +225,13 @@
   </div>
 </div>
 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4MSSG5GW4X"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date()); gtag('config', 'G-4MSSG5GW4X');
+  function gaPush(e,p){ gtag('event',e,p||{}); if(window.dataLayer) window.dataLayer.push(Object.assign({event:e},p||{})); }
+</script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script>
   const params = new URLSearchParams(window.location.search);
@@ -295,6 +302,7 @@
       const data = await res.json();
 
       if (data.success) {
+        gaPush('redeem_code_used', { code: code });
         document.getElementById('successEmail').textContent = email;
         showState('stateSuccess');
       } else {

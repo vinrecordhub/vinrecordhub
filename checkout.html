@@ -18,6 +18,8 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date()); gtag('config', 'G-4MSSG5GW4X');
+    gtag('event', 'checkout_page_view');
+    function gaPush(event, params){ gtag('event', event, params || {}); if(window.dataLayer) window.dataLayer.push(Object.assign({event:event},params||{})); }
   </script>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"/></noscript>
@@ -239,9 +241,12 @@
       .page{padding:1.5rem 1.25rem 3rem}
       .plan-grid{grid-template-columns:1fr}
       .coupon-row{flex-direction:column}
-      .btn-apply{padding:.75rem}
+      .btn-apply{padding:.85rem;min-height:44px}
       .sum-stats{grid-template-columns:1fr 1fr}
       .form-title{font-size:1.35rem}
+      /* Ensure all interactive elements meet 44px touch target */
+      .plan-card{min-height:44px}
+      .fi{min-height:44px;font-size:16px}
     }
   </style>
 </head>
@@ -424,7 +429,10 @@ function selectPlan(p) {
   renderPayPal();
 }
 ['standard','plus','combo'].forEach(p => {
-  document.getElementById('card-' + p).addEventListener('click', () => selectPlan(p));
+  document.getElementById('card-' + p).addEventListener('click', () => {
+    selectPlan(p);
+    gaPush('plan_selected', {plan: p});
+  });
 });
 
 // 3D tilt on plan cards
@@ -566,6 +574,13 @@ function renderPayPal() {
       const vin = document.getElementById('vinInput').value.trim().toUpperCase();
       const email = document.getElementById('emailInput').value.trim();
       const orderId = details.id;
+
+      gaPush('payment_completed', {
+        order_id: orderId,
+        plan: PLANS[plan].reportType,
+        value: getFinal(),
+        currency: 'USD',
+      });
 
       document.getElementById('loadingOverlay').style.display = 'flex';
 

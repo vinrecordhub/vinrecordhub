@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="VINRecordHub logo">
+  <title>VINRecordHub</title>
+
+  <!-- Navy circle -->
+  <circle cx="100" cy="100" r="92" fill="#0b0d1c"/>
+
+  <!-- Subtle gold ring -->
+  <circle cx="100" cy="100" r="88" fill="none" stroke="rgba(212,168,50,0.2)" stroke-width="1"/>
+
+  <!-- Shield icon -->
+  <g transform="translate(100, 60)">
+    <path d="M0,-20 L16,-12 L16,3 Q16,16 0,23 Q-16,16 -16,3 L-16,-12 Z" fill="#d4a832"/>
+    <polyline points="-7,3 -1,10 9,-5"
+              fill="none" stroke="#0b0d1c" stroke-width="3"
+              stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- VIN -->
+  <text x="100" y="107"
+        text-anchor="middle"
+        font-family="'Arial Black', 'Impact', 'Helvetica Neue', sans-serif"
+        font-weight="900"
+        font-size="40"
+        letter-spacing="5"
+        fill="#ffffff">VIN</text>
+
+  <!-- RECORDHUB -->
+  <text x="100" y="130"
+        text-anchor="middle"
+        font-family="'Arial', 'Helvetica Neue', sans-serif"
+        font-weight="700"
+        font-size="13.5"
+        letter-spacing="2"
+        fill="#d4a832">RECORDHUB</text>
+
+  <!-- Thin gold rule -->
+  <line x1="72" y1="140" x2="128" y2="140"
+        stroke="rgba(212,168,50,0.35)" stroke-width="0.8"/>
+</svg>

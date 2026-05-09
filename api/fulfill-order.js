@@ -166,7 +166,7 @@ async function sendReportEmail(email, vin, reports) {
 
 // ─── MAIN HANDLER ─────────────────────────────────────────
 module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'https://vinrecordhub.com');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
@@ -203,13 +203,7 @@ module.exports = async function handler(req, res) {
 
     // Prevent duplicate orders
     let existing = null;
-    // Rate limit: 5 payment attempts per IP per minute
-  const rl = rateLimit(req, { maxRequests: 5, windowMs: 60000 });
-  if (rl.limited) {
-    return res.status(429).json({ error: 'Too many requests. Please wait ' + rl.resetIn + ' seconds.' });
-  }
-
-  try {
+    try {
       const { data } = await supabase
         .from('orders')
         .select('id')

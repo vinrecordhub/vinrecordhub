@@ -121,7 +121,7 @@ async function sendReportEmail(email, vin, yearMakeModel, htmlBase64, reportType
 // MAIN HANDLER
 // ============================================================
 module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'https://vinrecordhub.com');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
@@ -134,14 +134,14 @@ module.exports = async function handler(req, res) {
     const type = (reportType === 'autocheck') ? 'autocheck' : 'carfax';
 
     // Validate inputs
-    if (!code || !vin || !email) {
-      return res.status(400).json({ error: 'Missing required fields' });
+    if (!code || typeof code !== 'string') {
+      return res.status(400).json({ error: 'Missing redemption code' });
     }
-    if (vin.length !== 17) {
-      return res.status(400).json({ error: 'VIN must be 17 characters' });
+    if (!vin || !/^[A-HJ-NPR-Z0-9]{17}$/i.test(vin.trim())) {
+      return res.status(400).json({ error: 'Invalid VIN — must be 17 alphanumeric characters' });
     }
-    if (!email.includes('@')) {
-      return res.status(400).json({ error: 'Invalid email' });
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) {
+      return res.status(400).json({ error: 'Invalid email address' });
     }
 
     // Validate redemption code in Supabase
@@ -202,7 +202,6 @@ module.exports = async function handler(req, res) {
     console.error('redeem error:', err.message);
     return res.status(500).json({
       error: 'Failed to generate report. Contact support@vinrecordhub.com',
-      details: err.message,
     });
   }
 };

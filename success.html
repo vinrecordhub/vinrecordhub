@@ -204,16 +204,39 @@
     <p class="support-note">Didn't receive your report within 10 minutes?<br/>Email <a href="mailto:support@vinrecordhub.com">support@vinrecordhub.com</a> with your Order ID above.</p>
   </div>
 </div>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4MSSG5GW4X"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date()); gtag('config', 'G-4MSSG5GW4X');
+</script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script>
+  function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
   const p = new URLSearchParams(window.location.search);
   const plans = {standard:'Carfax® Report',plus:'AutoCheck® Report',combo:'Combo Pack (Carfax® + AutoCheck®)',carfax:'Carfax® Report',autocheck:'AutoCheck® Report'};
   const delivered = p.get('delivered');
+  const planKey = p.get('plan') || '';
+  const orderAmt = planKey === 'combo' ? '14.99' : '9.99';
 
   document.getElementById('orderId').textContent = p.get('order') || '—';
   document.getElementById('vinDisplay').textContent = p.get('vin') || '—';
   document.getElementById('emailDisplay').textContent = p.get('email') || '—';
-  document.getElementById('planDisplay').textContent = plans[p.get('plan')] || 'Vehicle History Report';
+  document.getElementById('planDisplay').textContent = plans[planKey] || 'Vehicle History Report';
+
+  // GA4: payment completed
+  gtag('event', 'payment_completed', {
+    order_id: p.get('order') || '',
+    plan: planKey,
+    value: parseFloat(orderAmt),
+    currency: 'USD',
+  });
+
+  // GA4: report delivered
+  if (delivered === '1') {
+    gtag('event', 'report_delivered', { plan: planKey, order_id: p.get('order') || '' });
+  }
 
   // GSAP staggered sub-element entrance (card itself is animated via CSS)
   if(typeof gsap!=='undefined'){
@@ -223,7 +246,9 @@
 
   if (delivered === '1') {
     document.querySelector('h1').textContent = 'Report Delivered!';
-    document.querySelector('.sub').innerHTML = 'Your vehicle history report has been sent to <strong>' + (p.get('email') || 'your email') + '</strong>. Check your inbox now — it should already be there.';
+    const emailVal = p.get('email') || 'your email';
+    const subEl = document.querySelector('.sub');
+    subEl.innerHTML = 'Your vehicle history report has been sent to <strong>' + escHtml(emailVal) + '</strong>. Check your inbox now — it should already be there.';
     document.querySelectorAll('.tl-dot').forEach(d => {
       d.className = 'tl-dot done';
       d.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';

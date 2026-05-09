@@ -373,11 +373,12 @@
     .step-d{font-size:.84rem;color:var(--muted);line-height:1.68}
 
     /* WALKTHROUGH VIDEO */
-    .walkthrough-wrap{margin-top:3rem;text-align:center}
+    .walkthrough-wrap{margin-top:3rem;text-align:center;contain:layout}
     .walkthrough-label{font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
       color:var(--accent);margin-bottom:1rem;opacity:.8}
     .walkthrough-vid{width:100%;max-width:960px;border-radius:16px;
-      border:1px solid var(--border);box-shadow:0 0 60px var(--a-glow);display:block;margin:0 auto}
+      border:1px solid var(--border);display:block;margin:0 auto;
+      will-change:transform;transform:translateZ(0)}
 
     /* PRICING */
     .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);
@@ -481,14 +482,14 @@
       box-shadow:0 8px 32px oklch(76% .145 52 / .45)}
     .sample-modal-btn svg{flex-shrink:0}
     .report-modal-backdrop{position:fixed;inset:0;z-index:900;
-      background:oklch(0% 0 0 / .82);backdrop-filter:blur(6px);
+      background:oklch(0% 0 0 / .86);
       display:flex;align-items:center;justify-content:center;
-      opacity:0;pointer-events:none;transition:opacity .25s var(--ease)}
+      opacity:0;pointer-events:none;transition:opacity .2s var(--ease)}
     .report-modal-backdrop.open{opacity:1;pointer-events:all}
     .report-modal{position:relative;width:min(1100px,96vw);height:88vh;
       background:#fff;border-radius:16px;overflow:hidden;
-      display:flex;flex-direction:column;
-      transform:scale(.96) translateY(20px);transition:transform .3s var(--ease)}
+      display:flex;flex-direction:column;contain:layout paint;
+      transform:scale(.96) translateY(16px);transition:transform .25s var(--ease)}
     .report-modal-backdrop.open .report-modal{transform:scale(1) translateY(0)}
     .report-modal-bar{display:flex;align-items:center;justify-content:space-between;
       padding:.75rem 1.25rem;background:#f5f5f5;border-bottom:1px solid #e0e0e0;
@@ -505,7 +506,9 @@
       border-radius:6px;padding:.25rem .65rem;font-size:.75rem;cursor:pointer;
       color:#555;transition:background .15s}
     .report-modal-open-btn:hover{background:#e8e8e8}
-    .report-modal-iframe{flex:1;width:100%;border:none}
+    .report-modal-iframe{flex:1;width:100%;border:none;
+      transform:translateZ(0);will-change:transform;
+      overscroll-behavior:contain}
 
     /* COMPARISON */
     .cmp-table{border:1px solid var(--border2);border-radius:16px;overflow:hidden;margin-top:3rem;
@@ -910,8 +913,7 @@
       <div class="walkthrough-label">See it in action →</div>
       <video
         class="walkthrough-vid"
-        src="/walkthrough.mp4"
-        autoplay
+        id="walkthroughVid"
         muted
         loop
         playsinline
@@ -1209,6 +1211,23 @@ window.addEventListener('load',function(){
       entries.forEach(function(e){bar.classList.toggle('show',!e.isIntersecting)});
     },{threshold:0});
     io.observe(hero);
+  })();
+
+  // Lazy-load video only when scrolled into view; pause when out
+  (function initWalkthroughVideo(){
+    var vid=document.getElementById('walkthroughVid');
+    if(!vid) return;
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          if(!vid.src) vid.src='/walkthrough.mp4';
+          vid.play().catch(function(){});
+        } else {
+          vid.pause();
+        }
+      });
+    },{threshold:0.2});
+    io.observe(vid);
   })();
 
   function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}

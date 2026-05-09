@@ -1,0 +1,212 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080" role="img" aria-label="VINRecordHub Instagram post">
+  <title>Know the truth before you buy — VINRecordHub</title>
+  <defs>
+    <!-- Amber radial glow behind car -->
+    <radialGradient id="carGlow" cx="50%" cy="62%" r="45%">
+      <stop offset="0%"   stop-color="#d4a832" stop-opacity="0.28"/>
+      <stop offset="55%"  stop-color="#d4a832" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#d4a832" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Subtle vignette -->
+    <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+      <stop offset="0%"   stop-color="transparent"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.45"/>
+    </radialGradient>
+    <!-- Bottom fade for car -->
+    <linearGradient id="carFade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#1a1e35"/>
+      <stop offset="100%" stop-color="#0b0d1c"/>
+    </linearGradient>
+    <!-- Gold shimmer on headline -->
+    <linearGradient id="goldShimmer" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#d4a832"/>
+      <stop offset="50%"  stop-color="#f0c840"/>
+      <stop offset="100%" stop-color="#d4a832"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1080" height="1080" fill="#0b0d1c"/>
+
+  <!-- Amber glow behind car -->
+  <ellipse cx="540" cy="680" rx="420" ry="260" fill="url(#carGlow)"/>
+
+  <!-- Subtle grid lines (tech feel) -->
+  <g stroke="rgba(212,168,50,0.05)" stroke-width="1">
+    <line x1="0"    y1="360" x2="1080" y2="360"/>
+    <line x1="0"    y1="720" x2="1080" y2="720"/>
+    <line x1="360"  y1="0"   x2="360"  y2="1080"/>
+    <line x1="720"  y1="0"   x2="720"  y2="1080"/>
+  </g>
+
+  <!-- ── CAR SILHOUETTE ── -->
+  <!-- Body -->
+  <g fill="#141728" opacity="0.95">
+    <!-- Main body -->
+    <path d="
+      M 155 720
+      L 170 680
+      L 240 640
+      L 340 590
+      L 420 560
+      L 490 545
+      Q 530 535 570 535
+      Q 620 535 660 545
+      L 720 560
+      L 800 590
+      L 875 635
+      L 920 670
+      L 930 700
+      L 930 720
+      Z
+    "/>
+    <!-- Roof / cabin -->
+    <path d="
+      M 360 560
+      Q 380 510 420 490
+      Q 460 472 510 468
+      L 570 466
+      Q 620 466 660 472
+      Q 700 480 730 500
+      Q 755 518 770 545
+      L 720 560
+      L 660 545
+      Q 620 535 570 535
+      Q 530 535 490 545
+      L 420 560
+      Z
+    " fill="#1a1e35"/>
+  </g>
+
+  <!-- Wheels -->
+  <circle cx="310" cy="722" r="68" fill="#0b0d1c" stroke="#2a2e45" stroke-width="3"/>
+  <circle cx="310" cy="722" r="48" fill="#141728"/>
+  <circle cx="310" cy="722" r="30" fill="#0b0d1c" stroke="rgba(212,168,50,0.3)" stroke-width="2"/>
+  <circle cx="310" cy="722" r="6"  fill="#d4a832"/>
+
+  <circle cx="775" cy="722" r="68" fill="#0b0d1c" stroke="#2a2e45" stroke-width="3"/>
+  <circle cx="775" cy="722" r="48" fill="#141728"/>
+  <circle cx="775" cy="722" r="30" fill="#0b0d1c" stroke="rgba(212,168,50,0.3)" stroke-width="2"/>
+  <circle cx="775" cy="722" r="6"  fill="#d4a832"/>
+
+  <!-- Windshield glare -->
+  <path d="M 420 490 Q 460 475 510 470 L 490 520 Q 455 525 430 535 Z"
+        fill="rgba(212,168,50,0.08)"/>
+
+  <!-- Headlight glow -->
+  <ellipse cx="172" cy="680" rx="28" ry="14" fill="rgba(212,168,50,0.15)"/>
+  <ellipse cx="172" cy="680" rx="14" ry="7"  fill="rgba(212,168,50,0.3)"/>
+
+  <!-- Tail light glow -->
+  <ellipse cx="912" cy="688" rx="20" ry="10" fill="rgba(212,100,50,0.2)"/>
+
+  <!-- Ground reflection -->
+  <ellipse cx="540" cy="790" rx="380" ry="20" fill="rgba(212,168,50,0.06)"/>
+
+  <!-- Vignette overlay -->
+  <rect width="1080" height="1080" fill="url(#vignette)"/>
+
+  <!-- ── TOP DECORATION ── -->
+  <!-- Thin gold rule top -->
+  <line x1="80" y1="108" x2="1000" y2="108" stroke="rgba(212,168,50,0.3)" stroke-width="1"/>
+
+  <!-- Logo mark (top left) -->
+  <g transform="translate(80, 72)">
+    <circle cx="20" cy="0" r="18" fill="#d4a832"/>
+    <!-- Tiny shield in circle -->
+    <path d="M20,-8 L27,-4 L27,1 Q27,7 20,10 Q13,7 13,1 L13,-4 Z" fill="#0b0d1c"/>
+    <polyline points="17,2 19.5,5 24,-2"
+              fill="none" stroke="#d4a832" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="46" y="5"
+          font-family="'Arial Black', sans-serif"
+          font-weight="900" font-size="16" fill="#ffffff"
+          letter-spacing="1">VIN<tspan fill="#d4a832">RecordHub</tspan></text>
+  </g>
+
+  <!-- ── HEADLINE TEXT ── -->
+  <!-- "Know the truth" -->
+  <text x="540" y="278"
+        text-anchor="middle"
+        font-family="'Arial Black', 'Impact', 'Helvetica Neue', sans-serif"
+        font-weight="900"
+        font-size="108"
+        letter-spacing="-2"
+        fill="#ffffff">Know the truth</text>
+
+  <!-- "before you buy" -->
+  <text x="540" y="388"
+        text-anchor="middle"
+        font-family="'Arial Black', 'Impact', 'Helvetica Neue', sans-serif"
+        font-weight="900"
+        font-size="108"
+        letter-spacing="-2"
+        fill="#ffffff">before you buy</text>
+
+  <!-- Gold accent rule under headline -->
+  <rect x="220" y="410" width="640" height="3" rx="2" fill="url(#goldShimmer)"/>
+
+  <!-- ── PRICE BADGE ── -->
+  <g transform="translate(540, 478)">
+    <!-- Pill background -->
+    <rect x="-175" y="-26" width="350" height="52" rx="26"
+          fill="rgba(212,168,50,0.12)" stroke="#d4a832" stroke-width="1.5"/>
+    <!-- Price text -->
+    <text x="0" y="10"
+          text-anchor="middle"
+          font-family="'Arial', 'Helvetica Neue', sans-serif"
+          font-weight="700"
+          font-size="28"
+          letter-spacing="1"
+          fill="#d4a832">$9.99 Instant VIN Report</text>
+  </g>
+
+  <!-- ── TRUST BADGES ── -->
+  <g transform="translate(540, 846)" text-anchor="middle">
+    <!-- Badge 1: Shield -->
+    <g transform="translate(-230, 0)">
+      <rect x="-72" y="-20" width="144" height="40" rx="20"
+            fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <path d="M-52,0 L-44,-4 L-44,2 Q-44,7 -52,10 Q-60,7 -60,2 L-60,-4 Z"
+            fill="#d4a832" transform="scale(0.6) translate(0,0)"/>
+      <text x="8" y="5"
+            font-family="'Arial', sans-serif" font-weight="600"
+            font-size="15" fill="rgba(255,255,255,0.7)"
+            letter-spacing="0.5">256-bit secure</text>
+    </g>
+    <!-- Separator -->
+    <circle cx="0" cy="0" r="3" fill="rgba(212,168,50,0.4)"/>
+    <!-- Badge 2: Instant -->
+    <g transform="translate(0, 0)">
+      <rect x="-72" y="-20" width="144" height="40" rx="20"
+            fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <text x="0" y="5"
+            text-anchor="middle"
+            font-family="'Arial', sans-serif" font-weight="600"
+            font-size="15" fill="rgba(255,255,255,0.7)"
+            letter-spacing="0.5">⚡ Instant delivery</text>
+    </g>
+    <!-- Badge 3: Guarantee -->
+    <g transform="translate(230, 0)">
+      <rect x="-88" y="-20" width="176" height="40" rx="20"
+            fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <text x="0" y="5"
+            text-anchor="middle"
+            font-family="'Arial', sans-serif" font-weight="600"
+            font-size="15" fill="rgba(255,255,255,0.7)"
+            letter-spacing="0.5">✓ Money-back guarantee</text>
+    </g>
+  </g>
+
+  <!-- Bottom gold rule -->
+  <line x1="80" y1="972" x2="1000" y2="972" stroke="rgba(212,168,50,0.3)" stroke-width="1"/>
+
+  <!-- Bottom URL -->
+  <text x="540" y="1006"
+        text-anchor="middle"
+        font-family="'Arial', sans-serif"
+        font-weight="400"
+        font-size="18"
+        letter-spacing="3"
+        fill="rgba(255,255,255,0.3)">VINRECORDHUB.COM</text>
+</svg>

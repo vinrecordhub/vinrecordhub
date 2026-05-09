@@ -469,6 +469,44 @@
       transition:transform .15s var(--ease),opacity .15s}
     .report-unlock-btn:hover{transform:scale(1.02);opacity:.9}
 
+    /* SAMPLE REPORT MODAL */
+    .sample-modal-btn{display:inline-flex;align-items:center;gap:.5rem;
+      background:var(--accent);color:oklch(10% .015 252);
+      border:none;border-radius:10px;padding:.75rem 1.6rem;
+      font-size:.9rem;font-weight:700;cursor:pointer;
+      box-shadow:0 4px 20px oklch(76% .145 52 / .3);
+      transition:transform .15s var(--ease),box-shadow .15s;
+      text-decoration:none;margin-bottom:2rem}
+    .sample-modal-btn:hover{transform:translateY(-2px);
+      box-shadow:0 8px 32px oklch(76% .145 52 / .45)}
+    .sample-modal-btn svg{flex-shrink:0}
+    .report-modal-backdrop{position:fixed;inset:0;z-index:900;
+      background:oklch(0% 0 0 / .82);backdrop-filter:blur(6px);
+      display:flex;align-items:center;justify-content:center;
+      opacity:0;pointer-events:none;transition:opacity .25s var(--ease)}
+    .report-modal-backdrop.open{opacity:1;pointer-events:all}
+    .report-modal{position:relative;width:min(1100px,96vw);height:88vh;
+      background:#fff;border-radius:16px;overflow:hidden;
+      display:flex;flex-direction:column;
+      transform:scale(.96) translateY(20px);transition:transform .3s var(--ease)}
+    .report-modal-backdrop.open .report-modal{transform:scale(1) translateY(0)}
+    .report-modal-bar{display:flex;align-items:center;justify-content:space-between;
+      padding:.75rem 1.25rem;background:#f5f5f5;border-bottom:1px solid #e0e0e0;
+      flex-shrink:0}
+    .report-modal-title{font-size:.82rem;font-weight:700;color:#333;white-space:nowrap;
+      overflow:hidden;text-overflow:ellipsis}
+    .report-modal-actions{display:flex;align-items:center;gap:.5rem;flex-shrink:0}
+    .report-modal-close{background:#e0e0e0;border:none;border-radius:50%;
+      width:28px;height:28px;cursor:pointer;font-size:14px;
+      display:flex;align-items:center;justify-content:center;
+      transition:background .15s;color:#333}
+    .report-modal-close:hover{background:#ccc}
+    .report-modal-open-btn{background:transparent;border:1px solid #999;
+      border-radius:6px;padding:.25rem .65rem;font-size:.75rem;cursor:pointer;
+      color:#555;transition:background .15s}
+    .report-modal-open-btn:hover{background:#e8e8e8}
+    .report-modal-iframe{flex:1;width:100%;border:none}
+
     /* COMPARISON */
     .cmp-table{border:1px solid var(--border2);border-radius:16px;overflow:hidden;margin-top:3rem;
       box-shadow:0 4px 40px oklch(0% 0 0 / .4),inset 0 1px 0 var(--border2)}
@@ -985,7 +1023,11 @@
   <div class="sample-inner">
     <div class="sec-tag rv">Sample Report</div>
     <h2 class="rv rv-1">Here's what you get <em>in your inbox.</em></h2>
-    <p class="rv rv-2" style="font-size:.95rem;color:var(--muted);max-width:520px;margin-bottom:2.5rem;line-height:1.76">A real vehicle history report delivered as an HTML file. Open in any browser. Download and keep forever.</p>
+    <p class="rv rv-2" style="font-size:.95rem;color:var(--muted);max-width:520px;margin-bottom:1.5rem;line-height:1.76">A real vehicle history report delivered as an HTML file. Open in any browser. Download and keep forever.</p>
+    <button class="sample-modal-btn rv rv-2" onclick="openSampleReport()" aria-label="View sample Carfax vehicle history report">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      View Sample Report
+    </button>
     <div class="report-card rv rv-3">
       <div class="report-header">
         <div>
@@ -1015,8 +1057,8 @@
         </div>
         <div class="report-unlock">
           <div class="report-unlock-inner">
-            <div class="report-unlock-lbl">Full report available after purchase</div>
-            <a href="#pricing" class="report-unlock-btn">Get Full Report — $9.99 →</a>
+            <div class="report-unlock-lbl">See exactly what a real report looks like</div>
+            <button onclick="openSampleReport()" class="report-unlock-btn">View Sample Report →</button>
           </div>
         </div>
       </div>
@@ -1066,6 +1108,20 @@
       <h3 class="g-title">100% Money-Back <span>Guarantee</span></h3>
       <p class="g-desc">Not satisfied with your report? Contact us within 24 hours and we'll give you a full refund — no questions asked. We stand behind every report we deliver.</p>
     </div>
+  </div>
+</div>
+
+<!-- SAMPLE REPORT MODAL -->
+<div class="report-modal-backdrop" id="reportModalBackdrop" role="dialog" aria-modal="true" aria-label="Sample vehicle history report">
+  <div class="report-modal">
+    <div class="report-modal-bar">
+      <span class="report-modal-title">Sample Report — 2024 Toyota Camry SE · VIN 4T1G11AK1RU216345</span>
+      <div class="report-modal-actions">
+        <a href="/sample-report.html" target="_blank" class="report-modal-open-btn">Open in new tab ↗</a>
+        <button class="report-modal-close" onclick="closeSampleReport()" aria-label="Close sample report">✕</button>
+      </div>
+    </div>
+    <iframe class="report-modal-iframe" id="reportModalFrame" src="" title="Sample vehicle history report" loading="lazy"></iframe>
   </div>
 </div>
 
@@ -1287,6 +1343,30 @@ window.addEventListener('load',function(){
     }
   }
 
+
+  function openSampleReport(){
+    const backdrop=document.getElementById('reportModalBackdrop');
+    const frame=document.getElementById('reportModalFrame');
+    if(!frame.src||frame.src==='about:blank'||!frame.src.includes('sample-report')){
+      frame.src='/sample-report.html';
+    }
+    backdrop.classList.add('open');
+    document.body.style.overflow='hidden';
+    gaPush({event:'sample_report_viewed'});
+  }
+
+  function closeSampleReport(){
+    document.getElementById('reportModalBackdrop').classList.remove('open');
+    document.body.style.overflow='';
+  }
+
+  document.getElementById('reportModalBackdrop').addEventListener('click',function(e){
+    if(e.target===this) closeSampleReport();
+  });
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape') closeSampleReport();
+  });
 
 </script>
 </body>

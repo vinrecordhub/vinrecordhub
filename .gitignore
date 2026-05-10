@@ -2,3 +2,6 @@ node_modules/
 .vercel/
 .env
 .env.local
+*.env
+tiktok_token_debug.json
+cloudflared.exe

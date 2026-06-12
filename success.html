@@ -135,6 +135,21 @@
     .support-note{font-size:.75rem;color:var(--muted);text-align:center;line-height:1.6}
     .support-note a{color:var(--accent);text-decoration:none}
     .support-note a:hover{text-decoration:underline}
+
+    .spam-alert{
+      margin: 1rem 0 1.5rem;
+      padding: 1rem 1.25rem;
+      border-radius: 14px;
+      background: var(--g-dim);
+      border: 1px solid var(--g-bdr);
+      color: var(--green);
+      font-size: 1.35rem;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+    }
+
     .vinny-success{display:flex;align-items:center;justify-content:center;gap:.75rem;margin:0 auto 1.5rem;animation:popIn .5s cubic-bezier(0.16,1,0.3,1) .4s both}
     .vinny-success img{width:68px;height:auto}
     .vinny-success-msg{font-size:.82rem;color:oklch(72% 0.15 155);font-weight:600}
@@ -256,6 +271,12 @@
     const emailVal = p.get('email') || 'your email';
     const subEl = document.querySelector('.sub');
     subEl.innerHTML = 'Your vehicle history report has been sent to <strong>' + escHtml(emailVal) + '</strong>. Check your inbox now — it should already be there.';
+
+    const spamAlert = document.createElement('div');
+    spamAlert.className = 'spam-alert';
+    spamAlert.textContent = 'Please check your spam or junk folder if you do not see the report.';
+    subEl.insertAdjacentElement('afterend', spamAlert);
+
     document.querySelectorAll('.tl-dot').forEach(d => {
       d.className = 'tl-dot done';
       d.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';

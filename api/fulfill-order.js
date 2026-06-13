@@ -5,9 +5,9 @@
 // be recovered (free) from the admin panel via /api/resend-order.
 
 const { createClient } = require('@supabase/supabase-js');
-const rateLimit = require('./rate-limit');
-const { sanitizeVin, sanitizeEmail, sanitizePlan, sanitizeOrderId, sanitizeCoupon } = require('./sanitize');
-const svc = require('./report-service');
+const rateLimit = require('../lib/rate-limit');
+const { sanitizeVin, sanitizeEmail, sanitizePlan, sanitizeOrderId, sanitizeCoupon } = require('../lib/sanitize');
+const svc = require('../lib/report-service');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,

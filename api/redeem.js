@@ -3,7 +3,7 @@
 // Validates a redemption code, generates the report from CheapVHR, emails customer.
 
 const { createClient } = require('@supabase/supabase-js');
-const svc = require('./report-service');
+const svc = require('../lib/report-service');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,

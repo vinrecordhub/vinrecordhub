@@ -2,7 +2,7 @@
 // No Google account needed — uses data you already have
 
 const { createClient } = require('@supabase/supabase-js');
-const rateLimit = require('./rate-limit');
+const rateLimit = require('../lib/rate-limit');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,

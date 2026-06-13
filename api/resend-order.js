@@ -55,6 +55,17 @@ module.exports = async function handler(req, res) {
     await new Promise(r => setTimeout(r, 1000));
     return res.status(401).json({ error: 'Unauthorized' });
   }
+  // Lookup mode: list recent CheapVHR reports so the admin can recover the VIN
+  // for a legacy order. Free (no credit), needs no orderId.
+  if (req.body.lookup) {
+    try {
+      const reports = await svc.listRecentReports();
+      return res.status(200).json({ lookup: true, reports });
+    } catch (err) {
+      return res.status(502).json({ error: 'Could not fetch CheapVHR reports: ' + err.message });
+    }
+  }
+
   if (!orderId) return res.status(400).json({ error: 'Missing orderId' });
 
   try {

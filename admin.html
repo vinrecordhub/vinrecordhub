@@ -216,7 +216,10 @@
       align-items:center;transition:background .15s}
     .table-row:hover{background:oklch(100% 0 0 / .02)}
     .row-num{color:var(--faint);font-size:.75rem;font-family:monospace}
-    .row-email{font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .row-email{font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+    .row-vin{display:block;font-family:'Courier New',monospace;font-size:.7rem;color:var(--faint);
+      letter-spacing:.04em;margin-top:.2rem;cursor:pointer;transition:color .15s}
+    .row-vin:hover{color:var(--green)}
     .row-orderid{font-family:'Courier New',monospace;font-size:.75rem;color:var(--faint);
       overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
       cursor:pointer;transition:color .15s}
@@ -330,6 +333,21 @@
     .modal-note{font-size:.78rem;color:var(--muted);margin-top:.75rem;line-height:1.6}
     .modal-note.err{color:var(--red)}
     .modal-note.ok{color:var(--green)}
+    .vin-list{margin-top:.6rem;border:1px solid var(--border2);border-radius:9px;
+      overflow:hidden;max-height:230px;overflow-y:auto}
+    .vin-item{display:flex;align-items:center;justify-content:space-between;gap:.6rem;
+      padding:.55rem .8rem;border-bottom:1px solid var(--border)}
+    .vin-item:last-child{border-bottom:none}
+    .vin-item.near{background:var(--a-dim)}
+    .vin-item .vmeta{min-width:0}
+    .vin-item .vmm{display:block;color:var(--text);font-weight:600;font-size:.82rem;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .vin-item .vsub{display:block;color:var(--faint);font-size:.7rem;
+      font-family:'Courier New',monospace;margin-top:.1rem}
+    .vin-use{background:var(--g-dim);border:1px solid var(--g-bdr);color:var(--green);
+      font-size:.72rem;font-weight:700;padding:.32rem .7rem;border-radius:5px;
+      cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;flex:none}
+    .vin-use:hover{background:oklch(72% 0.15 155 / .16)}
 
     @media(max-width:900px){
       .table-header,.table-row{grid-template-columns:34px 1fr 84px 64px 80px}
@@ -710,7 +728,7 @@
 
       return `<div class="table-row">
         <span class="row-num">${start + i + 1}</span>
-        <span class="row-email" title="${safeEmail}">${safeEmail || '—'}</span>
+        <span class="row-email" title="${safeEmail}">${safeEmail || '—'}${o.vin ? `<span class="row-vin" title="Click to copy VIN" data-vin="${escH(o.vin)}" onclick="event.stopPropagation();copyId(this.dataset.vin)">${escH(o.vin)}</span>` : ''}</span>
         <span class="row-orderid" title="Click to copy" data-id="${safeOrderId}" onclick="copyId(this.dataset.id)">${shortId}</span>
         <span><span class="plan-tag ${pc.cls}">${pc.label}</span></span>
         <span class="row-amount">$${parseFloat(o.amount || 0).toFixed(2)}</span>
@@ -770,7 +788,11 @@
         <span class="modal-label">VIN</span>
         <input id="resendVin" class="modal-input mono" maxlength="17" placeholder="17-character VIN"
           value="${escH(o.vin || '')}" oninput="this.value=this.value.toUpperCase()"/>
-        ${o.vin ? '' : '<div class="modal-note">This order predates VIN storage — enter the customer&#39;s VIN (from their checkout email) to resend.</div>'}
+        ${o.vin
+          ? '<div class="modal-note">Stored from checkout. Edit only if it was wrong.</div>'
+          : '<div class="modal-note">This order predates VIN storage — enter the VIN from the customer&#39;s report email, or find it from CheapVHR below.</div>'}
+        <button class="modal-btn secondary" id="vinFindBtn" style="margin-top:.6rem;width:100%" onclick="findVin()">Find VIN from CheapVHR (free)</button>
+        <div id="vinLookup"></div>
       </div>
       <div class="modal-row">
         <span class="modal-label">Send to</span>
@@ -872,6 +894,62 @@
       sendBtn.textContent = 'Retry';
     }
     sendBtn.disabled = false; checkBtn.disabled = false;
+  }
+
+  async function findVin() {
+    const btn = document.getElementById('vinFindBtn');
+    const box = document.getElementById('vinLookup');
+    btn.disabled = true; btn.textContent = 'Loading...';
+    try {
+      const res = await fetch('/api/resend-order', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: adminToken, lookup: true }),
+      });
+      const d = await res.json();
+      if (!res.ok) box.innerHTML = `<div class="modal-note err">${escH(d.error || 'Lookup failed')}</div>`;
+      else renderVinList(d.reports || []);
+    } catch (e) {
+      box.innerHTML = `<div class="modal-note err">${escH(e.message)}</div>`;
+    }
+    btn.disabled = false; btn.textContent = 'Refresh list';
+  }
+
+  function renderVinList(reports) {
+    const box = document.getElementById('vinLookup');
+    if (!reports.length) {
+      box.innerHTML = '<div class="modal-note">No reports found on the CheapVHR account.</div>';
+      return;
+    }
+    const orderTime = resendOrder && resendOrder.created_at ? new Date(resendOrder.created_at).getTime() : null;
+    // One row per VIN (carfax + autocheck can both list the same VIN); newest kept.
+    const seen = new Set();
+    const items = reports
+      .filter(r => { const k = (r.vin || '').toUpperCase(); if (!k || seen.has(k)) return false; seen.add(k); return true; })
+      .map(r => ({ ...r, near: orderTime != null && Math.abs(new Date(r.createdAt).getTime() - orderTime) < 864e5 }))
+      .sort((a, b) => (b.near - a.near) || (new Date(b.createdAt) - new Date(a.createdAt)));
+
+    box.innerHTML = `<div class="vin-list">${items.map(r => {
+      const t = new Date(r.createdAt);
+      const dateStr = t.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' ' +
+        t.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      return `<div class="vin-item${r.near ? ' near' : ''}">
+        <span class="vmeta">
+          <span class="vmm">${escH(r.yearMakeModel || '—')}${r.near ? ' &nbsp;<span style="color:var(--accent);font-size:.66rem;font-weight:700">· near order time</span>' : ''}</span>
+          <span class="vsub">${escH(r.vin || '')} · ${dateStr}</span>
+        </span>
+        <button class="vin-use" data-vin="${escH(r.vin || '')}" onclick="useVin(this.dataset.vin)">Use</button>
+      </div>`;
+    }).join('')}</div>`;
+  }
+
+  function useVin(vin) {
+    const input = document.getElementById('resendVin');
+    if (input) input.value = (vin || '').toUpperCase();
+    // VIN changed — force a fresh free check before sending.
+    const sendBtn = document.getElementById('resendSendBtn');
+    if (sendBtn) { sendBtn.disabled = true; sendBtn.textContent = 'Resend'; }
+    const result = document.getElementById('resendResult');
+    if (result) result.innerHTML = '';
   }
 
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeResend(); });

@@ -1,17 +1,18 @@
 // api/paddle-webhook.js
-// Receives Paddle webhook events and processes them
+// Receives Paddle webhook events and processes them.
 // Handles: transaction.completed, transaction.canceled, transaction.payment_failed
+//
+// Persists VIN + CheapVHR report ids + delivery status so a failed delivery can
+// be recovered (free) from the admin panel via /api/resend-order.
 
 const { createClient } = require('@supabase/supabase-js');
-const { ProxyAgent, fetch: undiciFetch } = require('undici');
 const crypto = require('crypto');
+const svc = require('./report-service');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_KEY
 );
-
-const proxyAgent = process.env.FIXIE_URL ? new ProxyAgent(process.env.FIXIE_URL) : null;
 
 // Paddle price ID to plan mapping
 const PRICE_TO_PLAN = {
@@ -40,59 +41,6 @@ function verifyPaddleWebhook(rawBody, signature, secret) {
   } catch {
     return false;
   }
-}
-
-// Fetch report from CheapVHR via Fixie
-async function fetchReport(vin, reportType) {
-  const res = await undiciFetch(`https://api.cheapvhr.com/v1/${reportType}/vin/${vin}/html`, {
-    method: 'GET',
-    headers: { 'x-api-key': process.env.CHEAPVHR_API_KEY },
-    dispatcher: proxyAgent,
-  });
-  if (!res.ok) throw new Error(`CheapVHR ${res.status}`);
-  return await res.json();
-}
-
-// Send report email via Resend
-async function sendReportEmail(email, vin, reports) {
-  const yearMakeModel = reports[0]?.yearMakeModel || '';
-  const isCombo = reports.length > 1;
-  const reportTypeLabel = isCombo ? 'Carfax & AutoCheck Reports' : reports[0].type === 'carfax' ? 'Carfax Report' : 'AutoCheck Report';
-
-  const attachments = reports.map(r => ({
-    filename: `VIN_${vin}_${r.type === 'carfax' ? 'Carfax' : 'AutoCheck'}.html`,
-    content: Buffer.from(r.html, 'utf-8').toString('base64'),
-  }));
-
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from: 'VINRecordHub <noreply@vinrecordhub.com>',
-      to: email,
-      subject: `Your ${reportTypeLabel} — ${yearMakeModel || 'VIN ' + vin}`,
-      html: `
-        <body style="background:#080808;color:#f4f4ef;font-family:sans-serif;padding:40px 20px">
-          <div style="max-width:560px;margin:0 auto">
-            <div style="font-weight:800;font-size:22px;margin-bottom:24px">VIN<span style="color:#e8ff3f">Record</span>Hub</div>
-            <h1 style="font-size:24px;margin-bottom:10px">Your ${reportTypeLabel} ${isCombo ? 'are' : 'is'} Ready ✓</h1>
-            ${yearMakeModel ? `<p style="color:#999;font-size:16px;margin-bottom:6px"><strong style="color:#e8ff3f">${yearMakeModel}</strong></p>` : ''}
-            <p style="color:#666;margin-bottom:8px">VIN: <strong style="color:#fff;font-family:monospace">${vin}</strong></p>
-            <p style="color:#666;margin-bottom:24px">Your report${isCombo ? 's are' : ' is'} attached. Open ${isCombo ? 'them' : 'it'} in any browser.</p>
-            <div style="background:#0f1a00;border:1px solid #2a3a00;border-radius:10px;padding:16px;margin-bottom:24px">
-              <p style="color:#e8ff3f;font-size:13px;font-weight:700;margin-bottom:6px">📎 ${isCombo ? '2 reports' : 'Report'} attached</p>
-              ${isCombo ? `<p style="color:#999;font-size:12px">• VIN_${vin}_Carfax.html<br/>• VIN_${vin}_AutoCheck.html</p>` : `<p style="color:#666;font-size:12px">Open <strong style="color:#999">${attachments[0].filename}</strong> in any browser.</p>`}
-            </div>
-            <p style="color:#444;font-size:12px">Questions? <a href="mailto:support@vinrecordhub.com" style="color:#e8ff3f">support@vinrecordhub.com</a></p>
-          </div>
-        </body>`,
-      attachments,
-    }),
-  });
-  if (!res.ok) throw new Error(`Resend ${res.status}: ${await res.text()}`);
 }
 
 // Send failure notification email
@@ -174,26 +122,63 @@ module.exports = async function handler(req, res) {
         return res.status(200).json({ received: true });
       }
 
-      // Save order
-      await supabase.from('orders').insert({
-        email,
-        plan: planInfo.plan,
-        quantity: planInfo.reportTypes.length,
-        amount: planInfo.amount,
-        paypal_order_id: transactionId, // reusing column for transaction ID
-      });
+      // Save order first so a failed report/email is still recoverable from admin.
+      const { data: inserted } = await supabase
+        .from('orders')
+        .insert({
+          email,
+          plan: planInfo.plan,
+          quantity: planInfo.reportTypes.length,
+          amount: planInfo.amount,
+          paypal_order_id: transactionId, // reusing column for transaction ID
+          vin,
+          delivery_status: 'pending',
+        })
+        .select('id')
+        .single();
+      const orderRowId = inserted?.id || null;
 
-      // Fetch reports from CheapVHR
+      // Generate report(s) — keep going on a per-type failure so a combo still
+      // delivers what succeeded; the rest is recoverable via resend.
       const reports = [];
+      const idUpdates = {};
+      const failures = [];
       for (const type of planInfo.reportTypes) {
-        const report = await fetchReport(vin, type);
-        if (!report.html) throw new Error(`No HTML for ${type}`);
-        reports.push({ type, ...report });
+        try {
+          const r = await svc.generateReportByVin(vin, type);
+          if (!r.html) throw new Error('No HTML returned');
+          if (r.id) idUpdates[svc.REPORT_ID_COLUMN[type]] = String(r.id);
+          reports.push({ type, html: r.html, yearMakeModel: r.yearMakeModel });
+        } catch (err) {
+          console.error(`CheapVHR ${type} failed for ${vin}:`, err.message);
+          failures.push(`${type}: ${err.message}`);
+        }
       }
 
-      // Email reports to customer
-      await sendReportEmail(email, vin, reports);
-      console.log('Report delivered successfully to:', email);
+      let emailed = false;
+      if (reports.length) {
+        try {
+          await svc.sendReportEmail(email, vin, reports);
+          emailed = true;
+          console.log('Report delivered successfully to:', email);
+        } catch (err) {
+          console.error('Resend email failed:', err.message);
+          failures.push(`email: ${err.message}`);
+        }
+      }
+
+      const status = !reports.length ? 'failed'
+        : (emailed && reports.length === planInfo.reportTypes.length ? 'delivered' : 'partial');
+
+      if (orderRowId) {
+        await supabase.from('orders').update({
+          ...idUpdates,
+          year_make_model: reports[0]?.yearMakeModel || null,
+          delivery_status: status,
+          delivered_at: emailed ? new Date().toISOString() : null,
+          last_error: failures.join('; ') || null,
+        }).eq('id', orderRowId);
+      }
     }
 
     // Handle transaction.canceled

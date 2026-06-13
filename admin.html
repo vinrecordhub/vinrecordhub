@@ -207,11 +207,11 @@
     /* TABLE */
     .table-wrap{background:var(--surface);border:1px solid var(--border2);
       border-radius:12px;overflow:hidden}
-    .table-header{display:grid;grid-template-columns:45px 1.8fr 1.2fr 130px 90px 130px;
+    .table-header{display:grid;grid-template-columns:40px 1.5fr 1fr 104px 76px 108px 96px 84px;
       gap:1rem;padding:.85rem 1.25rem;background:var(--surface2);
       font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;
       color:var(--faint);border-bottom:1px solid var(--border)}
-    .table-row{display:grid;grid-template-columns:45px 1.8fr 1.2fr 130px 90px 130px;
+    .table-row{display:grid;grid-template-columns:40px 1.5fr 1fr 104px 76px 108px 96px 84px;
       gap:1rem;padding:.95rem 1.25rem;border-top:1px solid var(--border);
       align-items:center;transition:background .15s}
     .table-row:hover{background:oklch(100% 0 0 / .02)}
@@ -260,10 +260,82 @@
     .copy-toast.show{opacity:1}
 
     :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+    /* STATUS BADGE */
+    .row-status-wrap{min-width:0}
+    .status-badge{display:inline-block;padding:.2rem .55rem;border-radius:4px;
+      font-size:.66rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+    .status-delivered{background:var(--g-dim);color:var(--green);border:1px solid var(--g-bdr)}
+    .status-partial{background:var(--am-dim);color:var(--amber);border:1px solid var(--am-bdr)}
+    .status-failed{background:var(--r-dim);color:var(--red);border:1px solid var(--r-bdr)}
+    .status-pending{background:oklch(100% 0 0 / .05);color:var(--muted);border:1px solid var(--border2)}
+    .status-unknown{color:var(--faint);font-size:.8rem}
+
+    /* RESEND BUTTON */
+    .btn-resend{background:var(--b-dim);border:1px solid var(--b-bdr);color:var(--blue);
+      font-size:.74rem;font-weight:700;padding:.4rem .8rem;border-radius:6px;
+      cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;
+      transition:background .15s,transform .15s}
+    .btn-resend:hover{background:oklch(68% 0.16 245 / .16)}
+    .btn-resend:active{transform:scale(0.95)}
+
+    /* MODAL */
+    .modal-overlay{position:fixed;inset:0;z-index:500;display:none;
+      align-items:center;justify-content:center;padding:1.5rem;
+      background:oklch(0% 0 0 / .65);backdrop-filter:blur(6px)}
+    .modal-overlay.show{display:flex}
+    .modal-card{background:var(--surface);border:1px solid var(--border2);
+      border-radius:16px;width:100%;max-width:520px;max-height:88vh;overflow-y:auto;
+      box-shadow:0 24px 60px oklch(0% 0 0 / .6),0 0 50px var(--a-glow)}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;
+      padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);position:sticky;top:0;
+      background:var(--surface);z-index:1}
+    .modal-head h3{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .modal-close{background:none;border:none;color:var(--muted);font-size:1.5rem;
+      cursor:pointer;line-height:1;padding:0 .25rem;transition:color .15s}
+    .modal-close:hover{color:var(--text)}
+    .modal-body{padding:1.5rem}
+    .modal-row{margin-bottom:1rem}
+    .modal-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--faint);margin-bottom:.4rem;display:block}
+    .modal-meta{font-size:.85rem;color:var(--muted);line-height:1.7}
+    .modal-meta strong{color:var(--text);font-weight:600}
+    .modal-input{width:100%;background:var(--surface2);border:1px solid var(--border2);
+      border-radius:8px;padding:.7rem .9rem;color:var(--text);font-family:'Inter',sans-serif;
+      font-size:.9rem;outline:none;transition:border-color .2s,box-shadow .2s}
+    .modal-input:focus{border-color:var(--a-bdr);box-shadow:0 0 0 3px var(--a-dim)}
+    .modal-input.mono{font-family:'Courier New',monospace;letter-spacing:.06em;text-transform:uppercase}
+    .modal-actions{display:flex;gap:.6rem;margin-top:1.25rem}
+    .modal-btn{flex:1;border:none;border-radius:9px;padding:.85rem;font-family:'Inter',sans-serif;
+      font-weight:700;font-size:.88rem;cursor:pointer;transition:opacity .15s,transform .15s}
+    .modal-btn:active{transform:scale(0.98)}
+    .modal-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+    .modal-btn.secondary{background:oklch(100% 0 0 / .05);border:1px solid var(--border2);color:var(--text)}
+    .modal-btn.secondary:hover:not(:disabled){background:oklch(100% 0 0 / .09)}
+    .modal-btn.primary{background:var(--accent);color:oklch(10% .015 252)}
+    .modal-btn.primary:hover:not(:disabled){opacity:.9}
+    .plan-step{display:flex;align-items:center;justify-content:space-between;gap:.75rem;
+      padding:.7rem .9rem;border:1px solid var(--border2);border-radius:9px;margin-bottom:.5rem;
+      font-size:.85rem}
+    .plan-step .pname{font-weight:600;text-transform:capitalize}
+    .pill{font-size:.66rem;font-weight:700;padding:.2rem .55rem;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+    .pill-free{background:var(--g-dim);color:var(--green);border:1px solid var(--g-bdr)}
+    .pill-cost{background:var(--am-dim);color:var(--amber);border:1px solid var(--am-bdr)}
+    .pill-ok{background:var(--g-dim);color:var(--green);border:1px solid var(--g-bdr)}
+    .pill-fail{background:var(--r-dim);color:var(--red);border:1px solid var(--r-bdr)}
+    .limits-bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.75rem}
+    .limit-chip{flex:1;min-width:90px;background:var(--surface2);border:1px solid var(--border2);
+      border-radius:8px;padding:.6rem .75rem;text-align:center}
+    .limit-chip .lv{font-size:1.1rem;font-weight:800;color:var(--accent)}
+    .limit-chip .ll{font-size:.6rem;color:var(--faint);text-transform:uppercase;letter-spacing:.08em;margin-top:.2rem}
+    .modal-note{font-size:.78rem;color:var(--muted);margin-top:.75rem;line-height:1.6}
+    .modal-note.err{color:var(--red)}
+    .modal-note.ok{color:var(--green)}
+
     @media(max-width:900px){
-      .table-header,.table-row{grid-template-columns:40px 1fr 100px 80px}
+      .table-header,.table-row{grid-template-columns:34px 1fr 84px 64px 80px}
       .table-header span:nth-child(3),.table-row .row-orderid,
-      .table-header span:nth-child(6),.table-row .row-date{display:none}
+      .table-header span:nth-child(6),.table-row .row-date,
+      .table-header span:nth-child(7),.table-row .row-status-wrap{display:none}
       .admin-content{padding:1rem}
       .stats-grid{grid-template-columns:1fr 1fr}
       .charts-row{grid-template-columns:1fr}
@@ -427,6 +499,8 @@
         <span>Plan</span>
         <span>Amount</span>
         <span>Date</span>
+        <span>Status</span>
+        <span></span>
       </div>
       <div id="tableBody">
         <div class="loading-state">
@@ -440,6 +514,17 @@
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- RESEND MODAL -->
+<div class="modal-overlay" id="resendModal" onclick="if(event.target===this)closeResend()">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>Resend Report</h3>
+      <button class="modal-close" aria-label="Close" onclick="closeResend()">&times;</button>
+    </div>
+    <div class="modal-body" id="resendBody"></div>
   </div>
 </div>
 
@@ -630,6 +715,8 @@
         <span><span class="plan-tag ${pc.cls}">${pc.label}</span></span>
         <span class="row-amount">$${parseFloat(o.amount || 0).toFixed(2)}</span>
         <span class="row-date"><strong>${dateStr}</strong><br/>${timeStr}</span>
+        <span class="row-status-wrap">${statusBadge(o.delivery_status)}</span>
+        <span class="row-action"><button class="btn-resend" data-oid="${escH(o.id)}" onclick="openResend(this.dataset.oid)">Resend</button></span>
       </div>`;
     }).join('');
   }
@@ -647,6 +734,147 @@
       setTimeout(() => toast.classList.remove('show'), 2000);
     });
   }
+
+  // ─── DELIVERY STATUS + RESEND ─────────────────────────────
+  function statusBadge(status) {
+    const map = {
+      delivered: ['status-delivered', 'Delivered'],
+      partial:   ['status-partial',   'Partial'],
+      failed:    ['status-failed',    'Failed'],
+      pending:   ['status-pending',   'Pending'],
+    };
+    const s = (status || '').toLowerCase();
+    return map[s]
+      ? `<span class="status-badge ${map[s][0]}">${map[s][1]}</span>`
+      : '<span class="status-unknown">—</span>';
+  }
+
+  let resendOrder = null;
+
+  function openResend(orderId) {
+    const o = allOrders.find(x => String(x.id) === String(orderId));
+    if (!o) return;
+    resendOrder = o;
+    const plan = (o.plan || 'carfax').toLowerCase();
+    const pc = planConfig[plan] || planConfig.carfax;
+    document.getElementById('resendBody').innerHTML = `
+      <div class="modal-row">
+        <span class="modal-label">Order</span>
+        <div class="modal-meta">
+          <strong>${escH(o.email || '—')}</strong><br/>
+          <span class="plan-tag ${pc.cls}" style="display:inline-block;margin-top:.35rem">${pc.label}</span>
+          &nbsp; $${parseFloat(o.amount || 0).toFixed(2)} &nbsp; ${statusBadge(o.delivery_status)}
+        </div>
+      </div>
+      <div class="modal-row">
+        <span class="modal-label">VIN</span>
+        <input id="resendVin" class="modal-input mono" maxlength="17" placeholder="17-character VIN"
+          value="${escH(o.vin || '')}" oninput="this.value=this.value.toUpperCase()"/>
+        ${o.vin ? '' : '<div class="modal-note">This order predates VIN storage — enter the customer&#39;s VIN (from their checkout email) to resend.</div>'}
+      </div>
+      <div class="modal-row">
+        <span class="modal-label">Send to</span>
+        <input id="resendEmail" class="modal-input" value="${escH(o.email || '')}" placeholder="customer@email.com"/>
+      </div>
+      <div id="resendResult"></div>
+      <div class="modal-actions">
+        <button class="modal-btn secondary" id="resendCheckBtn" onclick="checkResend()">Check status (free)</button>
+        <button class="modal-btn primary" id="resendSendBtn" onclick="doResend()" disabled>Resend</button>
+      </div>
+      <div class="modal-note">&ldquo;Check status&rdquo; is free — it shows which reports already exist (reused at no cost) vs. which must be generated (1 credit each) before anything is sent.</div>`;
+    document.getElementById('resendModal').classList.add('show');
+  }
+
+  function closeResend() {
+    document.getElementById('resendModal').classList.remove('show');
+    resendOrder = null;
+  }
+
+  function renderPlanPreview(d) {
+    const steps = (d.plan || []).map(p => {
+      const pill = p.willCharge
+        ? '<span class="pill pill-cost">Generate · 1 credit</span>'
+        : '<span class="pill pill-free">Reuse · free</span>';
+      return `<div class="plan-step"><span class="pname">${escH(p.type)}</span>${pill}</div>`;
+    }).join('');
+    let limits = '';
+    if (d.limits) {
+      const l = d.limits;
+      limits = `<div class="limits-bar">
+        <div class="limit-chip"><div class="lv">${l.credits ?? '—'}</div><div class="ll">Credits</div></div>
+        <div class="limit-chip"><div class="lv">${l.carfaxReportsLeftToday ?? '—'}</div><div class="ll">Carfax / day</div></div>
+        <div class="limit-chip"><div class="lv">${l.autocheckReportsLeftToday ?? '—'}</div><div class="ll">AutoCheck / day</div></div>
+      </div>`;
+    }
+    document.getElementById('resendResult').innerHTML =
+      `<div class="modal-row"><span class="modal-label">Plan</span>${steps}${limits}</div>`;
+  }
+
+  async function checkResend() {
+    const vin = document.getElementById('resendVin').value.trim();
+    const email = document.getElementById('resendEmail').value.trim();
+    const btn = document.getElementById('resendCheckBtn');
+    const result = document.getElementById('resendResult');
+    if (vin.length !== 17) { result.innerHTML = '<div class="modal-note err">Enter a valid 17-character VIN.</div>'; return; }
+    btn.disabled = true; btn.textContent = 'Checking...';
+    result.innerHTML = '';
+    try {
+      const res = await fetch('/api/resend-order', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: adminToken, orderId: resendOrder.id, vin, email, dryRun: true }),
+      });
+      const d = await res.json();
+      if (!res.ok) {
+        result.innerHTML = `<div class="modal-note err">${escH(d.error || 'Check failed')}</div>`;
+      } else {
+        renderPlanPreview(d);
+        const need = d.creditsNeeded || 0;
+        const sendBtn = document.getElementById('resendSendBtn');
+        sendBtn.disabled = false;
+        sendBtn.textContent = need > 0 ? `Resend (uses ${need} credit${need > 1 ? 's' : ''})` : 'Resend (free)';
+      }
+    } catch (e) {
+      result.innerHTML = `<div class="modal-note err">${escH(e.message)}</div>`;
+    }
+    btn.disabled = false; btn.textContent = 'Re-check';
+  }
+
+  async function doResend() {
+    const vin = document.getElementById('resendVin').value.trim();
+    const email = document.getElementById('resendEmail').value.trim();
+    const sendBtn = document.getElementById('resendSendBtn');
+    const checkBtn = document.getElementById('resendCheckBtn');
+    const result = document.getElementById('resendResult');
+    if (vin.length !== 17) { result.innerHTML = '<div class="modal-note err">Enter a valid 17-character VIN.</div>'; return; }
+    sendBtn.disabled = true; checkBtn.disabled = true; sendBtn.textContent = 'Sending...';
+    try {
+      const res = await fetch('/api/resend-order', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: adminToken, orderId: resendOrder.id, vin, email }),
+      });
+      const d = await res.json();
+      const rows = (d.results || []).map(r => {
+        const ok = r.status === 'ok';
+        const label = ok ? (r.source === 'generate' ? 'Generated' : 'Reused') : 'Failed';
+        return `<div class="plan-step"><span class="pname">${escH(r.type)}</span>
+          <span class="pill ${ok ? 'pill-ok' : 'pill-fail'}">${label}</span></div>`;
+      }).join('');
+      if (d.emailed) {
+        result.innerHTML = `<div class="modal-row">${rows}<div class="modal-note ok">✓ Emailed to ${escH(d.email || email)}.</div></div>`;
+      } else {
+        const detail = (d.results || []).filter(r => r.status === 'failed').map(r => `${r.type}: ${r.error || ''}`).join('; ');
+        result.innerHTML = `<div class="modal-row">${rows}<div class="modal-note err">${escH(d.emailError || d.error || 'Delivery failed')}${detail ? ' — ' + escH(detail) : ''}</div></div>`;
+      }
+      sendBtn.textContent = 'Resend again';
+      loadOrders(); // refresh status badges underneath
+    } catch (e) {
+      result.innerHTML = `<div class="modal-note err">${escH(e.message)}</div>`;
+      sendBtn.textContent = 'Retry';
+    }
+    sendBtn.disabled = false; checkBtn.disabled = false;
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeResend(); });
 
   // ─── INIT ─────────────────────────────────────────────────
   if(typeof gsap!=='undefined'){

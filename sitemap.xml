@@ -15,4 +15,26 @@
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
+  <!-- Blog (SEO content) -->
+  <url><loc>https://vinrecordhub.com/blog</loc><changefreq>weekly</changefreq><priority>0.7</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/carfax-alternative</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/cheaper-than-carfax</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/autocheck-alternative</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/carfax-competitors</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/cheap-carfax-report</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/how-much-does-carfax-cost</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/cheap-vehicle-history-report</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/affordable-vehicle-history-report</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/low-cost-car-history-report</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/buy-vehicle-history-report</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/vehicle-history-report</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/car-history-report</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/used-car-history-report</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/vin-check</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/vin-report</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/instant-vin-report</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/accident-history-report</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/title-check</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/salvage-title-check</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
+  <url><loc>https://vinrecordhub.com/blog/odometer-check</loc><changefreq>monthly</changefreq><priority>0.6</priority><lastmod>2026-06-23</lastmod></url>
 </urlset>

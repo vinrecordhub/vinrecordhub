@@ -769,6 +769,7 @@
       <a href="#pricing">Pricing</a>
       <a href="#compare">Compare</a>
       <a href="#faq">FAQ</a>
+      <a href="/blog">Blog</a>
       <a href="mailto:support@vinrecordhub.com">Support</a>
       <a href="#pricing" class="nav-cta">Get Report — $9.99</a>
     </div>
@@ -782,6 +783,7 @@
   <a href="#pricing" onclick="closeM()">Pricing</a>
   <a href="#compare" onclick="closeM()">Compare</a>
   <a href="#faq" onclick="closeM()">FAQ</a>
+  <a href="/blog" onclick="closeM()">Blog</a>
   <a href="mailto:support@vinrecordhub.com" onclick="closeM()">Support</a>
   <a href="#pricing" onclick="closeM()" class="hi">Get Report →</a>
 </div>
@@ -790,6 +792,7 @@
   <div class="hero-aura" aria-hidden="true"></div>
   <div class="hero-mesh"></div>
   <div class="hero-grid"></div>
+  <canvas class="hero3d" data-theme="idx" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.55"></canvas>
   <div class="hero-inner">
     <div>
       <div class="hero-badge hero-rv"><span class="badge-dot"></span>Instant Vehicle History Reports</div>
@@ -1388,5 +1391,7 @@ window.addEventListener('load',function(){
   });
 
 </script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.172.0/build/three.module.js"}}</script>
+<script type="module" src="/blog/blog-3d.js"></script>
 </body>
 </html>

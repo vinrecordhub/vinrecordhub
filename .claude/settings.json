@@ -1,6 +1,5 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-
   "permissions": {
     "allow": [
       "Bash(npm install *)",
@@ -17,7 +16,11 @@
       "Bash(git switch *)",
       "Bash(gh pr *)",
       "Bash(gh issue *)",
-      "Bash(gh run *)"
+      "Bash(gh run *)",
+      "Bash(npx @claude-flow*)",
+      "Bash(npx claude-flow*)",
+      "Bash(node .claude/*)",
+      "mcp__claude-flow__*"
     ],
     "deny": [
       "Read(**/.env)",
@@ -37,7 +40,6 @@
       "Edit(**/*.key)"
     ]
   },
-
   "hooks": {
     "PreToolUse": [
       {
@@ -112,5 +114,10 @@
         ]
       }
     ]
+  },
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_FLOW_V3_ENABLED": "true",
+    "CLAUDE_FLOW_HOOKS_ENABLED": "true"
   }
 }

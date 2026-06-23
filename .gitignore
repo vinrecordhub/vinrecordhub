@@ -5,3 +5,9 @@ node_modules/
 *.env
 tiktok_token_debug.json
 cloudflared.exe
+# Ruflo runtime state (logs, sessions, local data) — added during SEO/Ruflo setup
+.claude-flow/data/
+.claude-flow/logs/
+.claude-flow/sessions/
+.swarm/
+.hive-mind/

@@ -4,7 +4,8 @@ Everything below needs your credentials/dashboards; the code is ready and waitin
 
 ## 1. Supabase — schema
 - [ ] Open the Supabase SQL editor and run `db/migrations/2026-07-11-credit-system.sql` (review it first — it creates `profiles`, `credit_transactions`, `coupons`, `coupon_redemptions`, `credit_orders`, `reports`, enables RLS on everything incl. legacy tables, and installs the SECURITY DEFINER functions).
-- [ ] Verify with: `select * from public.coupons;` → should show LAUNCH50 / WELCOME20 (both inactive).
+- [ ] Verify with: `select * from public.coupons;` → should show LAUNCH50 / WELCOME20 / TESTONLY (all ACTIVE, scoped to checkout plans — they replace the codes previously hardcoded in checkout.html, so behavior is unchanged).
+- [ ] **Disable TESTONLY from the admin panel before real traffic** — it sets any single-report/combo price to $1.
 
 ## 2. Supabase — Auth configuration (Dashboard → Authentication)
 - [ ] Providers → Email: ON, **Confirm email: ON** (required — spending is gated on verified email).
@@ -41,6 +42,6 @@ Removed (can delete after deploy): `PADDLE_WEBHOOK_SECRET` (Paddle handler retir
 
 ## Notes / decisions embedded in the build
 - Coupons floor at $0.01 — PayPal can't process $0; a truly free grant must be an `admin_adjust` ledger entry, never a checkout path.
-- `TESTONLY` ($1 fixed price) was deliberately NOT migrated — on a 25-credit bundle it would be a credit-minting hole.
+- `TESTONLY` ($1 fixed price) is migrated as a checkout-only `set_price` coupon; the bundle flow and admin validation both refuse `set_price` on bundles (a $1 25-credit bundle would be a credit-minting hole). Disable it from the admin panel before launch.
 - Legacy `redemption_codes` (/redeem) still works for already-sold codes; it's now RLS-locked server-side like everything else.
 - Legacy `orders` table untouched; new purchases live in `credit_orders`.

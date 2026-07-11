@@ -8,6 +8,7 @@
   <link rel="manifest" href="/site.webmanifest"/>
   <meta name="theme-color" content="#0b0d1c"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script>(function(){try{var t=localStorage.getItem('vrh-theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();</script>
   <title>Terms of Service — VINRecordHub</title>
   <meta name="description" content="VINRecordHub Terms of Service. Understand your rights and our policies for vehicle history report purchases, refunds, and acceptable use."/>
   <meta name="robots" content="index, follow"/>
@@ -26,20 +27,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"/></noscript>
+  <link rel="stylesheet" href="/assets/theme.css"/>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
-      --bg:       oklch(9% 0.018 252);
-      --surface:  oklch(12.5% 0.020 252);
-      --border:   oklch(100% 0 0 / .07);
-      --border2:  oklch(100% 0 0 / .13);
-      --text:     oklch(97% 0.006 252);
-      --muted:    oklch(65% 0.010 252);
-      --faint:    oklch(40% 0.010 252);
-      --accent:   oklch(76% 0.145 52);
-      --a-dim:    oklch(76% 0.145 52 / .08);
-      --a-bdr:    oklch(76% 0.145 52 / .28);
-      --ease:     cubic-bezier(0.25,1,0.5,1);
+      /* orange is this page's CTA-converting accent, not the site's primary purple accent */
+      --accent: var(--accent-secondary);
+      --a-dim:  color-mix(in oklab, var(--accent-secondary) 8%, transparent);
+      --a-bdr:  color-mix(in oklab, var(--accent-secondary) 28%, transparent);
     }
     html{scroll-behavior:smooth}
     body{background:var(--bg);color:var(--text);
@@ -55,7 +50,7 @@
       opacity:.2;pointer-events:none;z-index:0}
 
     nav{position:sticky;top:0;z-index:100;
-      background:oklch(9% .018 252 / .9);backdrop-filter:blur(20px) saturate(1.8);
+      background:var(--overlay-nav);backdrop-filter:blur(20px) saturate(1.8);
       border-bottom:1px solid var(--border);
       padding:0 clamp(1.25rem,5vw,3rem);height:62px;
       display:flex;align-items:center;justify-content:space-between}
@@ -104,6 +99,7 @@
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
     Back to Home
   </a>
+  <button class="theme-toggle" data-theme-toggle type="button" aria-label="Switch to light theme"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
 </nav>
 <div class="content">
   <div class="page-tag">Legal</div>
@@ -162,5 +158,6 @@ if(typeof gsap!=='undefined'&&typeof ScrollTrigger!=='undefined'){
   });
 }
 </script>
+<script src="/assets/theme.js" defer></script>
 </body>
 </html>

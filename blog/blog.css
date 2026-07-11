@@ -1,33 +1,19 @@
-/* VinRecordHub Blog — vibrant, full-width design. Mirrors homepage tokens (Inter + OKLCH dark). */
+/* VinRecordHub Blog — vibrant, full-width design. Shares theme.css for sitewide tokens;
+   only cluster-category accents and layout dimensions are blog-specific. */
 :root{
-  --bg:oklch(11% 0.022 264);
-  --bg-2:oklch(9% 0.02 264);
-  --surface:oklch(15% 0.026 264);
-  --surface-2:oklch(18% 0.03 264);
-  --border:oklch(100% 0 0 / .09);
-  --border-2:oklch(100% 0 0 / .14);
-  --text:oklch(99% 0.005 264);          /* near-white, high contrast */
-  --body:oklch(93% 0.01 264);           /* brighter body text */
-  --muted:oklch(78% 0.02 264);          /* brighter than before */
-  --faint:oklch(62% 0.02 264);
-  --accent:oklch(80% 0.19 55);          /* vibrant orange */
-  /* cluster accent colors — vibrant */
-  --c-alt:oklch(80% 0.19 55);           /* orange  */
-  --c-aff:oklch(80% 0.19 155);          /* green   */
-  --c-veh:oklch(78% 0.17 245);          /* blue    */
-  --c-vin:oklch(76% 0.21 305);          /* purple  */
-  --c-rev:oklch(74% 0.22 25);           /* red     */
-  --theme:var(--accent);                /* overridden per page */
+  --bg-2:oklch(7.5% .018 252);--body:oklch(93% .008 252);--c-alt:oklch(80% .19 55);--c-aff:oklch(80% .19 155);--c-veh:oklch(78% .17 245);--c-vin:oklch(76% .21 305);--c-rev:oklch(74% .22 25);
+  --theme:var(--accent);                /* overridden per page via .theme-* */
   --max:1240px;--read:720px;--pad:clamp(1.1rem,4vw,2.5rem);
-  --ease:cubic-bezier(0.16,1,0.3,1);
+  --ease:var(--expo);                   /* blog's "--ease" was theme.css's "--expo" curve */
 }
+[data-theme="light"]{--bg-2:oklch(95% .013 85);--body:oklch(28% .022 290);--c-alt:oklch(52% .15 55);--c-aff:oklch(46% .13 155);--c-veh:oklch(46% .13 245);--c-vin:oklch(48% .19 305);--c-rev:oklch(48% .18 25)}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--body);
   font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
   line-height:1.7;-webkit-font-smoothing:antialiased;font-size:1.075rem;
-  background-image:radial-gradient(1200px 600px at 100% -10%, oklch(80% 0.19 55 / .06), transparent 60%),
-                   radial-gradient(1000px 500px at -10% 10%, oklch(76% 0.21 305 / .05), transparent 55%);
+  background-image:radial-gradient(1200px 600px at 100% -10%, color-mix(in oklab, var(--c-alt) 6%, transparent), transparent 60%),
+                   radial-gradient(1000px 500px at -10% 10%, color-mix(in oklab, var(--c-vin) 5%, transparent), transparent 55%);
   background-attachment:fixed}
 a{color:var(--theme);text-decoration:none}
 a:hover{text-decoration:underline}
@@ -35,7 +21,7 @@ a:hover{text-decoration:underline}
 .theme-veh{--theme:var(--c-veh)}.theme-vin{--theme:var(--c-vin)}.theme-rev{--theme:var(--c-rev)}
 
 /* ---------- Nav ---------- */
-.nav-shell{position:sticky;top:0;z-index:50;background:oklch(11% 0.022 264 / .8);
+.nav-shell{position:sticky;top:0;z-index:50;background:var(--overlay-nav);
   backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
 nav{max-width:var(--max);margin:0 auto;padding:.95rem var(--pad);display:flex;align-items:center;
   justify-content:space-between;gap:1rem}
@@ -45,8 +31,8 @@ nav{max-width:var(--max);margin:0 auto;padding:.95rem var(--pad);display:flex;al
 .nav-links{display:flex;align-items:center;gap:1.5rem}
 .nav-links a{color:var(--muted);font-size:.92rem;font-weight:500}
 .nav-links a:hover{color:var(--text);text-decoration:none}
-.nav-cta{background:var(--accent);color:oklch(18% 0.03 264)!important;padding:.55rem 1rem;border-radius:9px;
-  font-weight:700;font-size:.88rem!important;box-shadow:0 4px 18px oklch(80% 0.19 55 / .35)}
+.nav-cta{background:var(--accent);color:var(--on-accent)!important;padding:.55rem 1rem;border-radius:9px;
+  font-weight:700;font-size:.88rem!important;box-shadow:0 4px 18px color-mix(in oklab, var(--accent) 35%, transparent)}
 .nav-cta:hover{filter:brightness(1.08);text-decoration:none}
 @media(max-width:680px){.nav-links a:not(.nav-cta){display:none}}
 
@@ -56,8 +42,8 @@ nav{max-width:var(--max);margin:0 auto;padding:.95rem var(--pad);display:flex;al
 .hero-band::before{content:'';position:absolute;inset:0;z-index:0;
   background:radial-gradient(680px 340px at 82% 0%, color-mix(in oklch, var(--theme) 30%, transparent), transparent 70%)}
 .hero-band::after{content:'';position:absolute;inset:0;z-index:0;opacity:.5;
-  background-image:linear-gradient(oklch(100% 0 0 / .04) 1px,transparent 1px),
-                   linear-gradient(90deg, oklch(100% 0 0 / .04) 1px,transparent 1px);
+  background-image:linear-gradient(color-mix(in oklab, var(--text) 4%, transparent) 1px,transparent 1px),
+                   linear-gradient(90deg, color-mix(in oklab, var(--text) 4%, transparent) 1px,transparent 1px);
   background-size:42px 42px;mask-image:radial-gradient(70% 80% at 70% 0%,#000,transparent)}
 .hero3d{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;display:block}
 .hero-band .hero3d{opacity:.5}
@@ -104,13 +90,13 @@ tbody tr:nth-last-child(1){background:color-mix(in oklch,var(--theme) 10%,transp
 
 /* CTA box (inline) */
 .cta-box{position:relative;overflow:hidden;background:linear-gradient(135deg,
-  color-mix(in oklch,var(--theme) 22%,var(--surface)),var(--surface-2));
+  color-mix(in oklch,var(--theme) 22%,var(--surface)),var(--surface2));
   border:1px solid color-mix(in oklch,var(--theme) 40%,transparent);
   border-radius:18px;padding:2rem;margin:2.6rem 0;text-align:center;
-  box-shadow:0 20px 50px oklch(0% 0 0 / .35)}
+  box-shadow:0 20px 50px var(--shadow-color)}
 .cta-box h3{font-size:1.45rem;color:var(--text);margin:0 0 .5rem;font-weight:800}
 .cta-box p{color:var(--muted);margin:0 0 1.3rem}
-.btn{display:inline-block;background:var(--theme);color:oklch(18% 0.03 264);padding:.85rem 1.7rem;
+.btn{display:inline-block;background:var(--theme);color:var(--on-accent);padding:.85rem 1.7rem;
   border-radius:11px;font-weight:800;font-size:.98rem;box-shadow:0 8px 26px color-mix(in oklch,var(--theme) 45%,transparent);
   transition:transform .15s var(--ease),filter .15s var(--ease)}
 .btn:hover{filter:brightness(1.08);transform:translateY(-2px);text-decoration:none}
@@ -141,7 +127,7 @@ tbody tr:nth-last-child(1){background:color-mix(in oklch,var(--theme) 10%,transp
 .sidebar{position:sticky;top:88px;align-self:start;display:flex;flex-direction:column;gap:1.1rem;min-width:0}
 @media(max-width:980px){.sidebar{position:static;top:auto}}
 .side-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.3rem}
-.side-cta{background:linear-gradient(160deg,color-mix(in oklch,var(--theme) 26%,var(--surface)),var(--surface-2));
+.side-cta{background:linear-gradient(160deg,color-mix(in oklch,var(--theme) 26%,var(--surface)),var(--surface2));
   border:1px solid color-mix(in oklch,var(--theme) 45%,transparent);text-align:center}
 .side-cta .price{font-size:2.1rem;font-weight:900;color:var(--text);letter-spacing:-.03em;line-height:1}
 .side-cta .price span{font-size:.95rem;font-weight:600;color:var(--muted)}
@@ -160,7 +146,7 @@ tbody tr:nth-last-child(1){background:color-mix(in oklch,var(--theme) 10%,transp
 
 /* ---------- Blog index ---------- */
 .idx-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--border);text-align:center;
-  background:radial-gradient(900px 420px at 50% -20%, oklch(80% 0.19 55 / .14), transparent 65%)}
+  background:radial-gradient(900px 420px at 50% -20%, color-mix(in oklab, var(--c-alt) 14%, transparent), transparent 65%)}
 .idx-hero-in{position:relative;z-index:2;max-width:var(--max);margin:0 auto;padding:clamp(3rem,7vw,5rem) var(--pad)}
 .idx-hero h1{font-size:clamp(2.4rem,6vw,3.8rem);font-weight:900;letter-spacing:-.045em;color:var(--text);line-height:1.05;margin-bottom:1rem}
 .idx-hero h1 em{font-style:normal;background:linear-gradient(120deg,var(--c-alt),var(--c-vin));
@@ -182,11 +168,11 @@ tbody tr:nth-last-child(1){background:color-mix(in oklch,var(--theme) 10%,transp
   border:1px solid var(--border);border-radius:16px;overflow:hidden;
   transition:border-color .2s var(--ease),transform .2s var(--ease),box-shadow .2s var(--ease)}
 .card:hover{border-color:color-mix(in oklch,var(--theme) 55%,transparent);transform:translateY(-4px);
-  box-shadow:0 18px 40px oklch(0% 0 0 / .4);text-decoration:none}
+  box-shadow:0 18px 40px var(--shadow-color);text-decoration:none}
 .card-cover{height:96px;position:relative;overflow:hidden;display:grid;place-items:center;
-  background:linear-gradient(135deg,color-mix(in oklch,var(--theme) 32%,var(--surface)),var(--surface-2))}
+  background:linear-gradient(135deg,color-mix(in oklch,var(--theme) 32%,var(--surface)),var(--surface2))}
 .card-cover::after{content:'';position:absolute;inset:0;opacity:.45;
-  background-image:linear-gradient(oklch(100% 0 0 / .07) 1px,transparent 1px),linear-gradient(90deg,oklch(100% 0 0 / .07) 1px,transparent 1px);
+  background-image:linear-gradient(color-mix(in oklab, var(--text) 7%, transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in oklab, var(--text) 7%, transparent) 1px,transparent 1px);
   background-size:22px 22px}
 .card-cover svg{position:relative;width:40px;height:40px;color:var(--theme);
   filter:drop-shadow(0 4px 12px color-mix(in oklch,var(--theme) 50%,transparent))}
@@ -227,13 +213,13 @@ tbody tr:nth-last-child(1){background:color-mix(in oklch,var(--theme) 10%,transp
 .btn:hover .btn-ic{transform:translate(3px,-1px) scale(1.06)}
 
 /* Double-bezel: inner highlight + concentric radii on premium surfaces */
-.card,.side-card,.cta-box{box-shadow:inset 0 1px 0 oklch(100% 0 0 / .06), 0 1px 0 oklch(0% 0 0 / .25)}
+.card,.side-card,.cta-box{box-shadow:inset 0 1px 0 color-mix(in oklab, white 6%, transparent), 0 1px 0 var(--shadow-color)}
 .card{border-radius:20px}
 .side-card{border-radius:18px}
 .cta-box{border-radius:22px}
 .cta-box::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-  box-shadow:inset 0 1px 1px oklch(100% 0 0 / .12)}
-.card:hover{box-shadow:inset 0 1px 0 oklch(100% 0 0 / .09), 0 18px 44px oklch(0% 0 0 / .45)}
+  box-shadow:inset 0 1px 1px color-mix(in oklab, white 12%, transparent)}
+.card:hover{box-shadow:inset 0 1px 0 color-mix(in oklab, white 9%, transparent), 0 18px 44px var(--shadow-color)}
 
 /* Macro-whitespace + sharper hierarchy on the reading column */
 .post-main h2{margin-top:3rem}

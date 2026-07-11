@@ -1,0 +1,149 @@
+/* assets/theme.css — single source of truth for color across the site.
+   Dark is the :root default so a failed pre-paint script degrades to the
+   established brand look. [data-theme="light"] overrides. Components must
+   reference tokens only — raw hex/oklch literals belong in this file alone. */
+
+:root {
+  color-scheme: dark;
+
+  /* ── semantic ─────────────────────────────────────── */
+  --bg:               oklch(9% 0.018 252);
+  --bg-elevated:      oklch(16% 0.022 252);
+  --surface:          oklch(12.5% 0.020 252);
+  --text:             oklch(97% 0.006 252);
+  --text-muted:       oklch(71% 0.012 252);
+  --text-faint:       oklch(66% 0.012 252);
+  --accent-primary:   oklch(74% 0.155 295);  /* purple */
+  --accent-secondary: oklch(76% 0.145 52);   /* orange */
+  --border:           oklch(100% 0 0 / .07);
+  --border-2:         oklch(100% 0 0 / .13);
+  --border-3:         oklch(100% 0 0 / .22);
+  --glow:             oklch(74% 0.155 295 / .10);
+
+  /* text/ink that sits on top of accent fills */
+  --on-accent:            oklch(13% 0.02 295);
+  --on-accent-secondary:  oklch(13% 0.02 52);
+
+  /* CTA = orange warmth per brand split (purple leads, orange converts) */
+  --cta:        var(--accent-secondary);
+  --cta-hover:  oklch(81% 0.155 52);
+  --on-cta:     var(--on-accent-secondary);
+
+  /* translucent chrome */
+  --overlay:     oklch(9% 0.018 252 / .97);
+  --overlay-nav: oklch(9% 0.018 252 / .88);
+
+  /* shadows */
+  --shadow-color:        oklch(0% 0 0 / .4);
+  --shadow-color-strong: oklch(0% 0 0 / .6);
+
+  /* status */
+  --success: oklch(72% 0.15 155);
+  --danger:  oklch(66% 0.19 26);
+  --warning: oklch(80% 0.18 72);
+  --info:    oklch(68% 0.16 245);
+
+  /* motion (shared site-wide) */
+  --ease: cubic-bezier(0.25, 1, 0.5, 1);
+  --expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* aurora effect colors as raw RGB triplets (parsed by fx-aurora.js) */
+  --fx-aurora-1: 167 139 250;  /* purple  */
+  --fx-aurora-2: 251 146 60;   /* orange  */
+  --fx-aurora-3: 96 165 250;   /* blue    */
+  --fx-aurora-alpha: 0.55;
+
+  /* ── legacy aliases (existing page CSS references these) ── */
+  --surface2: var(--bg-elevated);
+  --muted:    var(--text-muted);
+  --faint:    var(--text-faint);
+  --accent:   var(--accent-primary);
+  --border2:  var(--border-2);
+  --border3:  var(--border-3);
+  --a-dim:    color-mix(in oklab, var(--accent-primary) 8%, transparent);
+  --a-bdr:    color-mix(in oklab, var(--accent-primary) 28%, transparent);
+  --a-glow:   var(--glow);
+  --green:    var(--success);
+  --g-dim:    color-mix(in oklab, var(--success) 8%, transparent);
+  --g-bdr:    color-mix(in oklab, var(--success) 22%, transparent);
+  --red:      var(--danger);
+  --r-dim:    color-mix(in oklab, var(--danger) 8%, transparent);
+  --r-bdr:    color-mix(in oklab, var(--danger) 22%, transparent);
+  --amber:    var(--warning);
+  --am-dim:   color-mix(in oklab, var(--warning) 8%, transparent);
+  --am-bdr:   color-mix(in oklab, var(--warning) 22%, transparent);
+  --blue:     var(--info);
+  --b-dim:    color-mix(in oklab, var(--info) 8%, transparent);
+  --b-bdr:    color-mix(in oklab, var(--info) 22%, transparent);
+  --purple:   var(--accent-primary);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+
+  --bg:               oklch(97.5% 0.011 85);   /* warm cream, never #FFF */
+  --bg-elevated:      oklch(94.8% 0.014 85);
+  --surface:          oklch(99.2% 0.005 90);
+  --text:             oklch(23% 0.025 290);
+  --text-muted:       oklch(44% 0.03 290);
+  --text-faint:       oklch(50% 0.03 290);
+  --accent-primary:   oklch(53% 0.23 293);     /* #7C3AED family */
+  --accent-secondary: oklch(51% 0.16 40);      /* burnt orange — AA on cream */
+  --border:           oklch(30% 0.03 290 / .13);
+  --border-2:         oklch(30% 0.03 290 / .20);
+  --border-3:         oklch(30% 0.03 290 / .30);
+  --glow:             oklch(53% 0.23 293 / .12);
+
+  --on-accent:           oklch(99% 0.003 90);
+  --on-accent-secondary: oklch(99% 0.003 90);
+
+  --cta-hover: oklch(56% 0.17 42);
+
+  --overlay:     oklch(97.5% 0.011 85 / .97);
+  --overlay-nav: oklch(97.5% 0.011 85 / .90);
+
+  --shadow-color:        oklch(35% 0.04 290 / .14);
+  --shadow-color-strong: oklch(35% 0.04 290 / .20);
+
+  --success: oklch(50% 0.14 155);
+  --danger:  oklch(50% 0.19 27);
+  --warning: oklch(55% 0.14 75);
+  --info:    oklch(48% 0.14 245);
+
+  --fx-aurora-1: 139 92 246;
+  --fx-aurora-2: 249 115 22;
+  --fx-aurora-3: 59 130 246;
+  --fx-aurora-alpha: 0.30;
+}
+
+/* ── theme toggle control (shared by every nav) ─────── */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid var(--border-2);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease);
+}
+.theme-toggle:hover {
+  color: var(--text);
+  border-color: var(--border-3);
+  background: color-mix(in oklab, var(--text) 6%, transparent);
+}
+.theme-toggle svg { width: 17px; height: 17px; }
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+[data-theme="light"] .theme-toggle .icon-sun { display: block; }
+[data-theme="light"] .theme-toggle .icon-moon { display: none; }
+
+:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 3px; }
+
+@media (max-width: 600px) {
+  .theme-toggle { width: 44px; height: 44px; }
+}

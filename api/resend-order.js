@@ -16,7 +16,7 @@
 const { createClient } = require('@supabase/supabase-js');
 const rateLimit = require('../lib/rate-limit');
 const { sanitizeVin, sanitizeEmail } = require('../lib/sanitize');
-const { isValidAdminToken } = require('../lib/admin-auth');
+const { isValidAdminToken, isAuthorizedAdmin } = require('../lib/admin-auth');
 const svc = require('../lib/report-service');
 
 const supabase = createClient(
@@ -52,7 +52,7 @@ module.exports = async function handler(req, res) {
   const { token, orderId, vin: vinOverride, email: emailOverride, dryRun } = req.body || {};
 
   // Auth — fixed delay on failure to slow brute force (mirrors admin-orders).
-  if (!isValidAdminToken(token)) {
+  if (!isAuthorizedAdmin(req) && !isValidAdminToken(token)) {
     await new Promise(r => setTimeout(r, 1000));
     return res.status(401).json({ error: 'Unauthorized' });
   }

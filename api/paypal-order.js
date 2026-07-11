@@ -103,6 +103,24 @@ module.exports = async function handler(req, res) {
         .single();
       if (insertErr) throw new Error('order insert failed: ' + insertErr.message);
 
+      // Reserve the coupon atomically now (under a row lock) so per-user and
+      // max-redemption limits hold even if many orders are opened before any is
+      // paid. The create-time validateCoupon above is only fast UX feedback.
+      if (coupon) {
+        const { data: reserved, error: reserveErr } = await supabase.rpc('reserve_coupon', {
+          p_coupon_id: coupon.id,
+          p_user_id: user.id,
+          p_order_id: orderRow.id,
+        });
+        if (reserveErr) throw new Error('reserve_coupon failed: ' + reserveErr.message);
+        if (reserved !== true) {
+          await supabase.from('credit_orders')
+            .update({ status: 'canceled', updated_at: new Date().toISOString() })
+            .eq('id', orderRow.id);
+          return fail(res, 409, 'coupon_unavailable', 'This coupon is no longer available');
+        }
+      }
+
       const pp = await paypal.createOrder({
         amountUsd: pricing.amountDueUsd,
         description: `VINRecordHub — ${bundle.label} (${bundle.credits} report${bundle.credits > 1 ? 's' : ''})`,
@@ -110,6 +128,10 @@ module.exports = async function handler(req, res) {
       });
       if (!pp.ok || !pp.json?.id) {
         console.error('PayPal create failed:', pp.status, JSON.stringify(pp.json || {}).slice(0, 300));
+        await supabase.from('credit_orders')
+          .update({ status: 'canceled', updated_at: new Date().toISOString() })
+          .eq('id', orderRow.id);
+        if (coupon) await supabase.rpc('release_coupon_for_order', { p_order_id: orderRow.id });
         return fail(res, 502, 'paypal_error', 'Could not start payment');
       }
 

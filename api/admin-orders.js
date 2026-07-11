@@ -5,7 +5,7 @@
 
 const { createClient } = require('@supabase/supabase-js');
 const rateLimit = require('../lib/rate-limit');
-const { isValidAdminToken } = require('../lib/admin-auth');
+const { isAuthorizedAdmin } = require('../lib/admin-auth');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -23,8 +23,7 @@ module.exports = async function handler(req, res) {
   }
 
   // Check admin token
-  const token = req.query.token;
-  if (!isValidAdminToken(token)) {
+  if (!isAuthorizedAdmin(req)) {
     // Add delay to prevent brute force
     await new Promise(r => setTimeout(r, 1000));
     return res.status(401).json({ error: 'Unauthorized' });

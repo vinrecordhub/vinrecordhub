@@ -3,7 +3,7 @@
 
 const { createClient } = require('@supabase/supabase-js');
 const rateLimit = require('../lib/rate-limit');
-const { isValidAdminToken } = require('../lib/admin-auth');
+const { isAuthorizedAdmin } = require('../lib/admin-auth');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -17,8 +17,8 @@ module.exports = async function handler(req, res) {
   const rl = rateLimit(req, { maxRequests: 20, windowMs: 60000 });
   if (rl.limited) return res.status(429).json({ error: 'Too many requests' });
 
-  const { token, days } = req.query;
-  if (!isValidAdminToken(token)) {
+  const { days } = req.query;
+  if (!isAuthorizedAdmin(req)) {
     await new Promise(r => setTimeout(r, 1000));
     return res.status(401).json({ error: 'Unauthorized' });
   }

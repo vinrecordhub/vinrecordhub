@@ -620,7 +620,7 @@
     btn.textContent = 'Verifying...';
 
     try {
-      const res = await fetch(`/api/admin-orders?token=${encodeURIComponent(token)}`);
+      const res = await fetch('/api/admin-orders', { headers: { 'Authorization': 'Bearer ' + token } });
       if (res.ok) {
         adminToken = token;
         sessionStorage.setItem('adminToken', token);
@@ -653,7 +653,7 @@
       '<div class="loading-state"><div class="spinner"></div><div>Loading orders...</div></div>';
 
     try {
-      const res = await fetch(`/api/admin-orders?token=${encodeURIComponent(adminToken)}`);
+      const res = await fetch('/api/admin-orders', { headers: { 'Authorization': 'Bearer ' + adminToken } });
       if (!res.ok) { logout(); return; }
       const data = await res.json();
       processData(data);
@@ -667,9 +667,12 @@
 
   // ─── COUPONS ──────────────────────────────────────────────
   async function couponApi(method, path, body) {
-    const res = await fetch(`/api/admin-coupons?token=${encodeURIComponent(adminToken)}${path || ''}`, {
+    var qs = (path || '').replace(/^&/, '?');
+    var headers = { 'Authorization': 'Bearer ' + adminToken };
+    if (body) headers['Content-Type'] = 'application/json';
+    const res = await fetch('/api/admin-coupons' + qs, {
       method,
-      headers: body ? { 'Content-Type': 'application/json' } : undefined,
+      headers,
       body: body ? JSON.stringify(body) : undefined,
     });
     const json = await res.json().catch(() => ({}));
@@ -984,8 +987,9 @@
     result.innerHTML = '';
     try {
       const res = await fetch('/api/resend-order', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: adminToken, orderId: resendOrder.id, vin, email, dryRun: true }),
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminToken },
+        body: JSON.stringify({ orderId: resendOrder.id, vin, email, dryRun: true }),
       });
       const d = await res.json();
       if (!res.ok) {
@@ -1013,8 +1017,9 @@
     sendBtn.disabled = true; checkBtn.disabled = true; sendBtn.textContent = 'Sending...';
     try {
       const res = await fetch('/api/resend-order', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: adminToken, orderId: resendOrder.id, vin, email }),
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminToken },
+        body: JSON.stringify({ orderId: resendOrder.id, vin, email }),
       });
       const d = await res.json();
       const rows = (d.results || []).map(r => {
@@ -1044,8 +1049,9 @@
     btn.disabled = true; btn.textContent = 'Loading...';
     try {
       const res = await fetch('/api/resend-order', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: adminToken, lookup: true }),
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminToken },
+        body: JSON.stringify({ lookup: true }),
       });
       const d = await res.json();
       if (!res.ok) box.innerHTML = `<div class="modal-note err">${escH(d.error || 'Lookup failed')}</div>`;
@@ -1123,7 +1129,7 @@
 
   async function loadGA() {
     try {
-      const res = await fetch(`/api/ga-stats?token=${encodeURIComponent(adminToken)}&days=${gaRange}`);
+      const res = await fetch(`/api/ga-stats?days=${gaRange}`, { headers: { 'Authorization': 'Bearer ' + adminToken } });
       if (!res.ok) return;
       const d = await res.json();
       if (d.error) return;

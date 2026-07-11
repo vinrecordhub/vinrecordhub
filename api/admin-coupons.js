@@ -6,19 +6,12 @@
 //   PUT    /api/admin-coupons?token=...&id=N      update (incl. max_redemptions)
 //   DELETE /api/admin-coupons?token=...&id=N      deactivate (soft)
 
-const crypto = require('crypto');
 const { supabase } = require('../lib/supabase-server');
 const { BUNDLES } = require('../lib/bundles');
+const { isAuthorizedAdmin } = require('../lib/admin-auth');
 
 function fail(res, status, code, message) {
   return res.status(status).json({ error: { code, message } });
-}
-
-function checkToken(req) {
-  const token = req.query.token || '';
-  const expected = process.env.ADMIN_TOKEN || '';
-  if (!token || !expected || token.length !== expected.length) return false;
-  return crypto.timingSafeEqual(Buffer.from(token), Buffer.from(expected));
 }
 
 const MUTABLE = ['description', 'value', 'applies_to', 'max_redemptions', 'per_user_limit', 'is_active', 'expires_at'];
@@ -83,7 +76,7 @@ function validateFields(body, { forCreate }) {
 
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
-  if (!checkToken(req)) return fail(res, 401, 'unauthorized', 'Bad token');
+  if (!isAuthorizedAdmin(req)) return fail(res, 401, 'unauthorized', 'Bad token');
 
   try {
     if (req.method === 'GET') {

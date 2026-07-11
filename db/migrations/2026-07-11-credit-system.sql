@@ -124,6 +124,10 @@ create table if not exists public.coupon_redemptions (
   created_at      timestamptz not null default now()
 );
 
+-- Speeds up the per-user / total redemption counts done under lock in reserve_coupon.
+create index if not exists coupon_redemptions_coupon_user_idx
+  on public.coupon_redemptions (coupon_id, user_id);
+
 -- ─────────────────────────────────────────────────────────────
 -- 4. credit_orders — one row per bundle purchase attempt
 -- ─────────────────────────────────────────────────────────────
@@ -173,6 +177,92 @@ create index if not exists reports_user_idx on public.reports (user_id, created_
 -- 6. SECURITY DEFINER write paths (the ONLY write paths)
 -- ─────────────────────────────────────────────────────────────
 
+-- Reserve a coupon for an order at CREATE time, atomically. Locking the coupon
+-- row and counting committed redemptions here — before the order can be paid —
+-- is what makes per_user_limit / max_redemptions hold: N orders opened before
+-- payment can no longer each slip past a stale create-time count. One
+-- reservation per order (coupon_redemptions.credit_order_id is unique).
+create or replace function public.reserve_coupon(
+  p_coupon_id bigint,
+  p_user_id   uuid,
+  p_order_id  bigint
+)
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_coupon      public.coupons%rowtype;
+  v_total_count integer;
+  v_user_count  integer;
+begin
+  -- Serialize all reservations for this coupon: the row lock makes the count
+  -- checks below race-free, so two concurrent reserves can't both slip through.
+  select * into v_coupon from public.coupons where id = p_coupon_id for update;
+  if not found or not v_coupon.is_active then return false; end if;
+  if v_coupon.expires_at is not null and v_coupon.expires_at < now() then return false; end if;
+
+  -- Lazy self-heal: free reservations whose order was opened but never paid
+  -- (PayPal orders expire in ~3h). No cron needed; this can't help an attacker
+  -- because paid orders are 'granted', not 'created', so they're never swept.
+  delete from public.coupon_redemptions cr
+   using public.credit_orders co
+   where cr.credit_order_id = co.id
+     and co.coupon_id = p_coupon_id
+     and co.status = 'created'
+     and co.created_at < now() - interval '3 hours';
+
+  select count(*) into v_total_count
+    from public.coupon_redemptions where coupon_id = p_coupon_id;
+  if v_coupon.max_redemptions is not null and v_total_count >= v_coupon.max_redemptions then
+    return false;
+  end if;
+
+  select count(*) into v_user_count
+    from public.coupon_redemptions where coupon_id = p_coupon_id and user_id = p_user_id;
+  if v_user_count >= v_coupon.per_user_limit then
+    return false;
+  end if;
+
+  insert into public.coupon_redemptions (coupon_id, user_id, credit_order_id)
+  values (p_coupon_id, p_user_id, p_order_id)
+  on conflict (credit_order_id) do nothing;
+
+  -- redemption_count is a denormalized display value; keep it equal to the
+  -- authoritative row count so sweeps/releases never drift it.
+  update public.coupons
+     set redemption_count = (select count(*) from public.coupon_redemptions where coupon_id = p_coupon_id),
+         updated_at = now()
+   where id = p_coupon_id;
+
+  return true;
+end;
+$$;
+
+-- Release an order's coupon reservation (order canceled or payment failed) so
+-- the slot returns to the pool.
+create or replace function public.release_coupon_for_order(p_order_id bigint)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_coupon_id bigint;
+begin
+  delete from public.coupon_redemptions
+   where credit_order_id = p_order_id
+   returning coupon_id into v_coupon_id;
+  if v_coupon_id is not null then
+    update public.coupons
+       set redemption_count = (select count(*) from public.coupon_redemptions where coupon_id = v_coupon_id),
+           updated_at = now()
+     where id = v_coupon_id;
+  end if;
+end;
+$$;
+
 -- Grant credits for a verified PayPal capture. Called by BOTH the server-side
 -- capture handler and the signed webhook — the FOR UPDATE row lock plus the
 -- ledger's unique idempotency key make double-grant impossible.
@@ -208,6 +298,7 @@ begin
     update public.credit_orders
        set status = 'failed', updated_at = now()
      where id = v_order.id;
+    perform public.release_coupon_for_order(v_order.id);
     return query select false, 'amount_mismatch'; return;
   end if;
 
@@ -227,14 +318,10 @@ begin
     return query select false, 'duplicate_capture'; return;
   end if;
 
-  if v_order.coupon_id is not null then
-    update public.coupons
-       set redemption_count = redemption_count + 1, updated_at = now()
-     where id = v_order.coupon_id;
-    insert into public.coupon_redemptions (coupon_id, user_id, credit_order_id)
-    values (v_order.coupon_id, v_order.user_id, v_order.id)
-    on conflict (credit_order_id) do nothing;
-  end if;
+  -- Coupon redemption is NOT recorded here: it was reserved atomically at order
+  -- creation (reserve_coupon) so per-user / max-redemption limits are enforced
+  -- under a lock before any order can be paid. Recording it at grant time would
+  -- let N orders created before payment each slip past a create-time check.
 
   return query select true, 'granted';
 end;
@@ -344,9 +431,13 @@ revoke insert, update, delete on all tables in schema public from anon, authenti
 revoke all on function public.apply_credit_purchase(text, text, numeric) from public, anon, authenticated;
 revoke all on function public.spend_credit_for_report(uuid, text, text, text) from public, anon, authenticated;
 revoke all on function public.refund_report_credit(bigint, text) from public, anon, authenticated;
+revoke all on function public.reserve_coupon(bigint, uuid, bigint) from public, anon, authenticated;
+revoke all on function public.release_coupon_for_order(bigint) from public, anon, authenticated;
 grant execute on function public.apply_credit_purchase(text, text, numeric) to service_role;
 grant execute on function public.spend_credit_for_report(uuid, text, text, text) to service_role;
 grant execute on function public.refund_report_credit(bigint, text) to service_role;
+grant execute on function public.reserve_coupon(bigint, uuid, bigint) to service_role;
+grant execute on function public.release_coupon_for_order(bigint) to service_role;
 
 -- ─────────────────────────────────────────────────────────────
 -- 8. Seed coupons — shipped INACTIVE; enable from the admin panel.

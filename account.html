@@ -76,6 +76,11 @@
       transition:color .2s var(--ease),border-color .2s var(--ease),background .2s var(--ease)}
     .btn-logout:hover{color:var(--text);border-color:var(--border-3);background:color-mix(in oklab,var(--text) 5%,transparent)}
 
+    /* AUTH LINK TOAST */
+    .auth-toast{display:flex;align-items:center;gap:.6rem;border-radius:12px;
+      padding:.9rem 1.15rem;margin-bottom:1.5rem;font-size:.86rem;font-weight:600;
+      background:var(--g-dim);border:1px solid var(--g-bdr);color:var(--success)}
+
     /* VERIFY BANNER */
     .verify-banner{display:none;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
       background:var(--am-dim);border:1px solid var(--am-bdr);border-radius:12px;
@@ -250,6 +255,11 @@
     <button class="btn-logout" id="logoutBtn" type="button">Log Out</button>
   </div>
 
+  <div class="auth-toast" id="authToast" role="status" hidden>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    <span>Email verified — your account is ready!</span>
+  </div>
+
   <div class="verify-banner" id="verifyBanner" role="status">
     <span><strong>Your email isn't verified yet.</strong> Verify it to keep full access to your account.</span>
     <button class="btn-resend" id="resendBtn" type="button">Resend email</button>
@@ -358,6 +368,20 @@ function fmtDate(d){try{return new Date(d).toLocaleDateString('en-US',{month:'sh
 (function () {
   var reportType = 'carfax';
   var currentUser = null;
+
+  // Feedback for Supabase auth email links. Success redirects land here with
+  // the session in the hash (picked up by the client); failures land here
+  // with an error in the hash and NO session — stash a message for the login
+  // page, since requireAuth below will bounce there.
+  var authHash = new URLSearchParams((location.hash || '').replace(/^#/, ''));
+  var authLinkType = authHash.get('type');
+  if (authHash.get('error_description') || authHash.get('error_code')) {
+    try {
+      sessionStorage.setItem('vrh-auth-msg',
+        'That email link has expired or was already used. Log in and use "Resend email" to get a fresh one.');
+    } catch (e) {}
+    history.replaceState(null, '', location.pathname + location.search);
+  }
 
   document.querySelectorAll('.rt-card').forEach(function (card) {
     card.addEventListener('click', function () {
@@ -576,6 +600,13 @@ function fmtDate(d){try{return new Date(d).toLocaleDateString('en-US',{month:'sh
     document.getElementById('acctEmail').textContent = currentUser.email;
     if (!vrhAuth.isVerified(currentUser)) {
       document.getElementById('verifyBanner').classList.add('show');
+    }
+
+    // Arrived via a verification/magic link that produced a session.
+    if (authLinkType === 'signup' || authLinkType === 'magiclink' || authLinkType === 'email_change') {
+      var toast = document.getElementById('authToast');
+      toast.hidden = false;
+      setTimeout(function () { toast.hidden = true; }, 9000);
     }
 
     // Pre-fill the VIN the user typed on the homepage before buying credits.

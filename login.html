@@ -178,6 +178,20 @@
   var submitBtn = document.getElementById('submitBtn');
   var errMsg = document.getElementById('errMsg');
 
+  // Surface auth-email-link failures: either stashed by /account (expired
+  // verification link) or delivered directly in this page's URL hash.
+  var linkHash = new URLSearchParams((location.hash || '').replace(/^#/, ''));
+  var linkErr = null;
+  try { linkErr = sessionStorage.getItem('vrh-auth-msg'); sessionStorage.removeItem('vrh-auth-msg'); } catch (e) {}
+  if (!linkErr && (linkHash.get('error_description') || linkHash.get('error_code'))) {
+    linkErr = 'That email link has expired or was already used. Log in and use "Resend email" to get a fresh one.';
+    history.replaceState(null, '', location.pathname + location.search);
+  }
+  if (linkErr) {
+    errMsg.textContent = linkErr;
+    errMsg.className = 'msg err';
+  }
+
   document.getElementById('googleBtn').addEventListener('click', function () {
     vrhAuth.signInGoogle();
   });

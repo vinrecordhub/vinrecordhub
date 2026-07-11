@@ -17,7 +17,7 @@
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://vinrecordhub.com/"/>
   <meta property="og:title" content="VINRecordHub — Carfax® & AutoCheck® Reports from $9.99"/>
-  <meta property="og:description" content="Get real Carfax® & AutoCheck® vehicle history reports for just $9.99. Same data, delivered in 60 seconds. No subscription required."/>
+  <meta property="og:description" content="Affordable access to Carfax® & AutoCheck® vehicle history report data from $9.99 — accident, title, and odometer records delivered in 60 seconds. No subscription."/>
   <meta property="og:image" content="https://vinrecordhub.com/og-image.png"/>
   <meta property="og:image:type" content="image/png"/>
   <meta property="og:image:width" content="1536"/>
@@ -25,7 +25,7 @@
   <meta property="og:site_name" content="VINRecordHub"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="VINRecordHub — Carfax® Reports from $9.99"/>
-  <meta name="twitter:description" content="Real Carfax® & AutoCheck® vehicle history reports for $9.99. Delivered in 60 seconds."/>
+  <meta name="twitter:description" content="Affordable Carfax® & AutoCheck® vehicle history report data from $9.99. Delivered in 60 seconds."/>
   <meta name="twitter:image" content="https://vinrecordhub.com/og-image.png"/>
   <script type="application/ld+json">
   {
@@ -106,7 +106,7 @@
             "name": "Why is VINRecordHub more affordable?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "VINRecordHub is a vehicle history service that provides access to Carfax® & AutoCheck® reports through our platform. By optimizing our delivery infrastructure, we offer competitive pricing while delivering the same comprehensive vehicle data."
+              "text": "VINRecordHub is an independent vehicle history service, not affiliated with Carfax or AutoCheck. By streamlining our delivery infrastructure we offer competitive pricing on access to Carfax® and AutoCheck® report data."
             }
           },
           {
@@ -823,7 +823,7 @@
       <div class="vinny-wrap hero-rv hero-rv-4" aria-hidden="true">
         <div>
           <div class="vinny-bubble">Enter your VIN to get started!</div>
-          <img src="/vinny-wave.svg" class="vinny-img" width="80" height="90" alt="" loading="lazy"/>
+          <img src="/vinny-wave.svg" class="vinny-img" width="80" height="90" alt=""/>
         </div>
       </div>
     </div>
@@ -1097,8 +1097,8 @@
 <div id="compare">
   <div class="sec">
     <div class="sec-tag rv">Why VINRecordHub</div>
-    <h2 class="rv rv-1">Same data. <em>Way less.</em></h2>
-    <p class="sec-sub rv rv-2">Get the exact same Carfax® &amp; AutoCheck® data at a fraction of the retail price.</p>
+    <h2 class="rv rv-1">Same records. <em>Way less.</em></h2>
+    <p class="sec-sub rv rv-2">Access Carfax® &amp; AutoCheck® vehicle history records at a fraction of the retail price.</p>
     <div class="cmp-table">
       <div class="cmp-h rv rv-1"><span>Feature</span><span class="us">VINRecordHub</span><span>Carfax® Direct</span><span>AutoCheck® Direct</span></div>
       <div class="cmp-r rv rv-2"><span class="cmp-lbl" style="font-weight:600;color:var(--text)">Price per report</span><span class="c-good">$9.99</span><span class="c-bad">$44.99</span><span class="c-bad">$24.99</span></div>
@@ -1118,7 +1118,7 @@
     <div class="sec-tag rv">FAQ</div>
     <h2 class="rv rv-1">Common <em>questions.</em></h2>
     <div class="faq-list">
-      <div class="fq rv rv-1"><div class="fq-q">Why is VINRecordHub more affordable? <span class="fq-ico">+</span></div><div class="fq-a">VINRecordHub is a vehicle history service that provides access to Carfax® &amp; AutoCheck® reports through our platform. By optimizing our delivery infrastructure, we offer competitive pricing while delivering the same comprehensive vehicle data.</div></div>
+      <div class="fq rv rv-1"><div class="fq-q">Why is VINRecordHub more affordable? <span class="fq-ico">+</span></div><div class="fq-a">VINRecordHub is an independent vehicle history service — not affiliated with Carfax or AutoCheck. By streamlining our delivery infrastructure, we offer competitive pricing on access to Carfax® &amp; AutoCheck® report data.</div></div>
       <div class="fq rv rv-2"><div class="fq-q">How fast will I receive my report? <span class="fq-ico">+</span></div><div class="fq-a">Reports are delivered to your email inbox within 60 seconds of payment confirmation. You'll receive it as a downloadable file you can keep forever.</div></div>
       <div class="fq rv rv-3"><div class="fq-q">Where do I find the VIN on my car? <span class="fq-ico">+</span></div><div class="fq-a">The VIN is a 17-character code found on: the dashboard (visible through the windshield on the driver's side), the driver's door jamb sticker, your vehicle title, or your insurance card.</div></div>
       <div class="fq rv rv-4"><div class="fq-q">What if the report has no records? <span class="fq-ico">+</span></div><div class="fq-a">Some vehicles have limited history — normal for older vehicles or cars with minimal reported incidents. If your report returns no data, contact us at support@vinrecordhub.com and we'll resolve it or issue a full refund.</div></div>
@@ -1210,8 +1210,21 @@ window.addEventListener('load',function(){
 </div>
 
 <script>
-  function openM(){document.getElementById('mMenu').classList.add('open');document.body.style.overflow='hidden';document.getElementById('menuBtn').setAttribute('aria-expanded','true')}
-  function closeM(){document.getElementById('mMenu').classList.remove('open');document.body.style.overflow='';document.getElementById('menuBtn').setAttribute('aria-expanded','false')}
+  // Keyboard focus management shared by both dialogs: move focus in on open,
+  // trap Tab within the dialog, and restore focus to the opener on close.
+  var _focusReturn=null;
+  function trapFocus(container,e){
+    if(e.key!=='Tab')return;
+    var f=container.querySelectorAll('a[href],button:not([disabled]),input,[tabindex]:not([tabindex="-1"])');
+    f=Array.prototype.filter.call(f,function(el){return el.offsetParent!==null});
+    if(!f.length)return;
+    var first=f[0],last=f[f.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+  }
+  function openM(){document.getElementById('mMenu').classList.add('open');document.body.style.overflow='hidden';document.getElementById('menuBtn').setAttribute('aria-expanded','true');_focusReturn=document.getElementById('menuBtn');var c=document.querySelector('.m-close');if(c)c.focus();}
+  function closeM(){document.getElementById('mMenu').classList.remove('open');document.body.style.overflow='';document.getElementById('menuBtn').setAttribute('aria-expanded','false');if(_focusReturn){_focusReturn.focus();_focusReturn=null;}}
+  document.getElementById('mMenu').addEventListener('keydown',function(e){if(this.classList.contains('open'))trapFocus(this,e);});
   document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
 
 
@@ -1397,13 +1410,21 @@ window.addEventListener('load',function(){
     }
     backdrop.classList.add('open');
     document.body.style.overflow='hidden';
+    _sampleReturn=document.activeElement;
+    var cb=backdrop.querySelector('.report-modal-close');
+    if(cb)cb.focus();
     gaPush({event:'sample_report_viewed'});
   }
 
+  var _sampleReturn=null;
   function closeSampleReport(){
     document.getElementById('reportModalBackdrop').classList.remove('open');
     document.body.style.overflow='';
+    if(_sampleReturn&&_sampleReturn.focus){_sampleReturn.focus();_sampleReturn=null;}
   }
+  document.getElementById('reportModalBackdrop').addEventListener('keydown',function(e){
+    if(this.classList.contains('open'))trapFocus(this,e);
+  });
 
   document.getElementById('reportModalBackdrop').addEventListener('click',function(e){
     if(e.target===this) closeSampleReport();

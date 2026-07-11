@@ -147,3 +147,67 @@
 @media (max-width: 600px) {
   .theme-toggle { width: 44px; height: 44px; }
 }
+
+/* sRGB hex fallback for browsers without oklch() (pre-2023). Custom properties
+   accept oklch() as a valid token, so a plain second declaration won't fall
+   back — this @supports block is the reliable way to keep the palette readable.
+   Translucent borders/glows (color-mix) degrade to their inherited value on
+   these browsers, which is acceptable; text/bg/accent stay legible. */
+@supports not (color: oklch(0% 0 0)) {
+  :root {
+    --bg: #010306;
+    --bg-elevated: #070e16;
+    --surface: #03070e;
+    --text: #f2f5f9;
+    --text-muted: #9ca2a9;
+    --text-faint: #8d939a;
+    --accent-primary: #b395ff;
+    --accent-secondary: #f89453;
+    --on-accent: #08060e;
+    --on-accent-secondary: #0d0502;
+    --cta-hover: #ffa15a;
+    --success: #43c07a;
+    --danger: #f05751;
+    --warning: #ffa700;
+    --info: #249ff3;
+    --border: rgba(255,255,255,.09);
+    --border-2: rgba(255,255,255,.14);
+    --border-3: rgba(255,255,255,.24);
+    --glow: rgba(167,139,250,.12);
+    --cta: #f89453;
+    --on-cta: #0d0502;
+    --accent: #b395ff;
+    --overlay: rgba(11,14,20,.97);
+    --overlay-nav: rgba(11,14,20,.88);
+    --shadow-color: rgba(0,0,0,.4);
+    --shadow-color-strong: rgba(0,0,0,.6);
+  }
+  [data-theme="light"] {
+    --bg: #faf6ef;
+    --bg-elevated: #f2ede4;
+    --surface: #fefcf9;
+    --text: #1d1b28;
+    --text-muted: #525062;
+    --text-faint: #636174;
+    --accent-primary: #773ee1;
+    --accent-secondary: #ad3a00;
+    --on-accent: #fcfcf9;
+    --on-accent-secondary: #fcfcf9;
+    --cta-hover: #c24700;
+    --success: #00793d;
+    --danger: #b7191c;
+    --warning: #a06200;
+    --info: #0062a6;
+    --border: rgba(43,37,64,.13);
+    --border-2: rgba(43,37,64,.20);
+    --border-3: rgba(43,37,64,.30);
+    --glow: rgba(124,58,237,.12);
+    --cta: #ad3a00;
+    --on-cta: #fcfcf9;
+    --accent: #773ee1;
+    --overlay: rgba(250,246,239,.97);
+    --overlay-nav: rgba(250,246,239,.90);
+    --shadow-color: rgba(60,50,90,.14);
+    --shadow-color-strong: rgba(60,50,90,.20);
+  }
+}

@@ -79,8 +79,11 @@ nav{max-width:var(--max);margin:0 auto;padding:.95rem var(--pad);display:flex;al
 .post-main a{font-weight:600;text-decoration:underline;text-decoration-color:color-mix(in oklch,var(--theme) 45%,transparent);text-underline-offset:3px}
 
 /* Tables */
-table{width:100%;border-collapse:separate;border-spacing:0;margin:1.6rem 0;font-size:.96rem;
-  border:1px solid var(--border);border-radius:14px;overflow:hidden}
+/* display:block + overflow-x lets wide tables scroll instead of forcing the
+   whole content column past the viewport on narrow phones. */
+table{display:block;width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  border-collapse:separate;border-spacing:0;margin:1.6rem 0;font-size:.96rem;
+  border:1px solid var(--border);border-radius:14px}
 thead{background:color-mix(in oklch,var(--theme) 12%,var(--surface))}
 th,td{text-align:left;padding:.85rem 1rem;border-bottom:1px solid var(--border)}
 th{color:var(--text);font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em}

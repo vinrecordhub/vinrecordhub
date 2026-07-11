@@ -216,7 +216,7 @@
   </div>
 
   <div class="card">
-    <div class="card-title">Credit Balance</div>
+    <h2 class="card-title">Credit Balance</h2>
     <div class="balance-row">
       <div>
         <div class="balance-label">Available Credits</div>
@@ -227,7 +227,7 @@
   </div>
 
   <div class="card">
-    <div class="card-title">Generate a Report</div>
+    <h2 class="card-title">Generate a Report</h2>
     <p class="card-sub">1 credit = 1 Carfax® or AutoCheck® report, your choice.</p>
 
     <div class="fg">
@@ -255,7 +255,7 @@
   </div>
 
   <div class="card">
-    <div class="card-title">Transaction History</div>
+    <h2 class="card-title">Transaction History</h2>
     <div class="table-scroll">
       <table class="hist-table" id="historyTable" style="display:none">
         <thead><tr><th>Date</th><th>Reason</th><th>Credits</th></tr></thead>
@@ -266,7 +266,7 @@
   </div>
 
   <div class="card">
-    <div class="card-title">Order History</div>
+    <h2 class="card-title">Order History</h2>
     <div class="table-scroll">
       <table class="hist-table" id="ordersTable" style="display:none">
         <thead><tr><th>Date</th><th>Order</th><th>Amount</th><th>Status</th></tr></thead>
@@ -452,6 +452,13 @@ function fmtDate(d){try{return new Date(d).toLocaleDateString('en-US',{month:'sh
     document.getElementById('acctEmail').textContent = currentUser.email;
     if (!vrhAuth.isVerified(currentUser)) {
       document.getElementById('verifyBanner').classList.add('show');
+    }
+
+    // Pre-fill the VIN the user typed on the homepage before buying credits.
+    var vinParam = (new URLSearchParams(location.search).get('vin') || '').toUpperCase();
+    if (/^[A-HJ-NPR-Z0-9]{17}$/.test(vinParam)) {
+      var vi = document.getElementById('vinInput');
+      if (vi) vi.value = vinParam;
     }
 
     await Promise.all([loadBalance(), loadHistory(), loadOrders()]);

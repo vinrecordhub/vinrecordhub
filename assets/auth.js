@@ -2,10 +2,24 @@
 // page after vendor/supabase.js and supabase-config.js. Exposes window.vrhAuth
 // so pages stay framework-free and don't each re-implement session handling.
 (function () {
-  var client = window.supabase.createClient(
-    window.VRH_SUPABASE_URL,
-    window.VRH_SUPABASE_ANON_KEY
-  );
+  // If the config was never substituted (placeholder still present) or the SDK
+  // failed to load, don't throw and take the whole page down — leave vrhAuth
+  // null so pages can show a visible "sign-in unavailable" state instead of
+  // silently dead buttons.
+  var url = window.VRH_SUPABASE_URL, anon = window.VRH_SUPABASE_ANON_KEY;
+  var configured = url && anon && url.indexOf('__') === -1 && anon.indexOf('__') === -1;
+  var client;
+  try {
+    if (!window.supabase || !configured) throw new Error('Supabase not configured');
+    client = window.supabase.createClient(url, anon);
+  } catch (err) {
+    console.error('[vrhAuth] auth unavailable:', err.message);
+    window.vrhAuth = null;
+    document.addEventListener('DOMContentLoaded', function () {
+      document.documentElement.setAttribute('data-auth-unavailable', 'true');
+    });
+    return;
+  }
 
   function isVerified(user) {
     return !!(user && user.email_confirmed_at);

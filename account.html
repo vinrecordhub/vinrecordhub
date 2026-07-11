@@ -368,21 +368,21 @@ function fmtDate(d){try{return new Date(d).toLocaleDateString('en-US',{month:'sh
     var body = document.getElementById('ordersBody');
     var empty = document.getElementById('ordersEmpty');
     try {
+      // credit_orders is the credit-bundle purchases table (RLS: own rows only).
       var { data, error } = await vrhAuth.client
-        .from('orders')
-        .select('*')
+        .from('credit_orders')
+        .select('created_at,bundle_id,credits,amount_due_usd,status')
         .order('created_at', { ascending: false })
         .limit(20);
       if (error) throw error;
       if (!data || !data.length) { table.style.display = 'none'; empty.style.display = 'block'; return; }
+      var CREDITS = { b1: 1, b3: 3, b10: 10, b15: 15, b25: 25 };
       body.innerHTML = data.map(function (row) {
-        var label = row.bundle_id || row.plan || row.id || '—';
-        var amount = (row.amount_usd != null) ? '$' + Number(row.amount_usd).toFixed(2)
-          : (row.amount != null) ? '$' + Number(row.amount).toFixed(2)
-          : (row.amount_cents != null) ? '$' + (row.amount_cents / 100).toFixed(2)
-          : '—';
-        var status = row.status || row.delivery_status || '—';
-        return '<tr><td>' + fmtDate(row.created_at) + '</td><td>' + escHtml(String(label)) + '</td>' +
+        var n = row.credits || CREDITS[row.bundle_id] || '?';
+        var label = n + ' credit' + (n === 1 ? '' : 's');
+        var amount = (row.amount_due_usd != null) ? '$' + Number(row.amount_due_usd).toFixed(2) : '—';
+        var status = row.status || '—';
+        return '<tr><td>' + fmtDate(row.created_at) + '</td><td>' + escHtml(label) + '</td>' +
           '<td>' + escHtml(amount) + '</td><td>' + escHtml(String(status)) + '</td></tr>';
       }).join('');
       table.style.display = 'table'; empty.style.display = 'none';

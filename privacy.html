@@ -31,10 +31,10 @@
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
-      /* orange is this page's CTA-converting accent, not the site's primary purple accent */
-      --accent: var(--accent-secondary);
-      --a-dim:  color-mix(in oklab, var(--accent-secondary) 8%, transparent);
-      --a-bdr:  color-mix(in oklab, var(--accent-secondary) 28%, transparent);
+      /* inherit the site brand: purple primary for links/labels, --cta orange for buttons */
+      --accent: var(--accent-primary);
+      --a-dim:  color-mix(in oklab, var(--accent-primary) 8%, transparent);
+      --a-bdr:  color-mix(in oklab, var(--accent-primary) 28%, transparent);
     }
     html{scroll-behavior:smooth}
     body{background:var(--bg);color:var(--text);

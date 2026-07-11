@@ -31,8 +31,8 @@ nav{max-width:var(--max);margin:0 auto;padding:.95rem var(--pad);display:flex;al
 .nav-links{display:flex;align-items:center;gap:1.5rem}
 .nav-links a{color:var(--muted);font-size:.92rem;font-weight:500}
 .nav-links a:hover{color:var(--text);text-decoration:none}
-.nav-cta{background:var(--accent);color:var(--on-accent)!important;padding:.55rem 1rem;border-radius:9px;
-  font-weight:700;font-size:.88rem!important;box-shadow:0 4px 18px color-mix(in oklab, var(--accent) 35%, transparent)}
+.nav-cta{background:var(--cta);color:var(--on-cta)!important;padding:.55rem 1rem;border-radius:9px;
+  font-weight:700;font-size:.88rem!important;box-shadow:0 4px 18px color-mix(in oklab, var(--cta) 35%, transparent)}
 .nav-cta:hover{filter:brightness(1.08);text-decoration:none}
 @media(max-width:680px){.nav-links a:not(.nav-cta){display:none}}
 

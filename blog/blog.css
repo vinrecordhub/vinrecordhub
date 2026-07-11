@@ -23,7 +23,7 @@ a:hover{text-decoration:underline}
 /* ---------- Nav ---------- */
 .nav-shell{position:sticky;top:0;z-index:50;background:var(--overlay-nav);
   backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-nav{max-width:var(--max);margin:0 auto;padding:.95rem var(--pad);display:flex;align-items:center;
+nav{max-width:1880px;margin:0 auto;padding:.95rem clamp(1.25rem,2.5vw,3rem);display:flex;align-items:center;
   justify-content:space-between;gap:1rem}
 .logo{display:flex;align-items:center;gap:.5rem;font-size:1.05rem;font-weight:800;letter-spacing:-.04em;color:var(--text)}
 .logo:hover{text-decoration:none}

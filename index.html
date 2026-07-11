@@ -8,6 +8,7 @@
   <link rel="manifest" href="/site.webmanifest"/>
   <meta name="theme-color" content="#0b0d1c"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script>(function(){try{var t=localStorage.getItem('vrh-theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();</script>
   <title>VINRecordHub — Carfax® & AutoCheck® Reports from $9.99</title>
   <meta name="description" content="Access Carfax® & AutoCheck® vehicle history reports from $9.99. Accident history, title records, odometer checks — delivered instantly to your inbox."/>
   <meta name="keywords" content="carfax cheap, autocheck report, vehicle history report, cheap carfax, vin check, car history report"/>
@@ -56,27 +57,43 @@
         "offers": [
           {
             "@type": "Offer",
-            "name": "Carfax® Report",
+            "name": "1 Report Credit",
             "price": "9.99",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "url": "https://vinrecordhub.com/checkout?plan=standard"
+            "url": "https://vinrecordhub.com/checkout?bundle=b1"
           },
           {
             "@type": "Offer",
-            "name": "AutoCheck® Report",
-            "price": "9.99",
+            "name": "3 Report Credits",
+            "price": "19.99",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "url": "https://vinrecordhub.com/checkout?plan=plus"
+            "url": "https://vinrecordhub.com/checkout?bundle=b3"
           },
           {
             "@type": "Offer",
-            "name": "Combo Pack — Carfax® + AutoCheck®",
-            "price": "14.99",
+            "name": "10 Report Credits",
+            "price": "54.99",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "url": "https://vinrecordhub.com/checkout?plan=combo"
+            "url": "https://vinrecordhub.com/checkout?bundle=b10"
+          },
+          {
+            "@type": "Offer",
+            "name": "15 Report Credits",
+            "price": "74.99",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "url": "https://vinrecordhub.com/checkout?bundle=b15"
+          },
+          {
+            "@type": "Offer",
+            "name": "25 Report Credits",
+            "price": "99.99",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "url": "https://vinrecordhub.com/checkout?bundle=b25"
           }
         ]
       },
@@ -142,34 +159,14 @@
   </script>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"/></noscript>
+  <link rel="stylesheet" href="/assets/theme.css"/>
+  <link rel="stylesheet" href="/assets/fx.css"/>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    /* colors live in /assets/theme.css — only layout vars here */
     :root{
-      --bg:       oklch(9% 0.018 252);
-      --surface:  oklch(12.5% 0.020 252);
-      --surface2: oklch(16% 0.022 252);
-      --border:   oklch(100% 0 0 / .07);
-      --border2:  oklch(100% 0 0 / .13);
-      --border3:  oklch(100% 0 0 / .22);
-      --text:     oklch(97% 0.006 252);
-      --muted:    oklch(65% 0.010 252);
-      --faint:    oklch(40% 0.010 252);
-      --accent:   oklch(76% 0.145 52);
-      --a-dim:    oklch(76% 0.145 52 / .08);
-      --a-bdr:    oklch(76% 0.145 52 / .28);
-      --a-glow:   oklch(76% 0.145 52 / .10);
-      --green:    oklch(72% 0.15 155);
-      --g-dim:    oklch(72% 0.15 155 / .08);
-      --g-bdr:    oklch(72% 0.15 155 / .22);
-      --red:      oklch(62% 0.20 26);
-      --r-dim:    oklch(62% 0.20 26 / .08);
-      --r-bdr:    oklch(62% 0.20 26 / .22);
-      --amber:    oklch(80% 0.18 72);
-      --blue:     oklch(68% 0.16 245);
       --max: 1160px;
       --pad: clamp(1.25rem,5vw,3.5rem);
-      --ease: cubic-bezier(0.25,1,0.5,1);
-      --expo: cubic-bezier(0.16,1,0.3,1);
     }
     html{scroll-behavior:smooth;overflow-x:hidden}
     body{background:var(--bg);color:var(--text);
@@ -186,7 +183,7 @@
 
     /* NAV */
     .nav-shell{position:fixed;top:0;left:0;right:0;z-index:100;
-      background:oklch(9% .018 252 / .88);backdrop-filter:blur(20px) saturate(1.8);
+      background:var(--overlay-nav);backdrop-filter:blur(20px) saturate(1.8);
       border-bottom:1px solid var(--border);transition:background .3s}
     nav{max-width:var(--max);margin:0 auto;padding:0 var(--pad);
       height:62px;display:flex;align-items:center;justify-content:space-between}
@@ -195,24 +192,25 @@
     .logo-mark{flex-shrink:0;display:block}
     .logo-r{color:var(--accent)}
     .logo-h{color:var(--faint);font-weight:400;letter-spacing:-.02em}
-    .nav-links{display:flex;align-items:center;gap:2rem}
+    .nav-right{display:flex;align-items:center;gap:.9rem}
+    .nav-links{display:flex;align-items:center;gap:2rem;margin-right:1.1rem}
     .nav-links a{font-size:.84rem;font-weight:500;color:var(--muted);
       text-decoration:none;transition:color .2s var(--ease)}
     .nav-links a:hover{color:var(--text)}
-    .nav-cta{background:var(--a-dim);color:var(--accent);
+    .nav-cta{background:color-mix(in oklab, var(--cta) 9%, transparent);color:var(--cta);
       font-size:.78rem;font-weight:700;padding:.5rem 1.15rem;
       border-radius:8px;text-decoration:none;
-      border:1px solid var(--a-bdr);
+      border:1px solid color-mix(in oklab, var(--cta) 30%, transparent);
       transition:background .2s,border-color .2s,transform .2s var(--ease),box-shadow .2s}
-    .nav-cta:hover{background:var(--accent);color:oklch(10% .015 252);
-      border-color:var(--accent);transform:translateY(-1px);
-      box-shadow:0 6px 20px var(--a-glow)}
+    .nav-cta:hover{background:var(--cta);color:var(--on-cta);
+      border-color:var(--cta);transform:translateY(-1px);
+      box-shadow:0 6px 20px color-mix(in oklab, var(--cta) 20%, transparent)}
     .burger{display:none;flex-direction:column;gap:5px;
       background:none;border:none;cursor:pointer;padding:4px;
       min-width:44px;min-height:44px;align-items:center;justify-content:center}
     .burger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px}
     .m-menu{display:none;position:fixed;inset:0;z-index:200;
-      background:oklch(9% .018 252 / .99);
+      background:var(--overlay);
       flex-direction:column;align-items:center;justify-content:center;gap:2.5rem}
     .m-menu.open{display:flex}
     .m-menu a{font-size:1.5rem;font-weight:700;color:var(--text);text-decoration:none}
@@ -225,12 +223,12 @@
       display:flex;align-items:center;position:relative;overflow:hidden}
     .hero-mesh{position:absolute;inset:0;pointer-events:none;
       background:
-        radial-gradient(ellipse 60% 50% at 70% 20%,oklch(76% .145 52 / .05) 0%,transparent 60%),
-        radial-gradient(ellipse 50% 40% at 15% 80%,oklch(68% .16 245 / .04) 0%,transparent 60%)}
+        radial-gradient(ellipse 60% 50% at 70% 20%,color-mix(in oklab, var(--accent-secondary) 6%, transparent) 0%,transparent 60%),
+        radial-gradient(ellipse 50% 40% at 15% 80%,color-mix(in oklab, var(--info) 4%, transparent) 0%,transparent 60%)}
     .hero-grid{position:absolute;inset:0;
       background-image:
-        linear-gradient(oklch(76% .145 52 / .024) 1px,transparent 1px),
-        linear-gradient(90deg,oklch(76% .145 52 / .024) 1px,transparent 1px);
+        linear-gradient(color-mix(in oklab, var(--accent-secondary) 3%, transparent) 1px,transparent 1px),
+        linear-gradient(90deg,color-mix(in oklab, var(--accent-secondary) 3%, transparent) 1px,transparent 1px);
       background-size:72px 72px;
       mask-image:radial-gradient(ellipse 80% 65% at 50% 0%,black 0%,transparent 100%);
       pointer-events:none}
@@ -259,12 +257,12 @@
       outline:none;transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
     .vin-input::placeholder{color:var(--faint);letter-spacing:0;font-weight:400}
     .vin-input:focus{border-color:var(--a-bdr);box-shadow:0 0 0 3px var(--a-dim)}
-    .vin-btn{background:var(--accent);color:oklch(10% .015 252);
+    .vin-btn{background:var(--cta);color:var(--on-cta);
       border:none;border-radius:10px;padding:.9rem 1.5rem;
       font-family:'Inter',sans-serif;font-weight:700;font-size:.875rem;
       cursor:pointer;white-space:nowrap;
       transition:opacity .15s,transform .2s var(--ease),box-shadow .2s}
-    .vin-btn:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 8px 24px var(--a-glow)}
+    .vin-btn:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 8px 24px color-mix(in oklab, var(--cta) 22%, transparent)}
     .vin-lk{margin-top:.55rem;display:none;align-items:center;gap:.45rem;
       font-size:.8rem;padding:.45rem .75rem;border-radius:8px}
     .vin-lk.show{display:flex;background:var(--g-dim);border:1px solid var(--g-bdr);color:var(--green)}
@@ -277,7 +275,7 @@
       border-radius:20px;padding:1.6rem;
       will-change:transform;transform:translateZ(0);
       animation:floatCard 3s ease-in-out infinite;
-      box-shadow:0 0 0 1px var(--border),0 24px 64px oklch(0% 0 0 / .7),0 0 80px var(--a-glow)}
+      box-shadow:0 0 0 1px var(--border),0 24px 64px var(--shadow-color-strong),0 0 80px var(--a-glow)}
     .hc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.1rem}
     .hc-logo{font-size:.78rem;font-weight:800;letter-spacing:-.02em}
     .hc-logo span{color:var(--accent)}
@@ -301,13 +299,13 @@
     .hc-row-l{color:var(--muted)}
     .hc-tag{font-size:.64rem;font-weight:600;padding:.13rem .45rem;border-radius:4px}
     .tag-ok{background:var(--g-dim);color:var(--green)}
-    .tag-warn{background:oklch(80% .18 72 / .1);color:var(--amber)}
+    .tag-warn{background:color-mix(in oklab, var(--warning) 10%, transparent);color:var(--amber)}
     .tag-bad{background:var(--r-dim);color:var(--red)}
     .hc-foot{margin-top:.9rem;padding-top:.9rem;border-top:1px solid var(--border);
       display:flex;align-items:center;justify-content:space-between}
     .hc-price{font-size:1.4rem;font-weight:900;letter-spacing:-.04em;color:var(--accent)}
     .hc-price span{font-size:.75rem;font-weight:400;color:var(--muted)}
-    .hc-cta{background:var(--accent);color:oklch(10% .015 252);
+    .hc-cta{background:var(--cta);color:var(--on-cta);
       font-size:.73rem;font-weight:700;padding:.45rem 1rem;
       border-radius:7px;text-decoration:none;transition:opacity .15s,transform .15s var(--ease)}
     .hc-cta:hover{opacity:.85;transform:scale(1.02)}
@@ -330,17 +328,17 @@
     .stat-card{background:var(--surface);border:1px solid var(--border2);
       border-radius:14px;padding:1.6rem 1.75rem;
       transition:transform .35s var(--ease),box-shadow .35s;
-      box-shadow:0 8px 32px oklch(0% 0 0 / .4)}
+      box-shadow:0 8px 32px var(--shadow-color)}
     .stat-card:nth-child(1){transform:perspective(600px) rotateY(-4deg) rotateX(2deg)}
     .stat-card:nth-child(2){transform:perspective(600px) rotateX(2deg)}
     .stat-card:nth-child(3){transform:perspective(600px) rotateY(4deg) rotateX(2deg)}
-    .stat-card:hover{transform:none!important;box-shadow:0 16px 48px oklch(0% 0 0 / .5)}
+    .stat-card:hover{transform:none!important;box-shadow:0 16px 48px var(--shadow-color-strong)}
     .stat-val{font-size:2.2rem;font-weight:900;letter-spacing:-.05em;line-height:1}
     .stat-sub{font-size:.78rem;color:var(--muted);margin-top:.3rem}
     .stat-note{font-size:.68rem;margin-top:.18rem}
     .sv-lime{color:var(--accent)}.sv-green{color:var(--green)}.sv-blue{color:var(--blue)}
     .sn-red{color:var(--red);text-decoration:line-through}
-    .sn-g{color:oklch(72% .18 155 / .65)}.sn-b{color:oklch(68% .16 245 / .65)}
+    .sn-g{color:color-mix(in oklab, var(--success) 65%, transparent)}.sn-b{color:color-mix(in oklab, var(--info) 65%, transparent)}
 
     /* SECTIONS */
     .sec{max-width:var(--max);margin:0 auto;padding:5rem var(--pad)}
@@ -383,20 +381,26 @@
     /* PRICING */
     .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);
       gap:1rem;margin-top:3rem;perspective:1200px}
+    .bundles-grid{grid-template-columns:repeat(5,1fr);gap:.75rem}
+    .bundles-grid .pc{padding:1.4rem 1.1rem}
+    .bundles-grid .pc-price{font-size:2.1rem}
+    @media(max-width:1100px){.bundles-grid{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:960px){.bundles-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:600px){.bundles-grid{grid-template-columns:1fr}}
     .pc{background:var(--surface);border:1px solid var(--border2);
       border-radius:16px;padding:2rem;cursor:pointer;position:relative;
       transition:border-color .3s var(--ease),transform .3s var(--ease),box-shadow .3s;
       transform-style:preserve-3d}
     .pc:hover{border-color:var(--a-bdr);
       transform:translateY(-6px) rotateX(2deg);
-      box-shadow:0 20px 60px oklch(0% 0 0 / .55),0 0 40px var(--a-glow)}
+      box-shadow:0 20px 60px var(--shadow-color-strong),0 0 40px var(--a-glow)}
     .pc.feat{border-color:var(--accent);
-      background:oklch(76% .145 52 / .04);
-      box-shadow:0 0 0 1px var(--a-bdr),0 8px 40px var(--a-glow),0 0 60px oklch(76% .145 52 / .08)}
-    @keyframes featPulse{0%,100%{box-shadow:0 0 0 1px var(--a-bdr),0 8px 40px var(--a-glow),0 0 60px oklch(76% .145 52 / .08)}50%{box-shadow:0 0 0 1px var(--a-bdr),0 8px 40px var(--a-glow),0 0 90px oklch(76% .145 52 / .16)}}
+      background:color-mix(in oklab, var(--accent-primary) 4%, transparent);
+      box-shadow:0 0 0 1px var(--a-bdr),0 8px 40px var(--a-glow),0 0 60px color-mix(in oklab, var(--accent-secondary) 8%, transparent)}
+    @keyframes featPulse{0%,100%{box-shadow:0 0 0 1px var(--a-bdr),0 8px 40px var(--a-glow),0 0 60px color-mix(in oklab, var(--accent-secondary) 8%, transparent)}50%{box-shadow:0 0 0 1px var(--a-bdr),0 8px 40px var(--a-glow),0 0 90px color-mix(in oklab, var(--accent-primary) 16%, transparent)}}
     .pc.feat{animation:featPulse 3s ease-in-out infinite}
     .feat-badge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);
-      background:var(--accent);color:oklch(10% .015 252);
+      background:var(--cta);color:var(--on-cta);
       font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
       padding:.22rem 1rem;border-radius:0 0 8px 8px;white-space:nowrap}
     .pc-name{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
@@ -407,16 +411,16 @@
     .pc-save{font-size:.7rem;color:var(--green);font-weight:600;margin-top:.25rem}
     .pc-divider{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
     .pc-feats{list-style:none;display:flex;flex-direction:column;gap:.5rem}
-    .pc-feats li{font-size:.83rem;color:oklch(80% .008 252);
+    .pc-feats li{font-size:.83rem;color:var(--text-muted);
       display:flex;align-items:center;gap:.6rem}
     .pc-feats li svg{flex-shrink:0;color:var(--green)}
     .btn-buy{display:block;text-align:center;margin-top:1.75rem;padding:.8rem;
       border-radius:10px;font-size:.84rem;font-weight:700;text-decoration:none;
       transition:background .2s var(--ease),transform .2s var(--ease),box-shadow .2s;
-      background:oklch(100% 0 0 / .06);color:var(--text);border:1px solid var(--border2)}
-    .btn-buy:hover{background:oklch(100% 0 0 / .11);transform:scale(1.02)}
-    .pc.feat .btn-buy{background:var(--accent);color:oklch(10% .015 252);border-color:transparent}
-    .pc.feat .btn-buy:hover{box-shadow:0 8px 28px oklch(76% .145 52 / .3);transform:scale(1.02)}
+      background:color-mix(in oklab, var(--text) 6%, transparent);color:var(--text);border:1px solid var(--border2)}
+    .btn-buy:hover{background:color-mix(in oklab, var(--text) 11%, transparent);transform:scale(1.02)}
+    .pc.feat .btn-buy{background:var(--cta);color:var(--on-cta);border-color:transparent}
+    .pc.feat .btn-buy:hover{box-shadow:0 8px 28px color-mix(in oklab, var(--cta) 30%, transparent);transform:scale(1.02)}
 
     /* FEATURES */
     .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);
@@ -431,7 +435,7 @@
     /* SAMPLE REPORT */
     .sample-inner{max-width:1160px;margin:0 auto;padding:5rem clamp(1.25rem,5vw,3.5rem)}
     .report-card{border:1px solid var(--border2);border-radius:20px;overflow:hidden;
-      box-shadow:0 24px 80px oklch(0% 0 0 / .6),0 0 60px var(--a-glow);
+      box-shadow:0 24px 80px var(--shadow-color-strong),0 0 60px var(--a-glow);
       transform:perspective(1200px) rotateX(3deg);transition:transform .4s var(--ease)}
     .report-card:hover{transform:perspective(1200px) rotateX(0deg)}
     .report-header{background:var(--surface2);padding:1.25rem 1.75rem;
@@ -461,25 +465,25 @@
     .report-row-meta{font-size:.7rem;color:var(--muted)}
     .report-row-desc{font-size:.76rem;color:var(--muted)}
     .report-unlock{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-      background:linear-gradient(to bottom,transparent 0%,oklch(12.5% .020 252 / .96) 40%)}
+      background:linear-gradient(to bottom,transparent 0%,color-mix(in oklab, var(--surface) 96%, transparent) 40%)}
     .report-unlock-inner{text-align:center}
     .report-unlock-lbl{font-size:.9rem;font-weight:700;margin-bottom:.5rem}
-    .report-unlock-btn{display:inline-block;background:var(--accent);
-      color:oklch(10% .015 252);font-size:.82rem;font-weight:700;
+    .report-unlock-btn{display:inline-block;background:var(--cta);
+      color:var(--on-cta);font-size:.82rem;font-weight:700;
       padding:.55rem 1.35rem;border-radius:8px;text-decoration:none;
       transition:transform .15s var(--ease),opacity .15s}
     .report-unlock-btn:hover{transform:scale(1.02);opacity:.9}
 
     /* SAMPLE REPORT MODAL */
     .sample-modal-btn{display:inline-flex;align-items:center;gap:.5rem;
-      background:var(--accent);color:oklch(10% .015 252);
+      background:var(--cta);color:var(--on-cta);
       border:none;border-radius:10px;padding:.75rem 1.6rem;
       font-size:.9rem;font-weight:700;cursor:pointer;
-      box-shadow:0 4px 20px oklch(76% .145 52 / .3);
+      box-shadow:0 4px 20px color-mix(in oklab, var(--cta) 30%, transparent);
       transition:transform .15s var(--ease),box-shadow .15s;
       text-decoration:none;margin-bottom:2rem}
     .sample-modal-btn:hover{transform:translateY(-2px);
-      box-shadow:0 8px 32px oklch(76% .145 52 / .45)}
+      box-shadow:0 8px 32px color-mix(in oklab, var(--cta) 45%, transparent)}
     .sample-modal-btn svg{flex-shrink:0}
     .report-modal-backdrop{position:fixed;inset:0;z-index:900;
       background:oklch(0% 0 0 / .86);
@@ -512,7 +516,7 @@
 
     /* COMPARISON */
     .cmp-table{border:1px solid var(--border2);border-radius:16px;overflow:hidden;margin-top:3rem;
-      box-shadow:0 4px 40px oklch(0% 0 0 / .4),inset 0 1px 0 var(--border2)}
+      box-shadow:0 4px 40px var(--shadow-color),inset 0 1px 0 var(--border2)}
     .cmp-h{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
       background:var(--surface2);padding:.95rem 1.5rem;
       font-size:.68rem;font-weight:700;letter-spacing:.08em;
@@ -521,10 +525,10 @@
     .cmp-r{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
       padding:.9rem 1.5rem;border-top:1px solid var(--border);
       font-size:.875rem;gap:1rem;align-items:center;transition:background .15s}
-    .cmp-r:hover{background:oklch(100% 0 0 / .02)}
+    .cmp-r:hover{background:color-mix(in oklab, var(--text) 3%, transparent)}
     .cmp-lbl{color:var(--muted)}
     .c-us{text-align:center;color:var(--accent);font-weight:800;font-size:.95rem}
-    .c-no{text-align:center;color:oklch(62% .22 26 / .6)}
+    .c-no{text-align:center;color:color-mix(in oklab, var(--danger) 60%, transparent)}
     .c-yes{text-align:center;color:var(--green);font-weight:600}
     .c-bad{text-align:center;color:var(--red);font-weight:700}
     .c-good{text-align:center;color:var(--accent);font-weight:800}
@@ -548,7 +552,7 @@
     .gbox{background:var(--surface);border:1px solid var(--border2);
       border-radius:20px;padding:3.5rem 2.5rem;text-align:center;
       max-width:600px;margin:0 auto;position:relative;overflow:hidden;
-      box-shadow:0 0 0 1px var(--g-bdr),0 8px 60px oklch(0% 0 0 / .5),0 0 80px var(--g-dim);
+      box-shadow:0 0 0 1px var(--g-bdr),0 8px 60px var(--shadow-color-strong),0 0 80px var(--g-dim);
       transform:perspective(800px) rotateX(1deg)}
     .gbox::before{content:'';position:absolute;inset:0;
       background:radial-gradient(circle at 50% 0%,var(--g-dim) 0%,transparent 70%);
@@ -571,7 +575,7 @@
       transition:border-color .2s var(--ease),box-shadow .2s}
     .cap-input::placeholder{color:var(--faint)}
     .cap-input:focus{border-color:var(--a-bdr);box-shadow:0 0 0 3px var(--a-dim)}
-    .cap-btn{background:var(--accent);color:oklch(10% .015 252);
+    .cap-btn{background:var(--cta);color:var(--on-cta);
       border:none;border-radius:10px;padding:.88rem 1.4rem;
       font-family:'Inter',sans-serif;font-weight:700;font-size:.875rem;
       cursor:pointer;white-space:nowrap;
@@ -597,15 +601,15 @@
       display:flex;justify-content:space-between;align-items:center;
       font-size:.73rem;color:var(--faint);flex-wrap:wrap;gap:.75rem}
     .f-legal{margin-top:1.25rem;padding-top:1.25rem;
-      border-top:1px solid oklch(100% 0 0 / .03);
-      font-size:.63rem;color:oklch(30% .008 252);line-height:1.72;text-align:center}
+      border-top:1px solid var(--border);
+      font-size:.63rem;color:var(--text-faint);line-height:1.72;text-align:center}
 
     /* TOAST */
     @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
     .toast{position:fixed;bottom:1.5rem;left:1.5rem;z-index:500;
       background:var(--surface);border:1px solid var(--border2);border-radius:12px;
       padding:.875rem 1.15rem;max-width:280px;display:none;
-      box-shadow:0 8px 40px oklch(0% 0 0 / .5);
+      box-shadow:0 8px 40px var(--shadow-color-strong);
       animation:slideUp .4s var(--ease) forwards}
     .toast-inner{display:flex;align-items:center;gap:.75rem}
     .toast-avatar{width:36px;height:36px;border-radius:50%;
@@ -625,13 +629,13 @@
     #vrh-quick-replies.show{opacity:1;transform:translateY(0);pointer-events:all}
     .vrh-qr-label{font-size:.64rem;font-weight:700;letter-spacing:.08em;
       text-transform:uppercase;color:var(--faint);margin-bottom:.15rem;text-align:right}
-    .vrh-qr-btn{background:oklch(16% .022 252 / .95);border:1px solid var(--border2);
+    .vrh-qr-btn{background:color-mix(in oklab, var(--bg-elevated) 95%, transparent);border:1px solid var(--border2);
       color:var(--text);font-family:'Inter',sans-serif;
       font-size:.78rem;font-weight:500;padding:.5rem 1rem;
       border-radius:100px;cursor:pointer;white-space:nowrap;
       backdrop-filter:blur(12px);
       transition:background .15s,border-color .15s,transform .2s var(--ease),color .15s;
-      box-shadow:0 2px 12px oklch(0% 0 0 / .4)}
+      box-shadow:0 2px 12px var(--shadow-color)}
     .vrh-qr-btn:hover{background:var(--a-dim);border-color:var(--a-bdr);
       color:var(--accent);transform:translateX(-3px)}
     .qr-icon{margin-right:.35rem}
@@ -665,6 +669,7 @@
       h1{font-size:clamp(1.65rem,8.5vw,2.3rem)}
       h2{font-size:clamp(1.4rem,5.5vw,1.9rem)}
       .vin-row{flex-direction:column}
+      .vin-row .star-border{width:100%}
       .vin-btn{width:100%;padding:.9rem}
       .feat-grid{grid-template-columns:1fr}
       .cmp-h,.cmp-r{grid-template-columns:1.5fr .7fr .7fr .7fr;font-size:.64rem;padding:.68rem .75rem}
@@ -695,7 +700,7 @@
     .vinny-bubble{background:var(--surface);border:1px solid var(--a-bdr);
       border-radius:14px 14px 14px 4px;padding:.55rem .85rem;
       font-size:.78rem;color:var(--text);font-weight:500;
-      box-shadow:0 4px 20px oklch(0% 0 0 / .3);position:relative;line-height:1.4}
+      box-shadow:0 4px 20px var(--shadow-color);position:relative;line-height:1.4}
     .vinny-bubble::before{content:'';position:absolute;bottom:-8px;left:16px;
       width:0;height:0;border-left:8px solid transparent;
       border-right:4px solid transparent;border-top:8px solid var(--a-bdr)}
@@ -712,7 +717,7 @@
 
     /* STICKY CTA BAR */
     .sticky-cta{position:fixed;bottom:0;left:0;right:0;z-index:90;
-      background:oklch(9% .018 252 / .97);backdrop-filter:blur(20px) saturate(1.6);
+      background:var(--overlay);backdrop-filter:blur(20px) saturate(1.6);
       border-top:1px solid var(--a-bdr);
       padding:.75rem clamp(1.25rem,5vw,3rem);
       display:flex;align-items:center;justify-content:space-between;gap:1rem;
@@ -720,7 +725,7 @@
     .sticky-cta.show{transform:translateY(0);pointer-events:all}
     .sticky-cta-txt{font-size:.84rem;color:var(--muted);font-weight:500}
     .sticky-cta-txt strong{color:var(--text)}
-    .sticky-cta-btn{background:var(--accent);color:oklch(10% .015 252);
+    .sticky-cta-btn{background:var(--cta);color:var(--on-cta);
       font-size:.84rem;font-weight:700;padding:.65rem 1.4rem;
       border-radius:9px;text-decoration:none;white-space:nowrap;
       transition:opacity .15s,transform .15s var(--ease);flex-shrink:0}
@@ -733,8 +738,8 @@
     /* HERO BACKGROUND — static gradient, zero paint cost */
     .hero-aura{position:absolute;inset:0;pointer-events:none;z-index:0;
       background:
-        radial-gradient(ellipse 55% 50% at 72% 15%,oklch(76% .145 52 / .08) 0%,transparent 65%),
-        radial-gradient(ellipse 45% 40% at 12% 85%,oklch(68% .16 245 / .06) 0%,transparent 65%)}
+        radial-gradient(ellipse 55% 50% at 72% 15%,color-mix(in oklab, var(--accent-secondary) 8%, transparent) 0%,transparent 65%),
+        radial-gradient(ellipse 45% 40% at 12% 85%,color-mix(in oklab, var(--info) 6%, transparent) 0%,transparent 65%)}
 
     /* Hero above-fold reveals — CSS-only, fires immediately without waiting for GSAP */
     @keyframes heroReveal{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
@@ -764,16 +769,19 @@
       <img class="logo-mark" src="/favicon-96x96.png" width="24" height="24" alt="" aria-hidden="true"/>
       VIN<span class="logo-r">Record</span><span class="logo-h">Hub</span>
     </a>
-    <div class="nav-links">
-      <a href="#how">How it Works</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#compare">Compare</a>
-      <a href="#faq">FAQ</a>
-      <a href="/blog">Blog</a>
-      <a href="mailto:support@vinrecordhub.com">Support</a>
-      <a href="#pricing" class="nav-cta">Get Report — $9.99</a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#how">How it Works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#compare">Compare</a>
+        <a href="#faq">FAQ</a>
+        <a href="/blog">Blog</a>
+        <a href="mailto:support@vinrecordhub.com">Support</a>
+        <a href="#pricing" class="nav-cta">Buy Credits — from $9.99</a>
+      </div>
+      <button class="theme-toggle" data-theme-toggle type="button" aria-label="Switch to light theme"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
+      <button class="burger" id="menuBtn" onclick="openM()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mMenu"><span></span><span></span><span></span></button>
     </div>
-    <button class="burger" id="menuBtn" onclick="openM()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mMenu"><span></span><span></span><span></span></button>
   </nav>
 </div>
 
@@ -785,24 +793,25 @@
   <a href="#faq" onclick="closeM()">FAQ</a>
   <a href="/blog" onclick="closeM()">Blog</a>
   <a href="mailto:support@vinrecordhub.com" onclick="closeM()">Support</a>
-  <a href="#pricing" onclick="closeM()" class="hi">Get Report →</a>
+  <a href="#pricing" onclick="closeM()" class="hi">Buy Credits →</a>
 </div>
 
 <section class="hero" aria-label="Vehicle History Reports — Get Started">
   <div class="hero-aura" aria-hidden="true"></div>
   <div class="hero-mesh"></div>
   <div class="hero-grid"></div>
-  <canvas class="hero3d" data-theme="idx" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.55"></canvas>
+  <canvas data-fx-aurora aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none"></canvas>
   <div class="hero-inner">
     <div>
       <div class="hero-badge hero-rv"><span class="badge-dot"></span>Instant Vehicle History Reports</div>
       <h1 class="hero-rv hero-rv-1">Every accident. Every secret. <em>Know before you buy.</em></h1>
-      <p class="hero-sub hero-rv hero-rv-2">Real Carfax® &amp; AutoCheck® vehicle history — accidents, title brands, odometer fraud — for just $9.99. Delivered to your inbox in 60 seconds.</p>
+      <p class="hero-sub hero-rv hero-rv-2">Full vehicle history from Carfax® &amp; AutoCheck® data — accidents, title brands, odometer fraud. From $9.99 per report (as low as $4.00 with credit bundles), delivered to your inbox in 60 seconds.</p>
       <label for="heroVin" class="vin-label hero-rv hero-rv-3">Enter VIN — get your report instantly</label>
       <div class="vin-row hero-rv hero-rv-3">
         <input class="vin-input" id="heroVin" type="text" placeholder="e.g. 1HGCM82633A004352" maxlength="17" autocomplete="off" spellcheck="false" aria-label="Vehicle Identification Number (VIN)" aria-describedby="vinLk vinErr vinCount" aria-invalid="false" oninput="this.value=this.value.toUpperCase();validateVin(this)"/>
-        <button class="vin-btn" onclick="goCheckout()" aria-label="Get vehicle history report">Check VIN →</button>
+        <span class="star-border"><button class="vin-btn" onclick="goCheckout()" aria-label="Get vehicle history report">Check VIN →</button></span>
       </div>
+      <p class="type-line hero-rv hero-rv-3" aria-hidden="true" style="font-size:.84rem;color:var(--text-muted);margin-top:.6rem">Uncover&nbsp;<span data-typetext='["hidden accident damage.","odometer rollbacks.","salvage title brands.","flood damage history.","auction records."]' style="color:var(--accent-primary);font-weight:600"></span><span class="type-caret"></span></p>
       <div style="font-size:.68rem;color:var(--faint);margin-top:.3rem" id="vinCount" aria-live="polite"></div>
       <div class="vin-lk" id="vinLk" role="status" aria-live="polite" aria-atomic="true"><span id="vinLkIco"></span><span id="vinLkTxt"></span></div>
       <div class="vin-err" id="vinErr" role="alert" aria-live="assertive"></div>
@@ -896,14 +905,14 @@
       <div class="step rv rv-1">
         <div class="step-num">Step 01</div>
         <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M6 14h.01M10 14h4M18 14h.01"/></svg>
-        <div class="step-t">Enter the VIN</div>
-        <div class="step-d">Find the 17-character VIN on the dashboard, door jamb, or vehicle title and type it above.</div>
+        <div class="step-t">Pick a credit bundle</div>
+        <div class="step-d">Create a free account and grab a bundle — from $9.99 for one report down to $4.00 each in bulk. Pay with PayPal or card.</div>
       </div>
       <div class="step rv rv-2">
         <div class="step-num">Step 02</div>
         <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-        <div class="step-t">Pay Securely</div>
-        <div class="step-d">Choose Carfax®, AutoCheck®, or the combo. Pay with PayPal or card — from $9.99. No subscription.</div>
+        <div class="step-t">Enter the VIN</div>
+        <div class="step-d">In your account, enter the 17-character VIN and choose Carfax® or AutoCheck® — 1 credit per report.</div>
       </div>
       <div class="step rv rv-3">
         <div class="step-num">Step 03</div>
@@ -929,58 +938,72 @@
 
 <div id="pricing">
   <div class="sec">
-    <div class="sec-tag rv">Pricing</div>
-    <h2 class="rv rv-1">Simple, <em>honest</em> pricing.</h2>
-    <p class="sec-sub rv rv-2">One-time payment. No subscription. Reports in seconds.</p>
-    <div class="pricing-grid">
-      <div class="pc rv rv-1" onclick="goCheckoutPlan('standard')">
-        <div class="pc-name">Carfax® Report</div>
+    <div class="sec-tag rv">Credit Bundles</div>
+    <h2 class="rv rv-1">Buy credits. <em>Spend anytime.</em></h2>
+    <p class="sec-sub rv rv-2">1 credit = 1 full report — Carfax® or AutoCheck®, your choice each time. Bigger bundles drop the price per report. Credits never expire.</p>
+    <div class="pricing-grid bundles-grid">
+      <div class="pc glow-card rv rv-1" onclick="goCheckoutBundle('b1')">
+        <div class="pc-name">1 Credit</div>
         <div class="pc-price"><sup>$</sup>9.99</div>
-        <div class="pc-per">single report</div>
+        <div class="pc-per">$9.99 per report</div>
         <hr class="pc-divider"/>
         <ul class="pc-feats">
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Powered by Carfax® data</li>
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Accident &amp; damage history</li>
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Title &amp; ownership records</li>
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Odometer verification</li>
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Service &amp; recall records</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>1 report of your choice</li>
           <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Instant email delivery</li>
         </ul>
-        <a href="/checkout?plan=standard" class="btn-buy">Get Carfax® Report →</a>
+        <a href="/checkout?bundle=b1" class="btn-buy">Buy 1 credit →</a>
       </div>
-      <div class="pc feat rv rv-2" onclick="goCheckoutPlan('combo')">
-        <div class="feat-badge">Best Value</div>
-        <div class="pc-name">Combo Pack</div>
-        <div class="pc-price"><sup>$</sup>14.99</div>
-        <div class="pc-per">Carfax® + AutoCheck®</div>
-        <div class="pc-save">Save $5 — most thorough check</div>
+      <div class="pc glow-card rv rv-2" onclick="goCheckoutBundle('b3')">
+        <div class="pc-name">3 Credits</div>
+        <div class="pc-price"><sup>$</sup>19.99</div>
+        <div class="pc-per">$6.66 per report</div>
+        <div class="pc-save">Save 33% vs single</div>
         <hr class="pc-divider"/>
         <ul class="pc-feats">
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>1 full Carfax® report</li>
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>1 full AutoCheck® report</li>
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Cross-verify both sources</li>
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Maximum buying confidence</li>
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>All accident &amp; title records</li>
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Both delivered instantly</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Compare up to 3 vehicles</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Or both reports on one VIN</li>
         </ul>
-        <a href="/checkout?plan=combo" class="btn-buy">Get Combo Pack →</a>
+        <a href="/checkout?bundle=b3" class="btn-buy">Buy 3 credits →</a>
       </div>
-      <div class="pc rv rv-3" onclick="goCheckoutPlan('premium')">
-        <div class="pc-name">AutoCheck® Report</div>
-        <div class="pc-price"><sup>$</sup>9.99</div>
-        <div class="pc-per">single report</div>
+      <div class="pc glow-card rv rv-3" onclick="goCheckoutBundle('b10')">
+        <div class="pc-name">10 Credits</div>
+        <div class="pc-price"><sup>$</sup>54.99</div>
+        <div class="pc-per">$5.50 per report</div>
+        <div class="pc-save">Save 45% vs single</div>
         <hr class="pc-divider"/>
         <ul class="pc-feats">
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Powered by AutoCheck® (Experian)</li>
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Auction &amp; dealer records</li>
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Title &amp; ownership records</li>
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Odometer verification</li>
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>AutoCheck® score included</li>
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Instant email delivery</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Serious car-shopping trips</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Credits never expire</li>
         </ul>
-        <a href="/checkout?plan=premium" class="btn-buy">Get AutoCheck® Report →</a>
+        <a href="/checkout?bundle=b10" class="btn-buy">Buy 10 credits →</a>
+      </div>
+      <div class="pc feat glow-card rv rv-4" onclick="goCheckoutBundle('b15')">
+        <div class="feat-badge">Most Popular</div>
+        <div class="pc-name">15 Credits</div>
+        <div class="pc-price"><sup>$</sup>74.99</div>
+        <div class="pc-per">$5.00 per report</div>
+        <div class="pc-save">Save 50% vs single</div>
+        <hr class="pc-divider"/>
+        <ul class="pc-feats">
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Flippers &amp; exporters</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>US &amp; Gulf pre-import checks</li>
+        </ul>
+        <a href="/checkout?bundle=b15" class="btn-buy">Buy 15 credits →</a>
+      </div>
+      <div class="pc glow-card rv rv-5" onclick="goCheckoutBundle('b25')">
+        <div class="pc-name">25 Credits</div>
+        <div class="pc-price"><sup>$</sup>99.99</div>
+        <div class="pc-per">$4.00 per report</div>
+        <div class="pc-save">Save 60% vs single</div>
+        <hr class="pc-divider"/>
+        <ul class="pc-feats">
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Dealer &amp; bulk buying</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Lowest price per report</li>
+        </ul>
+        <a href="/checkout?bundle=b25" class="btn-buy">Buy 25 credits →</a>
       </div>
     </div>
+    <p class="rv" style="font-size:.8rem;color:var(--muted);margin-top:1.5rem;text-align:center">Full comparison, FAQs and bulk-buying guides on the <a href="/bundles" style="color:var(--accent);font-weight:600">bundles page →</a></p>
   </div>
 </div>
 
@@ -989,33 +1012,33 @@
     <div class="sec-tag rv">What You Get</div>
     <h2 class="rv rv-1">Everything in <em>one report.</em></h2>
     <p class="sec-sub rv rv-2">Comprehensive vehicle history — all for $9.99.</p>
-    <div class="feat-grid">
-      <div class="fc rv rv-1">
+    <div class="feat-grid bento">
+      <div class="fc glow-card rv rv-1">
         <svg class="fc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         <div class="fc-t">Accident History</div>
         <div class="fc-d">Full accident records including damage severity, airbag deployments, and structural damage.</div>
       </div>
-      <div class="fc rv rv-2">
+      <div class="fc glow-card rv rv-2">
         <svg class="fc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         <div class="fc-t">Title Records</div>
         <div class="fc-d">Salvage, rebuilt, flood, lemon, and junk title brands — every red flag before you buy.</div>
       </div>
-      <div class="fc rv rv-3">
+      <div class="fc glow-card rv rv-3">
         <svg class="fc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <div class="fc-t">Ownership History</div>
         <div class="fc-d">Number of owners, usage type (personal, rental, fleet, taxi), and geographic history.</div>
       </div>
-      <div class="fc rv rv-4">
+      <div class="fc glow-card rv rv-4">
         <svg class="fc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
         <div class="fc-t">Odometer Check</div>
         <div class="fc-d">Detect mileage rollbacks and discrepancies that sellers try to hide.</div>
       </div>
-      <div class="fc rv rv-5">
+      <div class="fc glow-card rv rv-5">
         <svg class="fc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
         <div class="fc-t">Service Records</div>
         <div class="fc-d">Oil changes, repairs, recalls, and maintenance history from verified shops and dealers.</div>
       </div>
-      <div class="fc rv rv-6">
+      <div class="fc glow-card rv rv-6">
         <svg class="fc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <div class="fc-t">Recall Information</div>
         <div class="fc-d">Outstanding manufacturer recalls and whether they've been resolved — critical safety info.</div>
@@ -1079,14 +1102,14 @@
     <div class="cmp-table">
       <div class="cmp-h rv rv-1"><span>Feature</span><span class="us">VINRecordHub</span><span>Carfax® Direct</span><span>AutoCheck® Direct</span></div>
       <div class="cmp-r rv rv-2"><span class="cmp-lbl" style="font-weight:600;color:var(--text)">Price per report</span><span class="c-good">$9.99</span><span class="c-bad">$44.99</span><span class="c-bad">$24.99</span></div>
-      <div class="cmp-r rv rv-3"><span class="cmp-lbl">Combo (both reports)</span><span class="c-good">$14.99</span><span class="c-bad">$69.98</span><span class="c-bad">$69.98</span></div>
+      <div class="cmp-r rv rv-3"><span class="cmp-lbl">Both reports (2 credits)</span><span class="c-good">from $13.32</span><span class="c-bad">$69.98</span><span class="c-bad">$69.98</span></div>
       <div class="cmp-r rv rv-4"><span class="cmp-lbl">Subscription required</span><span class="c-yes">✓ None</span><span class="c-no">✗ Required</span><span class="c-no">✗ Required</span></div>
       <div class="cmp-r rv rv-5"><span class="cmp-lbl">Accident history</span><span class="c-yes">✓</span><span class="c-yes">✓</span><span class="c-yes">✓</span></div>
       <div class="cmp-r rv rv-6"><span class="cmp-lbl">Title records</span><span class="c-yes">✓</span><span class="c-yes">✓</span><span class="c-yes">✓</span></div>
       <div class="cmp-r rv rv-6"><span class="cmp-lbl">Instant delivery</span><span class="c-yes">✓</span><span class="c-yes">✓</span><span class="c-yes">✓</span></div>
       <div class="cmp-r rv rv-6"><span class="cmp-lbl">Money-back guarantee</span><span class="c-yes">✓</span><span class="c-no">✗</span><span class="c-no">✗</span></div>
     </div>
-    <p style="font-size:.67rem;color:oklch(30% .008 252);margin-top:.9rem;text-align:center">* Competitor pricing from Carfax.com and AutoCheck.com. Subject to change.</p>
+    <p style="font-size:.67rem;color:var(--text-faint);margin-top:.9rem;text-align:center">* Competitor pricing from Carfax.com and AutoCheck.com. Subject to change.</p>
   </div>
 </div>
 
@@ -1143,7 +1166,7 @@
         <div class="f-tagline">Instant vehicle history powered by Carfax® &amp; AutoCheck®.</div>
       </div>
       <div class="f-links">
-        <div class="f-col"><h4>Product</h4><a href="#how">How it Works</a><a href="#pricing">Pricing</a><a href="#compare">Compare</a></div>
+        <div class="f-col"><h4>Product</h4><a href="#how">How it Works</a><a href="/bundles">Credit Bundles</a><a href="#compare">Compare</a><a href="/blog/carfax-vs-autocheck">Carfax vs AutoCheck</a><a href="/blog/bulk-vin-reports-for-dealers">Bulk Reports for Dealers</a></div>
         <div class="f-col"><h4>Support</h4><a href="#faq">FAQ</a><a href="mailto:support@vinrecordhub.com">Contact Us</a><a href="mailto:support@vinrecordhub.com">support@vinrecordhub.com</a></div>
         <div class="f-col"><h4>Legal</h4><a href="/terms">Terms of Service</a><a href="/privacy">Privacy Policy</a></div>
       </div>
@@ -1250,9 +1273,9 @@ window.addEventListener('load',function(){
     const v=inp.value.trim(),err=document.getElementById('vinErr'),lk=document.getElementById('vinLk'),ctr=document.getElementById('vinCount');
     if(ctr) ctr.textContent=v.length>0&&v.length<17?v.length+'/17 characters entered':v.length===17?'':'';
     if(!v){inp.style.borderColor='';inp.setAttribute('aria-invalid','false');err.style.display='none';lk.className='vin-lk';return true}
-    if(v.length<17){inp.style.borderColor='oklch(80% .18 72 / .4)';inp.setAttribute('aria-invalid','true');err.style.display='none';lk.className='vin-lk';clearTimeout(vtimer);return false}
-    if(!isValidVin(v)){inp.style.borderColor='oklch(62% .22 26 / .5)';inp.setAttribute('aria-invalid','true');err.textContent='Invalid VIN — cannot contain letters I, O, or Q';err.style.display='block';return false}
-    inp.style.borderColor='oklch(72% .18 155 / .5)';inp.setAttribute('aria-invalid','false');err.style.display='none';
+    if(v.length<17){inp.style.borderColor='var(--warning)';inp.setAttribute('aria-invalid','true');err.style.display='none';lk.className='vin-lk';clearTimeout(vtimer);return false}
+    if(!isValidVin(v)){inp.style.borderColor='var(--danger)';inp.setAttribute('aria-invalid','true');err.textContent='Invalid VIN — cannot contain letters I, O, or Q';err.style.display='block';return false}
+    inp.style.borderColor='var(--success)';inp.setAttribute('aria-invalid','false');err.style.display='none';
     if(ctr) ctr.textContent='';
     clearTimeout(vtimer);vtimer=setTimeout(()=>lookupVin(v),300);return true;
   }
@@ -1264,20 +1287,20 @@ window.addEventListener('load',function(){
   function goCheckout(){
     const v=document.getElementById('heroVin').value.trim(),err=document.getElementById('vinErr');
     if(!isValidVin(v)){
-      document.getElementById('heroVin').style.borderColor='oklch(62% .22 26 / .6)';
+      document.getElementById('heroVin').style.borderColor='color-mix(in oklab, var(--danger) 60%, transparent)';
       err.textContent=v.length===0?'Please enter your 17-character VIN':v.length<17?`VIN must be 17 characters — you've entered ${v.length}`:'Invalid VIN — cannot contain I, O, or Q';
       err.style.display='block';document.getElementById('heroVin').focus();return;
     }
     gaPush('vin_submitted', {vin_length: v.length});
-    gaPush('checkout_initiated', {plan: 'standard', source: 'hero'});
-    window.location.href=`/checkout?vin=${encodeURIComponent(v)}&plan=standard`;
+    gaPush('checkout_initiated', {bundle: 'b1', source: 'hero'});
+    window.location.href=`/checkout?bundle=b1&vin=${encodeURIComponent(v)}`;
   }
 
-  function goCheckoutPlan(p){
+  function goCheckoutBundle(b){
     const v=document.getElementById('heroVin').value.trim();
     const vp=isValidVin(v)?`&vin=${encodeURIComponent(v)}`:'';
-    gaPush('checkout_initiated', {plan: p, source: 'pricing'});
-    window.location.href=`/checkout?plan=${p}${vp}`;
+    gaPush('checkout_initiated', {bundle: b, source: 'pricing'});
+    window.location.href=`/checkout?bundle=${b}${vp}`;
   }
 
   document.getElementById('heroVin').addEventListener('keypress',e=>{if(e.key==='Enter')goCheckout()});
@@ -1391,7 +1414,8 @@ window.addEventListener('load',function(){
   });
 
 </script>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.172.0/build/three.module.js"}}</script>
-<script type="module" src="/blog/blog-3d.js"></script>
+<script src="/assets/theme.js" defer></script>
+<script src="/assets/fx.js" defer></script>
+<script src="/assets/fx-aurora.js" defer></script>
 </body>
 </html>

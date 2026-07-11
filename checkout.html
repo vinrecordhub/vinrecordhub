@@ -137,6 +137,24 @@
       padding:.18rem .75rem;border-radius:0 0 6px 6px;white-space:nowrap}
     .disclaimer{font-size:.65rem;color:var(--faint);margin-top:.75rem;line-height:1.55}
 
+    /* friendly bundles nudge for single-report buyers */
+    .bundle-tip{display:flex;align-items:flex-start;gap:.6rem;margin-top:.75rem;
+      padding:.75rem .9rem;border-radius:10px;
+      font-size:.8rem;line-height:1.55;color:var(--text-muted);
+      background:color-mix(in oklab, var(--accent) 7%, var(--surface));
+      border:1px solid color-mix(in oklab, var(--accent) 22%, transparent);
+      animation:tipIn .35s var(--ease)}
+    @keyframes tipIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+    .bundle-tip[hidden]{display:none}
+    .bundle-tip svg{flex-shrink:0;color:var(--accent);margin-top:.1rem}
+    .bundle-tip strong{color:var(--text)}
+    .bundle-tip a{color:var(--accent);font-weight:700;text-decoration:none;white-space:nowrap}
+    .bundle-tip a:hover{text-decoration:underline}
+    .bt-x{margin-left:auto;background:none;border:none;color:var(--muted);
+      cursor:pointer;font-size:.85rem;padding:.1rem .3rem;flex-shrink:0;line-height:1}
+    .bt-x:hover{color:var(--text)}
+    @media(prefers-reduced-motion:reduce){.bundle-tip{animation:none}}
+
     /* COUPON */
     .coupon-row{display:flex;gap:.5rem}
     .coupon-row .fi{flex:1}
@@ -309,6 +327,11 @@
           <div class="plan-badge">Save $5 — most thorough check</div>
         </div>
       </div>
+      <div class="bundle-tip" id="bundleTip" role="note" hidden>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2.2-2.5 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span>Checking more than one car? <strong>Credit bundles</strong> bring it down to <strong>$4 per report</strong> — and credits never expire. <a href="/bundles">See bundles →</a></span>
+        <button class="bt-x" type="button" onclick="dismissBundleTip()" aria-label="Dismiss bundles reminder">✕</button>
+      </div>
       <p class="disclaimer">* Carfax® and AutoCheck® are registered trademarks of their respective owners. VINRecordHub is not affiliated with or endorsed by Carfax or AutoCheck.</p>
     </div>
 
@@ -406,8 +429,20 @@ function selectPlan(p) {
   plan = p;
   document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
   document.getElementById('card-' + p).classList.add('active');
+  updateBundleTip(p);
   refreshSummary();
   renderPayPal();
+}
+
+// nudge single-report buyers toward credit bundles; combo buyers are left alone
+function updateBundleTip(p) {
+  let dismissed = false;
+  try { dismissed = sessionStorage.getItem('vrh-bundle-tip') === '1'; } catch (e) {}
+  document.getElementById('bundleTip').hidden = dismissed || p === 'combo';
+}
+function dismissBundleTip() {
+  try { sessionStorage.setItem('vrh-bundle-tip', '1'); } catch (e) {}
+  document.getElementById('bundleTip').hidden = true;
 }
 ['standard','plus','combo'].forEach(p => {
   document.getElementById('card-' + p).addEventListener('click', () => {

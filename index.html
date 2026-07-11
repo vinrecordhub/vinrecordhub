@@ -404,17 +404,14 @@
     .pc:hover{border-color:var(--a-bdr);
       transform:translateY(-6px) rotateX(2deg);
       box-shadow:0 20px 60px var(--shadow-color-strong),0 0 40px var(--a-glow)}
-    .pc.feat{border-color:var(--a-bdr);
-      background:color-mix(in oklab, var(--accent-primary) 4%, transparent);
-      box-shadow:0 0 0 1px var(--a-bdr),0 8px 28px var(--a-glow)}
-    /* bundle card: the one loud card in the row — gradient frame + warm tint */
-    .pc.feat.pc-bundle{border:1px solid transparent;scale:1.03;
+    /* featured cards (combo + bundle): gradient frame + warm tint */
+    .pc.feat{border:1px solid transparent;scale:1.03;
       background:
         linear-gradient(172deg, color-mix(in oklab, var(--accent) 12%, var(--surface)), var(--surface) 58%) padding-box,
         linear-gradient(160deg, var(--accent), color-mix(in oklab, var(--accent) 30%, var(--border2)) 45%, var(--accent-secondary)) border-box;
       box-shadow:0 14px 48px color-mix(in oklab, var(--accent) 16%, transparent)}
-    .pc-bundle .feat-badge{background:linear-gradient(90deg, var(--accent), var(--accent-secondary));color:var(--on-accent)}
-    .pc-bundle .pc-price{background:linear-gradient(120deg, var(--accent), var(--accent-secondary));
+    .pc.feat .feat-badge{background:linear-gradient(90deg, var(--accent), var(--accent-secondary));color:var(--on-accent)}
+    .pc.feat .pc-price{background:linear-gradient(120deg, var(--accent), var(--accent-secondary));
       -webkit-background-clip:text;background-clip:text;color:transparent}
     .pc-chips{display:flex;justify-content:center;align-items:center;gap:.4rem;margin-top:.9rem}
     .pc-chips span{min-width:2.1rem;padding:.28rem .5rem;border-radius:999px;

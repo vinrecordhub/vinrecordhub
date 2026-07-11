@@ -23,6 +23,11 @@
     body{background:var(--bg);color:var(--text);
       font-family:'Inter',-apple-system,sans-serif;font-weight:400;
       min-height:100vh;line-height:1.6;-webkit-font-smoothing:antialiased}
+    /* ambient glow, echoing the homepage hero */
+    body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+      background:
+        radial-gradient(55% 40% at 88% -8%, color-mix(in oklab, var(--accent-primary) 11%, transparent), transparent 70%),
+        radial-gradient(45% 35% at -8% 30%, color-mix(in oklab, var(--accent-secondary) 6%, transparent), transparent 70%)}
 
     /* NAV */
     .nav-shell{position:relative;z-index:10;
@@ -87,15 +92,46 @@
     /* CARDS (shared) */
     .card{background:var(--surface);border:1px solid var(--border-2);border-radius:18px;
       padding:1.75rem 2rem;margin-bottom:1.75rem;
-      box-shadow:0 0 0 1px var(--border),0 16px 48px var(--shadow-color),0 0 40px var(--glow)}
+      box-shadow:0 0 0 1px var(--border),0 16px 48px var(--shadow-color),0 0 40px var(--glow);
+      transition:transform .25s var(--ease),box-shadow .25s}
+    .card:hover{transform:translateY(-2px)}
     .card-title{font-size:1.02rem;font-weight:800;letter-spacing:-.01em;margin-bottom:.3rem}
     .card-sub{font-size:.82rem;color:var(--text-muted);margin-bottom:1.4rem}
+    .ct-row{display:flex;align-items:center;gap:.7rem;margin-bottom:.35rem}
+    .ct-row .card-title{margin-bottom:0}
+    .ct-ico{width:36px;height:36px;border-radius:11px;flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;
+      color:var(--accent-primary);background:var(--a-dim);border:1px solid var(--a-bdr)}
+    .ct-ico svg{width:18px;height:18px}
 
-    /* BALANCE CARD */
-    .balance-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.25rem}
-    .balance-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);margin-bottom:.5rem}
-    .balance-value{font-size:3rem;font-weight:900;letter-spacing:-.05em;color:var(--accent-primary);line-height:1}
-    .balance-value span{font-size:1rem;font-weight:500;color:var(--text-muted);margin-left:.4rem}
+    /* HERO / STATS */
+    .card-hero{border:1px solid transparent;
+      background:
+        linear-gradient(172deg, color-mix(in oklab, var(--accent-primary) 10%, var(--surface)), var(--surface) 60%) padding-box,
+        linear-gradient(160deg, var(--accent-primary), color-mix(in oklab, var(--accent-primary) 30%, var(--border-2)) 45%, var(--accent-secondary)) border-box;
+      box-shadow:0 14px 48px color-mix(in oklab, var(--accent-primary) 14%, transparent)}
+    .hero-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1.4rem}
+    .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+    .stat{background:color-mix(in oklab, var(--bg-elevated) 55%, transparent);
+      border:1px solid var(--border);border-radius:14px;padding:1.15rem 1.3rem}
+    .stat-n{font-size:2.3rem;font-weight:900;letter-spacing:-.04em;line-height:1.15}
+    .stat-n.grad{background:linear-gradient(120deg, var(--accent-primary), var(--accent-secondary));
+      -webkit-background-clip:text;background-clip:text;color:transparent}
+    .stat-l{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);margin-top:.3rem}
+
+    /* PILLS */
+    .pill{display:inline-block;font-size:.68rem;font-weight:700;padding:.16rem .6rem;border-radius:999px;white-space:nowrap}
+    .pill.ok{color:var(--success);background:var(--g-dim);border:1px solid var(--g-bdr)}
+    .pill.warn{color:var(--warning);background:var(--am-dim);border:1px solid var(--am-bdr)}
+    .pill.bad{color:var(--danger);background:var(--r-dim);border:1px solid var(--r-bdr)}
+    .pill.mut{color:var(--text-muted);background:var(--bg-elevated);border:1px solid var(--border-2)}
+
+    /* VIN live check */
+    .vin-status{display:none;align-items:center;gap:.5rem;font-size:.8rem;margin-top:.5rem;font-weight:600}
+    .vin-status.show{display:flex;color:var(--success)}
+    .vin-status.err{display:flex;color:var(--warning)}
+    .vin-status.ldg{display:flex;color:var(--text-muted)}
+
     .btn-cta{background:var(--cta);color:var(--on-cta);font-family:'Inter',sans-serif;
       font-weight:700;font-size:.85rem;padding:.8rem 1.5rem;border-radius:10px;
       text-decoration:none;white-space:nowrap;display:inline-block;min-height:44px;line-height:1.6;
@@ -113,6 +149,7 @@
     .fi::placeholder{color:var(--text-faint);letter-spacing:0}
     .fi:focus{border-color:var(--a-bdr);box-shadow:0 0 0 3px var(--a-dim)}
     .fi.err{border-color:var(--r-bdr);box-shadow:0 0 0 3px var(--r-dim)}
+    .fi.ok{border-color:var(--g-bdr)}
     .fh{font-size:.72rem;color:var(--text-faint);margin-top:.4rem}
 
     .rt-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.4rem}
@@ -125,6 +162,8 @@
     .rt-dot{width:16px;height:16px;border-radius:50%;border:1px solid var(--border-3);
       position:absolute;top:.9rem;right:.9rem}
     .rt-card.active .rt-dot{background:var(--accent-primary);border-color:var(--accent-primary)}
+    .rt-ico{color:var(--accent-primary);margin-bottom:.55rem}
+    .rt-ico svg{width:20px;height:20px}
     .rt-name{font-size:.85rem;font-weight:700;padding-right:1.5rem}
     .rt-sub{font-size:.7rem;color:var(--text-muted);margin-top:.25rem}
 
@@ -166,7 +205,8 @@
       .acct-page{padding:1.75rem 1.25rem 3.5rem}
       .card{padding:1.4rem 1.25rem}
       .rt-grid{grid-template-columns:1fr}
-      .balance-value{font-size:2.4rem}
+      .stat-grid{grid-template-columns:1fr}
+      .stat-n{font-size:1.9rem}
       .fi{font-size:16px}
     }
   </style>
@@ -204,7 +244,7 @@
 
   <div class="acct-header">
     <div>
-      <h1>My Account</h1>
+      <h1>Dashboard</h1>
       <p id="acctEmail"></p>
     </div>
     <button class="btn-logout" id="logoutBtn" type="button">Log Out</button>
@@ -215,24 +255,41 @@
     <button class="btn-resend" id="resendBtn" type="button">Resend email</button>
   </div>
 
-  <div class="card">
-    <h2 class="card-title">Credit Balance</h2>
-    <div class="balance-row">
-      <div>
-        <div class="balance-label">Available Credits</div>
-        <div class="balance-value" id="balanceValue">—<span>credits</span></div>
+  <div class="card card-hero">
+    <div class="hero-top">
+      <div class="ct-row" style="margin-bottom:0">
+        <div class="ct-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5c-.5-.9-1.4-1.5-2.5-1.5-1.7 0-3 1.3-3 3s1.3 3 3 3c1.1 0 2-.6 2.5-1.5"/></svg></div>
+        <h2 class="card-title">Credit Balance</h2>
       </div>
       <a class="btn-cta" href="/bundles">Buy More Credits</a>
+    </div>
+    <div class="stat-grid">
+      <div class="stat">
+        <div class="stat-n grad" id="balanceValue">—</div>
+        <div class="stat-l">Available credits</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n" id="statReports">—</div>
+        <div class="stat-l">Reports generated</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n" id="statPurchased">—</div>
+        <div class="stat-l">Credits purchased</div>
+      </div>
     </div>
   </div>
 
   <div class="card">
-    <h2 class="card-title">Generate a Report</h2>
+    <div class="ct-row">
+      <div class="ct-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+      <h2 class="card-title">Generate a Report</h2>
+    </div>
     <p class="card-sub">1 credit = 1 Carfax® or AutoCheck® report, your choice.</p>
 
     <div class="fg">
       <label class="fl" for="vinInput">Vehicle VIN Number</label>
       <input class="fi" type="text" id="vinInput" placeholder="17-character VIN" maxlength="17" autocomplete="off" spellcheck="false" aria-describedby="vinHint" aria-invalid="false"/>
+      <div class="vin-status" id="vinStatus" role="status" aria-live="polite"><span id="vinStatusIco"></span><span id="vinStatusTxt"></span></div>
       <div class="fh" id="vinHint">Found on dashboard, door jamb, or vehicle title.</div>
     </div>
 
@@ -240,11 +297,13 @@
     <div class="rt-grid" role="group" aria-labelledby="rtLabel">
       <div class="rt-card active" id="rt-carfax" data-report-type="carfax">
         <div class="rt-dot"></div>
+        <div class="rt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
         <div class="rt-name">Carfax® Report</div>
         <div class="rt-sub">Accident &amp; title history</div>
       </div>
       <div class="rt-card" id="rt-autocheck" data-report-type="autocheck">
         <div class="rt-dot"></div>
+        <div class="rt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17h14M6.5 17l1-4.5h9l1 4.5M8 12.5 9.5 8h5L16 12.5"/><circle cx="7.5" cy="19" r="1.5"/><circle cx="16.5" cy="19" r="1.5"/></svg></div>
         <div class="rt-name">AutoCheck® Report</div>
         <div class="rt-sub">By Experian</div>
       </div>
@@ -255,7 +314,10 @@
   </div>
 
   <div class="card">
-    <h2 class="card-title">Transaction History</h2>
+    <div class="ct-row">
+      <div class="ct-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg></div>
+      <h2 class="card-title">Transaction History</h2>
+    </div>
     <div class="table-scroll">
       <table class="hist-table" id="historyTable" style="display:none">
         <thead><tr><th>Date</th><th>Reason</th><th>Credits</th></tr></thead>
@@ -266,7 +328,10 @@
   </div>
 
   <div class="card">
-    <h2 class="card-title">Order History</h2>
+    <div class="ct-row">
+      <div class="ct-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+      <h2 class="card-title">Order History</h2>
+    </div>
     <div class="table-scroll">
       <table class="hist-table" id="ordersTable" style="display:none">
         <thead><tr><th>Date</th><th>Order</th><th>Amount</th><th>Status</th></tr></thead>
@@ -302,9 +367,43 @@ function fmtDate(d){try{return new Date(d).toLocaleDateString('en-US',{month:'sh
     });
   });
 
+  // Live VIN verification — same NHTSA lookup the homepage uses.
+  var vtimer = null;
+  function setVinStatus(cls, ico, txt) {
+    var el = document.getElementById('vinStatus');
+    el.className = 'vin-status' + (cls ? ' ' + cls : '');
+    document.getElementById('vinStatusIco').textContent = ico;
+    document.getElementById('vinStatusTxt').innerHTML = txt;
+  }
+  async function lookupVin(vin) {
+    setVinStatus('ldg', '⏳', 'Looking up vehicle...');
+    try {
+      var r = await fetch('https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/' + vin + '?format=json');
+      var d = await r.json();
+      var res = d && d.Results && d.Results[0];
+      if (!res || res.ErrorCode !== '0' || !res.Make) {
+        setVinStatus('err', '⚠️', 'VIN not found — please double-check');
+        return;
+      }
+      var name = [res.ModelYear, res.Make, res.Model, res.Trim].filter(Boolean).join(' ');
+      setVinStatus('show', '✅', '<strong>' + escHtml(name) + '</strong>');
+    } catch (e) { setVinStatus('', '', ''); }
+  }
   document.getElementById('vinInput').addEventListener('input', function () {
     this.value = this.value.toUpperCase();
     this.classList.remove('err');
+    var vin = this.value.trim();
+    clearTimeout(vtimer);
+    if (vin.length === 17 && isValidVin(vin)) {
+      this.classList.add('ok');
+      vtimer = setTimeout(function () { lookupVin(vin); }, 300);
+    } else if (vin.length === 17) {
+      this.classList.remove('ok');
+      setVinStatus('err', '⚠️', 'Invalid VIN — cannot contain I, O, or Q');
+    } else {
+      this.classList.remove('ok');
+      setVinStatus('', '', '');
+    }
   });
 
   document.getElementById('logoutBtn').addEventListener('click', async function () {
@@ -334,9 +433,9 @@ function fmtDate(d){try{return new Date(d).toLocaleDateString('en-US',{month:'sh
         .eq('id', currentUser.id)
         .single();
       if (error) throw error;
-      el.innerHTML = (data ? data.credit_balance : 0) + '<span>credits</span>';
+      el.textContent = data ? data.credit_balance : 0;
     } catch (err) {
-      el.innerHTML = '0<span>credits</span>';
+      el.textContent = '0';
     }
   }
 
@@ -351,10 +450,28 @@ function fmtDate(d){try{return new Date(d).toLocaleDateString('en-US',{month:'sh
         .order('created_at', { ascending: false })
         .limit(50);
       if (error) throw error;
+
+      // stats tiles are derived from the same rows
+      var spends = 0, purchased = 0;
+      (data || []).forEach(function (row) {
+        if (row.reason === 'spend') spends++;
+        if (row.reason === 'purchase' && row.delta > 0) purchased += row.delta;
+      });
+      document.getElementById('statReports').textContent = spends;
+      document.getElementById('statPurchased').textContent = purchased;
+
       if (!data || !data.length) { table.style.display = 'none'; empty.style.display = 'block'; return; }
+      var REASONS = {
+        purchase: ['Credits purchased', 'ok'],
+        spend: ['Report generated', 'mut'],
+        refund: ['Credit refunded', 'warn'],
+        admin_adjust: ['Adjustment', 'mut'],
+      };
       body.innerHTML = data.map(function (row) {
         var pos = row.delta > 0;
-        return '<tr><td>' + fmtDate(row.created_at) + '</td><td>' + escHtml(row.reason || '') + '</td>' +
+        var r = REASONS[row.reason] || [row.reason || '—', 'mut'];
+        return '<tr><td>' + fmtDate(row.created_at) + '</td>' +
+          '<td><span class="pill ' + r[1] + '">' + escHtml(r[0]) + '</span></td>' +
           '<td class="hist-delta ' + (pos ? 'pos' : 'neg') + '">' + (pos ? '+' : '') + row.delta + '</td></tr>';
       }).join('');
       table.style.display = 'table'; empty.style.display = 'none';
@@ -376,14 +493,21 @@ function fmtDate(d){try{return new Date(d).toLocaleDateString('en-US',{month:'sh
         .limit(20);
       if (error) throw error;
       if (!data || !data.length) { table.style.display = 'none'; empty.style.display = 'block'; return; }
-      var CREDITS = { b1: 1, b3: 3, b10: 10, b15: 15, b25: 25 };
+      var CREDITS = { b3: 3, b10: 10, b15: 15, b25: 25 };
+      var STATUS = {
+        granted: ['Completed', 'ok'],
+        created: ['Pending', 'mut'],
+        paid: ['Processing', 'warn'],
+        failed: ['Failed', 'bad'],
+        canceled: ['Canceled', 'mut'],
+      };
       body.innerHTML = data.map(function (row) {
         var n = row.credits || CREDITS[row.bundle_id] || '?';
         var label = n + ' credit' + (n === 1 ? '' : 's');
         var amount = (row.amount_due_usd != null) ? '$' + Number(row.amount_due_usd).toFixed(2) : '—';
-        var status = row.status || '—';
+        var s = STATUS[row.status] || [row.status || '—', 'mut'];
         return '<tr><td>' + fmtDate(row.created_at) + '</td><td>' + escHtml(label) + '</td>' +
-          '<td>' + escHtml(amount) + '</td><td>' + escHtml(String(status)) + '</td></tr>';
+          '<td>' + escHtml(amount) + '</td><td><span class="pill ' + s[1] + '">' + escHtml(s[0]) + '</span></td></tr>';
       }).join('');
       table.style.display = 'table'; empty.style.display = 'none';
     } catch (err) {

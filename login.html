@@ -94,6 +94,7 @@
 
     /* MESSAGES */
     .msg{font-size:.82rem;padding:.7rem 1rem;border-radius:8px;margin-top:1rem;display:none;line-height:1.5}
+    .msg:empty{display:none}
     .msg.err{display:block;background:var(--r-dim);border:1px solid var(--r-bdr);color:var(--danger)}
     .msg.ok{display:block;background:var(--g-dim);border:1px solid var(--g-bdr);color:var(--success)}
 
@@ -148,7 +149,7 @@
         <input class="fi" type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" required/>
       </div>
       <button class="btn-submit" type="submit" id="submitBtn">Log In</button>
-      <div class="msg err" id="errMsg" role="alert" aria-live="assertive"></div>
+      <div class="msg" id="errMsg" role="alert" aria-live="assertive"></div>
     </form>
 
     <p class="auth-foot">Don't have an account? <a href="/signup" id="signupLink">Sign up</a></p>

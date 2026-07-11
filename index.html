@@ -195,6 +195,26 @@
       transition:border-color .2s,background .2s,transform .2s var(--ease)}
     .nav-links a.nav-login:hover{border-color:var(--a-bdr);
       background:var(--bg-elevated);transform:translateY(-1px)}
+    .nav-acct{position:relative}
+    .nav-acct-btn{display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;
+      color:var(--text);font-family:inherit;font-size:.78rem;font-weight:700;
+      padding:.5rem 1.05rem;border-radius:8px;border:1px solid var(--border2);
+      background:var(--surface);
+      transition:border-color .2s,background .2s,transform .2s var(--ease)}
+    .nav-acct-btn:hover{border-color:var(--a-bdr);background:var(--bg-elevated);transform:translateY(-1px)}
+    .nav-acct-menu{position:absolute;right:0;top:calc(100% + .55rem);min-width:180px;
+      background:var(--surface);border:1px solid var(--border2);border-radius:12px;
+      padding:.4rem;display:none;flex-direction:column;
+      box-shadow:0 16px 48px var(--shadow-color-strong);z-index:150}
+    .nav-acct.open .nav-acct-menu{display:flex}
+    .nav-acct-menu a,.nav-acct-menu button{display:block;width:100%;text-align:left;
+      font-family:inherit;font-size:.82rem;font-weight:600;color:var(--muted);
+      padding:.55rem .75rem;border-radius:8px;text-decoration:none;
+      background:none;border:none;cursor:pointer;transition:background .15s,color .15s}
+    .nav-acct-menu a:hover,.nav-acct-menu button:hover{background:var(--bg-elevated);color:var(--text)}
+    .nav-acct-menu button{color:var(--danger, #e5484d)}
+    .m-logout{background:none;border:none;cursor:pointer;font-family:inherit;
+      font-size:1.5rem;font-weight:700;color:var(--text)}
     .burger{display:none;flex-direction:column;gap:5px;
       background:none;border:none;cursor:pointer;padding:4px;
       min-width:44px;min-height:44px;align-items:center;justify-content:center}
@@ -815,6 +835,15 @@
         <a href="mailto:support@vinrecordhub.com">Support</a>
         <a href="#pricing" class="nav-cta">Get Report — $9.99</a>
         <a href="/login" class="nav-login" id="navLogin">Log In</a>
+        <div class="nav-acct" id="navAcct" hidden>
+          <button class="nav-acct-btn" id="navAcctBtn" type="button" aria-haspopup="true" aria-expanded="false">My Account <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="nav-acct-menu" id="navAcctMenu">
+            <a href="/account">Dashboard</a>
+            <a href="/buy-credits">Buy Credits</a>
+            <a href="/bundles">Bundles</a>
+            <button type="button" id="navLogoutBtn">Log Out</button>
+          </div>
+        </div>
       </div>
       <a href="https://www.instagram.com/vinrecordhub/" target="_blank" rel="noopener" class="nav-ig" aria-label="Follow VINRecordHub on Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a><button class="theme-toggle" data-theme-toggle type="button" aria-label="Switch to light theme"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
       <button class="burger" id="menuBtn" onclick="openM()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mMenu"><span></span><span></span><span></span></button>
@@ -831,6 +860,7 @@
   <a href="/blog" onclick="closeM()">Blog</a>
   <a href="mailto:support@vinrecordhub.com" onclick="closeM()">Support</a>
   <a href="/login" onclick="closeM()" id="mNavLogin">Log In</a>
+  <button type="button" class="m-logout" id="mNavLogout" hidden>Log Out</button>
   <a href="#pricing" onclick="closeM()" class="hi">Get Report →</a>
 </div>
 
@@ -1513,5 +1543,39 @@ window.addEventListener('load',function(){
 <script src="/assets/theme.js" defer></script>
 <script src="/assets/fx.js" defer></script>
 <script src="/assets/fx-aurora.js" defer></script>
+<script src="/assets/vendor/supabase.js" defer></script>
+<script src="/assets/supabase-config.js" defer></script>
+<script src="/assets/auth.js" defer></script>
+<script>
+// Swap "Log In" for the account menu when a session exists (deferred scripts
+// have run by DOMContentLoaded, so vrhAuth is ready here).
+document.addEventListener('DOMContentLoaded', function () {
+  var acct = document.getElementById('navAcct');
+  var btn = document.getElementById('navAcctBtn');
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var open = acct.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('click', function () {
+    acct.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+  });
+  function logout() { vrhAuth.signOut().then(function () { location.reload(); }); }
+  document.getElementById('navLogoutBtn').addEventListener('click', logout);
+  document.getElementById('mNavLogout').addEventListener('click', logout);
+
+  if (!window.vrhAuth) return;
+  vrhAuth.getSession().then(function (session) {
+    if (!session) return;
+    document.getElementById('navLogin').hidden = true;
+    acct.hidden = false;
+    var mLogin = document.getElementById('mNavLogin');
+    mLogin.textContent = 'Dashboard';
+    mLogin.href = '/account';
+    document.getElementById('mNavLogout').hidden = false;
+  });
+});
+</script>
 </body>
 </html>

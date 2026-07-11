@@ -189,6 +189,12 @@
     .nav-cta:hover{background:var(--cta);color:var(--on-cta);
       border-color:var(--cta);transform:translateY(-1px);
       box-shadow:0 6px 20px color-mix(in oklab, var(--cta) 20%, transparent)}
+    .nav-links a.nav-login{color:var(--text);font-size:.78rem;font-weight:700;
+      padding:.5rem 1.05rem;border-radius:8px;border:1px solid var(--border2);
+      background:var(--surface);
+      transition:border-color .2s,background .2s,transform .2s var(--ease)}
+    .nav-links a.nav-login:hover{border-color:var(--a-bdr);
+      background:var(--bg-elevated);transform:translateY(-1px)}
     .burger{display:none;flex-direction:column;gap:5px;
       background:none;border:none;cursor:pointer;padding:4px;
       min-width:44px;min-height:44px;align-items:center;justify-content:center}
@@ -392,6 +398,7 @@
     @media(max-width:600px){.bulk-strip{flex-direction:column;text-align:center;align-items:stretch}.bulk-cta{text-align:center}}
     .pc{background:var(--surface);border:1px solid var(--border2);
       border-radius:16px;padding:2rem;cursor:pointer;position:relative;
+      text-align:center;
       transition:border-color .3s var(--ease),transform .3s var(--ease),box-shadow .3s;
       transform-style:preserve-3d}
     .pc:hover{border-color:var(--a-bdr);
@@ -400,20 +407,36 @@
     .pc.feat{border-color:var(--a-bdr);
       background:color-mix(in oklab, var(--accent-primary) 4%, transparent);
       box-shadow:0 0 0 1px var(--a-bdr),0 8px 28px var(--a-glow)}
+    /* bundle card: the one loud card in the row — gradient frame + warm tint */
+    .pc.feat.pc-bundle{border:1px solid transparent;scale:1.03;
+      background:
+        linear-gradient(172deg, color-mix(in oklab, var(--accent) 12%, var(--surface)), var(--surface) 58%) padding-box,
+        linear-gradient(160deg, var(--accent), color-mix(in oklab, var(--accent) 30%, var(--border2)) 45%, var(--accent-secondary)) border-box;
+      box-shadow:0 14px 48px color-mix(in oklab, var(--accent) 16%, transparent)}
+    .pc-bundle .feat-badge{background:linear-gradient(90deg, var(--accent), var(--accent-secondary));color:var(--on-accent)}
+    .pc-bundle .pc-price{background:linear-gradient(120deg, var(--accent), var(--accent-secondary));
+      -webkit-background-clip:text;background-clip:text;color:transparent}
+    .pc-chips{display:flex;justify-content:center;align-items:center;gap:.4rem;margin-top:.9rem}
+    .pc-chips span{min-width:2.1rem;padding:.28rem .5rem;border-radius:999px;
+      font-size:.74rem;font-weight:800;color:var(--accent);
+      background:color-mix(in oklab, var(--accent) 12%, transparent);
+      border:1px solid color-mix(in oklab, var(--accent) 30%, transparent)}
+    .pc-chips em{font-style:normal;font-size:.7rem;font-weight:600;color:var(--muted);margin-left:.2rem}
     .feat-badge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);
       background:var(--cta);color:var(--on-cta);
       font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
       padding:.22rem 1rem;border-radius:0 0 8px 8px;white-space:nowrap}
-    .pc-name{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-      color:var(--muted);margin-bottom:1.25rem}
+    .pc-name{font-size:.8rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--text);margin-bottom:1.25rem}
     .pc-price{font-size:2.75rem;font-weight:900;letter-spacing:-.06em;line-height:1}
-    .pc-price sup{font-size:1.1rem;vertical-align:super;color:var(--accent)}
+    .pc-price sup{font-size:1.1rem;vertical-align:super;color:var(--accent);
+      letter-spacing:0;margin-right:.14em}
     .pc-per{font-size:.75rem;color:var(--muted);margin-top:.3rem}
     .pc-save{font-size:.7rem;color:var(--green);font-weight:600;margin-top:.25rem}
     .pc-divider{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
     .pc-feats{list-style:none;display:flex;flex-direction:column;gap:.5rem}
     .pc-feats li{font-size:.83rem;color:var(--text-muted);
-      display:flex;align-items:center;gap:.6rem}
+      display:flex;align-items:center;justify-content:center;gap:.6rem}
     .pc-feats li svg{flex-shrink:0;color:var(--green)}
     .btn-buy{display:block;text-align:center;margin-top:1.75rem;padding:.8rem;
       border-radius:10px;font-size:.84rem;font-weight:700;text-decoration:none;
@@ -812,8 +835,8 @@
         <a href="#faq">FAQ</a>
         <a href="/blog">Blog</a>
         <a href="mailto:support@vinrecordhub.com">Support</a>
-        <a href="/login" id="navLogin">Log In</a>
         <a href="#pricing" class="nav-cta">Get Report — $9.99</a>
+        <a href="/login" class="nav-login" id="navLogin">Log In</a>
       </div>
       <a href="https://www.instagram.com/vinrecordhub/" target="_blank" rel="noopener" class="nav-ig" aria-label="Follow VINRecordHub on Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a><button class="theme-toggle" data-theme-toggle type="button" aria-label="Switch to light theme"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
       <button class="burger" id="menuBtn" onclick="openM()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mMenu"><span></span><span></span><span></span></button>
@@ -1017,9 +1040,9 @@
         <div class="pc-price"><span class="pc-from">from</span><sup>$</sup>4<span class="pc-price-dec">.00</span></div>
         <div class="pc-per">per report, in bulk</div>
         <div class="pc-save">Buy once — credits never expire</div>
+        <div class="pc-chips"><span>3</span><span>10</span><span>15</span><span>25</span><em>credits</em></div>
         <hr class="pc-divider"/>
         <ul class="pc-feats">
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>3, 10, 15 or 25 credits</li>
           <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>1 credit = Carfax® or AutoCheck®</li>
           <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Your choice, every time</li>
           <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Credits never expire</li>

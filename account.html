@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96"/>
+  <link rel="shortcut icon" href="/favicon.ico"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+  <link rel="manifest" href="/site.webmanifest"/>
+  <meta name="theme-color" content="#0b0d1c"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script>(function(){try{var t=localStorage.getItem('vrh-theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();</script>
+  <link rel="stylesheet" href="/assets/theme.css"/>
+  <title>My Account — VINRecordHub</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"/></noscript>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{ --max:1160px; --pad:clamp(1.25rem,5vw,3.5rem); }
+    html{overflow-x:hidden}
+    body{background:var(--bg);color:var(--text);
+      font-family:'Inter',-apple-system,sans-serif;font-weight:400;
+      min-height:100vh;line-height:1.6;-webkit-font-smoothing:antialiased}
+
+    /* NAV */
+    .nav-shell{position:relative;z-index:10;
+      background:var(--overlay-nav);backdrop-filter:blur(20px) saturate(1.8);
+      border-bottom:1px solid var(--border)}
+    nav{max-width:var(--max);margin:0 auto;padding:0 var(--pad);
+      height:62px;display:flex;align-items:center;justify-content:space-between}
+    .logo{display:flex;align-items:center;gap:.5rem;font-size:1rem;font-weight:800;letter-spacing:-.04em;
+      text-decoration:none;color:var(--text)}
+    .logo-mark{flex-shrink:0;display:block}
+    .logo-r{color:var(--accent-primary)}
+    .logo-h{color:var(--text-faint);font-weight:400;letter-spacing:-.02em}
+    .nav-links{display:flex;align-items:center;gap:2rem}
+    .nav-links a{font-size:.84rem;font-weight:500;color:var(--text-muted);
+      text-decoration:none;transition:color .2s var(--ease)}
+    .nav-links a:hover{color:var(--text)}
+    .nav-right{display:flex;align-items:center;gap:1rem}
+    .burger{display:none;flex-direction:column;gap:5px;
+      background:none;border:none;cursor:pointer;padding:4px;
+      min-width:44px;min-height:44px;align-items:center;justify-content:center}
+    .burger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px}
+    .m-menu{display:none;position:fixed;inset:0;z-index:200;
+      background:var(--overlay);
+      flex-direction:column;align-items:center;justify-content:center;gap:2.5rem}
+    .m-menu.open{display:flex}
+    .m-menu a{font-size:1.5rem;font-weight:700;color:var(--text);text-decoration:none}
+    .m-close{position:absolute;top:1.5rem;right:1.5rem;
+      background:none;border:none;color:var(--text-muted);font-size:1.75rem;cursor:pointer;line-height:1}
+
+    /* PAGE */
+    .acct-page{max-width:var(--max);margin:0 auto;padding:2.5rem var(--pad) 5rem;display:none}
+    .acct-page.ready{display:block}
+    .acct-loading{min-height:60vh;display:flex;align-items:center;justify-content:center}
+    .acct-loading.done{display:none}
+    .spinner{width:40px;height:40px;border-radius:50%;
+      border:2px solid var(--border-2);border-top-color:var(--accent-primary);
+      animation:spin .75s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .acct-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1.75rem}
+    .acct-header h1{font-size:1.5rem;font-weight:800;letter-spacing:-.03em}
+    .acct-header p{font-size:.85rem;color:var(--text-muted);margin-top:.25rem}
+    .btn-logout{background:transparent;border:1px solid var(--border-2);color:var(--text-muted);
+      font-family:'Inter',sans-serif;font-weight:600;font-size:.82rem;padding:.6rem 1.1rem;
+      border-radius:9px;cursor:pointer;min-height:44px;
+      transition:color .2s var(--ease),border-color .2s var(--ease),background .2s var(--ease)}
+    .btn-logout:hover{color:var(--text);border-color:var(--border-3);background:color-mix(in oklab,var(--text) 5%,transparent)}
+
+    /* VERIFY BANNER */
+    .verify-banner{display:none;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+      background:var(--am-dim);border:1px solid var(--am-bdr);border-radius:12px;
+      padding:1rem 1.25rem;margin-bottom:1.75rem;font-size:.84rem;color:var(--warning)}
+    .verify-banner.show{display:flex}
+    .verify-banner strong{color:var(--text)}
+    .btn-resend{background:transparent;border:1px solid var(--am-bdr);color:var(--warning);
+      font-family:'Inter',sans-serif;font-weight:700;font-size:.78rem;padding:.5rem 1rem;
+      border-radius:8px;cursor:pointer;white-space:nowrap;min-height:38px;
+      transition:background .2s var(--ease)}
+    .btn-resend:hover{background:color-mix(in oklab,var(--warning) 12%,transparent)}
+    .btn-resend:disabled{opacity:.6;cursor:not-allowed}
+
+    /* CARDS (shared) */
+    .card{background:var(--surface);border:1px solid var(--border-2);border-radius:18px;
+      padding:1.75rem 2rem;margin-bottom:1.75rem;
+      box-shadow:0 0 0 1px var(--border),0 16px 48px var(--shadow-color),0 0 40px var(--glow)}
+    .card-title{font-size:1.02rem;font-weight:800;letter-spacing:-.01em;margin-bottom:.3rem}
+    .card-sub{font-size:.82rem;color:var(--text-muted);margin-bottom:1.4rem}
+
+    /* BALANCE CARD */
+    .balance-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.25rem}
+    .balance-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);margin-bottom:.5rem}
+    .balance-value{font-size:3rem;font-weight:900;letter-spacing:-.05em;color:var(--accent-primary);line-height:1}
+    .balance-value span{font-size:1rem;font-weight:500;color:var(--text-muted);margin-left:.4rem}
+    .btn-cta{background:var(--cta);color:var(--on-cta);font-family:'Inter',sans-serif;
+      font-weight:700;font-size:.85rem;padding:.8rem 1.5rem;border-radius:10px;
+      text-decoration:none;white-space:nowrap;display:inline-block;min-height:44px;line-height:1.6;
+      transition:opacity .15s,transform .15s var(--ease),box-shadow .15s}
+    .btn-cta:hover{opacity:.92;transform:translateY(-1px);box-shadow:0 8px 24px color-mix(in oklab,var(--cta) 30%,transparent)}
+
+    /* GENERATE REPORT */
+    .fg{margin-bottom:1.1rem}
+    .fl{display:block;font-size:.67rem;font-weight:700;letter-spacing:.1em;
+      text-transform:uppercase;color:var(--text-faint);margin-bottom:.5rem}
+    .fi{width:100%;background:var(--bg-elevated);border:1px solid var(--border-2);
+      border-radius:10px;padding:.85rem 1.1rem;color:var(--text);
+      font-family:'Inter',sans-serif;font-size:.92rem;letter-spacing:.04em;outline:none;min-height:44px;
+      transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
+    .fi::placeholder{color:var(--text-faint);letter-spacing:0}
+    .fi:focus{border-color:var(--a-bdr);box-shadow:0 0 0 3px var(--a-dim)}
+    .fi.err{border-color:var(--r-bdr);box-shadow:0 0 0 3px var(--r-dim)}
+    .fh{font-size:.72rem;color:var(--text-faint);margin-top:.4rem}
+
+    .rt-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.4rem}
+    .rt-card{border:1px solid var(--border-2);border-radius:12px;padding:1rem 1.1rem;
+      cursor:pointer;position:relative;background:var(--bg-elevated);min-height:44px;
+      transition:border-color .2s var(--ease),background .2s var(--ease),transform .2s var(--ease)}
+    .rt-card:hover{border-color:var(--a-bdr);background:var(--a-dim)}
+    .rt-card.active{border-color:var(--accent-primary);background:var(--a-dim);
+      box-shadow:0 0 0 1px var(--a-bdr)}
+    .rt-dot{width:16px;height:16px;border-radius:50%;border:1px solid var(--border-3);
+      position:absolute;top:.9rem;right:.9rem}
+    .rt-card.active .rt-dot{background:var(--accent-primary);border-color:var(--accent-primary)}
+    .rt-name{font-size:.85rem;font-weight:700;padding-right:1.5rem}
+    .rt-sub{font-size:.7rem;color:var(--text-muted);margin-top:.25rem}
+
+    .btn-submit{width:100%;background:var(--cta);color:var(--on-cta);border:none;
+      border-radius:10px;padding:.9rem 1.4rem;font-family:'Inter',sans-serif;
+      font-weight:700;font-size:.92rem;cursor:pointer;min-height:44px;
+      transition:opacity .15s,transform .15s var(--ease),box-shadow .15s}
+    .btn-submit:hover{opacity:.92;transform:translateY(-1px);box-shadow:0 8px 24px color-mix(in oklab,var(--cta) 30%,transparent)}
+    .btn-submit:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+
+    .gen-result{margin-top:1.1rem;padding:.9rem 1.1rem;border-radius:10px;font-size:.85rem;
+      display:none;line-height:1.6}
+    .gen-result.ok{display:flex;flex-direction:column;gap:.5rem;background:var(--g-dim);border:1px solid var(--g-bdr);color:var(--success)}
+    .gen-result.err{display:flex;flex-direction:column;gap:.6rem;background:var(--r-dim);border:1px solid var(--r-bdr);color:var(--danger)}
+    .gen-result .btn-cta{align-self:flex-start;padding:.55rem 1.1rem;font-size:.78rem;min-height:38px}
+
+    /* HISTORY TABLE */
+    .hist-table{width:100%;border-collapse:collapse;font-size:.82rem}
+    .hist-table th{text-align:left;font-size:.64rem;font-weight:700;letter-spacing:.08em;
+      text-transform:uppercase;color:var(--text-faint);padding:.5rem .3rem;border-bottom:1px solid var(--border)}
+    .hist-table td{padding:.7rem .3rem;border-bottom:1px solid var(--border);color:var(--text-muted)}
+    .hist-table tr:last-child td{border-bottom:none}
+    .hist-delta{font-weight:700}
+    .hist-delta.pos{color:var(--success)}
+    .hist-delta.neg{color:var(--danger)}
+    .empty-state{font-size:.83rem;color:var(--text-faint);padding:1rem 0;text-align:center}
+    .table-scroll{overflow-x:auto}
+
+    :focus-visible{outline:2px solid var(--accent-primary);outline-offset:3px;border-radius:4px}
+
+    @media(max-width:860px){
+      .nav-links{display:none}
+      .burger{display:flex}
+      nav{height:56px}
+    }
+    @media(max-width:600px){
+      :root{--pad:1.25rem}
+      nav{height:52px}
+      .acct-page{padding:1.75rem 1.25rem 3.5rem}
+      .card{padding:1.4rem 1.25rem}
+      .rt-grid{grid-template-columns:1fr}
+      .balance-value{font-size:2.4rem}
+      .fi{font-size:16px}
+    }
+  </style>
+</head>
+<body>
+
+<div class="nav-shell">
+  <nav aria-label="Main navigation">
+    <a href="/" class="logo">
+      <img class="logo-mark" src="/favicon-96x96.png" width="24" height="24" alt="" aria-hidden="true"/>
+      VIN<span class="logo-r">Record</span><span class="logo-h">Hub</span>
+    </a>
+    <div class="nav-links">
+      <a href="/bundles">Bundles</a>
+      <a href="/blog">Blog</a>
+      <a href="mailto:support@vinrecordhub.com">Support</a>
+    </div>
+    <div class="nav-right">
+      <button class="theme-toggle" data-theme-toggle type="button" aria-label="Switch to light theme"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
+      <button class="burger" id="menuBtn" onclick="openM()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mMenu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+</div>
+
+<div class="m-menu" id="mMenu" role="dialog" aria-modal="true" aria-label="Navigation menu">
+  <button class="m-close" onclick="closeM()" aria-label="Close navigation menu">✕</button>
+  <a href="/bundles" onclick="closeM()">Bundles</a>
+  <a href="/blog" onclick="closeM()">Blog</a>
+  <a href="mailto:support@vinrecordhub.com" onclick="closeM()">Support</a>
+</div>
+
+<div class="acct-loading" id="acctLoading"><div class="spinner"></div></div>
+
+<div class="acct-page" id="acctPage">
+
+  <div class="acct-header">
+    <div>
+      <h1>My Account</h1>
+      <p id="acctEmail"></p>
+    </div>
+    <button class="btn-logout" id="logoutBtn" type="button">Log Out</button>
+  </div>
+
+  <div class="verify-banner" id="verifyBanner" role="status">
+    <span><strong>Your email isn't verified yet.</strong> Verify it to keep full access to your account.</span>
+    <button class="btn-resend" id="resendBtn" type="button">Resend email</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Credit Balance</div>
+    <div class="balance-row">
+      <div>
+        <div class="balance-label">Available Credits</div>
+        <div class="balance-value" id="balanceValue">—<span>credits</span></div>
+      </div>
+      <a class="btn-cta" href="/bundles">Buy More Credits</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Generate a Report</div>
+    <p class="card-sub">1 credit = 1 Carfax® or AutoCheck® report, your choice.</p>
+
+    <div class="fg">
+      <label class="fl" for="vinInput">Vehicle VIN Number</label>
+      <input class="fi" type="text" id="vinInput" placeholder="17-character VIN" maxlength="17" autocomplete="off" spellcheck="false" aria-describedby="vinHint" aria-invalid="false"/>
+      <div class="fh" id="vinHint">Found on dashboard, door jamb, or vehicle title.</div>
+    </div>
+
+    <span class="fl" id="rtLabel">Choose Report Type</span>
+    <div class="rt-grid" role="group" aria-labelledby="rtLabel">
+      <div class="rt-card active" id="rt-carfax" data-report-type="carfax">
+        <div class="rt-dot"></div>
+        <div class="rt-name">Carfax® Report</div>
+        <div class="rt-sub">Accident &amp; title history</div>
+      </div>
+      <div class="rt-card" id="rt-autocheck" data-report-type="autocheck">
+        <div class="rt-dot"></div>
+        <div class="rt-name">AutoCheck® Report</div>
+        <div class="rt-sub">By Experian</div>
+      </div>
+    </div>
+
+    <button class="btn-submit" id="generateBtn" type="button">Generate Report — 1 Credit</button>
+    <div class="gen-result" id="genResult" role="status" aria-live="polite"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Transaction History</div>
+    <div class="table-scroll">
+      <table class="hist-table" id="historyTable" style="display:none">
+        <thead><tr><th>Date</th><th>Reason</th><th>Credits</th></tr></thead>
+        <tbody id="historyBody"></tbody>
+      </table>
+    </div>
+    <div class="empty-state" id="historyEmpty">No transactions yet.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Order History</div>
+    <div class="table-scroll">
+      <table class="hist-table" id="ordersTable" style="display:none">
+        <thead><tr><th>Date</th><th>Order</th><th>Amount</th><th>Status</th></tr></thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
+    </div>
+    <div class="empty-state" id="ordersEmpty">No orders yet.</div>
+  </div>
+
+</div>
+
+<script src="/assets/theme.js" defer></script>
+<script src="/assets/vendor/supabase.js"></script>
+<script src="/assets/supabase-config.js"></script>
+<script src="/assets/auth.js"></script>
+<script>
+function openM(){document.getElementById('mMenu').classList.add('open');document.getElementById('menuBtn').setAttribute('aria-expanded','true');document.body.style.overflow='hidden'}
+function closeM(){document.getElementById('mMenu').classList.remove('open');document.getElementById('menuBtn').setAttribute('aria-expanded','false');document.body.style.overflow=''}
+
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function isValidVin(v){return /^[A-HJ-NPR-Z0-9]{17}$/.test(v)}
+function fmtDate(d){try{return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}catch(e){return ''}}
+
+(function () {
+  var reportType = 'carfax';
+  var currentUser = null;
+
+  document.querySelectorAll('.rt-card').forEach(function (card) {
+    card.addEventListener('click', function () {
+      document.querySelectorAll('.rt-card').forEach(function (c) { c.classList.remove('active'); });
+      card.classList.add('active');
+      reportType = card.getAttribute('data-report-type');
+    });
+  });
+
+  document.getElementById('vinInput').addEventListener('input', function () {
+    this.value = this.value.toUpperCase();
+    this.classList.remove('err');
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', async function () {
+    await vrhAuth.signOut();
+    window.location.href = '/login';
+  });
+
+  document.getElementById('resendBtn').addEventListener('click', async function () {
+    var btn = this;
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    try {
+      await vrhAuth.resendVerification(currentUser.email);
+      btn.textContent = 'Sent!';
+    } catch (err) {
+      btn.textContent = 'Resend email';
+      btn.disabled = false;
+    }
+  });
+
+  async function loadBalance() {
+    var el = document.getElementById('balanceValue');
+    try {
+      var { data, error } = await vrhAuth.client
+        .from('profiles')
+        .select('credit_balance')
+        .eq('id', currentUser.id)
+        .single();
+      if (error) throw error;
+      el.innerHTML = (data ? data.credit_balance : 0) + '<span>credits</span>';
+    } catch (err) {
+      el.innerHTML = '0<span>credits</span>';
+    }
+  }
+
+  async function loadHistory() {
+    var table = document.getElementById('historyTable');
+    var body = document.getElementById('historyBody');
+    var empty = document.getElementById('historyEmpty');
+    try {
+      var { data, error } = await vrhAuth.client
+        .from('credit_transactions')
+        .select('delta,reason,created_at')
+        .order('created_at', { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      if (!data || !data.length) { table.style.display = 'none'; empty.style.display = 'block'; return; }
+      body.innerHTML = data.map(function (row) {
+        var pos = row.delta > 0;
+        return '<tr><td>' + fmtDate(row.created_at) + '</td><td>' + escHtml(row.reason || '') + '</td>' +
+          '<td class="hist-delta ' + (pos ? 'pos' : 'neg') + '">' + (pos ? '+' : '') + row.delta + '</td></tr>';
+      }).join('');
+      table.style.display = 'table'; empty.style.display = 'none';
+    } catch (err) {
+      table.style.display = 'none'; empty.style.display = 'block';
+    }
+  }
+
+  async function loadOrders() {
+    var table = document.getElementById('ordersTable');
+    var body = document.getElementById('ordersBody');
+    var empty = document.getElementById('ordersEmpty');
+    try {
+      var { data, error } = await vrhAuth.client
+        .from('orders')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(20);
+      if (error) throw error;
+      if (!data || !data.length) { table.style.display = 'none'; empty.style.display = 'block'; return; }
+      body.innerHTML = data.map(function (row) {
+        var label = row.bundle_id || row.plan || row.id || '—';
+        var amount = (row.amount_usd != null) ? '$' + Number(row.amount_usd).toFixed(2)
+          : (row.amount != null) ? '$' + Number(row.amount).toFixed(2)
+          : (row.amount_cents != null) ? '$' + (row.amount_cents / 100).toFixed(2)
+          : '—';
+        var status = row.status || row.delivery_status || '—';
+        return '<tr><td>' + fmtDate(row.created_at) + '</td><td>' + escHtml(String(label)) + '</td>' +
+          '<td>' + escHtml(amount) + '</td><td>' + escHtml(String(status)) + '</td></tr>';
+      }).join('');
+      table.style.display = 'table'; empty.style.display = 'none';
+    } catch (err) {
+      table.style.display = 'none'; empty.style.display = 'block';
+    }
+  }
+
+  document.getElementById('generateBtn').addEventListener('click', async function () {
+    var btn = this;
+    var vinInput = document.getElementById('vinInput');
+    var result = document.getElementById('genResult');
+    var vin = vinInput.value.trim().toUpperCase();
+
+    result.className = 'gen-result';
+    result.innerHTML = '';
+
+    if (!isValidVin(vin)) {
+      vinInput.classList.add('err');
+      result.className = 'gen-result err';
+      result.textContent = vin.length === 0 ? 'Please enter your 17-character VIN.' : 'Invalid VIN — must be 17 characters, no I, O, or Q.';
+      return;
+    }
+    vinInput.classList.remove('err');
+
+    btn.disabled = true;
+    btn.textContent = 'Generating...';
+
+    try {
+      var session = await vrhAuth.getSession();
+      var res = await fetch('/api/generate-report', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + session.access_token,
+        },
+        body: JSON.stringify({ vin: vin, reportType: reportType, requestId: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2)) }),
+      });
+      var body = await res.json();
+
+      if (res.ok && body.success) {
+        result.className = 'gen-result ok';
+        result.innerHTML = '<span>Report for <strong>' + escHtml(body.yearMakeModel || vin) + '</strong> is on its way to your email!</span>';
+        loadBalance();
+        loadHistory();
+      } else if (res.status === 402 || (body.error && body.error.code === 'insufficient_credits')) {
+        result.className = 'gen-result err';
+        result.innerHTML = '<span>You don\'t have enough credits for this report.</span><a class="btn-cta" href="/bundles">Buy Credits</a>';
+      } else {
+        result.className = 'gen-result err';
+        result.textContent = (body.error && body.error.message) || 'Something went wrong — please try again.';
+      }
+    } catch (err) {
+      result.className = 'gen-result err';
+      result.textContent = 'Connection issue — please try again.';
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Generate Report — 1 Credit';
+  });
+
+  async function init() {
+    var session = await vrhAuth.requireAuth('/login');
+    if (!session) return;
+    currentUser = session.user;
+
+    document.getElementById('acctEmail').textContent = currentUser.email;
+    if (!vrhAuth.isVerified(currentUser)) {
+      document.getElementById('verifyBanner').classList.add('show');
+    }
+
+    await Promise.all([loadBalance(), loadHistory(), loadOrders()]);
+
+    document.getElementById('acctLoading').classList.add('done');
+    document.getElementById('acctPage').classList.add('ready');
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>

@@ -8,42 +8,22 @@
   <link rel="manifest" href="/site.webmanifest"/>
   <meta name="theme-color" content="#0b0d1c"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script>(function(){try{var t=localStorage.getItem('vrh-theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();</script>
   <title>Admin — VINRecordHub</title>
   <meta name="robots" content="noindex, nofollow"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"/></noscript>
+  <link rel="stylesheet" href="/assets/theme.css"/>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
-      --bg:       oklch(9% 0.018 252);
-      --surface:  oklch(12.5% 0.020 252);
-      --surface2: oklch(16% 0.022 252);
-      --border:   oklch(100% 0 0 / .07);
-      --border2:  oklch(100% 0 0 / .13);
-      --text:     oklch(97% 0.006 252);
-      --muted:    oklch(65% 0.010 252);
-      --faint:    oklch(40% 0.010 252);
-      --accent:   oklch(76% 0.145 52);
-      --a-dim:    oklch(76% 0.145 52 / .08);
-      --a-bdr:    oklch(76% 0.145 52 / .28);
-      --a-glow:   oklch(76% 0.145 52 / .10);
-      --green:    oklch(72% 0.15 155);
-      --g-dim:    oklch(72% 0.15 155 / .08);
-      --g-bdr:    oklch(72% 0.15 155 / .22);
-      --red:      oklch(62% 0.20 26);
-      --r-dim:    oklch(62% 0.20 26 / .08);
-      --r-bdr:    oklch(62% 0.20 26 / .22);
-      --blue:     oklch(68% 0.16 245);
-      --b-dim:    oklch(68% 0.16 245 / .08);
-      --b-bdr:    oklch(68% 0.16 245 / .22);
-      --amber:    oklch(80% 0.18 72);
-      --am-dim:   oklch(80% 0.18 72 / .08);
-      --am-bdr:   oklch(80% 0.18 72 / .22);
-      --purple:   oklch(72% 0.2 290);
-      --ease:     cubic-bezier(0.25,1,0.5,1);
-      --expo:     cubic-bezier(0.16,1,0.3,1);
+      /* orange is this page's CTA-converting accent, not the site's primary purple accent */
+      --accent:  var(--accent-secondary);
+      --a-dim:   color-mix(in oklab, var(--accent-secondary) 8%, transparent);
+      --a-bdr:   color-mix(in oklab, var(--accent-secondary) 28%, transparent);
+      --a-glow:  color-mix(in oklab, var(--accent-secondary) 10%, transparent);
     }
     html{overflow-x:hidden}
     body{background:var(--bg);color:var(--text);
@@ -63,7 +43,7 @@
       padding:2rem;position:relative;z-index:1}
     .login-card{background:var(--surface);border:1px solid var(--border2);
       border-radius:20px;padding:3rem;width:100%;max-width:400px;
-      box-shadow:0 0 0 1px var(--border),0 24px 60px oklch(0% 0 0 / .6),0 0 60px var(--a-glow)}
+      box-shadow:0 0 0 1px var(--border),0 24px 60px var(--shadow-color-strong),0 0 60px var(--a-glow)}
     .login-logo{display:flex;align-items:center;gap:.5rem;font-size:1rem;font-weight:800;letter-spacing:-.04em;margin-bottom:2rem}
     .login-logo .logo-mark{flex-shrink:0;display:block}
     .login-logo .logo-r{color:var(--accent)}
@@ -77,7 +57,7 @@
       transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
     .login-input::placeholder{color:var(--faint)}
     .login-input:focus{border-color:var(--a-bdr);box-shadow:0 0 0 3px var(--a-dim)}
-    .login-btn{width:100%;background:var(--accent);color:oklch(10% .015 252);
+    .login-btn{width:100%;background:var(--cta);color:var(--on-cta);
       border:none;border-radius:9px;padding:1rem;
       font-family:'Inter',sans-serif;font-weight:800;font-size:.92rem;
       cursor:pointer;
@@ -89,7 +69,7 @@
 
     /* ADMIN */
     .admin-wrap{display:none;position:relative;z-index:1}
-    .admin-nav{background:oklch(9% .018 252 / .9);backdrop-filter:blur(20px) saturate(1.8);
+    .admin-nav{background:var(--overlay-nav);backdrop-filter:blur(20px) saturate(1.8);
       border-bottom:1px solid var(--border);
       padding:0 clamp(1.25rem,5vw,3rem);height:62px;
       display:flex;align-items:center;justify-content:space-between;
@@ -104,11 +84,11 @@
       letter-spacing:.1em;text-transform:uppercase;font-weight:700}
     .nav-right{display:flex;align-items:center;gap:1rem}
     .last-updated{font-size:.75rem;color:var(--faint)}
-    .btn-logout{background:oklch(100% 0 0 / .05);border:1px solid var(--border);
+    .btn-logout{background:color-mix(in oklab, var(--text) 5%, transparent);border:1px solid var(--border);
       color:var(--muted);font-size:.8rem;padding:.4rem 1rem;border-radius:6px;
       cursor:pointer;font-family:'Inter',sans-serif;
       transition:color .15s,border-color .15s,background .15s}
-    .btn-logout:hover{color:var(--text);border-color:var(--border2);background:oklch(100% 0 0 / .08)}
+    .btn-logout:hover{color:var(--text);border-color:var(--border2);background:color-mix(in oklab, var(--text) 8%, transparent)}
     .btn-logout:active{transform:scale(0.97)}
 
     .admin-content{padding:2rem;max-width:1300px;margin:0 auto}
@@ -134,19 +114,19 @@
       text-transform:uppercase;color:var(--faint);margin-bottom:.25rem}
     .analytics-title{font-size:1rem;font-weight:700}
     .analytics-controls{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
-    .ga-range-btn{background:oklch(100% 0 0 / .04);border:1px solid var(--border);
+    .ga-range-btn{background:color-mix(in oklab, var(--text) 4%, transparent);border:1px solid var(--border);
       color:var(--muted);font-size:.75rem;padding:.35rem .85rem;border-radius:6px;
       cursor:pointer;font-family:'Inter',sans-serif;
       transition:background .15s,color .15s,border-color .15s}
     .ga-range-btn.active{background:var(--a-dim);border-color:var(--a-bdr);color:var(--accent)}
-    .btn-ga-refresh{background:var(--accent);color:oklch(10% .015 252);border:none;
+    .btn-ga-refresh{background:var(--cta);color:var(--on-cta);border:none;
       font-size:.75rem;font-weight:700;padding:.35rem .85rem;border-radius:6px;
       cursor:pointer;font-family:'Inter',sans-serif;
       display:flex;align-items:center;gap:.35rem;
       transition:opacity .15s}
     .btn-ga-refresh:hover{opacity:.85}
     .btn-ga-refresh:active{transform:scale(0.97)}
-    .btn-ga-link{background:oklch(100% 0 0 / .04);border:1px solid var(--border);
+    .btn-ga-link{background:color-mix(in oklab, var(--text) 4%, transparent);border:1px solid var(--border);
       color:var(--muted);font-size:.75rem;padding:.35rem .85rem;border-radius:6px;
       text-decoration:none;transition:color .15s}
     .btn-ga-link:hover{color:var(--text)}
@@ -186,13 +166,13 @@
       transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
     .search-input::placeholder{color:var(--faint)}
     .search-input:focus{border-color:var(--a-bdr);box-shadow:0 0 0 3px var(--a-dim)}
-    .filter-btn{background:oklch(100% 0 0 / .04);border:1px solid var(--border);
+    .filter-btn{background:color-mix(in oklab, var(--text) 4%, transparent);border:1px solid var(--border);
       color:var(--muted);font-size:.78rem;padding:.5rem 1rem;border-radius:6px;
       cursor:pointer;font-family:'Inter',sans-serif;
       transition:color .15s,border-color .15s,background .15s}
     .filter-btn:hover{color:var(--text);border-color:var(--border2)}
     .filter-btn.active{background:var(--a-dim);border-color:var(--a-bdr);color:var(--accent)}
-    .btn-refresh{background:var(--accent);color:oklch(10% .015 252);border:none;
+    .btn-refresh{background:var(--cta);color:var(--on-cta);border:none;
       border-radius:8px;padding:.6rem 1.25rem;
       font-family:'Inter',sans-serif;font-weight:700;font-size:.82rem;
       cursor:pointer;margin-left:auto;
@@ -205,6 +185,30 @@
     /* TABLE */
     .table-wrap{background:var(--surface);border:1px solid var(--border2);
       border-radius:12px;overflow:hidden}
+    .coupon-header{display:grid;grid-template-columns:1.2fr 1fr 1fr .9fr .7fr .9fr .8fr 130px;
+      padding:.7rem 1.1rem;font-size:.64rem;font-weight:700;letter-spacing:.08em;
+      text-transform:uppercase;color:var(--faint);border-bottom:1px solid var(--border);gap:.5rem}
+    .coupon-row{display:grid;grid-template-columns:1.2fr 1fr 1fr .9fr .7fr .9fr .8fr 130px;
+      padding:.7rem 1.1rem;font-size:.8rem;border-bottom:1px solid var(--border);
+      align-items:center;gap:.5rem}
+    .coupon-row:last-child{border-bottom:none}
+    .coupon-row code{font-family:'Courier New',monospace;font-weight:700;color:var(--accent)}
+    .cpn-badge{font-size:.62rem;font-weight:700;padding:.15rem .5rem;border-radius:100px;
+      display:inline-block;width:fit-content}
+    .cpn-on{background:var(--g-dim);color:var(--green);border:1px solid var(--g-bdr)}
+    .cpn-off{background:var(--r-dim);color:var(--red);border:1px solid var(--r-bdr)}
+    .cpn-btn{background:color-mix(in oklab, var(--text) 6%, transparent);border:1px solid var(--border2);
+      color:var(--text);font-size:.68rem;font-weight:600;padding:.3rem .6rem;border-radius:6px;
+      cursor:pointer;transition:background .15s}
+    .cpn-btn:hover{background:color-mix(in oklab, var(--text) 12%, transparent)}
+    .coupon-form{display:grid;grid-template-columns:1.2fr 1fr .7fr 1fr .9fr .9fr auto;gap:.5rem}
+    @media(max-width:960px){
+      .coupon-form{grid-template-columns:1fr 1fr}
+      .coupon-header,.coupon-row{grid-template-columns:1fr .9fr .8fr 110px}
+      .coupon-header span:nth-child(3),.coupon-row .cpn-bundles,
+      .coupon-header span:nth-child(5),.coupon-row .cpn-peruser,
+      .coupon-header span:nth-child(6),.coupon-row .cpn-expiry{display:none}
+    }
     .table-header{display:grid;grid-template-columns:40px 1.5fr 1fr 104px 76px 108px 96px 84px;
       gap:1rem;padding:.85rem 1.25rem;background:var(--surface2);
       font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;
@@ -212,7 +216,7 @@
     .table-row{display:grid;grid-template-columns:40px 1.5fr 1fr 104px 76px 108px 96px 84px;
       gap:1rem;padding:.95rem 1.25rem;border-top:1px solid var(--border);
       align-items:center;transition:background .15s}
-    .table-row:hover{background:oklch(100% 0 0 / .02)}
+    .table-row:hover{background:color-mix(in oklab, var(--text) 2%, transparent)}
     .row-num{color:var(--faint);font-size:.75rem;font-family:monospace}
     .row-email{font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
     .row-vin{display:block;font-family:'Courier New',monospace;font-size:.7rem;color:var(--faint);
@@ -224,9 +228,9 @@
     .row-orderid:hover{color:var(--green)}
     .plan-tag{display:inline-block;padding:.22rem .65rem;border-radius:4px;
       font-size:.7rem;font-weight:500;letter-spacing:.04em}
-    .plan-carfax{background:var(--a-dim);color:var(--accent);border:1px solid oklch(76% 0.145 52 / .15)}
+    .plan-carfax{background:var(--a-dim);color:var(--accent);border:1px solid color-mix(in oklab, var(--accent-secondary) 15%, transparent)}
     .plan-autocheck{background:var(--g-dim);color:var(--green);border:1px solid var(--g-bdr)}
-    .plan-combo{background:oklch(72% 0.2 290 / .08);color:var(--purple);border:1px solid oklch(72% 0.2 290 / .2)}
+    .plan-combo{background:color-mix(in oklab, var(--purple) 8%, transparent);color:var(--purple);border:1px solid color-mix(in oklab, var(--purple) 20%, transparent)}
     .row-amount{font-weight:700;font-size:.95rem;color:var(--accent)}
     .row-date{font-size:.75rem;color:var(--muted);line-height:1.5}
     .row-date strong{color:var(--text);font-weight:400}
@@ -245,16 +249,16 @@
       padding:1rem 1.25rem;border-top:1px solid var(--border)}
     .page-info{font-size:.8rem;color:var(--muted)}
     .page-btns{display:flex;gap:.5rem}
-    .page-btn{background:oklch(100% 0 0 / .04);border:1px solid var(--border);
+    .page-btn{background:color-mix(in oklab, var(--text) 4%, transparent);border:1px solid var(--border);
       color:var(--muted);padding:.4rem .9rem;border-radius:6px;
       cursor:pointer;font-size:.8rem;font-family:'Inter',sans-serif;
       transition:background .15s,color .15s}
-    .page-btn:hover:not(:disabled){background:oklch(100% 0 0 / .1);color:var(--text)}
+    .page-btn:hover:not(:disabled){background:color-mix(in oklab, var(--text) 10%, transparent);color:var(--text)}
     .page-btn.active{background:var(--a-dim);border-color:var(--a-bdr);color:var(--accent)}
     .page-btn:disabled{opacity:.3;cursor:not-allowed}
 
     .copy-toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);
-      background:var(--accent);color:oklch(10% .015 252);
+      background:var(--cta);color:var(--on-cta);
       padding:.6rem 1.5rem;border-radius:8px;
       font-family:'Inter',sans-serif;font-weight:700;font-size:.85rem;
       opacity:0;transition:opacity .3s;pointer-events:none;z-index:999}
@@ -268,7 +272,7 @@
     .status-delivered{background:var(--g-dim);color:var(--green);border:1px solid var(--g-bdr)}
     .status-partial{background:var(--am-dim);color:var(--amber);border:1px solid var(--am-bdr)}
     .status-failed{background:var(--r-dim);color:var(--red);border:1px solid var(--r-bdr)}
-    .status-pending{background:oklch(100% 0 0 / .05);color:var(--muted);border:1px solid var(--border2)}
+    .status-pending{background:color-mix(in oklab, var(--text) 5%, transparent);color:var(--muted);border:1px solid var(--border2)}
     .status-unknown{color:var(--faint);font-size:.8rem}
 
     /* RESEND BUTTON */
@@ -276,17 +280,17 @@
       font-size:.74rem;font-weight:700;padding:.4rem .8rem;border-radius:6px;
       cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;
       transition:background .15s,transform .15s}
-    .btn-resend:hover{background:oklch(68% 0.16 245 / .16)}
+    .btn-resend:hover{background:color-mix(in oklab, var(--blue) 16%, transparent)}
     .btn-resend:active{transform:scale(0.95)}
 
     /* MODAL */
     .modal-overlay{position:fixed;inset:0;z-index:500;display:none;
       align-items:center;justify-content:center;padding:1.5rem;
-      background:oklch(0% 0 0 / .65);backdrop-filter:blur(6px)}
+      background:var(--shadow-color-strong);backdrop-filter:blur(6px)}
     .modal-overlay.show{display:flex}
     .modal-card{background:var(--surface);border:1px solid var(--border2);
       border-radius:16px;width:100%;max-width:520px;max-height:88vh;overflow-y:auto;
-      box-shadow:0 24px 60px oklch(0% 0 0 / .6),0 0 50px var(--a-glow)}
+      box-shadow:0 24px 60px var(--shadow-color-strong),0 0 50px var(--a-glow)}
     .modal-head{display:flex;align-items:center;justify-content:space-between;
       padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);position:sticky;top:0;
       background:var(--surface);z-index:1}
@@ -310,9 +314,9 @@
       font-weight:700;font-size:.88rem;cursor:pointer;transition:opacity .15s,transform .15s}
     .modal-btn:active{transform:scale(0.98)}
     .modal-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
-    .modal-btn.secondary{background:oklch(100% 0 0 / .05);border:1px solid var(--border2);color:var(--text)}
-    .modal-btn.secondary:hover:not(:disabled){background:oklch(100% 0 0 / .09)}
-    .modal-btn.primary{background:var(--accent);color:oklch(10% .015 252)}
+    .modal-btn.secondary{background:color-mix(in oklab, var(--text) 5%, transparent);border:1px solid var(--border2);color:var(--text)}
+    .modal-btn.secondary:hover:not(:disabled){background:color-mix(in oklab, var(--text) 9%, transparent)}
+    .modal-btn.primary{background:var(--cta);color:var(--on-cta)}
     .modal-btn.primary:hover:not(:disabled){opacity:.9}
     .plan-step{display:flex;align-items:center;justify-content:space-between;gap:.75rem;
       padding:.7rem .9rem;border:1px solid var(--border2);border-radius:9px;margin-bottom:.5rem;
@@ -345,7 +349,7 @@
     .vin-use{background:var(--g-dim);border:1px solid var(--g-bdr);color:var(--green);
       font-size:.72rem;font-weight:700;padding:.32rem .7rem;border-radius:5px;
       cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;flex:none}
-    .vin-use:hover{background:oklch(72% 0.15 155 / .16)}
+    .vin-use:hover{background:color-mix(in oklab, var(--green) 16%, transparent)}
 
     @media(max-width:900px){
       .table-header,.table-row{grid-template-columns:34px 1fr 84px 64px 80px}
@@ -387,6 +391,7 @@
     </div>
     <div class="nav-right">
       <span class="last-updated" id="lastUpdated"></span>
+      <button class="theme-toggle" data-theme-toggle type="button" aria-label="Switch to light theme"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
       <button class="btn-logout" onclick="logout()">Sign Out</button>
     </div>
   </nav>
@@ -530,6 +535,52 @@
       </div>
     </div>
 
+    <!-- COUPONS -->
+    <div class="analytics-section" style="margin-top:2.5rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-bottom:1rem">
+        <h3 style="font-size:1rem;font-weight:800;letter-spacing:-.02em">Checkout Coupons</h3>
+        <button class="btn-refresh" onclick="loadCoupons()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.09"/></svg>
+          Refresh
+        </button>
+      </div>
+
+      <div class="table-wrap" style="margin-bottom:1rem">
+        <div class="coupon-header">
+          <span>Code</span><span>Discount</span><span>Bundles</span><span>Used / Max</span><span>Per-user</span><span>Expires</span><span>Status</span><span></span>
+        </div>
+        <div id="couponBody">
+          <div class="loading-state"><div class="spinner"></div><div>Loading coupons...</div></div>
+        </div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:1.25rem">
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:.9rem">New coupon</div>
+        <div class="coupon-form">
+          <input class="search-input" id="cpnCode" placeholder="CODE" maxlength="32" style="text-transform:uppercase" aria-label="Coupon code"/>
+          <select class="search-input" id="cpnType" aria-label="Discount type">
+            <option value="percent">% off total</option>
+            <option value="fixed_total">$ off total</option>
+            <option value="per_credit">$ off per credit</option>
+          </select>
+          <input class="search-input" id="cpnValue" type="number" min="0.01" step="0.01" placeholder="Value" aria-label="Discount value"/>
+          <select class="search-input" id="cpnBundles" aria-label="Applies to bundles">
+            <option value="">All bundles</option>
+            <option value="b1">b1 only</option>
+            <option value="b3">b3 only</option>
+            <option value="b10">b10 only</option>
+            <option value="b15">b15 only</option>
+            <option value="b25">b25 only</option>
+            <option value="b10,b15,b25">Bulk (b10+b15+b25)</option>
+          </select>
+          <input class="search-input" id="cpnMax" type="number" min="1" step="1" placeholder="Max uses (blank = ∞)" aria-label="Max redemptions"/>
+          <input class="search-input" id="cpnExpiry" type="date" aria-label="Expiry date"/>
+          <button class="btn-refresh" style="justify-content:center" onclick="createCoupon()">+ Create</button>
+        </div>
+        <div id="cpnMsg" style="font-size:.76rem;margin-top:.6rem;min-height:1rem"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -577,6 +628,7 @@
         document.getElementById('adminWrap').style.display = 'block';
         const data = await res.json();
         processData(data);
+        loadCoupons();
       } else {
         document.getElementById('loginErr').style.display = 'block';
         btn.disabled = false;
@@ -610,6 +662,98 @@
     } catch (err) {
       document.getElementById('tableBody').innerHTML =
         `<div class="empty-state"><div class="empty-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><p>Failed to load: ${err.message}</p></div>`;
+    }
+  }
+
+  // ─── COUPONS ──────────────────────────────────────────────
+  async function couponApi(method, path, body) {
+    const res = await fetch(`/api/admin-coupons?token=${encodeURIComponent(adminToken)}${path || ''}`, {
+      method,
+      headers: body ? { 'Content-Type': 'application/json' } : undefined,
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(json?.error?.message || 'Request failed');
+    return json;
+  }
+
+  const DISCOUNT_LABEL = {
+    percent: v => `${v}% off`,
+    fixed_total: v => `$${Number(v).toFixed(2)} off`,
+    per_credit: v => `$${Number(v).toFixed(2)}/credit off`,
+  };
+
+  async function loadCoupons() {
+    const body = document.getElementById('couponBody');
+    try {
+      const { coupons } = await couponApi('GET');
+      if (!coupons.length) {
+        body.innerHTML = '<div class="empty-state" style="padding:1.5rem"><p>No coupons yet.</p></div>';
+        return;
+      }
+      body.innerHTML = coupons.map(c => `
+        <div class="coupon-row">
+          <code>${escH(c.code)}</code>
+          <span>${DISCOUNT_LABEL[c.discount_type] ? DISCOUNT_LABEL[c.discount_type](c.value) : '—'}</span>
+          <span class="cpn-bundles">${c.applies_to && c.applies_to.length ? escH(c.applies_to.join(', ')) : 'all'}</span>
+          <span>${c.redemption_count} / ${c.max_redemptions ?? '∞'}</span>
+          <span class="cpn-peruser">${c.per_user_limit}×</span>
+          <span class="cpn-expiry">${c.expires_at ? new Date(c.expires_at).toLocaleDateString() : '—'}</span>
+          <span class="cpn-badge ${c.is_active ? 'cpn-on' : 'cpn-off'}">${c.is_active ? 'Active' : 'Off'}</span>
+          <span style="display:flex;gap:.35rem;justify-content:flex-end">
+            <button class="cpn-btn" onclick="toggleCoupon(${c.id}, ${!c.is_active})">${c.is_active ? 'Disable' : 'Enable'}</button>
+            <button class="cpn-btn" onclick="editCouponMax(${c.id}, ${c.max_redemptions === null ? 'null' : c.max_redemptions})">Max…</button>
+          </span>
+        </div>`).join('');
+    } catch (err) {
+      body.innerHTML = `<div class="empty-state" style="padding:1.5rem"><p>Failed to load coupons: ${escH(err.message)}</p></div>`;
+    }
+  }
+
+  async function toggleCoupon(id, active) {
+    try {
+      await couponApi('PUT', `&id=${id}`, { is_active: active });
+      loadCoupons();
+    } catch (err) { alert('Update failed: ' + err.message); }
+  }
+
+  async function editCouponMax(id, current) {
+    const raw = prompt('Max total redemptions (blank for unlimited):', current === null ? '' : current);
+    if (raw === null) return;
+    const val = raw.trim() === '' ? null : parseInt(raw, 10);
+    if (val !== null && (!Number.isInteger(val) || val <= 0)) { alert('Enter a positive whole number or leave blank.'); return; }
+    try {
+      await couponApi('PUT', `&id=${id}`, { max_redemptions: val });
+      loadCoupons();
+    } catch (err) { alert('Update failed: ' + err.message); }
+  }
+
+  async function createCoupon() {
+    const msg = document.getElementById('cpnMsg');
+    msg.style.color = 'var(--muted)';
+    msg.textContent = 'Creating…';
+    const bundlesRaw = document.getElementById('cpnBundles').value;
+    const maxRaw = document.getElementById('cpnMax').value.trim();
+    const expiryRaw = document.getElementById('cpnExpiry').value;
+    const payload = {
+      code: document.getElementById('cpnCode').value.trim().toUpperCase(),
+      discount_type: document.getElementById('cpnType').value,
+      value: parseFloat(document.getElementById('cpnValue').value),
+      applies_to: bundlesRaw ? bundlesRaw.split(',') : null,
+      max_redemptions: maxRaw === '' ? null : parseInt(maxRaw, 10),
+      expires_at: expiryRaw ? new Date(expiryRaw + 'T23:59:59Z').toISOString() : null,
+    };
+    try {
+      await couponApi('POST', '', payload);
+      msg.style.color = 'var(--green)';
+      msg.textContent = '✓ Coupon created';
+      document.getElementById('cpnCode').value = '';
+      document.getElementById('cpnValue').value = '';
+      document.getElementById('cpnMax').value = '';
+      loadCoupons();
+    } catch (err) {
+      msg.style.color = 'var(--red)';
+      msg.textContent = '✗ ' + err.message;
     }
   }
 
@@ -964,7 +1108,7 @@
     document.getElementById('adminWrap').style.display = 'block';
     loadOrders();
     loadGA();
-    loadGA();
+    loadCoupons();
   }
 
   // ─── ANALYTICS ────────────────────────────────────────────
@@ -1034,7 +1178,7 @@
                 <span style="font-size:.8rem;font-weight:600">${planNames[plan] || plan}</span>
                 <span style="font-size:.8rem;color:${planColors[plan] || 'var(--accent)'}"><strong>${count}</strong> (${pct}%)</span>
               </div>
-              <div style="height:4px;background:oklch(100% 0 0 / .06);border-radius:2px">
+              <div style="height:4px;background:color-mix(in oklab, var(--text) 6%, transparent);border-radius:2px">
                 <div style="height:4px;background:${planColors[plan] || 'var(--accent)'};border-radius:2px;width:${pct}%;transition:width .5s"></div>
               </div>
             </div>`;
@@ -1053,5 +1197,6 @@
     }
   }
 </script>
+<script src="/assets/theme.js" defer></script>
 </body>
 </html>

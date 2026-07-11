@@ -8,7 +8,8 @@
   <link rel="manifest" href="/site.webmanifest"/>
   <meta name="theme-color" content="#0b0d1c"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Checkout — VINRecordHub</title>
+  <script>(function(){try{var t=localStorage.getItem('vrh-theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();</script>
+  <title>Checkout — Buy Report Credits — VINRecordHub</title>
   <meta name="robots" content="noindex, nofollow"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -23,33 +24,9 @@
   </script>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"/></noscript>
+  <link rel="stylesheet" href="/assets/theme.css"/>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --bg:       oklch(9% 0.018 252);
-      --surface:  oklch(12.5% 0.020 252);
-      --surface2: oklch(16% 0.022 252);
-      --border:   oklch(100% 0 0 / .07);
-      --border2:  oklch(100% 0 0 / .13);
-      --border3:  oklch(100% 0 0 / .22);
-      --text:     oklch(97% 0.006 252);
-      --muted:    oklch(65% 0.010 252);
-      --faint:    oklch(40% 0.010 252);
-      --accent:   oklch(76% 0.145 52);
-      --a-dim:    oklch(76% 0.145 52 / .08);
-      --a-bdr:    oklch(76% 0.145 52 / .28);
-      --a-glow:   oklch(76% 0.145 52 / .10);
-      --green:    oklch(72% 0.15 155);
-      --g-dim:    oklch(72% 0.15 155 / .08);
-      --g-bdr:    oklch(72% 0.15 155 / .22);
-      --red:      oklch(62% 0.20 26);
-      --r-dim:    oklch(62% 0.20 26 / .08);
-      --r-bdr:    oklch(62% 0.20 26 / .22);
-      --amber:    oklch(80% 0.18 72);
-      --blue:     oklch(68% 0.16 245);
-      --ease:     cubic-bezier(0.25,1,0.5,1);
-      --expo:     cubic-bezier(0.16,1,0.3,1);
-    }
     html{overflow-x:hidden}
     body{background:var(--bg);color:var(--text);
       font-family:'Inter',-apple-system,sans-serif;
@@ -63,31 +40,9 @@
       mask-image:radial-gradient(ellipse 60% 50% at 20% 0%,black 0%,transparent 100%);
       opacity:.35;pointer-events:none;z-index:0}
 
-    /* LOADING OVERLAY */
-    #loadingOverlay{display:none;position:fixed;inset:0;z-index:999;
-      background:oklch(9% .018 252 / .97);backdrop-filter:blur(24px);
-      flex-direction:column;align-items:center;justify-content:center;gap:1.75rem}
-    .ov-spinner{width:56px;height:56px;border-radius:50%;
-      border:2px solid var(--border2);border-top-color:var(--accent);
-      animation:spin .75s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .ov-title{font-size:1.05rem;font-weight:700;margin-bottom:.3rem;text-align:center}
-    .ov-sub{font-size:.82rem;color:var(--muted);text-align:center;line-height:1.6}
-    .prog-steps{display:flex;flex-direction:column;gap:.5rem;width:260px}
-    .prog-step{display:flex;align-items:center;gap:.65rem;font-size:.8rem;
-      color:var(--faint);transition:color .3s}
-    .prog-step.lit{color:var(--text)}
-    .prog-step.done{color:var(--green)}
-    .step-badge{width:22px;height:22px;border-radius:50%;
-      background:var(--surface2);border:1px solid var(--border2);
-      display:flex;align-items:center;justify-content:center;
-      font-size:.65rem;font-weight:700;flex-shrink:0;transition:background .3s,border-color .3s,color .3s}
-    .prog-step.lit .step-badge{background:var(--a-dim);border-color:var(--a-bdr);color:var(--accent)}
-    .prog-step.done .step-badge{background:var(--g-dim);border-color:var(--g-bdr);color:var(--green)}
-
     /* NAV */
     nav{position:relative;z-index:10;
-      background:oklch(9% .018 252 / .88);backdrop-filter:blur(20px) saturate(1.8);
+      background:var(--overlay-nav);backdrop-filter:blur(20px) saturate(1.8);
       border-bottom:1px solid var(--border);
       padding:0 clamp(1.25rem,5vw,3rem);height:62px;
       display:flex;align-items:center;justify-content:space-between}
@@ -99,109 +54,109 @@
       font-size:.75rem;color:var(--muted);font-weight:500}
     .secure-badge-icon{color:var(--green)}
 
-    /* MAIN LAYOUT */
+    /* LAYOUT */
     .page{max-width:1080px;margin:0 auto;
       padding:2.5rem clamp(1.25rem,4vw,2.5rem) 5rem;
       position:relative;z-index:1;
       display:grid;grid-template-columns:1fr 380px;gap:2rem;
       align-items:start}
-
-    /* LEFT FORM */
     .form-title{font-size:1.6rem;font-weight:800;letter-spacing:-.04em;margin-bottom:.3rem}
     .form-sub{font-size:.875rem;color:var(--muted);margin-bottom:2rem}
 
-    /* FIELD */
-    .fg{margin-bottom:1.1rem}
+    /* AUTH GATE */
+    .gate{background:var(--surface);border:1px solid var(--border2);border-radius:16px;
+      padding:2.25rem;text-align:center;display:none}
+    .gate.show{display:block}
+    .gate-icon{color:var(--accent);margin-bottom:1rem}
+    .gate-title{font-size:1.15rem;font-weight:800;margin-bottom:.5rem}
+    .gate-sub{font-size:.85rem;color:var(--muted);line-height:1.7;margin-bottom:1.5rem}
+    .gate-actions{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+    .btn{display:inline-block;padding:.8rem 1.6rem;border-radius:10px;
+      font-family:'Inter',sans-serif;font-size:.875rem;font-weight:700;cursor:pointer;
+      text-decoration:none;border:none;
+      transition:transform .15s var(--ease),opacity .15s,background .2s}
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{background:var(--cta);color:var(--on-cta)}
+    .btn-ghost{background:color-mix(in oklab, var(--text) 6%, transparent);
+      color:var(--text);border:1px solid var(--border2)}
+    .btn-ghost:hover{background:color-mix(in oklab, var(--text) 11%, transparent)}
+    .btn[disabled]{opacity:.5;cursor:not-allowed;transform:none}
+
+    /* CHECKOUT MAIN */
+    #checkoutMain{display:none}
+    #checkoutMain.show{display:block}
+
     .fl{display:block;font-size:.67rem;font-weight:700;letter-spacing:.1em;
       text-transform:uppercase;color:var(--faint);margin-bottom:.5rem}
-    .fi{width:100%;background:var(--surface);border:1px solid var(--border2);
-      border-radius:10px;padding:.85rem 1.1rem;color:var(--text);
-      font-family:'Inter',sans-serif;font-size:.92rem;outline:none;
-      transition:border-color .2s var(--ease),box-shadow .2s var(--ease),background .2s}
-    .fi::placeholder{color:var(--faint);letter-spacing:0;font-weight:400}
-    .fi:focus{border-color:var(--a-bdr);box-shadow:0 0 0 3px var(--a-dim);background:oklch(100% 0 0 / .02)}
-    .fi.err{border-color:var(--r-bdr);box-shadow:0 0 0 3px var(--r-dim)}
-    .fi.ok{border-color:var(--g-bdr)}
-    .fh{font-size:.72rem;color:var(--faint);margin-top:.4rem}
 
-    /* VIN LOOKUP */
-    .vin-lk{display:none;align-items:center;gap:.45rem;
-      font-size:.8rem;padding:.45rem .75rem;border-radius:8px;margin-top:.5rem}
-    .vin-lk.show{display:flex;background:var(--g-dim);border:1px solid var(--g-bdr);color:var(--green)}
-    .vin-lk.err{display:flex;background:var(--r-dim);border:1px solid var(--r-bdr);color:var(--red)}
-    .vin-lk.ldg{display:flex;background:var(--border);border:1px solid var(--border2);color:var(--muted)}
-
-    /* PLAN SELECTOR */
-    .plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.25rem}
-    .plan-card{border:1px solid var(--border2);border-radius:12px;
+    /* BUNDLE SELECTOR */
+    .bundle-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.5rem}
+    .bundle-card{border:1px solid var(--border2);border-radius:12px;
       padding:.95rem 1.1rem;cursor:pointer;position:relative;
       background:var(--surface);
       transition:border-color .2s var(--ease),background .2s var(--ease),transform .2s var(--ease),box-shadow .2s}
-    .plan-card:hover{border-color:var(--a-bdr);background:var(--a-dim);transform:translateY(-2px)}
-    .plan-card:active{transform:scale(0.98)}
-    .plan-card.active{border-color:var(--accent);background:var(--a-dim);
+    .bundle-card:hover{border-color:var(--a-bdr);background:var(--a-dim);transform:translateY(-2px)}
+    .bundle-card.active{border-color:var(--accent);background:var(--a-dim);
       box-shadow:0 0 0 1px var(--a-bdr),0 4px 20px var(--a-glow)}
-    .plan-card.full{grid-column:1/-1}
-    .plan-dot{width:16px;height:16px;border-radius:50%;border:1px solid var(--border3);
-      position:absolute;top:.9rem;right:.9rem;
-      transition:background .15s,border-color .15s}
-    .plan-card.active .plan-dot{background:var(--accent);border-color:var(--accent)}
-    .plan-card.active .plan-dot::after{content:'✓';position:absolute;top:50%;left:50%;
-      transform:translate(-50%,-50%);font-size:9px;color:oklch(10% .015 252);font-weight:800}
-    .plan-name{font-size:.82rem;font-weight:700;padding-right:1.5rem;margin-bottom:.2rem}
-    .plan-price{font-size:1.35rem;font-weight:900;letter-spacing:-.04em;color:var(--accent)}
-    .plan-sub{font-size:.68rem;color:var(--muted);margin-top:.15rem}
-    .plan-badge{font-size:.62rem;color:var(--green);font-weight:600;
-      margin-top:.2rem;display:inline-block}
-    .plan-tag{position:absolute;top:-1px;left:50%;transform:translateX(-50%);
-      background:var(--accent);color:oklch(10% .015 252);font-size:.58rem;font-weight:800;
+    .bundle-dot{width:16px;height:16px;border-radius:50%;border:1px solid var(--border3);
+      position:absolute;top:.9rem;right:.9rem;transition:background .15s,border-color .15s}
+    .bundle-card.active .bundle-dot{background:var(--accent);border-color:var(--accent)}
+    .bundle-card.active .bundle-dot::after{content:'✓';position:absolute;top:50%;left:50%;
+      transform:translate(-50%,-50%);font-size:9px;color:var(--on-accent);font-weight:800}
+    .bundle-name{font-size:.82rem;font-weight:700;padding-right:1.5rem;margin-bottom:.2rem}
+    .bundle-price{font-size:1.35rem;font-weight:900;letter-spacing:-.04em;color:var(--accent)}
+    .bundle-sub{font-size:.68rem;color:var(--muted);margin-top:.15rem}
+    .bundle-save{font-size:.62rem;color:var(--green);font-weight:600;margin-top:.2rem;display:inline-block}
+    .bundle-tag{position:absolute;top:-1px;left:50%;transform:translateX(-50%);
+      background:var(--cta);color:var(--on-cta);font-size:.58rem;font-weight:800;
       letter-spacing:.08em;text-transform:uppercase;
       padding:.18rem .75rem;border-radius:0 0 6px 6px;white-space:nowrap}
+    .bundle-card.wide{grid-column:1/-1}
     .disclaimer{font-size:.65rem;color:var(--faint);margin-top:.75rem;line-height:1.55}
 
     /* COUPON */
     .coupon-row{display:flex;gap:.5rem}
     .coupon-row .fi{flex:1}
-    .btn-apply{background:oklch(100% 0 0 / .06);border:1px solid var(--border2);
+    .fi{width:100%;background:var(--surface);border:1px solid var(--border2);
+      border-radius:10px;padding:.85rem 1.1rem;color:var(--text);
+      font-family:'Inter',sans-serif;font-size:.92rem;outline:none;
+      transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
+    .fi::placeholder{color:var(--faint)}
+    .fi:focus{border-color:var(--a-bdr);box-shadow:0 0 0 3px var(--a-dim)}
+    .btn-apply{background:color-mix(in oklab, var(--text) 6%, transparent);border:1px solid var(--border2);
       color:var(--text);font-family:'Inter',sans-serif;font-weight:700;
       font-size:.82rem;padding:0 1.1rem;border-radius:10px;cursor:pointer;
       white-space:nowrap;transition:background .15s,transform .15s}
-    .btn-apply:hover{background:oklch(100% 0 0 / .12)}
-    .btn-apply:active{transform:scale(0.97)}
+    .btn-apply:hover{background:color-mix(in oklab, var(--text) 12%, transparent)}
     .coupon-msg{font-size:.76rem;margin-top:.45rem;min-height:1rem}
     .coupon-msg.ok{color:var(--green)}
     .coupon-msg.fail{color:var(--red)}
 
-    /* ERROR */
+    .fg{margin-bottom:1.25rem}
     .err-msg{color:var(--red);font-size:.8rem;margin-top:.75rem;display:none;
       padding:.7rem 1rem;background:var(--r-dim);
       border-radius:8px;border:1px solid var(--r-bdr)}
-
-    /* PAYPAL */
-    #ppBtn{margin-top:1.25rem}
+    #ppBtn{margin-top:1.25rem;min-height:44px}
     .pay-note{font-size:.72rem;color:var(--muted);text-align:center;margin-top:.65rem;line-height:1.6}
+
+    /* SUCCESS STATE */
+    .done{display:none;background:var(--surface);border:1px solid var(--g-bdr);border-radius:16px;
+      padding:2.5rem;text-align:center}
+    .done.show{display:block}
+    .done-icon{color:var(--green);margin-bottom:1rem}
+    .done-title{font-size:1.3rem;font-weight:800;margin-bottom:.5rem}
+    .done-sub{font-size:.875rem;color:var(--muted);line-height:1.7;margin-bottom:1.5rem}
+    .done-balance{font-size:2.4rem;font-weight:900;letter-spacing:-.05em;color:var(--accent);margin-bottom:1.5rem}
+    .done-balance span{font-size:.9rem;font-weight:500;color:var(--muted)}
 
     /* ORDER SUMMARY */
     .summary{position:sticky;top:1.5rem;
       background:var(--surface);border:1px solid var(--border2);
       border-radius:18px;padding:1.75rem;
-      transform:perspective(900px) rotateY(-3deg);
-      transform-origin:right center;
-      box-shadow:0 0 0 1px var(--border),0 20px 60px oklch(0% 0 0 / .6),0 0 60px var(--a-glow);
-      transition:transform .35s var(--ease)}
-    .summary:hover{transform:perspective(900px) rotateY(-1deg)}
+      box-shadow:0 0 0 1px var(--border),0 20px 60px var(--shadow-color-strong),0 0 60px var(--a-glow)}
     .sum-title{font-size:.65rem;font-weight:700;letter-spacing:.12em;
       text-transform:uppercase;color:var(--faint);margin-bottom:1.35rem}
-    .sum-plan{font-size:1.05rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.25rem}
-    .sum-vin{font-size:.72rem;color:var(--muted);font-family:'Courier New',monospace;
-      letter-spacing:.04em;margin-bottom:1.25rem;min-height:1rem}
-
-    .vehicle-card{background:var(--surface2);border:1px solid var(--border);
-      border-radius:10px;padding:.875rem;margin-bottom:1.25rem;display:none}
-    .vehicle-card.show{display:block}
-    .vc-name{font-size:.88rem;font-weight:700;margin-bottom:.15rem}
-    .vc-vin{font-size:.65rem;font-family:'Courier New',monospace;color:var(--muted)}
-
+    .sum-plan{font-size:1.05rem;font-weight:800;letter-spacing:-.02em;margin-bottom:1.25rem}
     .sum-row{display:flex;justify-content:space-between;
       font-size:.82rem;color:var(--faint);padding:.3rem 0}
     .sum-discount{color:var(--green)!important}
@@ -209,153 +164,110 @@
     .sum-total{display:flex;justify-content:space-between;align-items:center}
     .sum-total-l{font-size:.9rem;font-weight:700}
     .sum-total-p{font-size:2rem;font-weight:900;letter-spacing:-.05em;color:var(--accent)}
-
-    /* STAT CHIPS */
-    .sum-stats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:1.25rem}
-    .ss{background:var(--surface2);border:1px solid var(--border);
-      border-radius:9px;padding:.75rem;text-align:center;
-      transition:transform .2s var(--ease)}
-    .ss:hover{transform:translateY(-2px)}
-    .ss-val{font-size:1.1rem;font-weight:900;letter-spacing:-.04em;color:var(--accent)}
-    .ss-lbl{font-size:.62rem;color:var(--muted);margin-top:.15rem}
-
-    /* TRUST CHIPS */
+    .sum-per{font-size:.72rem;color:var(--muted);text-align:right;margin-top:.2rem}
     .trust-chips{display:flex;flex-direction:column;gap:.25rem;margin-top:1.25rem}
     .chip{display:flex;align-items:center;gap:.5rem;font-size:.75rem;
       color:var(--faint);padding:.3rem 0}
     .chip-icon{color:var(--muted);flex-shrink:0;width:14px;height:14px}
 
-    /* FOCUS */
     :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
 
-    /* RESPONSIVE */
     @media(max-width:860px){
       .page{grid-template-columns:1fr}
-      .summary{position:static;transform:none;order:-1;
-        box-shadow:0 4px 30px oklch(0% 0 0 / .5)}
-      .summary:hover{transform:none}
-      .sum-stats{grid-template-columns:repeat(4,1fr)}
+      .summary{position:static;order:-1;box-shadow:0 4px 30px var(--shadow-color-strong)}
     }
     @media(max-width:600px){
       nav{padding:0 1.25rem;height:54px}
       .page{padding:1.5rem 1.25rem 3rem}
-      .plan-grid{grid-template-columns:1fr}
+      .bundle-grid{grid-template-columns:1fr}
       .coupon-row{flex-direction:column}
       .btn-apply{padding:.85rem;min-height:44px}
-      .sum-stats{grid-template-columns:1fr 1fr}
       .form-title{font-size:1.35rem}
-      /* Ensure all interactive elements meet 44px touch target */
-      .plan-card{min-height:44px}
+      .bundle-card{min-height:44px}
       .fi{min-height:44px;font-size:16px}
     }
   </style>
 </head>
 <body>
 
-<div id="loadingOverlay">
-  <div class="ov-spinner"></div>
-  <div>
-    <div class="ov-title">Generating your report...</div>
-    <div class="ov-sub">Fetching vehicle history data. Usually 10–30 seconds.</div>
-  </div>
-  <div class="prog-steps">
-    <div class="prog-step done" id="ps1">
-      <span class="step-badge" id="pi1">1</span>
-      Payment verified
-    </div>
-    <div class="prog-step" id="ps2">
-      <span class="step-badge" id="pi2">2</span>
-      Fetching vehicle history...
-    </div>
-    <div class="prog-step" id="ps3">
-      <span class="step-badge" id="pi3">3</span>
-      Sending to your email...
-    </div>
-  </div>
-</div>
-
 <nav>
   <a href="/" class="logo">
     <img class="logo-mark" src="/favicon-96x96.png" width="24" height="24" alt="" aria-hidden="true"/>
     VIN<span class="logo-r">Record</span><span class="logo-h">Hub</span>
   </a>
-  <div class="secure-badge">
-    <svg class="secure-badge-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-    Secure checkout via PayPal
+  <div style="display:flex;align-items:center;gap:.9rem">
+    <div class="secure-badge">
+      <svg class="secure-badge-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Secure checkout via PayPal
+    </div>
+    <button class="theme-toggle" data-theme-toggle type="button" aria-label="Switch to light theme"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
   </div>
 </nav>
 
 <div class="page">
 
   <div class="form-col">
-    <h1 class="form-title">Complete your order</h1>
-    <p class="form-sub">Enter your vehicle details and choose a report type.</p>
+    <h1 class="form-title">Buy report credits</h1>
+    <p class="form-sub">1 credit = 1 vehicle history report — Carfax® or AutoCheck®, your choice each time.</p>
 
-    <div class="fg">
-      <label class="fl" for="vinInput">Vehicle VIN Number</label>
-      <input class="fi" type="text" id="vinInput" placeholder="17-character VIN" maxlength="17" autocomplete="off" spellcheck="false" aria-describedby="vinHint" aria-invalid="false"/>
-      <div class="vin-lk" id="vinLk" role="status" aria-live="polite"><span id="vinLkIco"></span><span id="vinLkTxt"></span></div>
-      <div class="fh" id="vinHint">Found on dashboard, door jamb, or vehicle title.</div>
-    </div>
-
-    <div class="fg">
-      <label class="fl" for="emailInput">Email Address</label>
-      <input class="fi" type="email" id="emailInput" placeholder="your@email.com" aria-describedby="emailHint"/>
-      <div class="fh" id="emailHint">Your report will be delivered here within 60 seconds.</div>
-    </div>
-
-    <div class="fg">
-      <span class="fl" id="planLabel">Choose Report Type</span>
-      <div class="plan-grid" role="group" aria-labelledby="planLabel">
-        <div class="plan-card" id="card-standard">
-          <div class="plan-dot"></div>
-          <div class="plan-name">Carfax® Report</div>
-          <div class="plan-price">$9.99</div>
-          <div class="plan-sub">single report</div>
-        </div>
-        <div class="plan-card" id="card-plus">
-          <div class="plan-dot"></div>
-          <div class="plan-name">AutoCheck® Report</div>
-          <div class="plan-price">$9.99</div>
-          <div class="plan-sub">by Experian</div>
-        </div>
-        <div class="plan-card full" id="card-combo">
-          <div class="plan-tag">Best Value</div>
-          <div class="plan-dot"></div>
-          <div class="plan-name" style="margin-top:.25rem">Combo Pack — Carfax® + AutoCheck®</div>
-          <div class="plan-price">$14.99</div>
-          <div class="plan-sub">both reports for one VIN</div>
-          <div class="plan-badge">Save $5 — most thorough check</div>
-        </div>
+    <!-- Signed-out gate -->
+    <div class="gate" id="gateSignin">
+      <div class="gate-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div class="gate-title">Sign in to buy credits</div>
+      <div class="gate-sub">Credits are tied to your account so you can spend them any time. Takes 20 seconds — or continue with Google.</div>
+      <div class="gate-actions">
+        <a class="btn btn-primary" id="gateSignup" href="/signup">Create account</a>
+        <a class="btn btn-ghost" id="gateLogin" href="/login">Sign in</a>
       </div>
-      <p class="disclaimer">* Carfax® and AutoCheck® are registered trademarks of their respective owners. VINRecordHub is not affiliated with or endorsed by Carfax or AutoCheck.</p>
     </div>
 
-    <div class="fg">
-      <label class="fl" for="couponInput">Coupon Code <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--faint)">(optional)</span></label>
-      <div class="coupon-row">
-        <input class="fi" type="text" id="couponInput" placeholder="Enter code..." autocomplete="off"/>
-        <button class="btn-apply" id="applyBtn" aria-label="Apply coupon code">Apply</button>
+    <!-- Unverified-email gate -->
+    <div class="gate" id="gateVerify">
+      <div class="gate-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+      <div class="gate-title">Verify your email first</div>
+      <div class="gate-sub">We sent a confirmation link to <strong id="gateEmail"></strong>. Click it, then refresh this page.</div>
+      <div class="gate-actions">
+        <button class="btn btn-ghost" id="resendVerify" type="button">Resend email</button>
+        <button class="btn btn-primary" type="button" onclick="location.reload()">I've verified — refresh</button>
       </div>
-      <div class="coupon-msg" id="couponMsg" role="status" aria-live="polite"></div>
     </div>
 
-    <div class="err-msg" id="errMsg" role="alert" aria-live="assertive"></div>
-    <div id="ppBtn"></div>
-    <p class="pay-note">Accepts all major cards · PayPal · No account required<br/>Report delivered within 60 seconds of payment</p>
+    <!-- Main checkout -->
+    <div id="checkoutMain">
+      <div class="fg">
+        <span class="fl" id="bundleLabel">Choose your bundle</span>
+        <div class="bundle-grid" role="group" aria-labelledby="bundleLabel" id="bundleGrid"></div>
+        <p class="disclaimer">* Carfax® and AutoCheck® are registered trademarks of their respective owners. VINRecordHub is not affiliated with or endorsed by Carfax or AutoCheck. Credits never expire.</p>
+      </div>
+
+      <div class="fg">
+        <label class="fl" for="couponInput">Coupon Code <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--faint)">(optional)</span></label>
+        <div class="coupon-row">
+          <input class="fi" type="text" id="couponInput" placeholder="Enter code..." autocomplete="off" maxlength="32"/>
+          <button class="btn-apply" id="applyBtn" type="button" aria-label="Apply coupon code">Apply</button>
+        </div>
+        <div class="coupon-msg" id="couponMsg" role="status" aria-live="polite"></div>
+      </div>
+
+      <div class="err-msg" id="errMsg" role="alert" aria-live="assertive"></div>
+      <div id="ppBtn"></div>
+      <p class="pay-note">Accepts all major cards · PayPal<br/>Credits appear in your account the moment payment is verified</p>
+    </div>
+
+    <!-- Post-purchase -->
+    <div class="done" id="doneBox">
+      <div class="done-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <div class="done-title">Credits added!</div>
+      <div class="done-balance" id="doneBalance"></div>
+      <div class="done-sub">Head to your account to generate a report — enter any VIN and choose Carfax® or AutoCheck®.</div>
+      <a class="btn btn-primary" id="doneCta" href="/account">Generate a report →</a>
+    </div>
   </div>
 
-  <div class="summary" id="summaryCrd">
+  <div class="summary" id="summaryCrd" aria-live="polite">
     <div class="sum-title">Order Summary</div>
-    <div class="sum-plan" id="sumPlan">Carfax® Report</div>
-    <div class="sum-vin" id="sumVin"></div>
-
-    <div class="vehicle-card" id="vehicleCard">
-      <div class="vc-name" id="vcName"></div>
-      <div class="vc-vin" id="vcVin"></div>
-    </div>
-
-    <div class="sum-row"><span id="sumDesc">1 Carfax® report</span><span id="sumPrice">$9.99</span></div>
+    <div class="sum-plan" id="sumPlan"></div>
+    <div class="sum-row"><span id="sumDesc"></span><span id="sumPrice"></span></div>
     <div class="sum-row sum-discount" id="discRow" style="display:none">
       <span id="discLabel">Discount</span>
       <span id="discAmt"></span>
@@ -363,35 +275,25 @@
     <div class="sum-divider"></div>
     <div class="sum-total">
       <span class="sum-total-l">Total</span>
-      <span class="sum-total-p" id="sumTotal">$9.99</span>
+      <span class="sum-total-p" id="sumTotal"></span>
     </div>
-
-    <div class="sum-stats">
-      <div class="ss"><div class="ss-val">60s</div><div class="ss-lbl">Delivery</div></div>
-      <div class="ss"><div class="ss-val" style="color:var(--green)">100%</div><div class="ss-lbl">Guaranteed</div></div>
-      <div class="ss"><div class="ss-val" style="color:var(--blue)">SSL</div><div class="ss-lbl">Encrypted</div></div>
-      <div class="ss"><div class="ss-val" style="color:var(--amber)">24/7</div><div class="ss-lbl">Support</div></div>
-    </div>
+    <div class="sum-per" id="sumPer"></div>
 
     <div class="trust-chips">
       <div class="chip">
-        <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Accident &amp; damage history
+        <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        Credits never expire
       </div>
       <div class="chip">
-        <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Title &amp; ownership records
+        <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Reports delivered in ~60 seconds
       </div>
       <div class="chip">
         <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-        Odometer verification
+        Choose Carfax® or AutoCheck® per report
       </div>
       <div class="chip">
-        <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-        Service &amp; recall records
-      </div>
-      <div class="chip">
-        <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         Money-back guarantee
       </div>
     </div>
@@ -399,283 +301,193 @@
 
 </div>
 
-<script src="https://www.paypal.com/sdk/js?client-id=AXUUd9Y2YuWhoRysQpAg75_bfr9ColW_hNmT-L4Z0O1wvYDIvWC1zcafdwz455AyCq2jHnQUYXmTLdzW&currency=USD&enable-funding=venmo,card&disable-funding=paylater"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=AXUUd9Y2YuWhoRysQpAg75_bfr9ColW_hNmT-L4Z0O1wvYDIvWC1zcafdwz455AyCq2jHnQUYXmTLdzW&currency=USD&intent=capture&enable-funding=venmo,card&disable-funding=paylater"></script>
+<script src="/assets/vendor/supabase.js" defer></script>
+<script src="/assets/supabase-config.js" defer></script>
+<script src="/assets/auth.js" defer></script>
+<script src="/assets/theme.js" defer></script>
 <script>
-// ─── HELPERS ──────────────────────────────────────────────
-function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-
-// ─── CONFIG ───────────────────────────────────────────────
-const PLANS = {
-  standard: { name:'Carfax® Report',              price:9.99,  reportType:'carfax',    desc:'1 Carfax® vehicle history report' },
-  plus:     { name:'AutoCheck® Report',           price:9.99,  reportType:'autocheck', desc:'1 AutoCheck® vehicle history report' },
-  combo:    { name:'Combo Pack — Carfax® + AutoCheck®', price:14.99, reportType:'combo', desc:'Carfax® + AutoCheck® for same VIN' },
+// Display copy only — every price is recomputed server-side from the bundle id.
+const BUNDLES = {
+  b1:  { credits: 1,  price: 9.99,  per: 9.99, save: null,  tag: null },
+  b3:  { credits: 3,  price: 19.99, per: 6.66, save: '33%', tag: null },
+  b10: { credits: 10, price: 54.99, per: 5.50, save: '45%', tag: null },
+  b15: { credits: 15, price: 74.99, per: 5.00, save: '50%', tag: 'Most Popular' },
+  b25: { credits: 25, price: 99.99, per: 4.00, save: '60%', tag: 'Best Value' },
 };
-const COUPONS = {
-  'TESTONLY':  { fixedPrice:1.00, label:'Test purchase' },
-  'LAUNCH50':  { pct:50, label:'50% launch discount' },
-  'WELCOME20': { pct:20, label:'20% welcome offer' },
-};
+const fmt = n => '$' + Number(n).toFixed(2);
 
-let plan = 'standard';
-let coupon = null;
+let bundleId = 'b3';
+let couponCode = null;
+let pricing = null;   // last server quote
+let session = null;
 
-// ─── PLAN SELECTION ───────────────────────────────────────
-function selectPlan(p) {
-  plan = p;
-  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
-  document.getElementById('card-' + p).classList.add('active');
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+// ── bundle selector ─────────────────────────────────────────
+function renderBundles() {
+  const grid = document.getElementById('bundleGrid');
+  grid.innerHTML = Object.entries(BUNDLES).map(([id, b]) => `
+    <div class="bundle-card${id === bundleId ? ' active' : ''}${id === 'b25' ? ' wide' : ''}" data-bundle="${id}" role="radio" aria-checked="${id === bundleId}" tabindex="0">
+      ${b.tag ? `<div class="bundle-tag">${b.tag}</div>` : ''}
+      <div class="bundle-dot"></div>
+      <div class="bundle-name"${b.tag ? ' style="margin-top:.25rem"' : ''}>${b.credits} credit${b.credits > 1 ? 's' : ''}</div>
+      <div class="bundle-price">${fmt(b.price)}</div>
+      <div class="bundle-sub">${fmt(b.per)} per report</div>
+      ${b.save ? `<span class="bundle-save">Save ${b.save} vs single</span>` : ''}
+    </div>`).join('');
+  grid.querySelectorAll('.bundle-card').forEach(card => {
+    const pick = () => { selectBundle(card.getAttribute('data-bundle')); };
+    card.addEventListener('click', pick);
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
+  });
+}
+
+function selectBundle(id) {
+  if (!BUNDLES[id]) return;
+  bundleId = id;
+  pricing = null;
+  gaPush('bundle_selected', { bundle: id });
+  renderBundles();
+  refreshSummary();
+  if (couponCode) applyCoupon(); else renderPayPal();
+}
+
+// ── summary ─────────────────────────────────────────────────
+function refreshSummary() {
+  const b = BUNDLES[bundleId];
+  const total = pricing ? pricing.amountDueUsd : b.price;
+  const discount = pricing ? pricing.discountUsd : 0;
+  document.getElementById('sumPlan').textContent = `${b.credits} Report Credit${b.credits > 1 ? 's' : ''}`;
+  document.getElementById('sumDesc').textContent = `${b.credits} × vehicle history report`;
+  document.getElementById('sumPrice').textContent = fmt(b.price);
+  document.getElementById('sumTotal').textContent = fmt(total);
+  document.getElementById('sumPer').textContent = `${fmt(total / b.credits)} per report`;
+  const dr = document.getElementById('discRow');
+  if (discount > 0) {
+    dr.style.display = 'flex';
+    document.getElementById('discLabel').textContent = `Coupon (${couponCode})`;
+    document.getElementById('discAmt').textContent = '-' + fmt(discount);
+  } else dr.style.display = 'none';
+}
+
+// ── coupon (server-validated quote) ─────────────────────────
+async function applyCoupon() {
+  const msg = document.getElementById('couponMsg');
+  const raw = document.getElementById('couponInput').value.trim().toUpperCase();
+  if (!raw) { couponCode = null; pricing = null; msg.textContent = ''; msg.className = 'coupon-msg'; refreshSummary(); renderPayPal(); return; }
+  try {
+    const res = await api('quote', { bundleId, couponCode: raw });
+    couponCode = raw;
+    pricing = res.pricing;
+    msg.textContent = '✓ Coupon applied';
+    msg.className = 'coupon-msg ok';
+    gaPush('coupon_applied', { code: raw, bundle: bundleId });
+  } catch (err) {
+    couponCode = null; pricing = null;
+    msg.textContent = '✗ ' + (err.userMessage || 'Invalid coupon code');
+    msg.className = 'coupon-msg fail';
+  }
   refreshSummary();
   renderPayPal();
 }
-['standard','plus','combo'].forEach(p => {
-  document.getElementById('card-' + p).addEventListener('click', () => {
-    selectPlan(p);
-    gaPush('plan_selected', {plan: p});
+document.getElementById('applyBtn').addEventListener('click', applyCoupon);
+
+// ── API helper ──────────────────────────────────────────────
+async function api(action, body) {
+  const res = await fetch('/api/paypal-order', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + session.access_token,
+    },
+    body: JSON.stringify(Object.assign({ action }, body)),
   });
-});
-
-// 3D tilt on plan cards
-document.querySelectorAll('.plan-card').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    if(window.innerWidth < 600) return;
-    const r = card.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
-    card.style.transform = `perspective(600px) rotateX(${-y*5}deg) rotateY(${x*5}deg) translateY(-2px)`;
-  });
-  card.addEventListener('mouseleave', () => { card.style.transform = ''; });
-});
-
-// ─── COUPON ───────────────────────────────────────────────
-function getFinal() {
-  const base = PLANS[plan].price;
-  if (!coupon) return base;
-  if (coupon.fixedPrice != null) return coupon.fixedPrice;
-  if (coupon.pct) return Math.max(0.01, base * (1 - coupon.pct / 100));
-  return base;
-}
-document.getElementById('applyBtn').addEventListener('click', () => {
-  const code = document.getElementById('couponInput').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
-  const msg = document.getElementById('couponMsg');
-  if (!code) { coupon = null; msg.textContent = ''; msg.className = 'coupon-msg'; refreshSummary(); renderPayPal(); return; }
-  if (COUPONS[code]) {
-    coupon = { code, ...COUPONS[code] };
-    msg.textContent = '✓ ' + COUPONS[code].label + ' applied';
-    msg.className = 'coupon-msg ok';
-  } else {
-    coupon = null;
-    msg.textContent = '✗ Invalid coupon code';
-    msg.className = 'coupon-msg fail';
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const err = new Error(json?.error?.code || 'request_failed');
+    err.code = json?.error?.code;
+    err.userMessage = json?.error?.message;
+    throw err;
   }
-  refreshSummary(); renderPayPal();
-});
-
-// ─── VIN LOOKUP ───────────────────────────────────────────
-function isValidVin(v) { return /^[A-HJ-NPR-Z0-9]{17}$/.test(v); }
-let vtimer = null;
-
-async function lookupVin(vin) {
-  const el=document.getElementById('vinLk'),ico=document.getElementById('vinLkIco'),txt=document.getElementById('vinLkTxt');
-  el.className='vin-lk ldg'; ico.textContent='⏳'; txt.textContent='Looking up vehicle...';
-  try {
-    const r = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`);
-    const d = await r.json(); const res = d?.Results?.[0];
-    if (!res || res.ErrorCode !== '0' || !res.Make) {
-      el.className='vin-lk err'; ico.textContent='⚠️'; txt.textContent='VIN not found — please double-check'; return;
-    }
-    const name = [res.ModelYear, res.Make, res.Model, res.Trim].filter(Boolean).join(' ');
-    el.className='vin-lk show'; ico.textContent='✅'; txt.innerHTML=`<strong>${escHtml(name)}</strong>`;
-    document.getElementById('vcName').textContent = name;
-    document.getElementById('vcVin').textContent = 'VIN: ' + vin;
-    document.getElementById('vehicleCard').className = 'vehicle-card show';
-  } catch { el.className='vin-lk'; }
+  return json;
 }
 
-document.getElementById('vinInput').addEventListener('input', function() {
-  this.value = this.value.toUpperCase();
-  const vin = this.value.trim();
-  const lk = document.getElementById('vinLk');
-  if (!vin) { this.style.borderColor=''; lk.className='vin-lk'; document.getElementById('vehicleCard').className='vehicle-card'; return; }
-  if (vin.length < 17) { this.style.borderColor=''; lk.className='vin-lk'; clearTimeout(vtimer); }
-  else if (!isValidVin(vin)) { this.classList.add('err'); this.classList.remove('ok'); }
-  else {
-    this.classList.remove('err'); this.classList.add('ok');
-    clearTimeout(vtimer); vtimer = setTimeout(() => lookupVin(vin), 300);
-  }
-  refreshSummary();
-});
-
-document.getElementById('emailInput').addEventListener('blur', function() {
-  const v = this.value.trim();
-  if (!v) return;
-  const ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
-  ok ? (this.classList.add('ok'), this.classList.remove('err')) : (this.classList.add('err'), this.classList.remove('ok'));
-});
-
-// ─── SUMMARY ──────────────────────────────────────────────
-function refreshSummary() {
-  const p = PLANS[plan];
-  const final = getFinal();
-  const vin = document.getElementById('vinInput').value.trim().toUpperCase();
-  document.getElementById('sumPlan').textContent = p.name;
-  document.getElementById('sumVin').textContent = vin ? 'VIN: ' + vin : '';
-  document.getElementById('sumDesc').textContent = p.desc;
-  document.getElementById('sumPrice').textContent = '$' + p.price.toFixed(2);
-  document.getElementById('sumTotal').textContent = '$' + final.toFixed(2);
-  const dr = document.getElementById('discRow');
-  if (coupon && final < p.price) {
-    dr.style.display = 'flex';
-    document.getElementById('discLabel').textContent = 'Coupon (' + coupon.code + ')';
-    document.getElementById('discAmt').textContent = '-$' + (p.price - final).toFixed(2);
-  } else { dr.style.display = 'none'; }
+function showErr(text) {
+  const el = document.getElementById('errMsg');
+  el.textContent = text;
+  el.style.display = 'block';
 }
 
-// ─── VALIDATION ───────────────────────────────────────────
-function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e); }
-function validate() {
-  const vin = document.getElementById('vinInput').value.trim().toUpperCase();
-  const email = document.getElementById('emailInput').value.trim();
-  const err = document.getElementById('errMsg');
-  const errors = [];
-  if (!vin) { document.getElementById('vinInput').classList.add('err'); errors.push('Please enter your vehicle VIN.'); }
-  else if (vin.length !== 17) { document.getElementById('vinInput').classList.add('err'); errors.push(`VIN must be 17 characters (${vin.length}/17).`); }
-  else if (!isValidVin(vin)) { document.getElementById('vinInput').classList.add('err'); errors.push('Invalid VIN — cannot contain I, O, or Q.'); }
-  else { document.getElementById('vinInput').classList.remove('err'); }
-  if (!email) { document.getElementById('emailInput').classList.add('err'); errors.push('Please enter your email address.'); }
-  else if (!isValidEmail(email)) { document.getElementById('emailInput').classList.add('err'); errors.push('Please enter a valid email address.'); }
-  else { document.getElementById('emailInput').classList.remove('err'); }
-  if (errors.length) { err.innerHTML = errors.join('<br>'); err.style.display = 'block'; return false; }
-  err.style.display = 'none'; return true;
-}
-
-// ─── PAYPAL ───────────────────────────────────────────────
+// ── PayPal ──────────────────────────────────────────────────
 function renderPayPal() {
-  document.getElementById('ppBtn').innerHTML = '';
+  const mount = document.getElementById('ppBtn');
+  mount.innerHTML = '';
+  document.getElementById('errMsg').style.display = 'none';
+  if (typeof paypal === 'undefined') { showErr('Payment module failed to load — refresh the page.'); return; }
   paypal.Buttons({
-    style: { layout:'vertical', color:'gold', shape:'rect', label:'pay', height:44 },
-    createOrder: function(data, actions) {
-      if (!validate()) return Promise.reject(new Error('Validation failed'));
-      return actions.order.create({
-        purchase_units:[{
-          description:'VINRecordHub — ' + PLANS[plan].name,
-          amount:{ currency_code:'USD', value: getFinal().toFixed(2),
-            breakdown:{ item_total:{ currency_code:'USD', value: getFinal().toFixed(2) } } },
-          items:[{ name: PLANS[plan].name,
-            description:'Digital vehicle history report — instant email delivery',
-            unit_amount:{ currency_code:'USD', value: getFinal().toFixed(2) },
-            quantity:'1', category:'DIGITAL_GOODS' }]
-        }],
-        application_context:{ shipping_preference:'NO_SHIPPING' }
-      });
+    style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'pay', height: 44 },
+    createOrder: async () => {
+      const res = await api('create', { bundleId, couponCode });
+      gaPush('begin_checkout', { bundle: bundleId, value: res.pricing.amountDueUsd, currency: 'USD' });
+      return res.paypalOrderId;
     },
-    onApprove: async function(data, actions) {
-      const details = await actions.order.capture();
-      const vin = document.getElementById('vinInput').value.trim().toUpperCase();
-      const email = document.getElementById('emailInput').value.trim();
-      const orderId = details.id;
-
-      gaPush('payment_completed', {
-        order_id: orderId,
-        plan: PLANS[plan].reportType,
-        value: getFinal(),
-        currency: 'USD',
-      });
-
-      document.getElementById('loadingOverlay').style.display = 'flex';
-
-      function stepDone(n) {
-        const el = document.getElementById('ps' + n);
-        const ico = document.getElementById('pi' + n);
-        el.className = 'prog-step done';
-        ico.textContent = '✓';
-      }
-      function stepActive(n) {
-        const el = document.getElementById('ps' + n);
-        el.className = 'prog-step lit';
-      }
-      function stepError(n, msg) {
-        const el = document.getElementById('ps' + n);
-        const ico = document.getElementById('pi' + n);
-        el.style.color = 'var(--red)';
-        ico.textContent = '✗';
-        ico.style.background = 'var(--r-dim)';
-        ico.style.borderColor = 'var(--r-bdr)';
-        ico.style.color = 'var(--red)';
-        if (msg) el.querySelector('span + *') && (el.lastChild.textContent = msg);
-      }
-
-      stepDone(1);
-
-      stepActive(2);
-      let reportSuccess = false;
-      let emailSuccess = false;
-
+    onApprove: async (data) => {
       try {
-        const res = await fetch('/api/fulfill-order', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email, vin,
-            plan: PLANS[plan].reportType,
-            paypalOrderId: orderId,
-            coupon: coupon ? coupon.code : null,
-          }),
-        });
-
-        const result = await res.json();
-
-        if (res.ok && result.success) {
-          stepDone(2);
-          stepActive(3);
-          await new Promise(r => setTimeout(r, 600));
-          stepDone(3);
-          emailSuccess = true;
-          reportSuccess = true;
-        } else {
-          stepError(2, 'Report fetch issue — check your email');
-          stepError(3, 'Contact support if not received');
-        }
-
+        const res = await api('capture', { paypalOrderId: data.orderID });
+        gaPush('purchase', { bundle: bundleId, currency: 'USD', value: pricing ? pricing.amountDueUsd : BUNDLES[bundleId].price });
+        document.getElementById('checkoutMain').classList.remove('show');
+        document.getElementById('checkoutMain').style.display = 'none';
+        document.getElementById('doneBox').classList.add('show');
+        document.getElementById('doneBalance').innerHTML =
+          (res.balance ?? BUNDLES[bundleId].credits) + ' <span>credits available</span>';
+        const vin = sessionStorage.getItem('vrh-pending-vin');
+        if (vin) document.getElementById('doneCta').href = '/account?vin=' + encodeURIComponent(vin);
       } catch (err) {
-        stepError(2, 'Connection issue — report may still deliver');
-        navigator.sendBeacon('/api/fulfill-order',
-          new Blob([JSON.stringify({ email, vin, plan: PLANS[plan].reportType, paypalOrderId: orderId, coupon: coupon ? coupon.code : null })],
-          { type: 'application/json' })
-        );
+        showErr(err.userMessage || 'Payment captured but confirmation is delayed — your credits will appear in your account shortly. Contact support@vinrecordhub.com if they don\'t.');
       }
-
-      await new Promise(r => setTimeout(r, emailSuccess ? 1200 : 2500));
-      window.location.href = `/success?vin=${encodeURIComponent(vin)}&email=${encodeURIComponent(email)}&plan=${plan}&order=${orderId}&delivered=${emailSuccess ? '1' : '0'}`;
     },
-    onError: function(err) {
-      document.getElementById('errMsg').textContent = 'Payment failed — please try again or contact support@vinrecordhub.com';
-      document.getElementById('errMsg').style.display = 'block';
-    },
-    onCancel: function() {
-      document.getElementById('errMsg').textContent = 'Payment cancelled — your order is still saved.';
-      document.getElementById('errMsg').style.display = 'block';
-    }
+    onError: () => showErr('Payment failed — please try again or contact support@vinrecordhub.com'),
+    onCancel: () => showErr('Payment cancelled — no charge was made.'),
   }).render('#ppBtn');
 }
 
-// ─── INIT ─────────────────────────────────────────────────
-const params = new URLSearchParams(window.location.search);
-const urlVin = params.get('vin');
-if (urlVin) {
-  const vi = document.getElementById('vinInput');
-  vi.value = urlVin.toUpperCase(); vi.classList.add('ok');
-  if (isValidVin(urlVin.toUpperCase())) setTimeout(() => lookupVin(urlVin.toUpperCase()), 600);
-  refreshSummary();
-}
-const urlPlan = params.get('plan');
-selectPlan(urlPlan && PLANS[urlPlan] ? urlPlan : 'standard');
+// ── boot: auth gate ─────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', async () => {
+  const params = new URLSearchParams(location.search);
+  if (BUNDLES[params.get('bundle')]) bundleId = params.get('bundle');
+  if (params.get('vin')) sessionStorage.setItem('vrh-pending-vin', params.get('vin'));
 
-// GSAP entrance animation
-if(typeof gsap!=='undefined'){
-  gsap.from('.form-col',{opacity:0,x:-20,duration:.55,ease:'power3.out'});
-  gsap.from('#summaryCrd',{opacity:0,x:20,duration:.55,ease:'power3.out',delay:.1});
-}
+  // auth.js is deferred; wait for it
+  let tries = 0;
+  while (!window.vrhAuth && tries++ < 100) await new Promise(r => setTimeout(r, 50));
+  if (!window.vrhAuth) { showErr('Could not initialize sign-in — refresh the page.'); return; }
+
+  session = await window.vrhAuth.getSession();
+  const next = encodeURIComponent('/checkout?bundle=' + bundleId);
+  document.getElementById('gateSignup').href = '/signup?next=' + next;
+  document.getElementById('gateLogin').href = '/login?next=' + next;
+
+  if (!session) {
+    document.getElementById('gateSignin').classList.add('show');
+    return;
+  }
+  if (!window.vrhAuth.isVerified(session.user)) {
+    document.getElementById('gateEmail').textContent = session.user?.email || 'your email';
+    document.getElementById('gateVerify').classList.add('show');
+    document.getElementById('resendVerify').addEventListener('click', async (e) => {
+      e.target.disabled = true;
+      try { await window.vrhAuth.resendVerification(session.user.email); e.target.textContent = 'Sent ✓'; }
+      catch { e.target.textContent = 'Failed — try later'; e.target.disabled = false; }
+    });
+    return;
+  }
+
+  document.getElementById('checkoutMain').classList.add('show');
+  renderBundles();
+  refreshSummary();
+  renderPayPal();
+});
 </script>
 </body>
 </html>

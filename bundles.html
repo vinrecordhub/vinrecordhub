@@ -35,12 +35,6 @@
     "@graph": [
       {
         "@type": "Product",
-        "name": "1 Credit Bundle — VINRecordHub",
-        "description": "1 credit, redeemable for one Carfax® or AutoCheck® vehicle history report.",
-        "offers": { "@type": "Offer", "price": "9.99", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://vinrecordhub.com/buy-credits?bundle=b1" }
-      },
-      {
-        "@type": "Product",
         "name": "3 Credit Bundle — VINRecordHub",
         "description": "3 credits, redeemable for Carfax® or AutoCheck® vehicle history reports. Save 33% vs. single reports.",
         "offers": { "@type": "Offer", "price": "19.99", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://vinrecordhub.com/buy-credits?bundle=b3" }
@@ -145,7 +139,7 @@
 
     /* BUNDLE GRID */
     .bundle-sec{max-width:var(--max);margin:0 auto;padding:2.5rem var(--pad) 1rem}
-    .bundle-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;perspective:1200px}
+    .bundle-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;perspective:1200px}
     .bc{background:var(--surface);border:1px solid var(--border-2);border-radius:16px;
       padding:1.75rem 1.4rem;position:relative;display:flex;flex-direction:column;
       transition:transform .3s var(--ease),border-color .3s var(--ease),box-shadow .3s}
@@ -298,20 +292,6 @@
 
 <section class="bundle-sec">
   <div class="bundle-grid">
-
-    <div class="bc" id="bundle-b1">
-      <div class="bc-credits">1 Credit</div>
-      <div class="bc-price"><sup>$</sup>9.99</div>
-      <div class="bc-per">$9.99 / report</div>
-      <div class="bc-save">&nbsp;</div>
-      <hr class="bc-divider"/>
-      <ul class="bc-feats">
-        <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Carfax® or AutoCheck®, your choice</li>
-        <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Credits never expire</li>
-        <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Instant email delivery</li>
-      </ul>
-      <a href="/buy-credits?bundle=b1" class="bc-cta">Buy Now</a>
-    </div>
 
     <div class="bc" id="bundle-b3">
       <div class="bc-credits">3 Credits</div>

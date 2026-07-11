@@ -377,25 +377,6 @@
     /* the bundles upsell card — highlighted like combo, with its own warm tint */
     .pc-from{font-size:.95rem;font-weight:600;letter-spacing:0;color:var(--muted);margin-right:.35rem}
     .pc-price-dec{font-size:1.3rem;font-weight:900}
-    .bundles-grid{grid-template-columns:repeat(5,1fr);gap:.75rem}
-    .bundles-grid .pc{padding:1.4rem 1.1rem}
-    .bundles-grid .pc-price{font-size:2.1rem}
-    @media(max-width:1100px){.bundles-grid{grid-template-columns:repeat(3,1fr)}}
-    @media(max-width:960px){.bundles-grid{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:600px){.bundles-grid{grid-template-columns:1fr}}
-    /* bulk/credits upsell strip */
-    .bulk-strip{margin-top:2.5rem;display:flex;align-items:center;justify-content:space-between;
-      gap:1.5rem;flex-wrap:wrap;background:var(--surface);border:1px solid var(--border2);
-      border-radius:16px;padding:1.4rem 1.75rem;
-      box-shadow:0 8px 30px var(--shadow-color)}
-    .bulk-txt{font-size:.9rem;color:var(--muted);line-height:1.6;max-width:640px}
-    .bulk-txt strong{color:var(--text);font-weight:700}
-    .bulk-cta{flex-shrink:0;background:color-mix(in oklab, var(--accent) 10%, transparent);
-      color:var(--accent);border:1px solid var(--a-bdr);
-      font-size:.85rem;font-weight:700;padding:.7rem 1.3rem;border-radius:10px;
-      text-decoration:none;white-space:nowrap;transition:background .2s var(--ease),transform .2s var(--ease)}
-    .bulk-cta:hover{background:var(--accent);color:var(--on-accent);transform:translateY(-1px)}
-    @media(max-width:600px){.bulk-strip{flex-direction:column;text-align:center;align-items:stretch}.bulk-cta{text-align:center}}
     .pc{background:var(--surface);border:1px solid var(--border2);
       border-radius:16px;padding:2rem;cursor:pointer;position:relative;
       text-align:center;

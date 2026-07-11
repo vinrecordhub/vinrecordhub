@@ -101,7 +101,7 @@ create trigger credit_tx_apply
 -- 3. coupons (fiat price reduction ONLY — never mint credits)
 -- ─────────────────────────────────────────────────────────────
 -- Coupons serve BOTH purchase flows, scoped by applies_to:
---   * bundle ids (b1..b25) -> credit-bundle flow (/buy-credits)
+--   * bundle ids (b3..b25) -> credit-bundle flow (/buy-credits)
 --   * plan ids (standard/plus/combo) -> single-report checkout (/checkout)
 --   * null -> everywhere
 -- 'set_price' (pay exactly $value) is refused by the bundle flow and by
@@ -141,7 +141,7 @@ create index if not exists coupon_redemptions_coupon_user_idx
 create table if not exists public.credit_orders (
   id                bigint generated always as identity primary key,
   user_id           uuid not null references public.profiles(id),
-  bundle_id         text not null check (bundle_id in ('b1','b3','b10','b15','b25')),
+  bundle_id         text not null check (bundle_id in ('b3','b10','b15','b25')),
   credits           integer not null check (credits > 0),
   list_price_usd    numeric(10,2) not null check (list_price_usd > 0),
   discount_usd      numeric(10,2) not null default 0 check (discount_usd >= 0),

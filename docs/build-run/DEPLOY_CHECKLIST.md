@@ -35,7 +35,7 @@ Removed (can delete after deploy): `PADDLE_WEBHOOK_SECRET` (Paddle handler retir
 
 ## 6. Post-deploy smoke test (sandbox first if possible)
 1. Sign up with a fresh email → confirm the verification email arrives and the link lands on /account.
-2. Buy the 1-credit bundle → credits appear after payment (webhook + capture both grant idempotently).
+2. Buy the 3-credit bundle → credits appear after payment (webhook + capture both grant idempotently).
 3. Generate a Carfax report with a real VIN → email arrives, balance drops to 0.
 4. Try to generate again → clean "insufficient credits" error, balance stays 0.
 5. Admin panel → coupons tab → activate WELCOME20, set max redemptions, re-test checkout with it.

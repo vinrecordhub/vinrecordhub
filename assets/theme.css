@@ -52,10 +52,10 @@
 
   /* aurora effect colors as raw RGB triplets (parsed by fx-aurora.js).
      Dark theme = warm orange/amber to match the black-and-orange brand. */
-  --fx-aurora-1: 251 146 60;   /* orange */
-  --fx-aurora-2: 234 179 8;    /* amber  */
-  --fx-aurora-3: 249 115 22;   /* deep orange */
-  --fx-aurora-alpha: 0.28;
+  --fx-aurora-1: 196 128 82;   /* muted orange */
+  --fx-aurora-2: 168 136 100;  /* warm sand */
+  --fx-aurora-3: 186 110 70;   /* muted ember */
+  --fx-aurora-alpha: 0.12;
 
   /* ── legacy aliases (existing page CSS references these) ── */
   --surface2: var(--bg-elevated);

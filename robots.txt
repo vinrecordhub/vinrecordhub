@@ -2,5 +2,12 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /api/
+Disallow: /account
+Disallow: /checkout
+Disallow: /login
+Disallow: /signup
+Disallow: /reset-password
+Disallow: /success
+Disallow: /redeem
 
 Sitemap: https://vinrecordhub.com/sitemap.xml

@@ -5,6 +5,7 @@
 
 const { createClient } = require('@supabase/supabase-js');
 const rateLimit = require('../lib/rate-limit');
+const { isValidAdminToken } = require('../lib/admin-auth');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -12,7 +13,7 @@ const supabase = createClient(
 );
 
 module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'https://vinrecordhub.com');
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
   // Rate limit admin endpoint — 20 requests per minute
@@ -23,7 +24,7 @@ module.exports = async function handler(req, res) {
 
   // Check admin token
   const token = req.query.token;
-  if (!token || token !== process.env.ADMIN_TOKEN) {
+  if (!isValidAdminToken(token)) {
     // Add delay to prevent brute force
     await new Promise(r => setTimeout(r, 1000));
     return res.status(401).json({ error: 'Unauthorized' });

@@ -3,6 +3,7 @@
 // Returns whether a code is valid and unused
 
 const { createClient } = require('@supabase/supabase-js');
+const rateLimit = require('../lib/rate-limit');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -12,6 +13,9 @@ const supabase = createClient(
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', 'https://vinrecordhub.com');
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
+
+  const rl = rateLimit(req, { maxRequests: 10, windowMs: 60000 });
+  if (rl.limited) return res.status(429).json({ error: 'Too many requests' });
 
   const { code } = req.query;
   if (!code) return res.status(400).json({ error: 'Missing code' });

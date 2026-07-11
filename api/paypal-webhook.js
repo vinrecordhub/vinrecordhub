@@ -42,6 +42,10 @@ module.exports = async function handler(req, res) {
         console.error('capture event missing fields', event.id);
         return res.status(200).json({ received: true }); // malformed → don't retry
       }
+      if (resource.amount?.currency_code !== 'USD') {
+        console.error('non-USD capture refused (webhook):', paypalOrderId, resource.amount?.currency_code);
+        return res.status(200).json({ received: true, result: 'currency_mismatch' });
+      }
 
       const { data, error } = await supabase.rpc('apply_credit_purchase', {
         p_paypal_order_id: paypalOrderId,

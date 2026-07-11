@@ -33,11 +33,12 @@ function html(title, body) {
 module.exports = async (req, res) => {
   const { code, error, error_description } = req.query;
 
+  const escHtml = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   if (error) {
     res.setHeader('Content-Type', 'text/html');
     return res.status(400).send(html('TikTok Auth Error', `
       <h2 class="err">Authorization failed</h2>
-      <p>${error_description || error}</p>`));
+      <p>${escHtml(error_description || error)}</p>`));
   }
 
   if (!code) {

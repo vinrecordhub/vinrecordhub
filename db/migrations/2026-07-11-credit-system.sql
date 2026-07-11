@@ -188,7 +188,7 @@ set search_path = public
 as $$
 declare
   v_order public.credit_orders%rowtype;
-  v_inserted boolean;
+  v_inserted integer;
 begin
   select * into v_order
     from public.credit_orders
@@ -223,7 +223,7 @@ begin
          updated_at = now()
    where id = v_order.id;
 
-  if v_inserted::int = 0 then
+  if v_inserted = 0 then
     return query select false, 'duplicate_capture'; return;
   end if;
 

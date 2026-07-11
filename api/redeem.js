@@ -3,6 +3,7 @@
 // Validates a redemption code, generates the report from CheapVHR, emails customer.
 
 const { createClient } = require('@supabase/supabase-js');
+const rateLimit = require('../lib/rate-limit');
 const svc = require('../lib/report-service');
 
 const supabase = createClient(
@@ -16,6 +17,9 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  const rl = rateLimit(req, { maxRequests: 5, windowMs: 60000 });
+  if (rl.limited) return res.status(429).json({ error: 'Too many requests. Please wait a minute.' });
 
   try {
     const { code, vin, email, reportType } = req.body;
@@ -53,17 +57,23 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    // Mark code as used IMMEDIATELY to prevent double-redemption
-    const { error: updateError } = await supabase
+    // Claim the code atomically — the conditional update makes concurrent
+    // double-redemption impossible (only one request gets the row).
+    const { data: claimed, error: updateError } = await supabase
       .from('redemption_codes')
       .update({
         is_used: true,
         vin_used: cleanVin,
         used_at: new Date().toISOString(),
       })
-      .eq('id', codeData.id);
+      .eq('id', codeData.id)
+      .eq('is_used', false)
+      .select('id');
 
     if (updateError) throw updateError;
+    if (!claimed || !claimed.length) {
+      return res.status(409).json({ error: 'Code already used' });
+    }
 
     // Generate report from CheapVHR (via Fixie static IP), with retry.
     const report = await svc.generateReportByVin(cleanVin, type);

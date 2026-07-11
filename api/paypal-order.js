@@ -151,6 +151,10 @@ module.exports = async function handler(req, res) {
       captureId = captureObj?.id || null;
       paidAmount = parseFloat(captureObj?.amount?.value || 'NaN');
 
+      if (captureObj && captureObj.amount?.currency_code !== 'USD') {
+        console.error('non-USD capture refused:', paypalOrderId, captureObj.amount?.currency_code);
+        return fail(res, 409, 'currency_mismatch', 'Unexpected payment currency — contact support@vinrecordhub.com');
+      }
       if (status !== 'COMPLETED' || !captureId || Number.isNaN(paidAmount)) {
         console.error('capture not completed:', paypalOrderId, status);
         return fail(res, 402, 'payment_incomplete', 'Payment was not completed');

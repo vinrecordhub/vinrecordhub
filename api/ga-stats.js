@@ -3,6 +3,7 @@
 
 const { createClient } = require('@supabase/supabase-js');
 const rateLimit = require('../lib/rate-limit');
+const { isValidAdminToken } = require('../lib/admin-auth');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -10,14 +11,14 @@ const supabase = createClient(
 );
 
 module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'https://vinrecordhub.com');
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
   const rl = rateLimit(req, { maxRequests: 20, windowMs: 60000 });
   if (rl.limited) return res.status(429).json({ error: 'Too many requests' });
 
   const { token, days } = req.query;
-  if (!token || token !== process.env.ADMIN_TOKEN) {
+  if (!isValidAdminToken(token)) {
     await new Promise(r => setTimeout(r, 1000));
     return res.status(401).json({ error: 'Unauthorized' });
   }

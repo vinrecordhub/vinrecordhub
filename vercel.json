@@ -38,6 +38,7 @@
     { "src": "/privacy", "dest": "/privacy.html" },
     { "src": "/admin", "dest": "/admin.html" },
     { "src": "/bundles", "dest": "/bundles.html" },
+    { "src": "/buy-credits", "dest": "/buy-credits.html" },
     { "src": "/account", "dest": "/account.html" },
     { "src": "/login", "dest": "/login.html" },
     { "src": "/signup", "dest": "/signup.html" },

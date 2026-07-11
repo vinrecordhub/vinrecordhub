@@ -4,6 +4,7 @@ Disallow: /admin
 Disallow: /api/
 Disallow: /account
 Disallow: /checkout
+Disallow: /buy-credits
 Disallow: /login
 Disallow: /signup
 Disallow: /reset-password

@@ -57,43 +57,27 @@
         "offers": [
           {
             "@type": "Offer",
-            "name": "1 Report Credit",
+            "name": "Carfax® Vehicle History Report",
             "price": "9.99",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "url": "https://vinrecordhub.com/checkout?bundle=b1"
+            "url": "https://vinrecordhub.com/checkout?plan=standard"
           },
           {
             "@type": "Offer",
-            "name": "3 Report Credits",
-            "price": "19.99",
+            "name": "AutoCheck® Vehicle History Report",
+            "price": "9.99",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "url": "https://vinrecordhub.com/checkout?bundle=b3"
+            "url": "https://vinrecordhub.com/checkout?plan=premium"
           },
           {
             "@type": "Offer",
-            "name": "10 Report Credits",
-            "price": "54.99",
+            "name": "Combo — Carfax® + AutoCheck®",
+            "price": "14.99",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "url": "https://vinrecordhub.com/checkout?bundle=b10"
-          },
-          {
-            "@type": "Offer",
-            "name": "15 Report Credits",
-            "price": "74.99",
-            "priceCurrency": "USD",
-            "availability": "https://schema.org/InStock",
-            "url": "https://vinrecordhub.com/checkout?bundle=b15"
-          },
-          {
-            "@type": "Offer",
-            "name": "25 Report Credits",
-            "price": "99.99",
-            "priceCurrency": "USD",
-            "availability": "https://schema.org/InStock",
-            "url": "https://vinrecordhub.com/checkout?bundle=b25"
+            "url": "https://vinrecordhub.com/checkout?plan=combo"
           }
         ]
       },
@@ -387,6 +371,19 @@
     @media(max-width:1100px){.bundles-grid{grid-template-columns:repeat(3,1fr)}}
     @media(max-width:960px){.bundles-grid{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:600px){.bundles-grid{grid-template-columns:1fr}}
+    /* bulk/credits upsell strip */
+    .bulk-strip{margin-top:2.5rem;display:flex;align-items:center;justify-content:space-between;
+      gap:1.5rem;flex-wrap:wrap;background:var(--surface);border:1px solid var(--border2);
+      border-radius:16px;padding:1.4rem 1.75rem;
+      box-shadow:0 8px 30px var(--shadow-color)}
+    .bulk-txt{font-size:.9rem;color:var(--muted);line-height:1.6;max-width:640px}
+    .bulk-txt strong{color:var(--text);font-weight:700}
+    .bulk-cta{flex-shrink:0;background:color-mix(in oklab, var(--accent) 10%, transparent);
+      color:var(--accent);border:1px solid var(--a-bdr);
+      font-size:.85rem;font-weight:700;padding:.7rem 1.3rem;border-radius:10px;
+      text-decoration:none;white-space:nowrap;transition:background .2s var(--ease),transform .2s var(--ease)}
+    .bulk-cta:hover{background:var(--accent);color:var(--on-accent);transform:translateY(-1px)}
+    @media(max-width:600px){.bulk-strip{flex-direction:column;text-align:center;align-items:stretch}.bulk-cta{text-align:center}}
     .pc{background:var(--surface);border:1px solid var(--border2);
       border-radius:16px;padding:2rem;cursor:pointer;position:relative;
       transition:border-color .3s var(--ease),transform .3s var(--ease),box-shadow .3s;
@@ -422,15 +419,22 @@
     .pc.feat .btn-buy{background:var(--cta);color:var(--on-cta);border-color:transparent}
     .pc.feat .btn-buy:hover{box-shadow:0 8px 28px color-mix(in oklab, var(--cta) 30%, transparent);transform:scale(1.02)}
 
-    /* FEATURES */
+    /* FEATURES — 3D depth cards */
     .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);
-      gap:1px;background:var(--border);margin-top:3rem;
-      border-radius:16px;overflow:hidden;border:1px solid var(--border)}
-    .fc{background:var(--surface);padding:2rem 1.75rem;transition:background .2s var(--ease)}
-    .fc:hover{background:var(--surface2)}
-    .fc-icon{width:40px;height:40px;margin-bottom:1rem;color:var(--accent);opacity:.8}
-    .fc-t{font-size:.92rem;font-weight:700;margin-bottom:.45rem}
-    .fc-d{font-size:.83rem;color:var(--muted);line-height:1.68}
+      gap:1rem;margin-top:3rem;perspective:1400px}
+    .fc{background:var(--surface);border:1px solid var(--border2);
+      border-radius:16px;padding:2rem 1.75rem;position:relative;
+      transform-style:preserve-3d;will-change:transform;
+      box-shadow:0 8px 30px var(--shadow-color);
+      transition:transform .35s var(--expo),box-shadow .35s,border-color .3s}
+    .fc:hover{border-color:var(--a-bdr);
+      box-shadow:0 22px 55px var(--shadow-color-strong),0 0 44px var(--a-glow)}
+    .fc-icon{width:52px;height:52px;padding:13px;margin-bottom:1.15rem;
+      border-radius:14px;color:var(--accent);
+      background:var(--a-dim);border:1px solid var(--a-bdr);
+      transform:translateZ(40px);transition:transform .35s var(--expo)}
+    .fc-t{font-size:.92rem;font-weight:700;margin-bottom:.45rem;transform:translateZ(24px)}
+    .fc-d{font-size:.83rem;color:var(--muted);line-height:1.68;transform:translateZ(12px)}
 
     /* SAMPLE REPORT */
     .sample-inner{max-width:1160px;margin:0 auto;padding:5rem clamp(1.25rem,5vw,3.5rem)}
@@ -777,7 +781,7 @@
         <a href="#faq">FAQ</a>
         <a href="/blog">Blog</a>
         <a href="mailto:support@vinrecordhub.com">Support</a>
-        <a href="#pricing" class="nav-cta">Buy Credits — from $9.99</a>
+        <a href="#pricing" class="nav-cta">Get Report — $9.99</a>
       </div>
       <button class="theme-toggle" data-theme-toggle type="button" aria-label="Switch to light theme"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
       <button class="burger" id="menuBtn" onclick="openM()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mMenu"><span></span><span></span><span></span></button>
@@ -793,7 +797,7 @@
   <a href="#faq" onclick="closeM()">FAQ</a>
   <a href="/blog" onclick="closeM()">Blog</a>
   <a href="mailto:support@vinrecordhub.com" onclick="closeM()">Support</a>
-  <a href="#pricing" onclick="closeM()" class="hi">Buy Credits →</a>
+  <a href="#pricing" onclick="closeM()" class="hi">Get Report →</a>
 </div>
 
 <section class="hero" aria-label="Vehicle History Reports — Get Started">
@@ -805,7 +809,7 @@
     <div>
       <div class="hero-badge hero-rv"><span class="badge-dot"></span>Instant Vehicle History Reports</div>
       <h1 class="hero-rv hero-rv-1">Every accident. Every secret. <em>Know before you buy.</em></h1>
-      <p class="hero-sub hero-rv hero-rv-2">Full vehicle history from Carfax® &amp; AutoCheck® data — accidents, title brands, odometer fraud. From $9.99 per report (as low as $4.00 with credit bundles), delivered to your inbox in 60 seconds.</p>
+      <p class="hero-sub hero-rv hero-rv-2">Full vehicle history from Carfax® &amp; AutoCheck® data — accidents, title brands, odometer fraud — from $9.99 per report. Delivered to your inbox in 60 seconds. No account needed.</p>
       <label for="heroVin" class="vin-label hero-rv hero-rv-3">Enter VIN — get your report instantly</label>
       <div class="vin-row hero-rv hero-rv-3">
         <input class="vin-input" id="heroVin" type="text" placeholder="e.g. 1HGCM82633A004352" maxlength="17" autocomplete="off" spellcheck="false" aria-label="Vehicle Identification Number (VIN)" aria-describedby="vinLk vinErr vinCount" aria-invalid="false" oninput="this.value=this.value.toUpperCase();validateVin(this)"/>
@@ -905,14 +909,14 @@
       <div class="step rv rv-1">
         <div class="step-num">Step 01</div>
         <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M6 14h.01M10 14h4M18 14h.01"/></svg>
-        <div class="step-t">Pick a credit bundle</div>
-        <div class="step-d">Create a free account and grab a bundle — from $9.99 for one report down to $4.00 each in bulk. Pay with PayPal or card.</div>
+        <div class="step-t">Enter the VIN</div>
+        <div class="step-d">Find the 17-character VIN on the dashboard, door jamb, or vehicle title and type it above.</div>
       </div>
       <div class="step rv rv-2">
         <div class="step-num">Step 02</div>
         <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-        <div class="step-t">Enter the VIN</div>
-        <div class="step-d">In your account, enter the 17-character VIN and choose Carfax® or AutoCheck® — 1 credit per report.</div>
+        <div class="step-t">Pay Securely</div>
+        <div class="step-d">Choose Carfax®, AutoCheck®, or the combo. Pay with PayPal or card — from $9.99. No subscription, no account.</div>
       </div>
       <div class="step rv rv-3">
         <div class="step-num">Step 03</div>
@@ -938,72 +942,66 @@
 
 <div id="pricing">
   <div class="sec">
-    <div class="sec-tag rv">Credit Bundles</div>
-    <h2 class="rv rv-1">Buy credits. <em>Spend anytime.</em></h2>
-    <p class="sec-sub rv rv-2">1 credit = 1 full report — Carfax® or AutoCheck®, your choice each time. Bigger bundles drop the price per report. Credits never expire.</p>
-    <div class="pricing-grid bundles-grid">
-      <div class="pc glow-card rv rv-1" onclick="goCheckoutBundle('b1')">
-        <div class="pc-name">1 Credit</div>
+    <div class="sec-tag rv">Pricing</div>
+    <h2 class="rv rv-1">One report, or <em>both.</em></h2>
+    <p class="sec-sub rv rv-2">Enter a VIN, pick your report, pay once. Delivered to your inbox in 60 seconds — no account needed.</p>
+    <div class="pricing-grid">
+      <div class="pc glow-card rv rv-1" onclick="goCheckoutPlan('standard')">
+        <div class="pc-name">Carfax® Report</div>
         <div class="pc-price"><sup>$</sup>9.99</div>
-        <div class="pc-per">$9.99 per report</div>
+        <div class="pc-per">single report</div>
         <hr class="pc-divider"/>
         <ul class="pc-feats">
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>1 report of your choice</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Powered by Carfax® data</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Accident &amp; damage history</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Title &amp; ownership records</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Odometer verification</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Service &amp; recall records</li>
           <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Instant email delivery</li>
         </ul>
-        <a href="/checkout?bundle=b1" class="btn-buy">Buy 1 credit →</a>
+        <a href="/checkout?plan=standard" class="btn-buy">Get Carfax® Report →</a>
       </div>
-      <div class="pc glow-card rv rv-2" onclick="goCheckoutBundle('b3')">
-        <div class="pc-name">3 Credits</div>
-        <div class="pc-price"><sup>$</sup>19.99</div>
-        <div class="pc-per">$6.66 per report</div>
-        <div class="pc-save">Save 33% vs single</div>
+      <div class="pc feat glow-card rv rv-2" onclick="goCheckoutPlan('combo')">
+        <div class="feat-badge">Best Value</div>
+        <div class="pc-name">Combo Pack</div>
+        <div class="pc-price"><sup>$</sup>14.99</div>
+        <div class="pc-per">Carfax® + AutoCheck®</div>
+        <div class="pc-save">Save $5 — most thorough check</div>
         <hr class="pc-divider"/>
         <ul class="pc-feats">
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Compare up to 3 vehicles</li>
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Or both reports on one VIN</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>1 full Carfax® report</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>1 full AutoCheck® report</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Cross-verify both sources</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Maximum buying confidence</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>All accident &amp; title records</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Both delivered instantly</li>
         </ul>
-        <a href="/checkout?bundle=b3" class="btn-buy">Buy 3 credits →</a>
+        <a href="/checkout?plan=combo" class="btn-buy">Get Combo Pack →</a>
       </div>
-      <div class="pc glow-card rv rv-3" onclick="goCheckoutBundle('b10')">
-        <div class="pc-name">10 Credits</div>
-        <div class="pc-price"><sup>$</sup>54.99</div>
-        <div class="pc-per">$5.50 per report</div>
-        <div class="pc-save">Save 45% vs single</div>
+      <div class="pc glow-card rv rv-3" onclick="goCheckoutPlan('premium')">
+        <div class="pc-name">AutoCheck® Report</div>
+        <div class="pc-price"><sup>$</sup>9.99</div>
+        <div class="pc-per">single report</div>
         <hr class="pc-divider"/>
         <ul class="pc-feats">
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Serious car-shopping trips</li>
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Credits never expire</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Powered by AutoCheck® (Experian)</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Auction &amp; dealer records</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Title &amp; ownership records</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Odometer verification</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>AutoCheck® score included</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Instant email delivery</li>
         </ul>
-        <a href="/checkout?bundle=b10" class="btn-buy">Buy 10 credits →</a>
-      </div>
-      <div class="pc feat glow-card rv rv-4" onclick="goCheckoutBundle('b15')">
-        <div class="feat-badge">Most Popular</div>
-        <div class="pc-name">15 Credits</div>
-        <div class="pc-price"><sup>$</sup>74.99</div>
-        <div class="pc-per">$5.00 per report</div>
-        <div class="pc-save">Save 50% vs single</div>
-        <hr class="pc-divider"/>
-        <ul class="pc-feats">
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Flippers &amp; exporters</li>
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>US &amp; Gulf pre-import checks</li>
-        </ul>
-        <a href="/checkout?bundle=b15" class="btn-buy">Buy 15 credits →</a>
-      </div>
-      <div class="pc glow-card rv rv-5" onclick="goCheckoutBundle('b25')">
-        <div class="pc-name">25 Credits</div>
-        <div class="pc-price"><sup>$</sup>99.99</div>
-        <div class="pc-per">$4.00 per report</div>
-        <div class="pc-save">Save 60% vs single</div>
-        <hr class="pc-divider"/>
-        <ul class="pc-feats">
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Dealer &amp; bulk buying</li>
-          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Lowest price per report</li>
-        </ul>
-        <a href="/checkout?bundle=b25" class="btn-buy">Buy 25 credits →</a>
+        <a href="/checkout?plan=premium" class="btn-buy">Get AutoCheck® Report →</a>
       </div>
     </div>
-    <p class="rv" style="font-size:.8rem;color:var(--muted);margin-top:1.5rem;text-align:center">Full comparison, FAQs and bulk-buying guides on the <a href="/bundles" style="color:var(--accent);font-weight:600">bundles page →</a></p>
+
+    <!-- bulk / credits upsell -->
+    <div class="bulk-strip rv">
+      <div class="bulk-txt">
+        <strong>Buying several?</strong> Credit bundles drop the price to as low as <strong>$4.00 per report</strong> — buy once, spend anytime, credits never expire.
+      </div>
+      <a href="/bundles" class="bulk-cta">See credit bundles →</a>
+    </div>
   </div>
 </div>
 
@@ -1012,33 +1010,33 @@
     <div class="sec-tag rv">What You Get</div>
     <h2 class="rv rv-1">Everything in <em>one report.</em></h2>
     <p class="sec-sub rv rv-2">Comprehensive vehicle history — all for $9.99.</p>
-    <div class="feat-grid bento">
-      <div class="fc glow-card rv rv-1">
+    <div class="feat-grid">
+      <div class="fc rv rv-1">
         <svg class="fc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         <div class="fc-t">Accident History</div>
         <div class="fc-d">Full accident records including damage severity, airbag deployments, and structural damage.</div>
       </div>
-      <div class="fc glow-card rv rv-2">
+      <div class="fc rv rv-2">
         <svg class="fc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         <div class="fc-t">Title Records</div>
         <div class="fc-d">Salvage, rebuilt, flood, lemon, and junk title brands — every red flag before you buy.</div>
       </div>
-      <div class="fc glow-card rv rv-3">
+      <div class="fc rv rv-3">
         <svg class="fc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <div class="fc-t">Ownership History</div>
         <div class="fc-d">Number of owners, usage type (personal, rental, fleet, taxi), and geographic history.</div>
       </div>
-      <div class="fc glow-card rv rv-4">
+      <div class="fc rv rv-4">
         <svg class="fc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
         <div class="fc-t">Odometer Check</div>
         <div class="fc-d">Detect mileage rollbacks and discrepancies that sellers try to hide.</div>
       </div>
-      <div class="fc glow-card rv rv-5">
+      <div class="fc rv rv-5">
         <svg class="fc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
         <div class="fc-t">Service Records</div>
         <div class="fc-d">Oil changes, repairs, recalls, and maintenance history from verified shops and dealers.</div>
       </div>
-      <div class="fc glow-card rv rv-6">
+      <div class="fc rv rv-6">
         <svg class="fc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <div class="fc-t">Recall Information</div>
         <div class="fc-d">Outstanding manufacturer recalls and whether they've been resolved — critical safety info.</div>
@@ -1305,33 +1303,43 @@ window.addEventListener('load',function(){
       err.style.display='block';document.getElementById('heroVin').focus();return;
     }
     gaPush('vin_submitted', {vin_length: v.length});
-    gaPush('checkout_initiated', {bundle: 'b1', source: 'hero'});
-    window.location.href=`/checkout?bundle=b1&vin=${encodeURIComponent(v)}`;
+    gaPush('checkout_initiated', {plan: 'standard', source: 'hero'});
+    window.location.href=`/checkout?plan=standard&vin=${encodeURIComponent(v)}`;
   }
 
-  function goCheckoutBundle(b){
+  function goCheckoutPlan(p){
     const v=document.getElementById('heroVin').value.trim();
     const vp=isValidVin(v)?`&vin=${encodeURIComponent(v)}`:'';
-    gaPush('checkout_initiated', {bundle: b, source: 'pricing'});
-    window.location.href=`/checkout?bundle=${b}${vp}`;
+    gaPush('checkout_initiated', {plan: p, source: 'pricing'});
+    window.location.href=`/checkout?plan=${p}${vp}`;
   }
 
   document.getElementById('heroVin').addEventListener('keypress',e=>{if(e.key==='Enter')goCheckout()});
 
-  document.querySelectorAll('.pc').forEach(c=>{
-    let rafPc=null;
-    c.addEventListener('mousemove',e=>{
-      if(rafPc)return;
-      rafPc=requestAnimationFrame(()=>{
-        rafPc=null;
-        const r=c.getBoundingClientRect();
-        const x=(e.clientX-r.left)/r.width-.5;
-        const y=(e.clientY-r.top)/r.height-.5;
-        c.style.transform=`translateY(-6px) rotateX(${-y*6}deg) rotateY(${x*6}deg)`;
+  // 3D pointer-tilt on pricing cards + feature cards (disabled for reduced motion
+  // and on touch, where there's no hover).
+  (function initCardTilt(){
+    if(window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    if(!window.matchMedia('(hover: hover)').matches) return;
+    function tilt(sel, lift, deg){
+      document.querySelectorAll(sel).forEach(c=>{
+        let raf=null;
+        c.addEventListener('mousemove',e=>{
+          if(raf)return;
+          raf=requestAnimationFrame(()=>{
+            raf=null;
+            const r=c.getBoundingClientRect();
+            const x=(e.clientX-r.left)/r.width-.5;
+            const y=(e.clientY-r.top)/r.height-.5;
+            c.style.transform=`translateY(${lift}) rotateX(${-y*deg}deg) rotateY(${x*deg}deg)`;
+          });
+        });
+        c.addEventListener('mouseleave',()=>{raf=null;c.style.transform=''});
       });
-    });
-    c.addEventListener('mouseleave',()=>{rafPc=null;c.style.transform=''});
-  });
+    }
+    tilt('.pc','-6px',6);
+    tilt('.fc','-4px',9);
+  })();
 
   // Scroll reveal — native IntersectionObserver, no library needed
   (function initScrollReveal(){

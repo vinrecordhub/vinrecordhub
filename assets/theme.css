@@ -6,32 +6,35 @@
 :root {
   color-scheme: dark;
 
-  /* ── semantic ─────────────────────────────────────── */
-  --bg:               oklch(9% 0.018 252);
-  --bg-elevated:      oklch(16% 0.022 252);
-  --surface:          oklch(12.5% 0.020 252);
+  /* ── semantic ─────────────────────────────────────────
+     Dark theme is the original black-and-orange brand: orange is the accent,
+     purple appears only in light mode. --bg is a touch lighter than the old
+     near-black navy. */
+  --bg:               oklch(13% 0.016 252);
+  --bg-elevated:      oklch(19% 0.020 252);
+  --surface:          oklch(16% 0.018 252);
   --text:             oklch(97% 0.006 252);
-  --text-muted:       oklch(71% 0.012 252);
+  --text-muted:       oklch(72% 0.012 252);
   --text-faint:       oklch(66% 0.012 252);
-  --accent-primary:   oklch(74% 0.155 295);  /* purple */
+  --accent-primary:   oklch(76% 0.145 52);   /* orange (dark brand accent) */
   --accent-secondary: oklch(76% 0.145 52);   /* orange */
   --border:           oklch(100% 0 0 / .07);
   --border-2:         oklch(100% 0 0 / .13);
   --border-3:         oklch(100% 0 0 / .22);
-  --glow:             oklch(74% 0.155 295 / .10);
+  --glow:             oklch(76% 0.145 52 / .12);
 
   /* text/ink that sits on top of accent fills */
-  --on-accent:            oklch(13% 0.02 295);
+  --on-accent:            oklch(13% 0.02 52);
   --on-accent-secondary:  oklch(13% 0.02 52);
 
-  /* CTA = orange warmth per brand split (purple leads, orange converts) */
+  /* CTA = orange */
   --cta:        var(--accent-secondary);
   --cta-hover:  oklch(81% 0.155 52);
   --on-cta:     var(--on-accent-secondary);
 
   /* translucent chrome */
-  --overlay:     oklch(9% 0.018 252 / .97);
-  --overlay-nav: oklch(9% 0.018 252 / .88);
+  --overlay:     oklch(13% 0.016 252 / .97);
+  --overlay-nav: oklch(13% 0.016 252 / .88);
 
   /* shadows */
   --shadow-color:        oklch(0% 0 0 / .4);
@@ -47,11 +50,12 @@
   --ease: cubic-bezier(0.25, 1, 0.5, 1);
   --expo: cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* aurora effect colors as raw RGB triplets (parsed by fx-aurora.js) */
-  --fx-aurora-1: 167 139 250;  /* purple  */
-  --fx-aurora-2: 251 146 60;   /* orange  */
-  --fx-aurora-3: 96 165 250;   /* blue    */
-  --fx-aurora-alpha: 0.55;
+  /* aurora effect colors as raw RGB triplets (parsed by fx-aurora.js).
+     Dark theme = warm orange/amber to match the black-and-orange brand. */
+  --fx-aurora-1: 251 146 60;   /* orange */
+  --fx-aurora-2: 234 179 8;    /* amber  */
+  --fx-aurora-3: 249 115 22;   /* deep orange */
+  --fx-aurora-alpha: 0.5;
 
   /* ── legacy aliases (existing page CSS references these) ── */
   --surface2: var(--bg-elevated);
@@ -155,30 +159,30 @@
    these browsers, which is acceptable; text/bg/accent stay legible. */
 @supports not (color: oklch(0% 0 0)) {
   :root {
-    --bg: #010306;
-    --bg-elevated: #070e16;
-    --surface: #03070e;
+    --bg: #12171e;
+    --bg-elevated: #1d232c;
+    --surface: #161c24;
     --text: #f2f5f9;
-    --text-muted: #9ca2a9;
+    --text-muted: #a0a6ad;
     --text-faint: #8d939a;
-    --accent-primary: #b395ff;
+    --accent-primary: #f89453;
     --accent-secondary: #f89453;
-    --on-accent: #08060e;
+    --on-accent: #0d0502;
     --on-accent-secondary: #0d0502;
     --cta-hover: #ffa15a;
     --success: #43c07a;
     --danger: #f05751;
     --warning: #ffa700;
     --info: #249ff3;
-    --border: rgba(255,255,255,.09);
-    --border-2: rgba(255,255,255,.14);
-    --border-3: rgba(255,255,255,.24);
-    --glow: rgba(167,139,250,.12);
+    --border: rgba(255,255,255,.07);
+    --border-2: rgba(255,255,255,.13);
+    --border-3: rgba(255,255,255,.22);
+    --glow: rgba(248,148,83,.12);
     --cta: #f89453;
     --on-cta: #0d0502;
-    --accent: #b395ff;
-    --overlay: rgba(11,14,20,.97);
-    --overlay-nav: rgba(11,14,20,.88);
+    --accent: #f89453;
+    --overlay: rgba(18,23,30,.97);
+    --overlay-nav: rgba(18,23,30,.88);
     --shadow-color: rgba(0,0,0,.4);
     --shadow-color-strong: rgba(0,0,0,.6);
   }

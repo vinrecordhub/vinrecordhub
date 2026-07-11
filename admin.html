@@ -66,6 +66,12 @@
     .login-btn:active{transform:scale(0.97)}
     .login-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
     .login-err{color:var(--red);font-size:.82rem;margin-top:.75rem;display:none}
+    .login-div{display:flex;align-items:center;gap:.8rem;color:var(--faint);
+      font-size:.68rem;margin:1.15rem 0;text-transform:uppercase;letter-spacing:.12em}
+    .login-div::before,.login-div::after{content:'';flex:1;height:1px;background:var(--border2)}
+    .login-btn.alt{background:var(--surface2);color:var(--text);border:1px solid var(--border2)}
+    .login-btn.alt:hover{border-color:var(--a-bdr);opacity:1}
+    .login-note{font-size:.72rem;color:var(--faint);margin-top:.9rem;line-height:1.5}
 
     /* ADMIN */
     .admin-wrap{display:none;position:relative;z-index:1}
@@ -202,6 +208,9 @@
       cursor:pointer;transition:background .15s}
     .cpn-btn:hover{background:color-mix(in oklab, var(--text) 12%, transparent)}
     .coupon-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.5rem}
+    /* selects/date inputs have large intrinsic widths; without this they
+       refuse to shrink into their tracks and the row overflows the card */
+    .coupon-form > *{min-width:0;width:100%}
     .coupon-form .btn-refresh{min-height:44px}
     @media(max-width:960px){
       .coupon-form{grid-template-columns:1fr 1fr}
@@ -379,6 +388,9 @@
     <input type="password" class="login-input" id="tokenInput" placeholder="Admin token..." aria-label="Admin token" autocomplete="current-password" onkeypress="if(event.key==='Enter') login()"/>
     <button class="login-btn" id="loginBtn" onclick="login()">Sign In →</button>
     <div class="login-err" id="loginErr">Invalid token. Please try again.</div>
+    <div class="login-div">or</div>
+    <button class="login-btn alt" type="button" onclick="location.href='/login?next=%2Fadmin'">Sign in with your account →</button>
+    <p class="login-note">Accounts with admin access sign in with their email or Google login. The token stays available as a fallback.</p>
   </div>
 </div>
 
@@ -603,6 +615,9 @@
 <div class="copy-toast" id="copyToast">Copied!</div>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="/assets/vendor/supabase.js"></script>
+<script src="/assets/supabase-config.js"></script>
+<script src="/assets/auth.js"></script>
 <script>
   // ─── HELPERS ──────────────────────────────────────────────
   function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
@@ -614,6 +629,7 @@
   let currentPage = 1;
   const PER_PAGE = 25;
   let adminToken = '';
+  let authMode = 'token';
 
   // ─── AUTH ─────────────────────────────────────────────────
   async function login() {
@@ -649,6 +665,10 @@
 
   function logout() {
     sessionStorage.removeItem('adminToken');
+    if (authMode === 'account' && window.vrhAuth) {
+      vrhAuth.signOut().then(function () { location.reload(); });
+      return;
+    }
     location.reload();
   }
 
@@ -1113,14 +1133,35 @@
     gsap.from('.login-card',{opacity:0,y:24,duration:.5,ease:'power3.out'});
   }
 
-  const savedToken = sessionStorage.getItem('adminToken');
-  if (savedToken) {
-    adminToken = savedToken;
+  function enterPanel() {
     document.getElementById('loginWrap').style.display = 'none';
     document.getElementById('adminWrap').style.display = 'block';
     loadOrders();
     loadGA();
     loadCoupons();
+  }
+
+  const savedToken = sessionStorage.getItem('adminToken');
+  if (savedToken) {
+    adminToken = savedToken;
+    enterPanel();
+  } else if (window.vrhAuth) {
+    // Account-based sign-in: an is_admin account's session token is accepted
+    // by the admin API, and supabase-js keeps the session refreshed in the
+    // background (onAuthChange feeds the fresh token into adminToken).
+    vrhAuth.getSession().then(async function (session) {
+      if (!session) return;
+      const probe = await fetch('/api/admin-orders', {
+        headers: { 'Authorization': 'Bearer ' + session.access_token },
+      });
+      if (!probe.ok) return; // signed in but not an admin — token gate stays
+      authMode = 'account';
+      adminToken = session.access_token;
+      vrhAuth.onAuthChange(function (event, s) {
+        if (s && s.access_token) adminToken = s.access_token;
+      });
+      enterPanel();
+    });
   }
 
   // ─── ANALYTICS ────────────────────────────────────────────

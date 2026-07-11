@@ -18,7 +18,7 @@ module.exports = async function handler(req, res) {
   if (rl.limited) return res.status(429).json({ error: 'Too many requests' });
 
   const { days } = req.query;
-  if (!isAuthorizedAdmin(req)) {
+  if (!(await isAuthorizedAdmin(req))) {
     await new Promise(r => setTimeout(r, 1000));
     return res.status(401).json({ error: 'Unauthorized' });
   }

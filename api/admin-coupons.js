@@ -89,7 +89,7 @@ function validateFields(body, { forCreate }) {
 
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
-  if (!isAuthorizedAdmin(req)) return fail(res, 401, 'unauthorized', 'Bad token');
+  if (!(await isAuthorizedAdmin(req))) return fail(res, 401, 'unauthorized', 'Bad token');
 
   try {
     if (req.method === 'GET') {

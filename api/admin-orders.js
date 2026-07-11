@@ -23,7 +23,7 @@ module.exports = async function handler(req, res) {
   }
 
   // Check admin token
-  if (!isAuthorizedAdmin(req)) {
+  if (!(await isAuthorizedAdmin(req))) {
     // Add delay to prevent brute force
     await new Promise(r => setTimeout(r, 1000));
     return res.status(401).json({ error: 'Unauthorized' });

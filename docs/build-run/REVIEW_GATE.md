@@ -1,8 +1,24 @@
 # Review Gate (Step C) — STOP before push
 
 Build, full-system audit, and 10-dimension QA are all green. **Nothing has been
-pushed.** 11 local commits sit on `main` ahead of `origin/main`, awaiting your
+pushed.** Local commits sit on `main` ahead of `origin/main`, awaiting your
 explicit green light.
+
+## Post-review revision (your feedback, 2026-07-11)
+- **Dark mode** is back to the original **black + orange**; purple appears **only
+  in light mode**. Dark background lifted slightly; aurora warmed to orange.
+- **Two purchase paths now coexist:**
+  - `/checkout` — the familiar **single report / combo, no account** quick-buy
+    (VIN → pay → emailed). Uses `api/fulfill-order.js` (restored). Homepage leads
+    with this. Keeps its own simple hardcoded coupons.
+  - `/buy-credits` — the **credit-bundle** purchase (account + `api/paypal-order`
+    + webhook + DB coupons). Linked from `/bundles` and a homepage "buy in bulk"
+    strip.
+- **"Everything in one report"** rebuilt as clean cards with icon badges + 3D tilt.
+- Note: this reintroduces the single-report payment path the audit had marked
+  removed. It's the same server-verified code that ran in production before
+  (PayPal amount verified server-side; dedupe on order id), so no new class of
+  risk — just re-audit `api/fulfill-order.js` alongside the new endpoints.
 
 ## What to review first (highest-signal files)
 | Area | Files |

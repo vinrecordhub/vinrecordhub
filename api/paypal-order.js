@@ -31,6 +31,9 @@ async function validateCoupon(code, bundleId, userId) {
     .single();
 
   if (!coupon || !coupon.is_active) return { error: 'invalid_coupon' };
+  // set_price is checkout-flow-only: "pay exactly $X" on a credit bundle
+  // would be a credit-minting hole regardless of scoping.
+  if (coupon.discount_type === 'set_price') return { error: 'coupon_not_applicable' };
   if (coupon.expires_at && new Date(coupon.expires_at) < new Date()) return { error: 'coupon_expired' };
   if (coupon.max_redemptions !== null && coupon.redemption_count >= coupon.max_redemptions) {
     return { error: 'coupon_exhausted' };

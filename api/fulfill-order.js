@@ -14,31 +14,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY
 );
 
-// Plan mapping — supports both old names (carfax/autocheck) and new approval names (standard/plus)
-const PLANS = {
-  standard:  { amount: 9.99,  reportTypes: ['carfax']              },
-  plus:      { amount: 9.99,  reportTypes: ['autocheck']           },
-  combo:     { amount: 14.99, reportTypes: ['carfax', 'autocheck'] },
-  carfax:    { amount: 9.99,  reportTypes: ['carfax']              },
-  autocheck: { amount: 9.99,  reportTypes: ['autocheck']           },
-};
-
-// Coupon validation — must match checkout.html
-const COUPONS = {
-  'TESTONLY':  { fixedPrice: 1.00 },
-  'LAUNCH50':  { type: 'percent', value: 50 },
-  'WELCOME20': { type: 'percent', value: 20 },
-};
-
-function getDiscountedAmount(planAmount, couponCode) {
-  if (!couponCode) return planAmount;
-  const coupon = COUPONS[couponCode.toUpperCase()];
-  if (!coupon) return planAmount;
-  if (coupon.fixedPrice !== undefined) return coupon.fixedPrice;
-  if (coupon.type === 'percent') return Math.max(0.01, planAmount * (1 - coupon.value / 100));
-  if (coupon.type === 'fixed') return Math.max(0.01, planAmount - coupon.value);
-  return planAmount;
-}
+const { CHECKOUT_PLANS, validateCheckoutCoupon, checkoutPrice } = require('../lib/checkout-pricing');
 
 // Verify PayPal payment is real and amount matches
 async function verifyPayPalPayment(orderId, expectedAmount) {
@@ -95,8 +71,17 @@ module.exports = async function handler(req, res) {
     if (!plan) return res.status(400).json({ error: 'Invalid plan selected' });
     if (!paypalOrderId) return res.status(400).json({ error: 'Invalid order ID' });
 
-    const { amount: baseAmount, reportTypes } = PLANS[plan];
-    const expectedAmount = getDiscountedAmount(baseAmount, coupon);
+    const { amount: baseAmount, reportTypes } = CHECKOUT_PLANS[plan];
+
+    // Coupons come from the admin-managed coupons table. An invalid, revoked,
+    // or exhausted code means full price is expected — a client that paid the
+    // discounted amount anyway then fails payment verification below.
+    let couponRow = null;
+    if (coupon) {
+      const cv = await validateCheckoutCoupon(coupon, plan);
+      couponRow = cv.coupon || null;
+    }
+    const expectedAmount = checkoutPrice(baseAmount, couponRow);
 
     // Prevent duplicate orders
     let existing = null;
@@ -134,6 +119,7 @@ module.exports = async function handler(req, res) {
         amount: expectedAmount,
         paypal_order_id: paypalOrderId,
         vin,
+        coupon_code: couponRow ? couponRow.code : null,
         delivery_status: 'pending',
       })
       .select('id')

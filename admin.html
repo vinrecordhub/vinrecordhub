@@ -561,17 +561,22 @@
           <select class="search-input" id="cpnType" aria-label="Discount type">
             <option value="percent">% off total</option>
             <option value="fixed_total">$ off total</option>
-            <option value="per_credit">$ off per credit</option>
+            <option value="per_credit">$ off per credit (bundles)</option>
+            <option value="set_price">$ fixed price (checkout only)</option>
           </select>
           <input class="search-input" id="cpnValue" type="number" min="0.01" step="0.01" placeholder="Value" aria-label="Discount value"/>
-          <select class="search-input" id="cpnBundles" aria-label="Applies to bundles">
-            <option value="">All bundles</option>
+          <select class="search-input" id="cpnBundles" aria-label="Applies to">
+            <option value="">Everywhere (bundles + checkout)</option>
+            <option value="b1,b3,b10,b15,b25">All bundles</option>
             <option value="b1">b1 only</option>
             <option value="b3">b3 only</option>
             <option value="b10">b10 only</option>
             <option value="b15">b15 only</option>
             <option value="b25">b25 only</option>
             <option value="b10,b15,b25">Bulk (b10+b15+b25)</option>
+            <option value="standard,plus,combo">Checkout: all plans</option>
+            <option value="standard,plus">Checkout: single reports</option>
+            <option value="combo">Checkout: combo only</option>
           </select>
           <input class="search-input" id="cpnMax" type="number" min="1" step="1" placeholder="Max uses (blank = ∞)" aria-label="Max redemptions"/>
           <input class="search-input" id="cpnExpiry" type="date" aria-label="Expiry date"/>
@@ -684,6 +689,7 @@
     percent: v => `${v}% off`,
     fixed_total: v => `$${Number(v).toFixed(2)} off`,
     per_credit: v => `$${Number(v).toFixed(2)}/credit off`,
+    set_price: v => `pay $${Number(v).toFixed(2)}`,
   };
 
   async function loadCoupons() {
@@ -699,7 +705,7 @@
           <code>${escH(c.code)}</code>
           <span>${DISCOUNT_LABEL[c.discount_type] ? DISCOUNT_LABEL[c.discount_type](c.value) : '—'}</span>
           <span class="cpn-bundles">${c.applies_to && c.applies_to.length ? escH(c.applies_to.join(', ')) : 'all'}</span>
-          <span>${c.redemption_count} / ${c.max_redemptions ?? '∞'}</span>
+          <span>${c.redemption_count + (c.checkout_uses || 0)} / ${c.max_redemptions ?? '∞'}</span>
           <span class="cpn-peruser">${c.per_user_limit}×</span>
           <span class="cpn-expiry">${c.expires_at ? new Date(c.expires_at).toLocaleDateString() : '—'}</span>
           <span class="cpn-badge ${c.is_active ? 'cpn-on' : 'cpn-off'}">${c.is_active ? 'Active' : 'Off'}</span>

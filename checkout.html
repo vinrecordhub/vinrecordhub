@@ -415,11 +415,8 @@ const PLANS = {
   plus:     { name:'AutoCheck® Report',           price:9.99,  reportType:'autocheck', desc:'1 AutoCheck® vehicle history report' },
   combo:    { name:'Combo Pack — Carfax® + AutoCheck®', price:14.99, reportType:'combo', desc:'Carfax® + AutoCheck® for same VIN' },
 };
-const COUPONS = {
-  'TESTONLY':  { fixedPrice:1.00, label:'Test purchase' },
-  'LAUNCH50':  { pct:50, label:'50% launch discount' },
-  'WELCOME20': { pct:20, label:'20% welcome offer' },
-};
+// Coupons are validated server-side against the admin-managed coupons table
+// (/api/checkout-coupon); fulfill-order re-verifies at payment time.
 
 let plan = 'standard';
 let coupon = null;
@@ -432,6 +429,7 @@ function selectPlan(p) {
   updateBundleTip(p);
   refreshSummary();
   renderPayPal();
+  if (coupon) revalidateCoupon();
 }
 
 // nudge single-report buyers toward credit bundles; combo buyers are left alone
@@ -467,25 +465,62 @@ document.querySelectorAll('.plan-card').forEach(card => {
 function getFinal() {
   const base = PLANS[plan].price;
   if (!coupon) return base;
-  if (coupon.fixedPrice != null) return coupon.fixedPrice;
-  if (coupon.pct) return Math.max(0.01, base * (1 - coupon.pct / 100));
-  return base;
+  let f = base;
+  if (coupon.discountType === 'set_price') f = coupon.value;
+  else if (coupon.discountType === 'percent') f = base * (1 - coupon.value / 100);
+  else if (coupon.discountType === 'fixed_total') f = base - coupon.value;
+  return Math.max(0.01, Math.round(f * 100) / 100);
 }
-document.getElementById('applyBtn').addEventListener('click', () => {
-  const code = document.getElementById('couponInput').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+
+async function fetchCoupon(code) {
+  try {
+    const r = await fetch('/api/checkout-coupon', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code, plan }),
+    });
+    const d = await r.json();
+    if (!r.ok || !d.coupon) return null;
+    return {
+      code: d.coupon.code,
+      discountType: d.coupon.discountType,
+      value: Number(d.coupon.value),
+      description: d.coupon.description,
+    };
+  } catch { return null; }
+}
+
+document.getElementById('applyBtn').addEventListener('click', async () => {
+  const code = document.getElementById('couponInput').value.trim().toUpperCase().replace(/[^A-Z0-9_-]/g,'');
   const msg = document.getElementById('couponMsg');
+  const btn = document.getElementById('applyBtn');
   if (!code) { coupon = null; msg.textContent = ''; msg.className = 'coupon-msg'; refreshSummary(); renderPayPal(); return; }
-  if (COUPONS[code]) {
-    coupon = { code, ...COUPONS[code] };
-    msg.textContent = '✓ ' + COUPONS[code].label + ' applied';
+  btn.disabled = true;
+  msg.textContent = 'Checking…';
+  msg.className = 'coupon-msg';
+  coupon = await fetchCoupon(code);
+  btn.disabled = false;
+  if (coupon) {
+    msg.textContent = '✓ ' + (coupon.description || coupon.code) + ' applied';
     msg.className = 'coupon-msg ok';
   } else {
-    coupon = null;
     msg.textContent = '✗ Invalid coupon code';
     msg.className = 'coupon-msg fail';
   }
   refreshSummary(); renderPayPal();
 });
+
+// A coupon can be plan-scoped, so switching plans re-checks it.
+async function revalidateCoupon() {
+  const prev = coupon.code;
+  const msg = document.getElementById('couponMsg');
+  coupon = await fetchCoupon(prev);
+  if (!coupon) {
+    msg.textContent = '✗ Coupon ' + prev + " doesn't apply to this plan";
+    msg.className = 'coupon-msg fail';
+  }
+  refreshSummary(); renderPayPal();
+}
 
 // ─── VIN LOOKUP ───────────────────────────────────────────
 function isValidVin(v) { return /^[A-HJ-NPR-Z0-9]{17}$/.test(v); }
@@ -684,7 +719,9 @@ if (urlVin) {
   if (isValidVin(urlVin.toUpperCase())) setTimeout(() => lookupVin(urlVin.toUpperCase()), 600);
   refreshSummary();
 }
-const urlPlan = params.get('plan');
+// legacy/alias plan names still arrive from old links and homepage CTAs
+const PLAN_ALIASES = { premium: 'plus', carfax: 'standard', autocheck: 'plus' };
+const urlPlan = PLAN_ALIASES[params.get('plan')] || params.get('plan');
 selectPlan(urlPlan && PLANS[urlPlan] ? urlPlan : 'standard');
 
 // GSAP entrance animation

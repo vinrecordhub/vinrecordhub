@@ -100,11 +100,18 @@ create trigger credit_tx_apply
 -- ─────────────────────────────────────────────────────────────
 -- 3. coupons (fiat price reduction ONLY — never mint credits)
 -- ─────────────────────────────────────────────────────────────
+-- Coupons serve BOTH purchase flows, scoped by applies_to:
+--   * bundle ids (b1..b25) -> credit-bundle flow (/buy-credits)
+--   * plan ids (standard/plus/combo) -> single-report checkout (/checkout)
+--   * null -> everywhere
+-- 'set_price' (pay exactly $value) is refused by the bundle flow and by
+-- admin validation unless scoped to checkout plans only — a $1 fixed price
+-- on a 25-credit bundle would be a credit-minting hole.
 create table if not exists public.coupons (
   id               bigint generated always as identity primary key,
   code             text not null unique check (code = upper(code) and code ~ '^[A-Z0-9_-]{3,32}$'),
   description      text,
-  discount_type    text not null check (discount_type in ('percent','fixed_total','per_credit')),
+  discount_type    text not null check (discount_type in ('percent','fixed_total','per_credit','set_price')),
   value            numeric(10,2) not null check (value > 0),
   applies_to       text[],                    -- bundle ids; null = all bundles
   max_redemptions  integer check (max_redemptions is null or max_redemptions > 0),
@@ -440,12 +447,23 @@ grant execute on function public.reserve_coupon(bigint, uuid, bigint) to service
 grant execute on function public.release_coupon_for_order(bigint) to service_role;
 
 -- ─────────────────────────────────────────────────────────────
--- 8. Seed coupons — shipped INACTIVE; enable from the admin panel.
---    (TESTONLY deliberately not migrated: a $1 fixed price on a 25-credit
---    bundle would be a credit-minting hole.)
+-- 8. Single-report checkout coupon support
+-- ─────────────────────────────────────────────────────────────
+-- Records which coupon a no-account checkout order used, for auditing and for
+-- enforcing max_redemptions on that flow (counted from these rows — there is
+-- no user identity there, so per_user_limit cannot apply).
+alter table public.orders add column if not exists coupon_code text;
+create index if not exists orders_coupon_code_idx on public.orders (coupon_code) where coupon_code is not null;
+
+-- ─────────────────────────────────────────────────────────────
+-- 9. Seed coupons — the three checkout codes that were previously hardcoded
+--    in checkout.html, migrated as-is (ACTIVE, checkout-scoped) so behavior
+--    doesn't change; manage them from the admin panel from now on.
+--    Consider disabling TESTONLY before launch.
 -- ─────────────────────────────────────────────────────────────
 insert into public.coupons (code, description, discount_type, value, applies_to, max_redemptions, is_active)
 values
-  ('LAUNCH50',  '50% launch discount',  'percent', 50, null, null, false),
-  ('WELCOME20', '20% welcome offer',    'percent', 20, null, null, false)
+  ('LAUNCH50',  '50% launch discount', 'percent',   50, array['standard','plus','combo'], null, true),
+  ('WELCOME20', '20% welcome offer',   'percent',   20, array['standard','plus','combo'], null, true),
+  ('TESTONLY',  'Test purchase',       'set_price',  1, array['standard','plus','combo'], null, true)
 on conflict (code) do nothing;

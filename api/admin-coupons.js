@@ -10,6 +10,16 @@ const { supabase } = require('../lib/supabase-server');
 const { BUNDLES } = require('../lib/bundles');
 const { isAuthorizedAdmin } = require('../lib/admin-auth');
 
+// applies_to accepts bundle ids (credit flow) and/or checkout plan ids
+// (no-account single-report flow). set_price coupons must stay checkout-only.
+const CHECKOUT_PLAN_IDS = ['standard', 'plus', 'combo'];
+const VALID_SCOPES = [...Object.keys(BUNDLES), ...CHECKOUT_PLAN_IDS];
+
+function isCheckoutOnlyScope(appliesTo) {
+  return Array.isArray(appliesTo) && appliesTo.length > 0
+    && appliesTo.every(s => CHECKOUT_PLAN_IDS.includes(s));
+}
+
 function fail(res, status, code, message) {
   return res.status(status).json({ error: { code, message } });
 }
@@ -24,10 +34,13 @@ function validateFields(body, { forCreate }) {
     const code = String(body.code || '').trim().toUpperCase();
     if (!/^[A-Z0-9_-]{3,32}$/.test(code)) errs.push('code must be 3-32 chars A-Z 0-9 _ -');
     out.code = code;
-    if (!['percent', 'fixed_total', 'per_credit'].includes(body.discount_type)) {
-      errs.push("discount_type must be percent | fixed_total | per_credit");
+    if (!['percent', 'fixed_total', 'per_credit', 'set_price'].includes(body.discount_type)) {
+      errs.push("discount_type must be percent | fixed_total | per_credit | set_price");
     }
     out.discount_type = body.discount_type;
+    if (body.discount_type === 'set_price' && !isCheckoutOnlyScope(body.applies_to)) {
+      errs.push(`set_price coupons must be scoped to checkout plans only (${CHECKOUT_PLAN_IDS.join(', ')})`);
+    }
   }
 
   if (body.value !== undefined) {
@@ -41,8 +54,8 @@ function validateFields(body, { forCreate }) {
   }
 
   if (body.applies_to !== undefined && body.applies_to !== null) {
-    if (!Array.isArray(body.applies_to) || body.applies_to.some(b => !BUNDLES[b])) {
-      errs.push(`applies_to must be null or an array of: ${Object.keys(BUNDLES).join(', ')}`);
+    if (!Array.isArray(body.applies_to) || body.applies_to.some(s => !VALID_SCOPES.includes(s))) {
+      errs.push(`applies_to must be null or an array of: ${VALID_SCOPES.join(', ')}`);
     } else {
       out.applies_to = body.applies_to.length ? body.applies_to : null;
     }
@@ -85,7 +98,19 @@ module.exports = async function handler(req, res) {
         .select('*')
         .order('created_at', { ascending: false });
       if (error) throw new Error(error.message);
-      return res.status(200).json({ coupons: data });
+      // redemption_count only tracks the bundle flow; checkout (no-account)
+      // uses are counted from orders.coupon_code.
+      const { data: orderRows } = await supabase
+        .from('orders')
+        .select('coupon_code')
+        .not('coupon_code', 'is', null);
+      const checkoutUses = {};
+      for (const row of orderRows || []) {
+        checkoutUses[row.coupon_code] = (checkoutUses[row.coupon_code] || 0) + 1;
+      }
+      return res.status(200).json({
+        coupons: data.map(c => ({ ...c, checkout_uses: checkoutUses[c.code] || 0 })),
+      });
     }
 
     if (req.method === 'POST') {
@@ -108,6 +133,16 @@ module.exports = async function handler(req, res) {
       const { fields, errs } = validateFields(body, { forCreate: false });
       if (errs.length) return fail(res, 400, 'validation', errs.join('; '));
       if (!Object.keys(fields).length) return fail(res, 400, 'empty', 'Nothing to update');
+      // discount_type is immutable, so only a scope change can move a
+      // set_price coupon onto bundles — refuse that here.
+      if ('applies_to' in fields) {
+        const { data: existing } = await supabase
+          .from('coupons').select('discount_type').eq('id', id).single();
+        if (existing?.discount_type === 'set_price' && !isCheckoutOnlyScope(fields.applies_to)) {
+          return fail(res, 400, 'validation',
+            `set_price coupons must be scoped to checkout plans only (${CHECKOUT_PLAN_IDS.join(', ')})`);
+        }
+      }
       fields.updated_at = new Date().toISOString();
       const { data, error } = await supabase.from('coupons').update(fields).eq('id', id).select('*').single();
       if (error) throw new Error(error.message);

@@ -108,6 +108,9 @@
     .vin-lk.show{display:flex;background:var(--g-dim);border:1px solid var(--g-bdr);color:var(--green)}
     .vin-lk.err{display:flex;background:var(--r-dim);border:1px solid var(--r-bdr);color:var(--red)}
     .vin-lk.ldg{display:flex;background:var(--border);border:1px solid var(--border2);color:var(--muted)}
+    /* Sits before the pay button so it is reached on the way there, not after. */
+    .pay-gate{display:none;font-size:.78rem;color:var(--muted);margin:.6rem 0 .1rem;text-align:center}
+    .pay-gate.on{display:block}
 
     /* PLAN SELECTOR */
     .plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.25rem}
@@ -292,8 +295,8 @@
 
     <div class="fg">
       <label class="fl" for="vinInput">Vehicle VIN Number</label>
-      <input class="fi" type="text" id="vinInput" placeholder="17-character VIN" maxlength="17" autocomplete="off" spellcheck="false" aria-describedby="vinHint" aria-invalid="false"/>
-      <div class="vin-lk" id="vinLk" role="status" aria-live="polite"><span id="vinLkIco"></span><span id="vinLkTxt"></span></div>
+      <input class="fi" type="text" id="vinInput" placeholder="17-character VIN" maxlength="17" autocomplete="off" spellcheck="false" aria-describedby="vinHint vinLk" aria-invalid="false"/>
+      <div class="vin-lk" id="vinLk" role="status" aria-live="polite" aria-atomic="true"><span id="vinLkIco" aria-hidden="true"></span><span id="vinLkTxt"></span></div>
       <div class="fh" id="vinHint">Found on dashboard, door jamb, or vehicle title.</div>
     </div>
 
@@ -345,6 +348,7 @@
     </div>
 
     <div class="err-msg" id="errMsg" role="alert" aria-live="assertive"></div>
+    <div class="pay-gate" id="payGate" role="status" aria-live="polite"></div>
     <div id="ppBtn"></div>
     <p class="pay-note">Accepts all major cards · PayPal · No account required<br/>Report delivered within 60 seconds of payment</p>
   </div>
@@ -533,10 +537,26 @@ let vtimer = null;
 let vinStatus = 'idle';   // idle | checking | ok | notfound | unverified
 let vinSeq = 0;           // discards responses for a VIN the user has moved on from
 
+// 'checking' is undetermined, not invalid, and 'unverified' still lets the sale
+// through — asserting aria-invalid on either would contradict what the form does.
 function setVinStatus(status) {
   vinStatus = status;
   const inp = document.getElementById('vinInput');
   inp.setAttribute('aria-invalid', status === 'notfound' ? 'true' : 'false');
+  updatePayGate();
+}
+
+// Polite, always-present line before the pay button, so the blocked state is
+// perceivable before the click rather than only after it.
+function updatePayGate() {
+  const g = document.getElementById('payGate');
+  if (!g) return;
+  const text = vinStatus === 'checking' ? 'Checking VIN…'
+             : vinStatus === 'notfound' ? 'Enter a VIN we can verify to continue.'
+             : vinStatus === 'ok'       ? 'VIN verified — you can continue.'
+             : '';
+  if (text) { g.classList.add('on'); g.textContent = text; }
+  else { g.classList.remove('on'); g.textContent = ''; }
 }
 
 async function lookupVin(vin) {
@@ -560,7 +580,10 @@ async function lookupVin(vin) {
     document.getElementById('vehicleCard').className = 'vehicle-card show';
   } catch {
     if (seq !== vinSeq) return;
-    setVinStatus('unverified'); el.className='vin-lk';
+    // Checkout still proceeds — but say so, or the user infers a check that
+    // never completed from the "Looking up vehicle..." they just saw.
+    setVinStatus('unverified');
+    el.className='vin-lk ldg'; ico.textContent='ℹ️'; txt.textContent='Couldn\'t verify this VIN right now — you can still continue';
   }
 }
 
@@ -614,17 +637,37 @@ function validate() {
   const email = document.getElementById('emailInput').value.trim();
   const err = document.getElementById('errMsg');
   const errors = [];
-  if (!vin) { document.getElementById('vinInput').classList.add('err'); errors.push('Please enter your vehicle VIN.'); }
-  else if (vin.length !== 17) { document.getElementById('vinInput').classList.add('err'); errors.push(`VIN must be 17 characters (${vin.length}/17).`); }
-  else if (!isValidVin(vin)) { document.getElementById('vinInput').classList.add('err'); errors.push('Invalid VIN — cannot contain I, O, or Q.'); }
-  else if (vinStatus === 'notfound') { document.getElementById('vinInput').classList.add('err'); errors.push('We couldn\'t find that VIN in the national vehicle database, so we can\'t run a report on it. Please check it against the dashboard, door jamb, or title and try again.'); }
-  else if (vinStatus === 'checking') { errors.push('Still checking that VIN — give it a second, then try again.'); }
-  else { document.getElementById('vinInput').classList.remove('err'); }
-  if (!email) { document.getElementById('emailInput').classList.add('err'); errors.push('Please enter your email address.'); }
-  else if (!isValidEmail(email)) { document.getElementById('emailInput').classList.add('err'); errors.push('Please enter a valid email address.'); }
-  else { document.getElementById('emailInput').classList.remove('err'); }
-  if (errors.length) { err.innerHTML = errors.join('<br>'); err.style.display = 'block'; return false; }
-  err.style.display = 'none'; return true;
+  let firstBad = null;
+  const flag = el => { firstBad = firstBad || el; };
+  const vinEl = document.getElementById('vinInput');
+  if (!vin) { vinEl.classList.add('err'); flag(vinEl); errors.push('Please enter your vehicle VIN.'); }
+  else if (vin.length !== 17) { vinEl.classList.add('err'); flag(vinEl); errors.push(`VIN must be 17 characters (${vin.length}/17).`); }
+  else if (!isValidVin(vin)) { vinEl.classList.add('err'); flag(vinEl); errors.push('Invalid VIN — cannot contain I, O, or Q.'); }
+  // Wording differs from the #vinLk status on purpose — heard back to back it
+  // should read as the consequence, not as the same sentence twice.
+  else if (vinStatus === 'notfound') { vinEl.classList.add('err'); flag(vinEl); errors.push('Can\'t continue: this VIN didn\'t match any vehicle record. Check it against the dashboard, door jamb, or title.'); }
+  else if (vinStatus === 'checking') { flag(vinEl); errors.push('Still checking that VIN — give it a second, then try again.'); }
+  else { vinEl.classList.remove('err'); }
+  const emailEl = document.getElementById('emailInput');
+  if (!email) { emailEl.classList.add('err'); flag(emailEl); errors.push('Please enter your email address.'); }
+  else if (!isValidEmail(email)) { emailEl.classList.add('err'); flag(emailEl); errors.push('Please enter a valid email address.'); }
+  else { emailEl.classList.remove('err'); }
+  if (errors.length) {
+    // Show the region BEFORE writing into it. Content injected while the element
+    // is display:none lands outside the accessibility tree, so the alert is never
+    // announced — the later visibility flip is not itself a live-region trigger.
+    err.style.display = 'block';
+    err.textContent = '';
+    errors.forEach((line, i) => {
+      if (i) err.appendChild(document.createElement('br'));
+      err.appendChild(document.createTextNode(line));
+    });
+    // PayPal's button is an iframe: without this, a rejected createOrder leaves
+    // focus stranded inside it, next to an error the user can't navigate to.
+    if (firstBad) firstBad.focus();
+    return false;
+  }
+  err.style.display = 'none'; err.textContent = ''; return true;
 }
 
 // ─── PAYPAL ───────────────────────────────────────────────

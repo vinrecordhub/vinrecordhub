@@ -87,7 +87,10 @@ table{display:block;width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-s
 thead{background:color-mix(in oklch,var(--theme) 12%,var(--surface))}
 th,td{text-align:left;padding:.85rem 1rem;border-bottom:1px solid var(--border)}
 th{color:var(--text);font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em}
-tbody tr:last-child td{border-bottom:none}
+/* Row headers (th scope="row") are labels inside the body, not a second header
+   row — drop the thead uppercase treatment so they read as data. */
+tbody th{font-weight:400;font-size:inherit;text-transform:none;letter-spacing:normal}
+tbody tr:last-child td,tbody tr:last-child th{border-bottom:none}
 tbody tr:hover{background:var(--surface)}
 tbody tr:nth-last-child(1){background:color-mix(in oklch,var(--theme) 10%,transparent)}
 

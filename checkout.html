@@ -631,11 +631,29 @@ function refreshSummary() {
 }
 
 // ─── VALIDATION ───────────────────────────────────────────
+// The only two writers for #errMsg. Display is flipped BEFORE the text lands:
+// content injected into a display:none subtree is outside the accessibility
+// tree, so role="alert" never fires and the message is silent. Every path that
+// surfaces an error goes through here so that ordering can't drift again.
+function showError(...lines) {
+  const err = document.getElementById('errMsg');
+  err.style.display = 'block';
+  err.textContent = '';
+  lines.forEach((line, i) => {
+    if (i) err.appendChild(document.createElement('br'));
+    err.appendChild(document.createTextNode(line));
+  });
+}
+function clearError() {
+  const err = document.getElementById('errMsg');
+  err.style.display = 'none';
+  err.textContent = '';
+}
+
 function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e); }
 function validate() {
   const vin = document.getElementById('vinInput').value.trim().toUpperCase();
   const email = document.getElementById('emailInput').value.trim();
-  const err = document.getElementById('errMsg');
   const errors = [];
   let firstBad = null;
   const flag = el => { firstBad = firstBad || el; };
@@ -653,21 +671,15 @@ function validate() {
   else if (!isValidEmail(email)) { emailEl.classList.add('err'); flag(emailEl); errors.push('Please enter a valid email address.'); }
   else { emailEl.classList.remove('err'); }
   if (errors.length) {
-    // Show the region BEFORE writing into it. Content injected while the element
-    // is display:none lands outside the accessibility tree, so the alert is never
-    // announced — the later visibility flip is not itself a live-region trigger.
-    err.style.display = 'block';
-    err.textContent = '';
-    errors.forEach((line, i) => {
-      if (i) err.appendChild(document.createElement('br'));
-      err.appendChild(document.createTextNode(line));
-    });
+    showError(...errors);
     // PayPal's button is an iframe: without this, a rejected createOrder leaves
     // focus stranded inside it, next to an error the user can't navigate to.
-    if (firstBad) firstBad.focus();
+    // Not on 'checking' — nothing needs editing there, and moving focus off the
+    // pay button just makes the user hunt for it again.
+    if (firstBad && vinStatus !== 'checking') firstBad.focus();
     return false;
   }
-  err.style.display = 'none'; err.textContent = ''; return true;
+  clearError(); return true;
 }
 
 // ─── PAYPAL ───────────────────────────────────────────────
@@ -769,13 +781,13 @@ function renderPayPal() {
       await new Promise(r => setTimeout(r, emailSuccess ? 1200 : 2500));
       window.location.href = `/success?vin=${encodeURIComponent(vin)}&email=${encodeURIComponent(email)}&plan=${plan}&order=${orderId}&delivered=${emailSuccess ? '1' : '0'}`;
     },
+    // showError, not inline writes: content must land after the region is
+    // visible or the alert never reaches the accessibility tree.
     onError: function(err) {
-      document.getElementById('errMsg').textContent = 'Payment failed — please try again or contact support@vinrecordhub.com';
-      document.getElementById('errMsg').style.display = 'block';
+      showError('Payment failed — please try again or contact support@vinrecordhub.com');
     },
     onCancel: function() {
-      document.getElementById('errMsg').textContent = 'Payment cancelled — your order is still saved.';
-      document.getElementById('errMsg').style.display = 'block';
+      showError('Payment cancelled — your order is still saved.');
     }
   }).render('#ppBtn');
 }

@@ -136,6 +136,9 @@
     .vin-status.show{display:flex;color:var(--success)}
     .vin-status.err{display:flex;color:var(--warning)}
     .vin-status.ldg{display:flex;color:var(--text-muted)}
+    /* Adjacent to the submit button, unlike .vin-status which sits by the input. */
+    .gen-gate{display:none;font-size:.78rem;color:var(--text-muted);margin:.9rem 0 -.4rem;text-align:center}
+    .gen-gate.on{display:block}
 
     .btn-cta{background:var(--cta);color:var(--on-cta);font-family:'Inter',sans-serif;
       font-weight:700;font-size:.85rem;padding:.8rem 1.5rem;border-radius:10px;
@@ -299,7 +302,7 @@
     <div class="fg">
       <label class="fl" for="vinInput">Vehicle VIN Number</label>
       <input class="fi" type="text" id="vinInput" placeholder="17-character VIN" maxlength="17" autocomplete="off" spellcheck="false" aria-describedby="vinHint" aria-invalid="false"/>
-      <div class="vin-status" id="vinStatus" role="status" aria-live="polite"><span id="vinStatusIco"></span><span id="vinStatusTxt"></span></div>
+      <div class="vin-status" id="vinStatus" role="status" aria-live="polite" aria-atomic="true"><span id="vinStatusIco" aria-hidden="true"></span><span id="vinStatusTxt"></span></div>
       <div class="fh" id="vinHint">Found on dashboard, door jamb, or vehicle title.</div>
     </div>
 
@@ -319,8 +322,9 @@
       </div>
     </div>
 
+    <div class="gen-gate" id="genGate" role="status" aria-live="polite"></div>
     <button class="btn-submit" id="generateBtn" type="button">Generate Report — 1 Credit</button>
-    <div class="gen-result" id="genResult" role="status" aria-live="polite"></div>
+    <div class="gen-result" id="genResult" role="status" aria-live="polite" tabindex="-1"></div>
   </div>
 
   <div class="card">
@@ -404,9 +408,22 @@ function fmtDate(d){try{return new Date(d).toLocaleDateString('en-US',{month:'sh
   // definitive not-found blocks — a failed lookup (NHTSA down) must not.
   var vinGate = 'idle';   // idle | checking | ok | notfound | unverified
   var vinSeq = 0;
+  var blockedWhileChecking = false;
   function setVinGate(s) {
     vinGate = s;
     document.getElementById('vinInput').setAttribute('aria-invalid', s === 'notfound' ? 'true' : 'false');
+    // #vinStatus sits by the input with the report-type grid between it and the
+    // button, so someone tabbing to Generate never passes it. This line is
+    // adjacent to the button and carries the gate state there.
+    var g = document.getElementById('genGate');
+    if (!g) return;
+    var txt = s === 'checking' ? 'Checking VIN…'
+            : s === 'notfound' ? 'Enter a VIN we can verify to continue.'
+            : (s === 'ok' && blockedWhileChecking) ? 'VIN verified — you can generate now.'
+            : '';
+    if (s !== 'checking') blockedWhileChecking = false;
+    if (txt) { g.classList.add('on'); g.textContent = txt; }
+    else { g.classList.remove('on'); g.textContent = ''; }
   }
 
   async function lookupVin(vin) {
@@ -586,9 +603,11 @@ function fmtDate(d){try{return new Date(d).toLocaleDateString('en-US',{month:'sh
       return;
     }
     if (vinGate === 'checking') {
+      // No focus move: nothing needs editing, and taking the user off the
+      // button they'll re-press just makes them hunt for it again.
+      blockedWhileChecking = true;
       result.className = 'gen-result err';
       result.textContent = 'Still checking that VIN — give it a second, then try again.';
-      vinInput.focus();
       return;
     }
     vinInput.classList.remove('err');
@@ -627,6 +646,9 @@ function fmtDate(d){try{return new Date(d).toLocaleDateString('en-US',{month:'sh
 
     btn.disabled = false;
     btn.textContent = 'Generate Report — 1 Credit';
+    // Disabling a focused button drops focus to <body>, so the polite result
+    // above can be missed entirely mid-transaction. Put focus on the outcome.
+    result.focus();
   });
 
   async function init() {

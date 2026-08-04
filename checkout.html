@@ -526,32 +526,57 @@ async function revalidateCoupon() {
 function isValidVin(v) { return /^[A-HJ-NPR-Z0-9]{17}$/.test(v); }
 let vtimer = null;
 
+// Gates checkout on the NHTSA decode result. 'unverified' means the lookup
+// itself failed (NHTSA down, network error) — that must NOT block a sale, so
+// only a definitive 'notfound' does. 'checking' blocks so a fast click can't
+// slip past an in-flight lookup.
+let vinStatus = 'idle';   // idle | checking | ok | notfound | unverified
+let vinSeq = 0;           // discards responses for a VIN the user has moved on from
+
+function setVinStatus(status) {
+  vinStatus = status;
+  const inp = document.getElementById('vinInput');
+  inp.setAttribute('aria-invalid', status === 'notfound' ? 'true' : 'false');
+}
+
 async function lookupVin(vin) {
+  const seq = ++vinSeq;
   const el=document.getElementById('vinLk'),ico=document.getElementById('vinLkIco'),txt=document.getElementById('vinLkTxt');
+  setVinStatus('checking');
   el.className='vin-lk ldg'; ico.textContent='⏳'; txt.textContent='Looking up vehicle...';
   try {
     const r = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`);
     const d = await r.json(); const res = d?.Results?.[0];
+    if (seq !== vinSeq) return;
     if (!res || res.ErrorCode !== '0' || !res.Make) {
-      el.className='vin-lk err'; ico.textContent='⚠️'; txt.textContent='VIN not found — please double-check'; return;
+      setVinStatus('notfound');
+      el.className='vin-lk err'; ico.textContent='⚠️'; txt.textContent='VIN not found — check it and try again'; return;
     }
+    setVinStatus('ok');
     const name = [res.ModelYear, res.Make, res.Model, res.Trim].filter(Boolean).join(' ');
     el.className='vin-lk show'; ico.textContent='✅'; txt.innerHTML=`<strong>${escHtml(name)}</strong>`;
     document.getElementById('vcName').textContent = name;
     document.getElementById('vcVin').textContent = 'VIN: ' + vin;
     document.getElementById('vehicleCard').className = 'vehicle-card show';
-  } catch { el.className='vin-lk'; }
+  } catch {
+    if (seq !== vinSeq) return;
+    setVinStatus('unverified'); el.className='vin-lk';
+  }
 }
 
 document.getElementById('vinInput').addEventListener('input', function() {
   this.value = this.value.toUpperCase();
   const vin = this.value.trim();
   const lk = document.getElementById('vinLk');
-  if (!vin) { this.style.borderColor=''; lk.className='vin-lk'; document.getElementById('vehicleCard').className='vehicle-card'; return; }
-  if (vin.length < 17) { this.style.borderColor=''; lk.className='vin-lk'; clearTimeout(vtimer); }
-  else if (!isValidVin(vin)) { this.classList.add('err'); this.classList.remove('ok'); }
+  // Any edit invalidates the previous decode — bump the sequence so a late
+  // response for the old VIN can't re-open the gate.
+  vinSeq++;
+  if (!vin) { this.style.borderColor=''; lk.className='vin-lk'; setVinStatus('idle'); document.getElementById('vehicleCard').className='vehicle-card'; return; }
+  if (vin.length < 17) { this.style.borderColor=''; lk.className='vin-lk'; setVinStatus('idle'); clearTimeout(vtimer); }
+  else if (!isValidVin(vin)) { this.classList.add('err'); this.classList.remove('ok'); setVinStatus('idle'); }
   else {
     this.classList.remove('err'); this.classList.add('ok');
+    setVinStatus('checking');   // covers the debounce window, not just the fetch
     clearTimeout(vtimer); vtimer = setTimeout(() => lookupVin(vin), 300);
   }
   refreshSummary();
@@ -592,6 +617,8 @@ function validate() {
   if (!vin) { document.getElementById('vinInput').classList.add('err'); errors.push('Please enter your vehicle VIN.'); }
   else if (vin.length !== 17) { document.getElementById('vinInput').classList.add('err'); errors.push(`VIN must be 17 characters (${vin.length}/17).`); }
   else if (!isValidVin(vin)) { document.getElementById('vinInput').classList.add('err'); errors.push('Invalid VIN — cannot contain I, O, or Q.'); }
+  else if (vinStatus === 'notfound') { document.getElementById('vinInput').classList.add('err'); errors.push('We couldn\'t find that VIN in the national vehicle database, so we can\'t run a report on it. Please check it against the dashboard, door jamb, or title and try again.'); }
+  else if (vinStatus === 'checking') { errors.push('Still checking that VIN — give it a second, then try again.'); }
   else { document.getElementById('vinInput').classList.remove('err'); }
   if (!email) { document.getElementById('emailInput').classList.add('err'); errors.push('Please enter your email address.'); }
   else if (!isValidEmail(email)) { document.getElementById('emailInput').classList.add('err'); errors.push('Please enter a valid email address.'); }
@@ -716,7 +743,7 @@ const urlVin = params.get('vin');
 if (urlVin) {
   const vi = document.getElementById('vinInput');
   vi.value = urlVin.toUpperCase(); vi.classList.add('ok');
-  if (isValidVin(urlVin.toUpperCase())) setTimeout(() => lookupVin(urlVin.toUpperCase()), 600);
+  if (isValidVin(urlVin.toUpperCase())) { setVinStatus('checking'); setTimeout(() => lookupVin(urlVin.toUpperCase()), 600); }
   refreshSummary();
 }
 // legacy/alias plan names still arrive from old links and homepage CTAs

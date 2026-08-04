@@ -12,9 +12,9 @@ VIN, pays a one-off fee, and receives a report by email within ~60 seconds. Ther
 subscription** and **no customer login** — it's a transactional, pay-per-report storefront.
 
 **Pricing (from homepage schema):**
-- Standard report — **$9.99**
-- Second report type — **$9.99**
-- Combo (both) — **$14.99**
+- Standard report — **$6.99**
+- Second report type — **$6.99**
+- Combo (both) — **$9.99**
 
 ### Tech stack
 | Layer | Tech |
@@ -149,7 +149,7 @@ This is the most important finding and it conflicts with the project's own state
 ("don't pretend to be Carfax; don't claim partnership unless proven").
 
 **Current live wording overclaims a Carfax/AutoCheck relationship:**
-- Homepage `<title>`: *"VINRecordHub — Carfax® & AutoCheck® Reports from $9.99"*.
+- Homepage `<title>`: *"VINRecordHub — Carfax® & AutoCheck® Reports from $6.99"*.
 - Meta/OG/Twitter: *"real Carfax® & AutoCheck® vehicle history reports"*, *"Same data,
   delivered in 60 seconds."*
 - `Service`/`Offer` schema names offers literally **"Carfax® Report"** and **"AutoCheck® Report"**.

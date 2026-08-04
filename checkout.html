@@ -309,22 +309,22 @@
         <div class="plan-card" id="card-standard">
           <div class="plan-dot"></div>
           <div class="plan-name">Carfax® Report</div>
-          <div class="plan-price">$9.99</div>
+          <div class="plan-price">$6.99</div>
           <div class="plan-sub">single report</div>
         </div>
         <div class="plan-card" id="card-plus">
           <div class="plan-dot"></div>
           <div class="plan-name">AutoCheck® Report</div>
-          <div class="plan-price">$9.99</div>
+          <div class="plan-price">$6.99</div>
           <div class="plan-sub">by Experian</div>
         </div>
         <div class="plan-card full" id="card-combo">
           <div class="plan-tag">Best Value</div>
           <div class="plan-dot"></div>
           <div class="plan-name" style="margin-top:.25rem">Combo Pack — Carfax® + AutoCheck®</div>
-          <div class="plan-price">$14.99</div>
+          <div class="plan-price">$9.99</div>
           <div class="plan-sub">both reports for one VIN</div>
-          <div class="plan-badge">Save $5 — most thorough check</div>
+          <div class="plan-badge">Save $4 — most thorough check</div>
         </div>
       </div>
       <div class="bundle-tip" id="bundleTip" role="note" hidden>
@@ -359,7 +359,7 @@
       <div class="vc-vin" id="vcVin"></div>
     </div>
 
-    <div class="sum-row"><span id="sumDesc">1 Carfax® report</span><span id="sumPrice">$9.99</span></div>
+    <div class="sum-row"><span id="sumDesc">1 Carfax® report</span><span id="sumPrice">$6.99</span></div>
     <div class="sum-row sum-discount" id="discRow" style="display:none">
       <span id="discLabel">Discount</span>
       <span id="discAmt"></span>
@@ -367,7 +367,7 @@
     <div class="sum-divider"></div>
     <div class="sum-total">
       <span class="sum-total-l">Total</span>
-      <span class="sum-total-p" id="sumTotal">$9.99</span>
+      <span class="sum-total-p" id="sumTotal">$6.99</span>
     </div>
 
     <div class="sum-stats">
@@ -411,9 +411,9 @@ function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').
 
 // ─── CONFIG ───────────────────────────────────────────────
 const PLANS = {
-  standard: { name:'Carfax® Report',              price:9.99,  reportType:'carfax',    desc:'1 Carfax® vehicle history report' },
-  plus:     { name:'AutoCheck® Report',           price:9.99,  reportType:'autocheck', desc:'1 AutoCheck® vehicle history report' },
-  combo:    { name:'Combo Pack — Carfax® + AutoCheck®', price:14.99, reportType:'combo', desc:'Carfax® + AutoCheck® for same VIN' },
+  standard: { name:'Carfax® Report',              price:6.99,  reportType:'carfax',    desc:'1 Carfax® vehicle history report' },
+  plus:     { name:'AutoCheck® Report',           price:6.99,  reportType:'autocheck', desc:'1 AutoCheck® vehicle history report' },
+  combo:    { name:'Combo Pack — Carfax® + AutoCheck®', price:9.99, reportType:'combo', desc:'Carfax® + AutoCheck® for same VIN' },
 };
 // Coupons are validated server-side against the admin-managed coupons table
 // (/api/checkout-coupon); fulfill-order re-verifies at payment time.

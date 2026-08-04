@@ -226,7 +226,7 @@
   const plans = {standard:'Carfax® Report',plus:'AutoCheck® Report',combo:'Combo Pack (Carfax® + AutoCheck®)',carfax:'Carfax® Report',autocheck:'AutoCheck® Report'};
   const delivered = p.get('delivered');
   const planKey = p.get('plan') || '';
-  const orderAmt = planKey === 'combo' ? '14.99' : '9.99';
+  const orderAmt = planKey === 'combo' ? '9.99' : '6.99';
 
   document.getElementById('orderId').textContent = p.get('order') || '—';
   document.getElementById('vinDisplay').textContent = p.get('vin') || '—';

@@ -47,8 +47,8 @@ content layer that funnels high-intent searchers to that page.
 - **D.** Commercial investigation (comparing providers, close to buying)
 - **E.** Comparison page
 - **F.** `/carfax-alternative`
-- **G.** Carfax Alternative — Affordable Vehicle History Reports from $9.99 | VinRecordHub
-- **H.** Looking for a Carfax alternative? Compare options and get an affordable vehicle history report from $9.99 — accident, title & odometer records delivered in minutes.
+- **G.** Carfax Alternative — Affordable Vehicle History Reports from $6.99 | VinRecordHub
+- **H.** Looking for a Carfax alternative? Compare options and get an affordable vehicle history report from $6.99 — accident, title & odometer records delivered in minutes.
 - **I.** A Carfax Alternative That Won't Cost You $40+
 - **J.** 1) Why shoppers look for an alternative (price, single-report use) · 2) What to look for in a vehicle history report · 3) VinRecordHub vs. typical single-report pricing (factual table) · 4) What's in our report (accident/title/odometer) · 5) FAQ + trademark disclaimer
 - **K.** "Run your VIN now — report in minutes" → `/checkout`
@@ -63,11 +63,11 @@ content layer that funnels high-intent searchers to that page.
 - **D.** Commercial / transactional
 - **E.** Landing page
 - **F.** `/cheaper-than-carfax`
-- **G.** Cheaper Than Carfax — Vehicle History Reports from $9.99 | VinRecordHub
-- **H.** Want a report that's cheaper than Carfax? Get accident, title, salvage and odometer checks from $9.99 with no subscription. Compare your options and save.
+- **G.** Cheaper Than Carfax — Vehicle History Reports from $6.99 | VinRecordHub
+- **H.** Want a report that's cheaper than Carfax? Get accident, title, salvage and odometer checks from $6.99 with no subscription. Compare your options and save.
 - **I.** A Cheaper Way to Check a Used Car's History
 - **J.** 1) The price gap explained · 2) Checks you still get (accident/title/odometer/salvage) · 3) Side-by-side price comparison (factual) · 4) Who it's for (private buyers, sellers, small dealers) · 5) How delivery works + FAQ
-- **K.** "Check your VIN for $9.99" → `/checkout`
+- **K.** "Check your VIN for $6.99" → `/checkout`
 - **L.** → `/checkout`, → `/carfax-alternative`, → `/cheap-vehicle-history-report`
 - **M.** Core money page in the alternative cluster
 - **N.** Medium · **O.** High
@@ -80,9 +80,9 @@ content layer that funnels high-intent searchers to that page.
 - **E.** Blog post / informational landing
 - **F.** `/cheap-carfax-report`
 - **G.** "Cheap Carfax"? How to Get an Affordable Vehicle History Report | VinRecordHub
-- **H.** Searching for a cheap Carfax? Learn how affordable vehicle history reports work and get accident, title and odometer records from $9.99 — no subscription.
+- **H.** Searching for a cheap Carfax? Learn how affordable vehicle history reports work and get accident, title and odometer records from $6.99 — no subscription.
 - **I.** Want a "Cheap Carfax"? Read This First
-- **J.** 1) What people mean by "cheap carfax" · 2) Why reports cost what they do · 3) How to get the same core checks affordably · 4) VinRecordHub option ($9.99) · 5) FAQ + clear trademark disclaimer
+- **J.** 1) What people mean by "cheap carfax" · 2) Why reports cost what they do · 3) How to get the same core checks affordably · 4) VinRecordHub option ($6.99) · 5) FAQ + clear trademark disclaimer
 - **K.** "See affordable report options" → `/checkout`
 - **L.** → `/carfax-alternative`, → `/affordable-vehicle-history-report`, → `/checkout`
 - **M.** Informational catch for brand+price searchers; **highest trademark caution** — never imply it IS Carfax
@@ -95,8 +95,8 @@ content layer that funnels high-intent searchers to that page.
 - **D.** Commercial investigation
 - **E.** Comparison page
 - **F.** `/autocheck-alternative`
-- **G.** AutoCheck Alternative — Affordable VIN History Reports from $9.99 | VinRecordHub
-- **H.** Need an AutoCheck alternative? Compare options and get an affordable vehicle history report from $9.99 with accident, title and odometer records. No subscription.
+- **G.** AutoCheck Alternative — Affordable VIN History Reports from $6.99 | VinRecordHub
+- **H.** Need an AutoCheck alternative? Compare options and get an affordable vehicle history report from $6.99 with accident, title and odometer records. No subscription.
 - **I.** An AutoCheck Alternative for Budget-Conscious Buyers
 - **J.** 1) Why people seek an alternative · 2) What an auction/score-style report covers · 3) VinRecordHub vs. typical pricing · 4) What's included · 5) FAQ + disclaimer
 - **K.** "Run your VIN now" → `/checkout`
@@ -112,7 +112,7 @@ content layer that funnels high-intent searchers to that page.
 - **E.** Comparison / listicle page
 - **F.** `/carfax-competitors`
 - **G.** Carfax Competitors Compared (2026) — Features & Prices | VinRecordHub
-- **H.** Comparing Carfax competitors? See how the main vehicle history report options stack up on price, coverage and speed — and find an affordable choice from $9.99.
+- **H.** Comparing Carfax competitors? See how the main vehicle history report options stack up on price, coverage and speed — and find an affordable choice from $6.99.
 - **I.** Carfax Competitors: An Honest Comparison
 - **J.** 1) The vehicle history report landscape · 2) Comparison criteria (price/coverage/speed/data source) · 3) Options table · 4) Where VinRecordHub fits (affordable, no subscription) · 5) How to choose + FAQ
 - **K.** "Compare and run your VIN" → `/checkout`
@@ -127,8 +127,8 @@ content layer that funnels high-intent searchers to that page.
 - **D.** Informational → commercial (pillar)
 - **E.** Pillar landing + buyer guide
 - **F.** `/vehicle-history-report`
-- **G.** Vehicle History Report — What's Inside & How to Get One from $9.99 | VinRecordHub
-- **H.** A vehicle history report reveals accidents, title problems, odometer rollback and more. Learn what's inside and get yours from $9.99, delivered in minutes.
+- **G.** Vehicle History Report — What's Inside & How to Get One from $6.99 | VinRecordHub
+- **H.** A vehicle history report reveals accidents, title problems, odometer rollback and more. Learn what's inside and get yours from $6.99, delivered in minutes.
 - **I.** Vehicle History Reports, Explained
 - **J.** 1) What a vehicle history report is · 2) What it reveals (accidents/title/salvage/odometer/ownership) · 3) How to read one (links to sample) · 4) Where the data comes from · 5) How to get one affordably + FAQ
 - **K.** "Get your vehicle history report" → `/checkout`
@@ -137,17 +137,17 @@ content layer that funnels high-intent searchers to that page.
 - **N.** High · **O.** High
 
 ## Topic 7 — Cheap Vehicle History Report
-- **A.** Cheap Vehicle History Report: Full Checks from $9.99
+- **A.** Cheap Vehicle History Report: Full Checks from $6.99
 - **B.** cheap vehicle history report
 - **C.** cheap car history report, inexpensive vehicle history report, budget vin report
 - **D.** Commercial / transactional
 - **E.** Landing page
 - **F.** `/cheap-vehicle-history-report`
-- **G.** Cheap Vehicle History Report — Accident, Title & Odometer from $9.99 | VinRecordHub
-- **H.** Get a cheap vehicle history report without cutting corners — accident, title, salvage and odometer checks from $9.99, delivered to your inbox in minutes.
+- **G.** Cheap Vehicle History Report — Accident, Title & Odometer from $6.99 | VinRecordHub
+- **H.** Get a cheap vehicle history report without cutting corners — accident, title, salvage and odometer checks from $6.99, delivered to your inbox in minutes.
 - **I.** Cheap Vehicle History Reports That Still Cover the Essentials
 - **J.** 1) "Cheap" vs "low-quality" — what matters · 2) The core checks you need · 3) Pricing & plans · 4) How fast you get it · 5) FAQ
-- **K.** "Get your $9.99 report" → `/checkout`
+- **K.** "Get your $6.99 report" → `/checkout`
 - **L.** → `/affordable-vehicle-history-report`, → `/cheaper-than-carfax`, → `/checkout`
 - **M.** Core affordability money page; lower trademark risk → rank-faster candidate
 - **N.** Low-Medium · **O.** High
@@ -159,11 +159,11 @@ content layer that funnels high-intent searchers to that page.
 - **D.** Commercial / transactional
 - **E.** Landing page
 - **F.** `/affordable-vehicle-history-report`
-- **G.** Affordable Vehicle History Report — From $9.99, No Subscription | VinRecordHub
-- **H.** Buy a single affordable vehicle history report from $9.99 — no monthly subscription, no upsells. Accident, title and odometer records delivered in minutes.
+- **G.** Affordable Vehicle History Report — From $6.99, No Subscription | VinRecordHub
+- **H.** Buy a single affordable vehicle history report from $6.99 — no monthly subscription, no upsells. Accident, title and odometer records delivered in minutes.
 - **I.** An Affordable Vehicle History Report — Pay Once, No Subscription
 - **J.** 1) The subscription problem · 2) Pay-per-report model · 3) What's included · 4) Pricing tiers · 5) FAQ
-- **K.** "Buy a single report — $9.99" → `/checkout`
+- **K.** "Buy a single report — $6.99" → `/checkout`
 - **L.** → `/cheap-vehicle-history-report`, → `/buy-vehicle-history-report`, → `/checkout`
 - **M.** Affordability cluster; strong, low-risk, rank-faster
 - **N.** Low-Medium · **O.** High
@@ -175,8 +175,8 @@ content layer that funnels high-intent searchers to that page.
 - **D.** Commercial
 - **E.** Landing page
 - **F.** `/low-cost-car-history-report`
-- **G.** Low-Cost Car History Report — From $9.99 | VinRecordHub
-- **H.** Get a low-cost car history report from $9.99 with accident, title, salvage and odometer checks. Compare options and skip the pricey subscriptions.
+- **G.** Low-Cost Car History Report — From $6.99 | VinRecordHub
+- **H.** Get a low-cost car history report from $6.99 with accident, title, salvage and odometer checks. Compare options and skip the pricey subscriptions.
 - **I.** Low-Cost Car History Reports Done Right
 - **J.** 1) Why price varies · 2) What a low-cost report should still include · 3) Comparison · 4) Pricing · 5) FAQ
 - **K.** "See low-cost report options" → `/checkout`
@@ -191,8 +191,8 @@ content layer that funnels high-intent searchers to that page.
 - **D.** Informational → commercial
 - **E.** Landing + guide
 - **F.** `/car-history-report`
-- **G.** Car History Report — Check Any Used Car by VIN from $9.99 | VinRecordHub
-- **H.** Run a car history report by VIN to see accidents, title status, salvage records and odometer readings. Affordable reports from $9.99, delivered in minutes.
+- **G.** Car History Report — Check Any Used Car by VIN from $6.99 | VinRecordHub
+- **H.** Run a car history report by VIN to see accidents, title status, salvage records and odometer readings. Affordable reports from $6.99, delivered in minutes.
 - **I.** Car History Reports: Check Before You Buy
 - **J.** 1) What a car history report covers · 2) How to run one (VIN steps) · 3) Reading the results · 4) Pricing · 5) FAQ
 - **K.** "Run a car history report" → `/checkout`
@@ -208,10 +208,10 @@ content layer that funnels high-intent searchers to that page.
 - **E.** Buyer guide / tool-style landing
 - **F.** `/vin-check`
 - **G.** VIN Check — Free Lookup vs. Full Vehicle History Report | VinRecordHub
-- **H.** A free VIN check decodes the basics; a full VIN report reveals accidents, title and odometer history. Learn the difference and get a full report from $9.99.
+- **H.** A free VIN check decodes the basics; a full VIN report reveals accidents, title and odometer history. Learn the difference and get a full report from $6.99.
 - **I.** VIN Check: What's Free and What's Not
 - **J.** 1) What a VIN is + where to find it · 2) Free VIN decode (NHTSA) — what it shows · 3) What free checks miss · 4) Full VIN report contents · 5) FAQ
-- **K.** "Run a full VIN report — $9.99" → `/checkout`
+- **K.** "Run a full VIN report — $6.99" → `/checkout`
 - **L.** → `/vin-report`, → `/vehicle-history-report`, → `/checkout`
 - **M.** **Top-funnel traffic magnet**; captures huge volume and routes to money pages
 - **N.** Medium-High · **O.** Medium-High
@@ -223,8 +223,8 @@ content layer that funnels high-intent searchers to that page.
 - **D.** Commercial / transactional
 - **E.** Landing page
 - **F.** `/vin-report`
-- **G.** VIN Report — Full Vehicle History by VIN from $9.99 | VinRecordHub
-- **H.** Enter a VIN and get a full report — accidents, title, salvage and odometer records — for $9.99, delivered to your inbox in minutes. No subscription.
+- **G.** VIN Report — Full Vehicle History by VIN from $6.99 | VinRecordHub
+- **H.** Enter a VIN and get a full report — accidents, title, salvage and odometer records — for $6.99, delivered to your inbox in minutes. No subscription.
 - **I.** Get a Full VIN Report in Minutes
 - **J.** 1) What a VIN report includes · 2) How to get yours (enter VIN) · 3) Sample/what it looks like · 4) Pricing · 5) FAQ
 - **K.** "Enter your VIN" → `/checkout`
@@ -239,8 +239,8 @@ content layer that funnels high-intent searchers to that page.
 - **D.** Transactional (urgency)
 - **E.** Landing page
 - **F.** `/instant-vin-report`
-- **G.** Instant VIN Report — Vehicle History in Minutes from $9.99 | VinRecordHub
-- **H.** Need a report now? Get an instant VIN report with accident, title and odometer records delivered to your email in about 60 seconds. From $9.99.
+- **G.** Instant VIN Report — Vehicle History in Minutes from $6.99 | VinRecordHub
+- **H.** Need a report now? Get an instant VIN report with accident, title and odometer records delivered to your email in about 60 seconds. From $6.99.
 - **I.** An Instant VIN Report, Delivered in ~60 Seconds
 - **J.** 1) When you need it now (dealer lot, private sale) · 2) How instant delivery works · 3) What's included · 4) Pricing · 5) FAQ
 - **K.** "Get your instant report" → `/checkout`
@@ -255,8 +255,8 @@ content layer that funnels high-intent searchers to that page.
 - **D.** Informational → commercial (buyer guide)
 - **E.** Buyer guide
 - **F.** `/used-car-history-report`
-- **G.** Used Car Report — Pre-Purchase History Check from $9.99 | VinRecordHub
-- **H.** Buying used? A used car report reveals hidden accidents, title issues and odometer rollback before you pay. Get yours from $9.99, delivered in minutes.
+- **G.** Used Car Report — Pre-Purchase History Check from $6.99 | VinRecordHub
+- **H.** Buying used? A used car report reveals hidden accidents, title issues and odometer rollback before you pay. Get yours from $6.99, delivered in minutes.
 - **I.** The Used Car Report Every Buyer Should Run
 - **J.** 1) Risks of buying used blind · 2) Pre-purchase checklist · 3) What the report reveals · 4) Inspection + report combo tips · 5) Pricing + FAQ
 - **K.** "Check the car before you buy" → `/checkout`
@@ -271,8 +271,8 @@ content layer that funnels high-intent searchers to that page.
 - **D.** Informational → commercial
 - **E.** Landing + guide
 - **F.** `/accident-history-report`
-- **G.** Accident History Report — Check Crash Records by VIN from $9.99 | VinRecordHub
-- **H.** Find out if a car has been in an accident. An accident history report by VIN reveals reported damage and incidents. Get yours from $9.99 in minutes.
+- **G.** Accident History Report — Check Crash Records by VIN from $6.99 | VinRecordHub
+- **H.** Find out if a car has been in an accident. An accident history report by VIN reveals reported damage and incidents. Get yours from $6.99 in minutes.
 - **I.** Has This Car Been in an Accident? Check by VIN
 - **J.** 1) Why accident history matters · 2) What gets reported (and what doesn't) · 3) How to check by VIN · 4) Reading the results · 5) Pricing + FAQ
 - **K.** "Check accident history" → `/checkout`
@@ -288,7 +288,7 @@ content layer that funnels high-intent searchers to that page.
 - **E.** Guide + landing
 - **F.** `/title-check`
 - **G.** Car Title Check — Find Branded & Problem Titles by VIN | VinRecordHub
-- **H.** Run a car title check by VIN to spot salvage, rebuilt, flood and other branded titles before you buy. Affordable reports from $9.99, delivered in minutes.
+- **H.** Run a car title check by VIN to spot salvage, rebuilt, flood and other branded titles before you buy. Affordable reports from $6.99, delivered in minutes.
 - **I.** Car Title Check: Don't Buy a Branded Title by Mistake
 - **J.** 1) What a title brand is · 2) Common brands (salvage/rebuilt/flood/lemon) · 3) How to check by VIN · 4) What to do if you find one · 5) Pricing + FAQ
 - **K.** "Run a title check" → `/checkout`
@@ -304,7 +304,7 @@ content layer that funnels high-intent searchers to that page.
 - **E.** Guide + landing
 - **F.** `/salvage-title-check`
 - **G.** Salvage Title Check — Check for Salvage/Rebuilt by VIN | VinRecordHub
-- **H.** A salvage title check by VIN reveals if a car was declared a total loss and rebuilt. Avoid costly surprises — get an affordable report from $9.99.
+- **H.** A salvage title check by VIN reveals if a car was declared a total loss and rebuilt. Avoid costly surprises — get an affordable report from $6.99.
 - **I.** Salvage Title Check: Know Before You Buy
 - **J.** 1) What a salvage/rebuilt title means · 2) Risks (safety, resale, insurance) · 3) How to check by VIN · 4) Buying a rebuilt car — when it's ok · 5) Pricing + FAQ
 - **K.** "Check for a salvage title" → `/checkout`
@@ -319,8 +319,8 @@ content layer that funnels high-intent searchers to that page.
 - **D.** Informational → commercial
 - **E.** Guide + landing
 - **F.** `/odometer-check`
-- **G.** Odometer Check — Detect Mileage Rollback by VIN from $9.99 | VinRecordHub
-- **H.** An odometer check by VIN reveals mileage inconsistencies and possible rollback. Protect yourself from fraud — get an affordable report from $9.99.
+- **G.** Odometer Check — Detect Mileage Rollback by VIN from $6.99 | VinRecordHub
+- **H.** An odometer check by VIN reveals mileage inconsistencies and possible rollback. Protect yourself from fraud — get an affordable report from $6.99.
 - **I.** Odometer Check: Is the Mileage Real?
 - **J.** 1) Odometer fraud, by the numbers · 2) How rollback happens · 3) How a VIN report flags it · 4) Red flags to watch · 5) Pricing + FAQ
 - **K.** "Verify the mileage" → `/checkout`
@@ -329,14 +329,14 @@ content layer that funnels high-intent searchers to that page.
 - **N.** Low-Medium · **O.** Medium
 
 ## Topic 19 — Buy Vehicle History Report
-- **A.** Buy a Vehicle History Report Online — From $9.99
+- **A.** Buy a Vehicle History Report Online — From $6.99
 - **B.** buy vehicle history report
 - **C.** buy vin report, purchase vehicle history report, buy car history report online
 - **D.** Transactional (bottom funnel)
 - **E.** Landing / conversion page
 - **F.** `/buy-vehicle-history-report`
-- **G.** Buy a Vehicle History Report Online — From $9.99, Instant | VinRecordHub
-- **H.** Buy a vehicle history report online from $9.99. Enter a VIN, pay once, and get accident, title and odometer records by email in minutes. No subscription.
+- **G.** Buy a Vehicle History Report Online — From $6.99, Instant | VinRecordHub
+- **H.** Buy a vehicle history report online from $6.99. Enter a VIN, pay once, and get accident, title and odometer records by email in minutes. No subscription.
 - **I.** Buy a Vehicle History Report in Two Steps
 - **J.** 1) What you're buying · 2) Pricing tiers (single/combo) · 3) How payment + delivery works · 4) Refund/no-records policy · 5) FAQ
 - **K.** "Buy now — enter your VIN" → `/checkout`
@@ -352,7 +352,7 @@ content layer that funnels high-intent searchers to that page.
 - **E.** Blog post
 - **F.** `/how-much-does-carfax-cost`
 - **G.** How Much Does a Carfax Cost in 2026? (+ Affordable Alternatives) | VinRecordHub
-- **H.** How much does a Carfax report cost, and is it worth it? See current pricing, what you get, and affordable alternatives that cover the same core checks from $9.99.
+- **H.** How much does a Carfax report cost, and is it worth it? See current pricing, what you get, and affordable alternatives that cover the same core checks from $6.99.
 - **I.** How Much Does a Carfax Cost — and Is There a Cheaper Way?
 - **J.** 1) Current Carfax/AutoCheck pricing (factual, cited) · 2) What you get for the money · 3) When a cheaper report is enough · 4) Affordable alternatives (incl. VinRecordHub) · 5) FAQ + trademark disclaimer
 - **B-note.** Pure brand term — informational only; **never** imply affiliation. Strong top-funnel capture that links to the alternative cluster.

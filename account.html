@@ -399,33 +399,56 @@ function fmtDate(d){try{return new Date(d).toLocaleDateString('en-US',{month:'sh
     document.getElementById('vinStatusIco').textContent = ico;
     document.getElementById('vinStatusTxt').innerHTML = txt;
   }
+  // Gates credit redemption on the decode result. Spending a credit on a VIN
+  // that doesn't exist costs the user a report they already paid for, so only a
+  // definitive not-found blocks — a failed lookup (NHTSA down) must not.
+  var vinGate = 'idle';   // idle | checking | ok | notfound | unverified
+  var vinSeq = 0;
+  function setVinGate(s) {
+    vinGate = s;
+    document.getElementById('vinInput').setAttribute('aria-invalid', s === 'notfound' ? 'true' : 'false');
+  }
+
   async function lookupVin(vin) {
+    var seq = ++vinSeq;
+    setVinGate('checking');
     setVinStatus('ldg', '⏳', 'Looking up vehicle...');
     try {
       var r = await fetch('https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/' + vin + '?format=json');
       var d = await r.json();
       var res = d && d.Results && d.Results[0];
+      if (seq !== vinSeq) return;
       if (!res || res.ErrorCode !== '0' || !res.Make) {
-        setVinStatus('err', '⚠️', 'VIN not found — please double-check');
+        setVinGate('notfound');
+        setVinStatus('err', '⚠️', 'VIN not found — check it and try again');
         return;
       }
+      setVinGate('ok');
       var name = [res.ModelYear, res.Make, res.Model, res.Trim].filter(Boolean).join(' ');
       setVinStatus('show', '✅', '<strong>' + escHtml(name) + '</strong>');
-    } catch (e) { setVinStatus('', '', ''); }
+    } catch (e) {
+      if (seq !== vinSeq) return;
+      setVinGate('unverified');
+      setVinStatus('ldg', 'ℹ️', 'Couldn\'t verify this VIN right now — you can still continue');
+    }
   }
   document.getElementById('vinInput').addEventListener('input', function () {
     this.value = this.value.toUpperCase();
     this.classList.remove('err');
     var vin = this.value.trim();
     clearTimeout(vtimer);
+    vinSeq++;   // any edit invalidates an in-flight lookup for the old VIN
     if (vin.length === 17 && isValidVin(vin)) {
       this.classList.add('ok');
+      setVinGate('checking');   // covers the debounce window, not just the fetch
       vtimer = setTimeout(function () { lookupVin(vin); }, 300);
     } else if (vin.length === 17) {
       this.classList.remove('ok');
+      setVinGate('idle');
       setVinStatus('err', '⚠️', 'Invalid VIN — cannot contain I, O, or Q');
     } else {
       this.classList.remove('ok');
+      setVinGate('idle');
       setVinStatus('', '', '');
     }
   });
@@ -552,6 +575,20 @@ function fmtDate(d){try{return new Date(d).toLocaleDateString('en-US',{month:'sh
       vinInput.classList.add('err');
       result.className = 'gen-result err';
       result.textContent = vin.length === 0 ? 'Please enter your 17-character VIN.' : 'Invalid VIN — must be 17 characters, no I, O, or Q.';
+      vinInput.focus();
+      return;
+    }
+    if (vinGate === 'notfound') {
+      vinInput.classList.add('err');
+      result.className = 'gen-result err';
+      result.textContent = 'Can\'t continue: this VIN didn\'t match any vehicle record, so a report would come back empty. Check it against the dashboard, door jamb, or title.';
+      vinInput.focus();
+      return;
+    }
+    if (vinGate === 'checking') {
+      result.className = 'gen-result err';
+      result.textContent = 'Still checking that VIN — give it a second, then try again.';
+      vinInput.focus();
       return;
     }
     vinInput.classList.remove('err');

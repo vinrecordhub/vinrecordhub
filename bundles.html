@@ -157,7 +157,10 @@
       font-size:.58rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
       padding:.22rem .9rem;border-radius:0 0 8px 8px;white-space:nowrap;
       background:var(--accent-primary);color:var(--on-accent)}
-    .bc-badge.best{background:var(--cta);color:var(--on-cta)}
+    /* --cta resolves to the same value as --accent-primary in the dark theme, so
+       this badge was indistinguishable from the other three. Inverted chip keeps
+       "best value" separate from the accent spotlight marking "most popular". */
+    .bc-badge.best{background:var(--text);color:var(--surface)}
     .bc-credits{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
       color:var(--text-muted);margin-bottom:1rem}
     .bc-price{font-size:2.2rem;font-weight:900;letter-spacing:-.05em;line-height:1}

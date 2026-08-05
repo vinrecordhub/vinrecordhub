@@ -829,7 +829,6 @@
       <div class="nav-links">
         <a href="#how">How it Works</a>
         <a href="#pricing">Pricing</a>
-        <a href="#compare">Compare</a>
         <a href="#faq">FAQ</a>
         <a href="/blog">Blog</a>
         <a href="mailto:support@vinrecordhub.com">Support</a>
@@ -855,7 +854,6 @@
   <button class="m-close" onclick="closeM()" aria-label="Close navigation menu">✕</button>
   <a href="#how" onclick="closeM()">How it Works</a>
   <a href="#pricing" onclick="closeM()">Pricing</a>
-  <a href="#compare" onclick="closeM()">Compare</a>
   <a href="#faq" onclick="closeM()">FAQ</a>
   <a href="/blog" onclick="closeM()">Blog</a>
   <a href="mailto:support@vinrecordhub.com" onclick="closeM()">Support</a>
@@ -1123,10 +1121,6 @@
     <div class="sec-tag rv">Sample Report</div>
     <h2 class="rv rv-1">Here's what you get <em>in your inbox.</em></h2>
     <p class="rv rv-2" style="font-size:.95rem;color:var(--muted);max-width:520px;margin-bottom:1.5rem;line-height:1.76">A real vehicle history report delivered as an HTML file. Open in any browser. Download and keep forever.</p>
-    <button class="sample-modal-btn rv rv-2" onclick="openSampleReport()" aria-label="View sample CFX vehicle history report">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-      View Sample Report
-    </button>
     <div class="report-card rv rv-3">
       <div class="report-header">
         <div>
@@ -1142,45 +1136,7 @@
         <div class="report-stat"><div class="rs-val warn">3</div><div class="rs-lbl">Previous Owners</div></div>
         <div class="report-stat"><div class="rs-val ok">✓</div><div class="rs-lbl">Odometer Verified</div></div>
       </div>
-      <div class="report-body">
-        <div class="report-body-lbl">Accident &amp; Damage History</div>
-        <div class="report-rows">
-          <div class="report-row">
-            <div class="report-row-head"><span class="report-row-title">Accident Reported</span><span class="report-row-meta">March 2021 · 45,231 miles</span></div>
-            <div class="report-row-desc">Front-end collision. Minor damage reported. Vehicle repaired at certified shop.</div>
-          </div>
-          <div class="report-row">
-            <div class="report-row-head"><span class="report-row-title">Accident Reported</span><span class="report-row-meta">August 2022 · 62,847 miles</span></div>
-            <div class="report-row-desc">Rear impact. Moderate damage. Insurance claim filed.</div>
-          </div>
-        </div>
-        <div class="report-unlock">
-          <div class="report-unlock-inner">
-            <div class="report-unlock-lbl">See exactly what a real report looks like</div>
-            <button onclick="openSampleReport()" class="report-unlock-btn">View Sample Report →</button>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
-</div>
-
-<div id="compare">
-  <div class="sec">
-    <div class="sec-tag rv">Why VINRecordHub</div>
-    <h2 class="rv rv-1">Same records. <em>Way less.</em></h2>
-    <p class="sec-sub rv rv-2">Access CFX &amp; ATC vehicle history records at a fraction of the retail price.</p>
-    <div class="cmp-table">
-      <div class="cmp-h rv rv-1"><span>Feature</span><span class="us">VINRecordHub</span><span>CFX Direct</span><span>ATC Direct</span></div>
-      <div class="cmp-r rv rv-2"><span class="cmp-lbl" style="font-weight:600;color:var(--text)">Price per report</span><span class="c-good">$6.99</span><span class="c-bad">$44.99</span><span class="c-bad">$24.99</span></div>
-      <div class="cmp-r rv rv-3"><span class="cmp-lbl">Both reports (combo)</span><span class="c-good">$9.99</span><span class="c-bad">$69.98</span><span class="c-bad">$69.98</span></div>
-      <div class="cmp-r rv rv-4"><span class="cmp-lbl">Subscription required</span><span class="c-yes">✓ None</span><span class="c-no">✗ Required</span><span class="c-no">✗ Required</span></div>
-      <div class="cmp-r rv rv-5"><span class="cmp-lbl">Accident history</span><span class="c-yes">✓</span><span class="c-yes">✓</span><span class="c-yes">✓</span></div>
-      <div class="cmp-r rv rv-6"><span class="cmp-lbl">Title records</span><span class="c-yes">✓</span><span class="c-yes">✓</span><span class="c-yes">✓</span></div>
-      <div class="cmp-r rv rv-6"><span class="cmp-lbl">Instant delivery</span><span class="c-yes">✓</span><span class="c-yes">✓</span><span class="c-yes">✓</span></div>
-      <div class="cmp-r rv rv-6"><span class="cmp-lbl">Money-back guarantee</span><span class="c-yes">✓</span><span class="c-no">✗</span><span class="c-no">✗</span></div>
-    </div>
-    <p style="font-size:.67rem;color:var(--text-faint);margin-top:.9rem;text-align:center">* Competitor pricing from each provider's public pricing page. Subject to change.</p>
   </div>
 </div>
 
@@ -1210,20 +1166,6 @@
   </div>
 </div>
 
-<!-- SAMPLE REPORT MODAL -->
-<div class="report-modal-backdrop" id="reportModalBackdrop" role="dialog" aria-modal="true" aria-label="Sample vehicle history report">
-  <div class="report-modal">
-    <div class="report-modal-bar">
-      <span class="report-modal-title">Sample Report — 2024 Toyota Camry SE · VIN 4T1G11AK1RU216345</span>
-      <div class="report-modal-actions">
-        <a href="/sample-report.html" target="_blank" class="report-modal-open-btn">Open in new tab ↗</a>
-        <button class="report-modal-close" onclick="closeSampleReport()" aria-label="Close sample report">✕</button>
-      </div>
-    </div>
-    <iframe class="report-modal-iframe" id="reportModalFrame" src="" title="Sample vehicle history report" loading="lazy"></iframe>
-  </div>
-</div>
-
 <div class="sticky-cta" id="stickyCta" aria-label="Get your vehicle history report">
   <span class="sticky-cta-txt"><strong>Don't buy blind</strong> — check any VIN in 60 seconds</span>
   <a href="#pricing" class="sticky-cta-btn">Get Report — from $6.99 →</a>
@@ -1237,7 +1179,7 @@
         <div class="f-tagline">Instant vehicle history powered by CFX &amp; ATC.</div>
       </div>
       <div class="f-links">
-        <div class="f-col"><h4>Product</h4><a href="#how">How it Works</a><a href="/bundles">Credit Bundles</a><a href="#compare">Compare</a><a href="/blog/carfax-vs-autocheck">CFX vs ATC</a><a href="/blog/bulk-vin-reports-for-dealers">Bulk Reports for Dealers</a></div>
+        <div class="f-col"><h4>Product</h4><a href="#how">How it Works</a><a href="/bundles">Credit Bundles</a><a href="/blog/bulk-vin-reports-for-dealers">Bulk Reports for Dealers</a></div>
         <div class="f-col"><h4>Support</h4><a href="#faq">FAQ</a><a href="mailto:support@vinrecordhub.com">Contact Us</a><a href="mailto:support@vinrecordhub.com">support@vinrecordhub.com</a></div>
         <div class="f-col"><h4>Legal</h4><a href="/terms">Terms of Service</a><a href="/privacy">Privacy Policy</a></div>
       </div>
@@ -1293,7 +1235,7 @@ window.addEventListener('load',function(){
 </div>
 
 <script>
-  // Keyboard focus management shared by both dialogs: move focus in on open,
+  // Keyboard focus management for the mobile nav dialog: move focus in on open,
   // trap Tab within the dialog, and restore focus to the opener on close.
   var _focusReturn=null;
   function trapFocus(container,e){
@@ -1507,37 +1449,6 @@ window.addEventListener('load',function(){
   }
 
 
-  function openSampleReport(){
-    const backdrop=document.getElementById('reportModalBackdrop');
-    const frame=document.getElementById('reportModalFrame');
-    if(!frame.src||frame.src==='about:blank'||!frame.src.includes('sample-report')){
-      frame.src='/sample-report.html';
-    }
-    backdrop.classList.add('open');
-    document.body.style.overflow='hidden';
-    _sampleReturn=document.activeElement;
-    var cb=backdrop.querySelector('.report-modal-close');
-    if(cb)cb.focus();
-    gaPush({event:'sample_report_viewed'});
-  }
-
-  var _sampleReturn=null;
-  function closeSampleReport(){
-    document.getElementById('reportModalBackdrop').classList.remove('open');
-    document.body.style.overflow='';
-    if(_sampleReturn&&_sampleReturn.focus){_sampleReturn.focus();_sampleReturn=null;}
-  }
-  document.getElementById('reportModalBackdrop').addEventListener('keydown',function(e){
-    if(this.classList.contains('open'))trapFocus(this,e);
-  });
-
-  document.getElementById('reportModalBackdrop').addEventListener('click',function(e){
-    if(e.target===this) closeSampleReport();
-  });
-
-  document.addEventListener('keydown',function(e){
-    if(e.key==='Escape') closeSampleReport();
-  });
 
 </script>
 <script src="/assets/theme.js" defer></script>

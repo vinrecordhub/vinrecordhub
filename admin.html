@@ -514,8 +514,8 @@
     <div class="table-controls">
       <input type="text" class="search-input" id="searchInput" placeholder="Search email or order ID..." aria-label="Search orders by email or order ID" autocomplete="off" oninput="filterOrders()"/>
       <button class="filter-btn active" onclick="setFilter('all', this)">All Plans</button>
-      <button class="filter-btn" onclick="setFilter('carfax', this)">Carfax</button>
-      <button class="filter-btn" onclick="setFilter('autocheck', this)">AutoCheck</button>
+      <button class="filter-btn" onclick="setFilter('carfax', this)">CFX</button>
+      <button class="filter-btn" onclick="setFilter('autocheck', this)">ATC</button>
       <button class="filter-btn" onclick="setFilter('combo', this)">Combo</button>
       <span class="results-count" id="resultsCount"></span>
       <button class="btn-refresh" onclick="loadOrders()">
@@ -837,10 +837,10 @@
 
   // ─── RENDER ───────────────────────────────────────────────
   const planConfig = {
-    carfax:    { label: 'Carfax',     cls: 'plan-carfax'    },
-    standard:  { label: 'Carfax',     cls: 'plan-carfax'    },
-    autocheck: { label: 'AutoCheck',  cls: 'plan-autocheck' },
-    plus:      { label: 'AutoCheck',  cls: 'plan-autocheck' },
+    carfax:    { label: 'CFX',     cls: 'plan-carfax'    },
+    standard:  { label: 'CFX',     cls: 'plan-carfax'    },
+    autocheck: { label: 'ATC',  cls: 'plan-autocheck' },
+    plus:      { label: 'ATC',  cls: 'plan-autocheck' },
     combo:     { label: 'Combo',      cls: 'plan-combo'     },
   };
 
@@ -995,8 +995,8 @@
       const l = d.limits;
       limits = `<div class="limits-bar">
         <div class="limit-chip"><div class="lv">${l.credits ?? '—'}</div><div class="ll">Credits</div></div>
-        <div class="limit-chip"><div class="lv">${l.carfaxReportsLeftToday ?? '—'}</div><div class="ll">Carfax / day</div></div>
-        <div class="limit-chip"><div class="lv">${l.autocheckReportsLeftToday ?? '—'}</div><div class="ll">AutoCheck / day</div></div>
+        <div class="limit-chip"><div class="lv">${l.carfaxReportsLeftToday ?? '—'}</div><div class="ll">CFX / day</div></div>
+        <div class="limit-chip"><div class="lv">${l.autocheckReportsLeftToday ?? '—'}</div><div class="ll">ATC / day</div></div>
       </div>`;
     }
     document.getElementById('resendResult').innerHTML =
@@ -1219,7 +1219,7 @@
         document.getElementById('gaChart').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:.8rem">No orders in this period</div>';
       }
 
-      const planNames = { carfax:'Carfax', standard:'Carfax', autocheck:'AutoCheck', plus:'AutoCheck', combo:'Combo' };
+      const planNames = { carfax:'CFX', standard:'CFX', autocheck:'ATC', plus:'ATC', combo:'Combo' };
       const planColors = { carfax:'var(--accent)', standard:'var(--accent)', autocheck:'var(--green)', plus:'var(--green)', combo:'var(--purple)' };
       const totalPlan = Object.values(d.byPlan).reduce((s, n) => s + n, 0);
       document.getElementById('gaPlan').innerHTML = totalPlan === 0

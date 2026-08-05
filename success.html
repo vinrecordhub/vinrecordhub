@@ -223,7 +223,7 @@
   function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
   const p = new URLSearchParams(window.location.search);
-  const plans = {standard:'Carfax® Report',plus:'AutoCheck® Report',combo:'Combo Pack (Carfax® + AutoCheck®)',carfax:'Carfax® Report',autocheck:'AutoCheck® Report'};
+  const plans = {standard:'CFX Report',plus:'ATC Report',combo:'Combo Pack (CFX + ATC)',carfax:'CFX Report',autocheck:'ATC Report'};
   const delivered = p.get('delivered');
   const planKey = p.get('plan') || '';
   const orderAmt = planKey === 'combo' ? '9.99' : '6.99';

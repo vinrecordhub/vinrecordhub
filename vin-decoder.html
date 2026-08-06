@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<script>(function(){try{var t=localStorage.getItem('vrh-theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();</script>
+<meta name="theme-color" content="#0b0d1c"/>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4MSSG5GW4X"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-4MSSG5GW4X');
+</script>
+<title>Free VIN Decoder — Decode Any VIN Number Instantly | VinRecordHub</title>
+<meta name="description" content="Free VIN decoder — enter any 17-character VIN to instantly decode year, make, model, engine and trim. No signup. Full accident and title history from $6.99."/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://vinrecordhub.com/vin-decoder"/>
+<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96"/>
+<link rel="shortcut icon" href="/favicon.ico"/>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+<link rel="manifest" href="/site.webmanifest"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Free VIN Decoder — Decode Any VIN Number Instantly"/>
+<meta property="og:description" content="Enter any 17-character VIN to instantly decode year, make, model, engine, trim and factory. Free, no signup."/>
+<meta property="og:url" content="https://vinrecordhub.com/vin-decoder"/>
+<meta property="og:image" content="https://vinrecordhub.com/og-image.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="dns-prefetch" href="https://vpic.nhtsa.dot.gov"/>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"/></noscript>
+<link rel="stylesheet" href="/assets/theme.css"/>
+<link rel="stylesheet" href="/blog/blog.css"/>
+<style>
+  .skip{position:absolute;left:-9999px;top:0;z-index:200;background:var(--cta);color:var(--on-cta);
+    padding:.75rem 1.1rem;border-radius:0 0 8px 0;font-weight:700;text-decoration:none}
+  .skip:focus{left:0}
+  .dec{background:var(--surface);border:1px solid var(--border-2);border-radius:16px;
+    padding:clamp(1.25rem,3vw,2rem);margin-bottom:2.5rem}
+  .dec-lbl{display:block;font-weight:700;font-size:.95rem;margin-bottom:.55rem;color:var(--text)}
+  .dec-hint{font-size:.82rem;color:var(--text-muted);margin-bottom:.9rem;max-width:60ch}
+  .dec-row{display:flex;gap:.7rem;flex-wrap:wrap}
+  .dec-in{flex:1 1 18rem;min-width:0;background:var(--bg);color:var(--text);
+    border:1px solid var(--border-3);border-radius:10px;padding:.85rem 1rem;
+    font-size:1.05rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    letter-spacing:.06em;text-transform:uppercase}
+  .dec-in::placeholder{color:var(--text-faint);letter-spacing:normal;text-transform:none}
+  .dec-in:focus-visible{outline:2px solid var(--cta);outline-offset:2px;border-color:var(--cta)}
+  .dec-in[aria-invalid="true"]{border-color:var(--danger)}
+  .dec-btn{min-height:44px;padding:.85rem 1.6rem;border-radius:10px;border:0;cursor:pointer;
+    background:var(--cta);color:var(--on-cta);font-weight:800;font-size:1rem;
+    font-family:inherit;transition:filter .2s}
+  .dec-btn:hover{filter:brightness(1.08)}
+  .dec-btn:focus-visible{outline:2px solid var(--text);outline-offset:2px}
+  .dec-btn[disabled]{opacity:.6;cursor:progress}
+  .dec-meta{font-size:.78rem;color:var(--text-faint);margin-top:.5rem;min-height:1.1em}
+  .dec-err{display:none;margin-top:.7rem;padding:.7rem .9rem;border-radius:9px;
+    background:color-mix(in oklab,var(--danger) 12%,transparent);
+    border:1px solid color-mix(in oklab,var(--danger) 45%,transparent);
+    color:var(--text);font-size:.88rem;font-weight:600}
+  .dec-err.show{display:block}
+  .dec-res{display:none;margin-top:1.6rem;border-top:1px solid var(--border-2);padding-top:1.4rem}
+  .dec-res.show{display:block}
+  .dec-vehicle{font-size:clamp(1.15rem,3vw,1.5rem);font-weight:800;color:var(--theme);
+    margin-bottom:.2rem;line-height:1.25}
+  .dec-vin{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;
+    color:var(--text-muted);margin-bottom:1.2rem;word-break:break-all}
+  .dec-dl{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,15rem),1fr));
+    gap:.1rem .9rem;margin:0}
+  .dec-item{border-top:1px solid var(--border);padding:.65rem .2rem}
+  .dec-dt{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;
+    color:var(--text-muted);font-weight:700;margin:0}
+  .dec-dd{margin:.2rem 0 0;font-size:.95rem;color:var(--text);font-weight:600;word-break:break-word}
+  .dec-note{margin-top:1rem;font-size:.82rem;color:var(--text-muted);
+    border-left:3px solid var(--warning);padding-left:.8rem}
+  .dec-warn{color:var(--text);border-left-color:var(--danger);font-weight:600}
+  .dec-next{margin-top:1.6rem;padding:1.15rem 1.25rem;border-radius:12px;
+    background:color-mix(in oklch,var(--theme) 10%,transparent);
+    border:1px solid color-mix(in oklch,var(--theme) 32%,transparent)}
+  .dec-next h3{margin:0 0 .4rem;font-size:1.02rem}
+  .dec-next p{margin:0 0 .9rem;font-size:.89rem;color:var(--text-muted);max-width:58ch}
+  .dec-cmp{list-style:none;padding:0;margin:0;display:grid;gap:.55rem}
+  .dec-cmp li{display:flex;gap:.6rem;align-items:flex-start;font-size:.92rem}
+  .dec-cmp .ic{flex:0 0 1.15rem;height:1.15rem;margin-top:.1rem}
+  .dec-yes .ic{color:var(--success)}
+  .dec-no .ic{color:var(--danger)}
+  @media (prefers-reduced-motion:reduce){.dec-btn{transition:none}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"VinRecordHub Free VIN Decoder","url":"https://vinrecordhub.com/vin-decoder","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Free VIN decoder that instantly returns year, make, model, engine, trim and manufacturing plant for any 17-character VIN.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"VinRecordHub","url":"https://vinrecordhub.com"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is this VIN decoder really free?","acceptedAnswer":{"@type":"Answer","text":"Yes. Decoding is free and unlimited, with no account and no email required. It reads the public NHTSA vPIC database, which publishes factory build data for every VIN sold in the United States."}},{"@type":"Question","name":"What does a VIN decoder show?","acceptedAnswer":{"@type":"Answer","text":"A decoder reads the build specification encoded in the VIN itself: model year, make, model, trim, body class, engine, transmission, drive type and the plant that assembled the car. It does not show what happened to the car after it left the factory."}},{"@type":"Question","name":"Does a free VIN decode show accidents or title problems?","acceptedAnswer":{"@type":"Answer","text":"No. Accidents, title brands such as salvage or flood, odometer readings and ownership history are event records collected after the sale. They are not encoded in the VIN and never appear in a free decode. A full vehicle history report is required, starting at $6.99."}},{"@type":"Question","name":"Where do I find my VIN?","acceptedAnswer":{"@type":"Answer","text":"Look at the base of the windshield on the driver's side, on the driver's door jamb sticker, or on your title, registration and insurance card."}},{"@type":"Question","name":"Why was my VIN rejected?","acceptedAnswer":{"@type":"Answer","text":"A VIN is exactly 17 characters and never contains the letters I, O or Q, which are excluded to avoid confusion with 1 and 0. Vehicles built before 1981 predate the standard and cannot be decoded."}}]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vinrecordhub.com/"},{"@type":"ListItem","position":2,"name":"Free VIN Decoder","item":"https://vinrecordhub.com/vin-decoder"}]}]}</script>
+</head>
+<body class="theme-vin">
+<a href="#main" class="skip">Skip to main content</a>
+<div class="nav-shell"><nav aria-label="Main navigation">
+  <a href="/" class="logo"><img class="logo-mark" src="/favicon-96x96.png" width="24" height="24" alt="" aria-hidden="true"/>VIN<span class="logo-r">Record</span><span class="logo-h">Hub</span></a>
+  <div class="nav-links"><a href="/">Home</a><a href="/blog">Blog</a><a href="mailto:support@vinrecordhub.com">Support</a><a href="https://www.instagram.com/vinrecordhub/" target="_blank" rel="noopener" class="nav-ig" aria-label="Follow VINRecordHub on Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a><button class="theme-toggle" data-theme-toggle type="button" aria-label="Switch to light theme"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button><a href="/checkout" class="nav-cta">Get Report — $6.99</a></div>
+</nav></div>
+<header class="hero-band">
+  <div class="crumbs"><a href="/">Home</a> / Free VIN Decoder</div>
+  <div class="hero-in">
+    <div>
+      <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.2-4.2"/></svg> Free tool</span>
+      <h1>Free VIN Decoder</h1>
+      <p class="hero-lede">Enter any 17-character VIN to decode the year, make, model, engine, trim and assembly plant in about a second. No account, no email, no limit.</p>
+    </div>
+    <svg class="hero-art" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.2-4.2"/></svg>
+  </div>
+</header>
+<div class="shell">
+  <main class="post-main" id="main" tabindex="-1">
+
+    <section class="dec" aria-labelledby="decH">
+      <h2 id="decH" style="margin-top:0">Decode a VIN</h2>
+      <form id="vinForm" novalidate>
+        <label class="dec-lbl" for="vinInput">Vehicle Identification Number (VIN)</label>
+        <p class="dec-hint" id="vinHint">17 characters. Letters I, O and Q are never used in a VIN. Try <button type="button" class="dec-sample" id="vinSample" style="background:none;border:0;padding:0;color:var(--theme);font:inherit;font-weight:700;text-decoration:underline;cursor:pointer">1HGCM82633A004352</button> as an example.</p>
+        <div class="dec-row">
+          <input class="dec-in" id="vinInput" name="vin" type="text" maxlength="17"
+                 placeholder="e.g. 1HGCM82633A004352" autocomplete="off" spellcheck="false"
+                 autocapitalize="characters" aria-describedby="vinHint vinMeta vinErr" aria-invalid="false"/>
+          <button class="dec-btn" id="vinBtn" type="submit">Decode VIN</button>
+        </div>
+        <p class="dec-meta" id="vinMeta"></p>
+        <p class="dec-err" id="vinErr" role="alert"></p>
+      </form>
+      <p id="vinStatus" role="status" aria-live="polite" class="visually-hidden"
+         style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"></p>
+      <noscript><p class="dec-note">This decoder needs JavaScript. You can still <a href="/checkout">order a full vehicle history report</a> for $6.99.</p></noscript>
+
+      <div class="dec-res" id="vinRes">
+        <h3 class="dec-vehicle" id="vinVehicle"></h3>
+        <p class="dec-vin" id="vinEcho"></p>
+        <dl class="dec-dl" id="vinDl"></dl>
+        <p class="dec-note" id="vinPartial" hidden>Some fields could not be decoded for this VIN. The manufacturer may not have published a complete build record.</p>
+        <p class="dec-note dec-warn" id="vinCheck" hidden>Heads up: the check digit in position 9 of this VIN doesn&rsquo;t validate, which almost always means a typo. Compare it against the dashboard, door jamb or title before ordering &mdash; our checkout verifies every VIN and won&rsquo;t accept one it can&rsquo;t confirm.</p>
+        <div class="dec-next" id="vinNext">
+          <h3>This is the factory spec — not the car's history</h3>
+          <p id="vinNextP">A decode shows how the car was built. It cannot show what happened to it since. Check accidents, title brands and odometer records before you pay for it.</p>
+          <a class="btn" id="vinCta" href="/checkout?plan=standard">Get the full history — $6.99 <span class="btn-ic" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <div class="reveal"><h2 id="what-you-get">What a free VIN decode tells you</h2>
+    <p>Every VIN is a 17-character build code. Characters 1–8 identify the manufacturer, brand and vehicle attributes, character 9 is a checksum, character 10 is the model year, character 11 is the assembly plant, and the last six are the serial number. Decoding it reads that factory record back out.</p>
+    <ul class="dec-cmp">
+      <li class="dec-yes"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Included free:</strong> model year, make, model, trim, body class, engine size and cylinders, fuel type, transmission, drive type, GVWR, manufacturer and assembly plant.</span></li>
+    </ul></div>
+
+    <div class="reveal"><h2 id="what-it-misses">What a decode cannot tell you</h2>
+    <p>Everything that happens after the car leaves the factory is an <em>event record</em>, reported later by insurers, repair shops, DMVs, auctions and police. None of it is encoded in the VIN, so no decoder — free or paid — can surface it.</p>
+    <ul class="dec-cmp">
+      <li class="dec-no"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Reported accidents and structural damage</span></li>
+      <li class="dec-no"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Title brands — salvage, rebuilt, flood, lemon, junk</span></li>
+      <li class="dec-no"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Odometer readings and rollback flags</span></li>
+      <li class="dec-no"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Number of owners, and whether it was a rental, fleet or taxi</span></li>
+      <li class="dec-no"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Service records, auction history and open liens</span></li>
+    </ul>
+    <p>That gap is the whole reason history reports exist. A decode confirms the seller's listing is describing the right car; a report tells you whether it is worth the asking price.</p></div>
+
+    <div class="reveal"><h2 id="how-to-use">How to use this before buying</h2>
+    <p>Decode first. If the year, engine or trim does not match what the listing claims, you have caught a problem for free — either a typo or a misrepresentation, and both are worth knowing before you drive out to see it. Once the spec checks out, run the full history to see the car's actual past.</p></div>
+
+    <div class="cta-box reveal"><h3>Full vehicle history — $6.99</h3><p>Accidents, title brands, odometer records and ownership history, emailed in about 60 seconds. No account required.</p>
+      <a href="/checkout" class="btn" data-cta="decoder-ctabox">Get Your Report — $6.99 <span class="btn-ic" aria-hidden="true">→</span></a>
+      <a href="/bundles" class="btn btn-ghost">Checking several cars?</a></div>
+
+    <div class="faq reveal" id="faq"><h2>Frequently asked questions</h2>
+      <details><summary>Is this VIN decoder really free?</summary><p>Yes. Decoding is free and unlimited, with no account and no email required. It reads the public NHTSA vPIC database, which publishes factory build data for every VIN sold in the United States.</p></details>
+      <details><summary>What does a VIN decoder show?</summary><p>A decoder reads the build specification encoded in the VIN itself: model year, make, model, trim, body class, engine, transmission, drive type and the plant that assembled the car. It does not show what happened to the car after it left the factory.</p></details>
+      <details><summary>Does a free VIN decode show accidents or title problems?</summary><p>No. Accidents, title brands such as salvage or flood, odometer readings and ownership history are event records collected after the sale. They are not encoded in the VIN and never appear in a free decode. A <a href="/checkout">full vehicle history report</a> is required, starting at $6.99.</p></details>
+      <details><summary>Where do I find my VIN?</summary><p>Look at the base of the windshield on the driver's side, on the driver's door jamb sticker, or on your title, registration and insurance card.</p></details>
+      <details><summary>Why was my VIN rejected?</summary><p>A VIN is exactly 17 characters and never contains the letters I, O or Q, which are excluded to avoid confusion with 1 and 0. Vehicles built before 1981 predate the standard and cannot be decoded.</p></details>
+    </div>
+
+    <div class="related reveal"><h3>Related guides</h3>
+      <a href="/blog/vin-check">VIN Check: What's Free and What's Not</a>
+      <a href="/blog/vin-report">Get a Full VIN Report</a>
+      <a href="/blog/vehicle-history-report">Vehicle History Report</a>
+      <a href="/blog/odometer-check">Odometer Check</a>
+      <a href="/blog/salvage-title-check">Salvage Title Check</a>
+      <a href="/blog">All posts</a></div>
+    <a class="back-home" href="/">← Back to the VinRecordHub home page</a>
+  </main>
+  <aside class="sidebar">
+    <div class="side-card side-cta">
+      <div class="price">$6.99<span> / report</span></div>
+      <p>The decode is free. The history — accidents, title, odometer — is $6.99.</p>
+      <a class="btn" href="/checkout" data-cta="decoder-sidebar">Get your report <span class="btn-ic" aria-hidden="true">→</span></a>
+    </div>
+    <div class="side-card">
+      <div class="side-title">On this page</div>
+      <nav class="toc" aria-label="On this page">
+        <a href="#decH">Decode a VIN</a>
+        <a href="#what-you-get">What you get free</a>
+        <a href="#what-it-misses">What it misses</a>
+        <a href="#how-to-use">How to use it</a>
+        <a href="#faq">FAQ</a></nav>
+    </div>
+    <div class="side-card side-trust">
+      <div class="side-title" style="margin-bottom:.9rem">Why VinRecordHub</div>
+      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg> Delivered in ~60 seconds</div>
+      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12V5a2 2 0 0 1 2-2h7l9 9-9 9-9-9z"/><circle cx="8" cy="8" r="1.3"/></svg> From $6.99, no subscription</div>
+      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7M3 4.5v4h4"/></svg> No-records refund policy</div>
+      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8.2-8 9-4.5-.8-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg> Accident, title &amp; odometer checks</div>
+    </div>
+  </aside>
+</div>
+<div class="footer-shell"><div class="footer-in">
+  <div class="f-top">
+    <div><div class="f-logo">VIN<span class="fr">Record</span><span class="fh">Hub</span></div>
+      <div class="f-tagline">Affordable vehicle history reports — accident, title, salvage and odometer checks from $6.99.</div></div>
+    <div class="f-links">
+      <div class="f-col"><h4>VinRecordHub</h4><a href="/">Home</a><a href="/checkout">Get a Report</a><a href="/vin-decoder">Free VIN Decoder</a><a href="/blog">Blog</a></div>
+      <div class="f-col"><h4>Support</h4><a href="mailto:support@vinrecordhub.com">Contact</a><a href="mailto:support@vinrecordhub.com">support@vinrecordhub.com</a></div>
+      <div class="f-col"><h4>Legal</h4><a href="/terms">Terms</a><a href="/privacy">Privacy</a></div>
+    </div>
+  </div>
+  <div class="f-btm"><span>© 2026 VinRecordHub. All rights reserved.</span><span><a href="/">Back to VinRecordHub →</a></span></div>
+  <div class="f-legal">Carfax® and AutoCheck® are registered trademarks of their respective owners. VinRecordHub is an independent service and is not affiliated with, endorsed by, or sponsored by Carfax, AutoCheck, or Experian. Decode data is sourced from the NHTSA vPIC public database.</div>
+</div></div>
+<script>
+(function(){
+  'use strict';
+  var FIELDS = [
+    ['Model year','ModelYear'], ['Make','Make'], ['Model','Model'],
+    ['Trim','Trim'], ['Series','Series'], ['Body class','BodyClass'],
+    ['Vehicle type','VehicleType'], ['Doors','Doors'], ['Drive type','DriveType'],
+    ['Cylinders','EngineCylinders'], ['Displacement (L)','DisplacementL'],
+    ['Horsepower','EngineHP'], ['Fuel type','FuelTypePrimary'],
+    ['Transmission','TransmissionStyle'], ['GVWR','GVWR'],
+    ['Manufacturer','Manufacturer'], ['Assembly plant','__plant']
+  ];
+
+  var form    = document.getElementById('vinForm');
+  var input   = document.getElementById('vinInput');
+  var btn     = document.getElementById('vinBtn');
+  var meta    = document.getElementById('vinMeta');
+  var errEl   = document.getElementById('vinErr');
+  var statusEl= document.getElementById('vinStatus');
+  var resEl   = document.getElementById('vinRes');
+  var vehEl   = document.getElementById('vinVehicle');
+  var echoEl  = document.getElementById('vinEcho');
+  var dlEl    = document.getElementById('vinDl');
+  var partial = document.getElementById('vinPartial');
+  var checkEl = document.getElementById('vinCheck');
+  var ctaEl   = document.getElementById('vinCta');
+  var nextP   = document.getElementById('vinNextP');
+  var sample  = document.getElementById('vinSample');
+
+  function ga(ev, params){ if (typeof gtag === 'function') gtag('event', ev, params || {}); }
+  function isValidVin(v){ return /^[A-HJ-NPR-Z0-9]{17}$/.test(v); }
+
+  function clearError(){ errEl.classList.remove('show'); errEl.textContent=''; input.setAttribute('aria-invalid','false'); }
+  function showError(msg){
+    // Reveal first, then write. A role="alert" written while still display:none is
+    // outside the a11y tree, so the message is never announced — the same bug
+    // c89de82/5af2aca fixed in checkout.html and account.html.
+    errEl.classList.add('show');
+    errEl.textContent = msg;
+    input.setAttribute('aria-invalid','true');
+    resEl.classList.remove('show');
+    input.focus();
+  }
+
+  function plantOf(r){
+    return [r.PlantCity, r.PlantState, r.PlantCountry]
+      .filter(function(x){ return x && String(x).trim(); })
+      .join(', ');
+  }
+
+  input.addEventListener('input', function(){
+    var v = input.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
+    if (v !== input.value) {
+      // Reassigning .value resets the caret to the end, which makes it impossible
+      // to fix a character mid-VIN. Put it back where the visitor left it.
+      var pos = input.selectionStart;
+      var dropped = input.value.length - v.length;
+      input.value = v;
+      try { input.setSelectionRange(pos - dropped, pos - dropped); } catch (e) {}
+    }
+    clearError();
+    meta.textContent = v.length === 0 ? '' :
+      v.length < 17 ? v.length + ' of 17 characters' : 'Ready to decode';
+  });
+
+  if (sample) sample.addEventListener('click', function(){
+    input.value = '1HGCM82633A004352';
+    meta.textContent = 'Ready to decode';
+    clearError();
+    form.requestSubmit ? form.requestSubmit() : decode();
+  });
+
+  form.addEventListener('submit', function(e){ e.preventDefault(); decode(); });
+
+  function decode(){
+    var vin = input.value.trim().toUpperCase();
+    if (!vin)            return showError('Enter a VIN to decode.');
+    if (vin.length !== 17) return showError('A VIN is exactly 17 characters — you entered ' + vin.length + '.');
+    if (!isValidVin(vin))  return showError('That VIN contains an invalid character. VINs never use the letters I, O or Q.');
+
+    clearError();
+    // Disabling a focused button drops focus to <body>; remember so it can be restored.
+    var btnHadFocus = document.activeElement === btn;
+    btn.disabled = true;
+    btn.textContent = 'Decoding…';
+    statusEl.textContent = 'Decoding VIN, please wait.';
+    ga('vin_decode_submitted');
+
+    fetch('https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/' + encodeURIComponent(vin) + '?format=json')
+      .then(function(r){
+        if (!r.ok) throw new Error('http ' + r.status);
+        return r.json();
+      })
+      .then(function(d){
+        var res = d && d.Results && d.Results[0];
+        if (!res || !res.Make) {
+          statusEl.textContent = 'No vehicle found for that VIN.';
+          ga('vin_decode_failed', { reason: 'not_found' });
+          return showError('No vehicle record found for that VIN. Double-check the characters — and note that vehicles built before 1981 predate the 17-character standard.');
+        }
+        render(vin, res);
+      })
+      .catch(function(){
+        statusEl.textContent = 'The decoder is unavailable.';
+        ga('vin_decode_failed', { reason: 'network' });
+        showError('The decoding service is temporarily unavailable. Please try again in a moment.');
+      })
+      .finally(function(){
+        btn.disabled = false;
+        btn.textContent = 'Decode VIN';
+        // Only reclaim focus if disabling it is what lost it — never steal focus
+        // the visitor has since moved somewhere else.
+        if (btnHadFocus && (!document.activeElement || document.activeElement === document.body)) {
+          btn.focus();
+        }
+      });
+  }
+
+  function render(vin, r){
+    var name = [r.ModelYear, r.Make, r.Model, r.Trim]
+      .filter(function(x){ return x && String(x).trim(); }).join(' ');
+
+    vehEl.textContent = name || 'Vehicle decoded';
+    echoEl.textContent = 'VIN ' + vin;
+
+    dlEl.textContent = '';
+    var shown = 0;
+    FIELDS.forEach(function(f){
+      var val = f[1] === '__plant' ? plantOf(r) : r[f[1]];
+      if (!val || !String(val).trim() || String(val).toLowerCase() === 'not applicable') return;
+      var wrap = document.createElement('div');
+      wrap.className = 'dec-item';
+      var dt = document.createElement('dt'); dt.className = 'dec-dt'; dt.textContent = f[0];
+      var dd = document.createElement('dd'); dd.className = 'dec-dd'; dd.textContent = String(val).trim();
+      wrap.appendChild(dt); wrap.appendChild(dd); dlEl.appendChild(wrap);
+      shown++;
+    });
+
+    partial.hidden = shown >= 8;
+
+    // checkout.html rejects any VIN NHTSA does not return ErrorCode 0 for, so warn
+    // here rather than sending the visitor into a checkout that will refuse them.
+    var codes = String(r.ErrorCode || '').split(',');
+    var checkDigitOk = codes.indexOf('0') !== -1;
+    checkEl.hidden = checkDigitOk;
+
+    ctaEl.href = '/checkout?plan=standard&vin=' + encodeURIComponent(vin);
+    nextP.textContent = name
+      ? 'You now know how this ' + name + ' was built. You still do not know if it has been wrecked, flooded, or had its odometer rolled back. Those records are what the full report covers.'
+      : 'A decode shows how the car was built. It cannot show what happened to it since. Check accidents, title brands and odometer records before you pay for it.';
+
+    resEl.classList.add('show');
+    statusEl.textContent = (name || 'Vehicle') + ' decoded. ' + shown + ' specifications listed below the form.'
+      + (checkDigitOk ? '' : ' Warning: this VIN\u2019s check digit does not validate and may contain a typo.');
+    ga('vin_decoded', { make: r.Make || '', model_year: r.ModelYear || '', check_digit_ok: checkDigitOk });
+  }
+
+  ctaEl.addEventListener('click', function(){ ga('decoder_cta_click', { source: 'results' }); });
+  document.querySelectorAll('[data-cta]').forEach(function(el){
+    el.addEventListener('click', function(){ ga('decoder_cta_click', { source: el.getAttribute('data-cta') }); });
+  });
+
+  var pre = new URLSearchParams(location.search).get('vin');
+  if (pre) {
+    var clean = pre.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,17);
+    input.value = clean;
+    // Only auto-run on a genuinely valid VIN: decode() routes failures through
+    // showError(), which focuses the input — stealing focus before any interaction.
+    if (isValidVin(clean)) decode();
+    else if (clean) meta.textContent = clean.length + ' of 17 characters';
+  }
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="/blog/blog-anim.js"></script>
+<script src="/assets/theme.js" defer></script>
+</body>
+</html>

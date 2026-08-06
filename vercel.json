@@ -31,6 +31,7 @@
     }
   ],
   "routes": [
+    { "src": "/vin-decoder", "dest": "/vin-decoder.html" },
     { "src": "/checkout", "dest": "/checkout.html" },
     { "src": "/success", "dest": "/success.html" },
     { "src": "/redeem", "dest": "/redeem.html" },

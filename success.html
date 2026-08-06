@@ -241,6 +241,21 @@
     currency: 'USD',
   });
 
+  // GA4 only credits revenue to the reserved `purchase` event; payment_completed
+  // is a custom name and never reaches the monetization reports. Both are sent so
+  // any funnel already built on payment_completed keeps working.
+  gtag('event', 'purchase', {
+    transaction_id: p.get('order') || '',
+    value: parseFloat(orderAmt),
+    currency: 'USD',
+    items: [{
+      item_id: planKey || 'standard',
+      item_name: plans[planKey] || 'Vehicle History Report',
+      price: parseFloat(orderAmt),
+      quantity: 1,
+    }],
+  });
+
   // GA4: report delivered
   if (delivered === '1') {
     gtag('event', 'report_delivered', { plan: planKey, order_id: p.get('order') || '' });

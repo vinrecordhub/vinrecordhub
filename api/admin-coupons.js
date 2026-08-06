@@ -5,6 +5,7 @@
 //   POST   /api/admin-coupons?token=...           create
 //   PUT    /api/admin-coupons?token=...&id=N      update (incl. max_redemptions)
 //   DELETE /api/admin-coupons?token=...&id=N      deactivate (soft)
+//   DELETE /api/admin-coupons?token=...&id=N&hard=1  delete outright (unused coupons only)
 
 const { supabase } = require('../lib/supabase-server');
 const { BUNDLES } = require('../lib/bundles');
@@ -26,7 +27,7 @@ function fail(res, status, code, message) {
 
 const MUTABLE = ['description', 'value', 'applies_to', 'max_redemptions', 'per_user_limit', 'is_active', 'expires_at'];
 
-function validateFields(body, { forCreate }) {
+function validateFields(body, { forCreate, existingType }) {
   const out = {};
   const errs = [];
 
@@ -45,9 +46,12 @@ function validateFields(body, { forCreate }) {
 
   if (body.value !== undefined) {
     const v = Number(body.value);
-    const type = body.discount_type;
+    // discount_type is immutable, so on update it never arrives in the body —
+    // the caller passes the stored type instead. Without it every update was
+    // checked against the percent rule regardless of the coupon's actual type.
+    const type = forCreate ? body.discount_type : existingType;
     if (!Number.isFinite(v) || v <= 0) errs.push('value must be > 0');
-    else if ((type === 'percent' || (!forCreate && type === undefined)) && v > 100) errs.push('percent value must be <= 100');
+    else if (type === 'percent' && v > 100) errs.push('percent value must be <= 100');
     out.value = v;
   } else if (forCreate) {
     errs.push('value required');
@@ -130,18 +134,21 @@ module.exports = async function handler(req, res) {
       const body = req.body || {};
       const unknown = Object.keys(body).filter(k => !MUTABLE.includes(k));
       if (unknown.length) return fail(res, 400, 'immutable_field', `Cannot change: ${unknown.join(', ')}`);
-      const { fields, errs } = validateFields(body, { forCreate: false });
+
+      const { data: existing } = await supabase
+        .from('coupons').select('discount_type').eq('id', id).single();
+      if (!existing) return fail(res, 404, 'not_found', 'Coupon not found');
+
+      const { fields, errs } = validateFields(body, { forCreate: false, existingType: existing.discount_type });
       if (errs.length) return fail(res, 400, 'validation', errs.join('; '));
       if (!Object.keys(fields).length) return fail(res, 400, 'empty', 'Nothing to update');
       // discount_type is immutable, so only a scope change can move a
       // set_price coupon onto bundles — refuse that here.
-      if ('applies_to' in fields) {
-        const { data: existing } = await supabase
-          .from('coupons').select('discount_type').eq('id', id).single();
-        if (existing?.discount_type === 'set_price' && !isCheckoutOnlyScope(fields.applies_to)) {
-          return fail(res, 400, 'validation',
-            `set_price coupons must be scoped to checkout plans only (${CHECKOUT_PLAN_IDS.join(', ')})`);
-        }
+      if ('applies_to' in fields
+          && existing.discount_type === 'set_price'
+          && !isCheckoutOnlyScope(fields.applies_to)) {
+        return fail(res, 400, 'validation',
+          `set_price coupons must be scoped to checkout plans only (${CHECKOUT_PLAN_IDS.join(', ')})`);
       }
       fields.updated_at = new Date().toISOString();
       const { data, error } = await supabase.from('coupons').update(fields).eq('id', id).select('*').single();
@@ -152,6 +159,36 @@ module.exports = async function handler(req, res) {
     if (req.method === 'DELETE') {
       const id = parseInt(req.query.id, 10);
       if (!Number.isInteger(id)) return fail(res, 400, 'invalid_id', 'id required');
+
+      if (req.query.hard === '1') {
+        const { data: existing } = await supabase
+          .from('coupons').select('code, redemption_count').eq('id', id).single();
+        if (!existing) return fail(res, 404, 'not_found', 'Coupon not found');
+
+        // credit_orders.coupon_id points at this row and orders.coupon_code names
+        // it, so a redeemed coupon can only be disabled — deleting it would leave
+        // paid orders pointing at nothing.
+        const [checkout, bundle] = await Promise.all([
+          supabase.from('orders').select('id', { count: 'exact', head: true }).eq('coupon_code', existing.code),
+          supabase.from('credit_orders').select('id', { count: 'exact', head: true }).eq('coupon_id', id),
+        ]);
+        // A failed count returns count:null, which would read as "unused" and let a
+        // redeemed coupon be destroyed. Refuse rather than guess.
+        if (checkout.error || bundle.error) {
+          return fail(res, 503, 'usage_check_failed',
+            'Could not confirm this coupon is unused, so it was not deleted. Try again.');
+        }
+        const used = (existing.redemption_count || 0) + (checkout.count || 0) + (bundle.count || 0);
+        if (used > 0) {
+          return fail(res, 409, 'coupon_in_use',
+            `${existing.code} has been redeemed ${used} time(s), so deleting it would break order history. Disable it instead.`);
+        }
+
+        const { error: delErr } = await supabase.from('coupons').delete().eq('id', id);
+        if (delErr) throw new Error(delErr.message);
+        return res.status(200).json({ deleted: true });
+      }
+
       const { error } = await supabase
         .from('coupons')
         .update({ is_active: false, updated_at: new Date().toISOString() })

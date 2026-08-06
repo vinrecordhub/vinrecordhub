@@ -191,10 +191,10 @@
     /* TABLE */
     .table-wrap{background:var(--surface);border:1px solid var(--border2);
       border-radius:12px;overflow:hidden}
-    .coupon-header{display:grid;grid-template-columns:1.2fr 1fr 1fr .9fr .7fr .9fr .8fr 130px;
+    .coupon-header{display:grid;grid-template-columns:1.2fr 1fr 1fr .9fr .7fr .9fr .8fr 200px;
       padding:.7rem 1.1rem;font-size:.64rem;font-weight:700;letter-spacing:.08em;
       text-transform:uppercase;color:var(--faint);border-bottom:1px solid var(--border);gap:.5rem}
-    .coupon-row{display:grid;grid-template-columns:1.2fr 1fr 1fr .9fr .7fr .9fr .8fr 130px;
+    .coupon-row{display:grid;grid-template-columns:1.2fr 1fr 1fr .9fr .7fr .9fr .8fr 200px;
       padding:.7rem 1.1rem;font-size:.8rem;border-bottom:1px solid var(--border);
       align-items:center;gap:.5rem}
     .coupon-row:last-child{border-bottom:none}
@@ -207,6 +207,10 @@
       color:var(--text);font-size:.68rem;font-weight:600;padding:.3rem .6rem;border-radius:6px;
       cursor:pointer;transition:background .15s}
     .cpn-btn:hover{background:color-mix(in oklab, var(--text) 12%, transparent)}
+    .cpn-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .cpn-btn.danger{color:var(--red);border-color:color-mix(in oklab, var(--red) 40%, transparent)}
+    .cpn-btn.danger:hover{background:color-mix(in oklab, var(--red) 14%, transparent)}
+    .cpn-actions{display:flex;gap:.35rem;justify-content:flex-end;flex-wrap:wrap}
     .coupon-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.5rem}
     /* selects/date inputs have large intrinsic widths; without this they
        refuse to shrink into their tracks and the row overflows the card */
@@ -214,7 +218,7 @@
     .coupon-form .btn-refresh{min-height:44px}
     @media(max-width:960px){
       .coupon-form{grid-template-columns:1fr 1fr}
-      .coupon-header,.coupon-row{grid-template-columns:1fr .9fr .8fr 110px}
+      .coupon-header,.coupon-row{grid-template-columns:1fr .9fr .8fr 150px}
       .coupon-header span:nth-child(3),.coupon-row .cpn-bundles,
       .coupon-header span:nth-child(5),.coupon-row .cpn-peruser,
       .coupon-header span:nth-child(6),.coupon-row .cpn-expiry{display:none}
@@ -328,6 +332,12 @@
     .modal-btn.secondary:hover:not(:disabled){background:color-mix(in oklab, var(--text) 9%, transparent)}
     .modal-btn.primary{background:var(--cta);color:var(--on-cta)}
     .modal-btn.primary:hover:not(:disabled){opacity:.9}
+    .modal-hint{font-size:.74rem;color:var(--muted);margin-top:.35rem}
+    .modal-err{display:none;font-size:.78rem;font-weight:600;color:var(--red);
+      margin-top:.9rem;padding:.6rem .75rem;border-radius:8px;
+      background:color-mix(in oklab, var(--red) 12%, transparent);
+      border:1px solid color-mix(in oklab, var(--red) 40%, transparent)}
+    .modal-err.show{display:block}
     .plan-step{display:flex;align-items:center;justify-content:space-between;gap:.75rem;
       padding:.7rem .9rem;border:1px solid var(--border2);border-radius:9px;margin-bottom:.5rem;
       font-size:.85rem}
@@ -612,6 +622,50 @@
   </div>
 </div>
 
+<!-- COUPON EDIT MODAL -->
+<div class="modal-overlay" id="cpnModal" onclick="if(event.target===this)closeCpnEdit()">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="cpnModalTitle">
+    <div class="modal-head">
+      <h3 id="cpnModalTitle">Edit coupon</h3>
+      <button class="modal-close" type="button" aria-label="Close" onclick="closeCpnEdit()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-row">
+        <span class="modal-label">Coupon</span>
+        <div class="modal-meta"><strong id="cpnEditCode"></strong> &nbsp;<span id="cpnEditType"></span></div>
+      </div>
+      <div class="modal-row">
+        <label class="modal-label" for="cpnEditValue" id="cpnEditValueLbl">Value</label>
+        <input class="modal-input" id="cpnEditValue" type="number" min="0.01" step="0.01" aria-describedby="cpnEditValueHint"/>
+        <div class="modal-hint" id="cpnEditValueHint"></div>
+      </div>
+      <div class="modal-row">
+        <label class="modal-label" for="cpnEditScope">Applies to</label>
+        <select class="modal-input" id="cpnEditScope"></select>
+      </div>
+      <div class="modal-row">
+        <label class="modal-label" for="cpnEditMax">Max total uses</label>
+        <input class="modal-input" id="cpnEditMax" type="number" min="1" step="1" placeholder="blank = unlimited" aria-describedby="cpnEditMaxHint"/>
+        <div class="modal-hint" id="cpnEditMaxHint">Leave blank for unlimited.</div>
+      </div>
+      <div class="modal-row">
+        <label class="modal-label" for="cpnEditPerUser">Per-user limit</label>
+        <input class="modal-input" id="cpnEditPerUser" type="number" min="1" step="1"/>
+      </div>
+      <div class="modal-row">
+        <label class="modal-label" for="cpnEditExpiry">Expires</label>
+        <input class="modal-input" id="cpnEditExpiry" type="date" aria-describedby="cpnEditExpiryHint"/>
+        <div class="modal-hint" id="cpnEditExpiryHint">Leave blank for no expiry.</div>
+      </div>
+      <p class="modal-err" id="cpnEditErr" role="alert"></p>
+      <div class="modal-actions">
+        <button class="modal-btn secondary" type="button" onclick="closeCpnEdit()">Cancel</button>
+        <button class="modal-btn primary" type="button" id="cpnEditSave" onclick="saveCpnEdit()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="copy-toast" id="copyToast">Copied!</div>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
@@ -712,10 +766,13 @@
     set_price: v => `pay $${Number(v).toFixed(2)}`,
   };
 
+  let allCoupons = [];
+
   async function loadCoupons() {
     const body = document.getElementById('couponBody');
     try {
       const { coupons } = await couponApi('GET');
+      allCoupons = coupons;
       if (!coupons.length) {
         body.innerHTML = '<div class="empty-state" style="padding:1.5rem"><p>No coupons yet.</p></div>';
         return;
@@ -729,9 +786,10 @@
           <span class="cpn-peruser">${c.per_user_limit}×</span>
           <span class="cpn-expiry">${c.expires_at ? new Date(c.expires_at).toLocaleDateString() : '—'}</span>
           <span class="cpn-badge ${c.is_active ? 'cpn-on' : 'cpn-off'}">${c.is_active ? 'Active' : 'Off'}</span>
-          <span style="display:flex;gap:.35rem;justify-content:flex-end">
-            <button class="cpn-btn" onclick="toggleCoupon(${c.id}, ${!c.is_active})">${c.is_active ? 'Disable' : 'Enable'}</button>
-            <button class="cpn-btn" onclick="editCouponMax(${c.id}, ${c.max_redemptions === null ? 'null' : c.max_redemptions})">Max…</button>
+          <span class="cpn-actions">
+            <button class="cpn-btn" type="button" onclick="toggleCoupon(${c.id}, ${!c.is_active})" aria-label="${c.is_active ? 'Disable' : 'Enable'} coupon ${escH(c.code)}">${c.is_active ? 'Disable' : 'Enable'}</button>
+            <button class="cpn-btn" type="button" data-cpn-edit="${c.id}" onclick="openCpnEdit(${c.id})" aria-label="Edit coupon ${escH(c.code)}">Edit</button>
+            <button class="cpn-btn danger" type="button" onclick="deleteCoupon(${c.id})" aria-label="Delete coupon ${escH(c.code)}">Delete</button>
           </span>
         </div>`).join('');
     } catch (err) {
@@ -746,15 +804,156 @@
     } catch (err) { alert('Update failed: ' + err.message); }
   }
 
-  async function editCouponMax(id, current) {
-    const raw = prompt('Max total redemptions (blank for unlimited):', current === null ? '' : current);
-    if (raw === null) return;
-    const val = raw.trim() === '' ? null : parseInt(raw, 10);
-    if (val !== null && (!Number.isInteger(val) || val <= 0)) { alert('Enter a positive whole number or leave blank.'); return; }
+  // Scope choices mirror the create form. set_price must stay checkout-only —
+  // the API rejects anything else, so the dialog never offers it.
+  const CPN_SCOPES = [
+    { v: '',                    label: 'Everywhere (bundles + checkout)', checkoutOnly: false },
+    { v: 'b3,b10,b15,b25',      label: 'All bundles',                     checkoutOnly: false },
+    { v: 'b3',                  label: 'b3 only',                         checkoutOnly: false },
+    { v: 'b10',                 label: 'b10 only',                        checkoutOnly: false },
+    { v: 'b15',                 label: 'b15 only',                        checkoutOnly: false },
+    { v: 'b25',                 label: 'b25 only',                        checkoutOnly: false },
+    { v: 'b10,b15,b25',         label: 'Bulk (b10+b15+b25)',              checkoutOnly: false },
+    { v: 'standard,plus,combo', label: 'Checkout: all plans',             checkoutOnly: true  },
+    { v: 'standard,plus',       label: 'Checkout: single reports',        checkoutOnly: true  },
+    { v: 'combo',               label: 'Checkout: combo only',            checkoutOnly: true  },
+  ];
+
+  const CPN_VALUE_META = {
+    percent:     { label: 'Percent off',            hint: '1-100. e.g. 25 takes 25% off the total.',           max: '100' },
+    fixed_total: { label: 'Dollars off total',      hint: 'e.g. 3 takes $3.00 off the total.',                  max: ''    },
+    per_credit:  { label: 'Dollars off per credit', hint: 'Bundles only. e.g. 0.50 takes 50c off each credit.', max: ''    },
+    set_price:   { label: 'Fixed price ($)',        hint: 'Checkout only. The customer pays exactly this.',     max: ''    },
+  };
+
+  let cpnEditId = null;
+  let cpnLastFocus = null;
+
+  function cpnErr(msg) {
+    const el = document.getElementById('cpnEditErr');
+    if (!msg) { el.classList.remove('show'); el.textContent = ''; return; }
+    el.classList.add('show');   // reveal before writing, or role="alert" stays silent
+    el.textContent = msg;
+  }
+
+  function openCpnEdit(id) {
+    const c = allCoupons.find(x => x.id === id);
+    if (!c) return;
+    cpnEditId = id;
+    cpnLastFocus = document.activeElement;
+
+    const meta = CPN_VALUE_META[c.discount_type] || CPN_VALUE_META.fixed_total;
+    document.getElementById('cpnEditCode').textContent = c.code;
+    document.getElementById('cpnEditType').textContent =
+      String(c.discount_type).replace(/_/g, ' ') + ' — type cannot be changed';
+    document.getElementById('cpnEditValueLbl').textContent = meta.label;
+    document.getElementById('cpnEditValueHint').textContent = meta.hint;
+
+    const valEl = document.getElementById('cpnEditValue');
+    if (meta.max) valEl.max = meta.max; else valEl.removeAttribute('max');
+    valEl.value = c.value;
+
+    const sel = document.getElementById('cpnEditScope');
+    const current = (c.applies_to && c.applies_to.length) ? c.applies_to.join(',') : '';
+    const opts = CPN_SCOPES.filter(o => c.discount_type !== 'set_price' || o.checkoutOnly);
+    sel.innerHTML = opts.map(o => '<option value="' + escH(o.v) + '">' + escH(o.label) + '</option>').join('');
+    if (!opts.some(o => o.v === current)) {
+      sel.insertAdjacentHTML('afterbegin',
+        '<option value="' + escH(current) + '">Current: ' + escH(current || 'everywhere') + '</option>');
+    }
+    sel.value = current;
+
+    document.getElementById('cpnEditMax').value = c.max_redemptions == null ? '' : c.max_redemptions;
+    document.getElementById('cpnEditPerUser').value = c.per_user_limit == null ? '' : c.per_user_limit;
+    document.getElementById('cpnEditExpiry').value = c.expires_at ? String(c.expires_at).slice(0, 10) : '';
+    cpnErr('');
+
+    document.getElementById('cpnModal').classList.add('show');
+    document.addEventListener('keydown', cpnKeydown, true);
+    valEl.focus();
+    valEl.select();
+  }
+
+  function closeCpnEdit() {
+    document.getElementById('cpnModal').classList.remove('show');
+    document.removeEventListener('keydown', cpnKeydown, true);
+    cpnEditId = null;
+    if (cpnLastFocus && document.contains(cpnLastFocus)) cpnLastFocus.focus();
+    cpnLastFocus = null;
+  }
+
+  function cpnKeydown(e) {
+    const m = document.getElementById('cpnModal');
+    if (!m.classList.contains('show')) return;
+    if (e.key === 'Escape') { e.stopPropagation(); closeCpnEdit(); return; }
+    if (e.key !== 'Tab') return;
+    const nodes = m.querySelectorAll('button, input, select, textarea, a[href]');
+    const list = Array.prototype.filter.call(nodes, el => !el.disabled && el.offsetParent !== null);
+    if (!list.length) return;
+    const first = list[0], last = list[list.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+
+  async function saveCpnEdit() {
+    const c = allCoupons.find(x => x.id === cpnEditId);
+    if (!c) return;
+    const value  = parseFloat(document.getElementById('cpnEditValue').value);
+    const scope  = document.getElementById('cpnEditScope').value;
+    const maxRaw = document.getElementById('cpnEditMax').value.trim();
+    const perRaw = document.getElementById('cpnEditPerUser').value.trim();
+    const expiry = document.getElementById('cpnEditExpiry').value;
+
+    if (!Number.isFinite(value) || value <= 0) return cpnErr('Value must be greater than 0.');
+    if (c.discount_type === 'percent' && value > 100) return cpnErr('A percent discount cannot exceed 100.');
+    if (maxRaw !== '' && (!/^\d+$/.test(maxRaw) || parseInt(maxRaw, 10) <= 0)) {
+      return cpnErr('Max total uses must be a positive whole number, or blank for unlimited.');
+    }
+    if (perRaw !== '' && (!/^\d+$/.test(perRaw) || parseInt(perRaw, 10) <= 0)) {
+      return cpnErr('Per-user limit must be a positive whole number.');
+    }
+
+    const payload = {
+      value: value,
+      applies_to: scope ? scope.split(',') : null,
+      max_redemptions: maxRaw === '' ? null : parseInt(maxRaw, 10),
+      expires_at: expiry ? new Date(expiry + 'T23:59:59Z').toISOString() : null,
+    };
+    if (perRaw !== '') payload.per_user_limit = parseInt(perRaw, 10);
+
+    const btn = document.getElementById('cpnEditSave');
+    cpnErr('');
+    btn.disabled = true; btn.textContent = 'Saving…';
     try {
-      await couponApi('PUT', `&id=${id}`, { max_redemptions: val });
-      loadCoupons();
-    } catch (err) { alert('Update failed: ' + err.message); }
+      const savedId = cpnEditId;
+      await couponApi('PUT', '&id=' + savedId, payload);
+      cpnLastFocus = null;         // the row is about to be re-rendered
+      closeCpnEdit();
+      await loadCoupons();
+      const back = document.querySelector('[data-cpn-edit="' + savedId + '"]');
+      if (back) back.focus();
+    } catch (err) {
+      cpnErr(err.message);
+    } finally {
+      btn.disabled = false; btn.textContent = 'Save changes';
+    }
+  }
+
+  async function deleteCoupon(id) {
+    const c = allCoupons.find(x => x.id === id);
+    if (!c) return;
+    const uses = (c.redemption_count || 0) + (c.checkout_uses || 0);
+    if (uses > 0) {
+      alert(c.code + ' has been redeemed ' + uses + ' time(s), so it cannot be deleted — paid orders reference it. Use Disable instead.');
+      return;
+    }
+    if (!confirm('Permanently delete ' + c.code + '?\n\nThis cannot be undone. It has never been redeemed, so no order history is affected.')) return;
+    try {
+      await couponApi('DELETE', '&id=' + id + '&hard=1');
+      await loadCoupons();
+    } catch (err) {
+      alert('Delete failed: ' + err.message);
+    }
   }
 
   async function createCoupon() {

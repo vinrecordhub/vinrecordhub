@@ -241,17 +241,30 @@
     currency: 'USD',
   });
 
+  // orderAmt above is the plan LIST price — this page only receives ?plan=, so a
+  // coupon order would over-report revenue. Prefer an ?amt= the checkout passes
+  // through; checkout.html already has the real figure (getFinal(), used for its own
+  // payment_completed at line 714) but does not forward it on the redirect at line
+  // 782 yet. Clamped to the list price so a hand-edited URL can only ever report
+  // less, never inflate revenue.
+  const listAmt = parseFloat(orderAmt);
+  const passedAmt = parseFloat(p.get('amt'));
+  const chargedAmt = (isFinite(passedAmt) && passedAmt > 0 && passedAmt <= listAmt)
+    ? passedAmt
+    : listAmt;
+
   // GA4 only credits revenue to the reserved `purchase` event; payment_completed
   // is a custom name and never reaches the monetization reports. Both are sent so
-  // any funnel already built on payment_completed keeps working.
+  // any funnel already built on payment_completed keeps working. Mirrors the
+  // already-correct purchase event in buy-credits.html:437.
   gtag('event', 'purchase', {
     transaction_id: p.get('order') || '',
-    value: parseFloat(orderAmt),
+    value: chargedAmt,
     currency: 'USD',
     items: [{
       item_id: planKey || 'standard',
       item_name: plans[planKey] || 'Vehicle History Report',
-      price: parseFloat(orderAmt),
+      price: chargedAmt,
       quantity: 1,
     }],
   });

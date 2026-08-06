@@ -59,7 +59,7 @@
   <line x1="528" y1="334" x2="1010" y2="334" stroke="#d4a43c" stroke-width="1" stroke-opacity="0.28"/>
 
   <!-- Subtitle 1 -->
-  <text x="528" y="378" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="27" font-weight="500" fill="#8892a8" letter-spacing="-0.4">Official CFX &amp; ATC data</text>
+  <text x="528" y="378" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="27" font-weight="500" fill="#8892a8" letter-spacing="-0.4">Official Carfax® &amp; AutoCheck® data</text>
 
   <!-- Subtitle 2 -->
   <text x="528" y="416" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="21" font-weight="400" fill="#4e5670" letter-spacing="-0.2">From $9.99 · Delivered in 60 seconds · No subscription</text>

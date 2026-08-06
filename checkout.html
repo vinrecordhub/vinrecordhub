@@ -311,20 +311,20 @@
       <div class="plan-grid" role="group" aria-labelledby="planLabel">
         <div class="plan-card" id="card-standard">
           <div class="plan-dot"></div>
-          <div class="plan-name">CFX Report</div>
+          <div class="plan-name">Carfax® Report</div>
           <div class="plan-price">$6.99</div>
           <div class="plan-sub">single report</div>
         </div>
         <div class="plan-card" id="card-plus">
           <div class="plan-dot"></div>
-          <div class="plan-name">ATC Report</div>
+          <div class="plan-name">AutoCheck® Report</div>
           <div class="plan-price">$6.99</div>
           <div class="plan-sub">by Experian</div>
         </div>
         <div class="plan-card full" id="card-combo">
           <div class="plan-tag">Best Value</div>
           <div class="plan-dot"></div>
-          <div class="plan-name" style="margin-top:.25rem">Combo Pack — CFX + ATC</div>
+          <div class="plan-name" style="margin-top:.25rem">Combo Pack — Carfax® + AutoCheck®</div>
           <div class="plan-price">$9.99</div>
           <div class="plan-sub">both reports for one VIN</div>
           <div class="plan-badge">Save $4 — most thorough check</div>
@@ -335,7 +335,7 @@
         <span>Checking more than one car? <strong>Credit bundles</strong> bring it down to <strong>$4 per report</strong> — and credits never expire. <a href="/bundles">See bundles →</a></span>
         <button class="bt-x" type="button" onclick="dismissBundleTip()" aria-label="Dismiss bundles reminder">✕</button>
       </div>
-      <p class="disclaimer">* VINRecordHub is an independent vehicle history service and is not affiliated with, endorsed by, or sponsored by any vehicle history data provider.</p>
+      <p class="disclaimer">* Carfax® and AutoCheck® are registered trademarks of their respective owners. VINRecordHub is not affiliated with or endorsed by Carfax or AutoCheck.</p>
     </div>
 
     <div class="fg">
@@ -355,7 +355,7 @@
 
   <div class="summary" id="summaryCrd">
     <div class="sum-title">Order Summary</div>
-    <div class="sum-plan" id="sumPlan">CFX Report</div>
+    <div class="sum-plan" id="sumPlan">Carfax® Report</div>
     <div class="sum-vin" id="sumVin"></div>
 
     <div class="vehicle-card" id="vehicleCard">
@@ -363,7 +363,7 @@
       <div class="vc-vin" id="vcVin"></div>
     </div>
 
-    <div class="sum-row"><span id="sumDesc">1 CFX report</span><span id="sumPrice">$6.99</span></div>
+    <div class="sum-row"><span id="sumDesc">1 Carfax® report</span><span id="sumPrice">$6.99</span></div>
     <div class="sum-row sum-discount" id="discRow" style="display:none">
       <span id="discLabel">Discount</span>
       <span id="discAmt"></span>
@@ -415,9 +415,9 @@ function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').
 
 // ─── CONFIG ───────────────────────────────────────────────
 const PLANS = {
-  standard: { name:'CFX Report',              price:6.99,  reportType:'carfax',    desc:'1 CFX vehicle history report' },
-  plus:     { name:'ATC Report',           price:6.99,  reportType:'autocheck', desc:'1 ATC vehicle history report' },
-  combo:    { name:'Combo Pack — CFX + ATC', price:9.99, reportType:'combo', desc:'CFX + ATC for same VIN' },
+  standard: { name:'Carfax® Report',              price:6.99,  reportType:'carfax',    desc:'1 Carfax® vehicle history report' },
+  plus:     { name:'AutoCheck® Report',           price:6.99,  reportType:'autocheck', desc:'1 AutoCheck® vehicle history report' },
+  combo:    { name:'Combo Pack — Carfax® + AutoCheck®', price:9.99, reportType:'combo', desc:'Carfax® + AutoCheck® for same VIN' },
 };
 // Coupons are validated server-side against the admin-managed coupons table
 // (/api/checkout-coupon); fulfill-order re-verifies at payment time.

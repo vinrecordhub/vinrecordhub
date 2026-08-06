@@ -31,7 +31,6 @@
     }
   ],
   "routes": [
-    { "src": "/blog/carfax-vs-autocheck", "status": 308, "headers": { "Location": "/blog" } },
     { "src": "/checkout", "dest": "/checkout.html" },
     { "src": "/success", "dest": "/success.html" },
     { "src": "/redeem", "dest": "/redeem.html" },
